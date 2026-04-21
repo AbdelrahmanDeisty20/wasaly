@@ -59,4 +59,8 @@ class Product extends Model
     {
         return $this->hasMany(Specification::class);
     }
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\API\GENERAL\PageController;
 use App\Http\Controllers\API\GENERAL\ProductController;
 use App\Http\Controllers\API\GENERAL\SettingController;
 use App\Http\Controllers\API\GENERAL\CartController;
+use App\Http\Controllers\API\GENERAL\CheckoutController;
 use App\Http\Middleware\SetLang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,10 +40,10 @@ Route::group(["middleware"=>SetLang::class],function(){
     Route::get("auth/{provider}/redirect", [AuthController::class, "redirectToProvider"]);
     Route::get("auth/{provider}/callback", [AuthController::class, "handleProviderCallback"]);
     // Forget Password Routes
-    Route::post("send-otp",[ForgetPasswordController::class,"sendOtp"]);
-    Route::post("verify-otp",[ForgetPasswordController::class,"verifyOtp"]);
+    Route::post("forget-send-otp",[ForgetPasswordController::class,"sendOtp"]);
+    Route::post("forget-verify-otp",[ForgetPasswordController::class,"verifyOtp"]);
     Route::post("reset-password",[ForgetPasswordController::class,"resetPassword"]);
-    Route::post("resend-otp",[ForgetPasswordController::class,"resendOtp"]);
+    Route::post("forget-resend-otp",[ForgetPasswordController::class,"resendOtp"]);
     // Authenticated Routes
     Route::group(["middleware"=>"auth:sanctum"],function(){
         Route::post("logout",[AuthController::class,"logoutCurrentDevice"]);
@@ -56,5 +57,6 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::put("carts/update", [CartController::class, "updateQuantity"]);
         Route::delete("carts/remove", [CartController::class, "removeItem"]);
         Route::delete("carts/clear", [CartController::class, "clearCart"]);
+        Route::post("carts/checkout", [CheckoutController::class, "checkout"]);
     });
 });

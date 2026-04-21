@@ -99,6 +99,8 @@ return [
     'address_updated_successfully' => 'Address updated successfully',
     'address_deleted_successfully' => 'Address deleted successfully',
     'address_not_found' => 'Address not found',
+    'payment_method_invalid' => 'Selected payment method is invalid',
+    'insufficient_stock_for' => 'Insufficient stock for product:',
     'contact_name_required' => 'Name is required',
     'contact_subject_required' => 'Subject is required',
     'contact_message_required' => 'Message is required',

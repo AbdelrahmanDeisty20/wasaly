@@ -19,6 +19,7 @@ class Order extends Model
         'customer_address',
         'payment_method',
         'status',
+        'governorate_id',
     ];
 
     public function user()
@@ -29,6 +30,11 @@ class Order extends Model
     public function address()
     {
         return $this->belongsTo(Address::class);
+    }
+
+    public function governorate()
+    {
+        return $this->belongsTo(Governorate::class);
     }
 
     public function items()

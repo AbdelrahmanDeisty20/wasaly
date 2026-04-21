@@ -98,6 +98,8 @@ return [
     'address_updated_successfully' => 'تم تحديث العنوان بنجاح',
     'address_deleted_successfully' => 'تم حذف العنوان بنجاح',
     'address_not_found' => 'العنوان غير موجود',
+    'payment_method_invalid' => 'طريقة الدفع المختارة غير صالحة',
+    'insufficient_stock_for' => 'الكمية غير كافية للمنتج:',
     'contact_name_required' => 'الاسم مطلوب',
     'contact_subject_required' => 'الموضوع مطلوب',
     'contact_message_required' => 'الرسالة مطلوبة',
