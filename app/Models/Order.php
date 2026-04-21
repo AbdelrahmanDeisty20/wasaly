@@ -20,6 +20,7 @@ class Order extends Model
         'payment_method',
         'status',
         'governorate_id',
+        'region',
     ];
 
     public function user()
