@@ -324,4 +324,14 @@ class AuthService
             ],
         ];
     }
+    public function deleteAccount()
+    {
+        $user = auth()->user();
+        $user->delete();
+        return [
+            'status' => true,
+            'message' => __('messages.account_deleted_successfully'),
+            'data' => [],
+        ];
+    }
 }

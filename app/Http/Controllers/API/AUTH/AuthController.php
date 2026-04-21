@@ -109,4 +109,12 @@ class AuthController extends Controller
         }
         return $this->success($result['data'], $result['message'], 200);
     }
+    public function deleteAccount()
+    {
+        $result = $this->AuthService->deleteAccount();
+        if(!$result){
+            return $this->error( $result['message'],400);
+        }
+        return $this->success( $result['data'], $result['message'],200);
+    }
 }
