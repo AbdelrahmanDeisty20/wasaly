@@ -182,4 +182,5 @@ return [
     'settings_retrieved_successfully'=>' تم استرجاع الاعدادات بنجاح',
     'settings_not_found'=>' لا يوجد اعدادات',
     'sub_category_not_found'=>' لا يوجد تصنيف فرعي',
+    'account_deleted_successfully' => 'تم حذف الحساب بنجاح',
 ];

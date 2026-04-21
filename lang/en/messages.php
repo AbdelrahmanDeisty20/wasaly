@@ -180,5 +180,6 @@ return [
     'sub_categories_retrieved_successfully' => 'Sub categories retrieved successfully',
     'page_recived_successfully'=>'pages  recived successfully',
     'settings_retrieved_successfully'=>'settings  recived successfully',
-    'settings_not_found'=>'no settings found'
+    'settings_not_found'=>'no settings found',
+    'account_deleted_successfully' => 'Account deleted successfully',
 ];
