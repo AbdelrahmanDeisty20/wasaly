@@ -164,7 +164,7 @@ return [
     'avatar_nullable' => 'Avatar is required',
     'logout_current_device_successfully' => 'Logged out from current device successfully',
     'logout_all_devices_successfully' => 'Logged out from all devices successfully',
-    'otp_already_sent' => 'OTP already sent, please wait 10 minutes before requesting a new one',
+    'otp_already_sent' => 'OTP already sent, please wait 1 minutes before requesting a new one',
     'phone_unique' => 'Phone number is already taken',
     'service_provider_social_login_blocked' => 'Social login is not allowed for service providers. Please use the mobile app login.',
     'brands_not_found' => 'No brands found',

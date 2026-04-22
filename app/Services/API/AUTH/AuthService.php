@@ -164,7 +164,7 @@ class AuthService
         if ($user) {
             $code = random_int(100000, 999999);
             $codeHash = Hash::make((string) $code);
-            $expiresAt = now()->addMinutes(10);
+            $expiresAt = now()->addMinutes(1);
 
             // إرسال OTP على الإيميل في الخلفية (Queue)
             Mail::to($user->email)->locale(app()->getLocale())->queue(new OtpMail($code, $user->full_name, 'resend'));
