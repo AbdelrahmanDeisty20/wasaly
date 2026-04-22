@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\API\OfferResource;
 use App\Services\API\General\offerService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class OfferController extends Controller
         $offers = $this->offerService->getAllActiveOffer();
         if($offers['status'])
         {
-            return $this->success($offers['data'],$offers['message'],200);
+            return $this->paginated(OfferResource::class,$offers['data'],$offers['message'],200);
         }else{
             return $this->error($offers['message'],400);
         }
