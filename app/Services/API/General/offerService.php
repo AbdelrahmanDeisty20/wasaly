@@ -13,8 +13,16 @@ class offerService
     {
         $offers = Offer::active()->with('product')->get();
         if ($offers->isEmpty()) {
-            return $this->error(__('messages.offers_not_found'), 404);
+           return [
+            'status' => false,
+            'message' => __('messages.offers_not_found'),
+            'data' => []
+           ];
         }
-        return $this->success(OfferResource::collection($offers), __('messages.offers_retrieved_successfully'));
+        return [
+            'status' => true,
+            'message' => __('messages.offers_retrieved_successfully'),
+            'data' => OfferResource::collection($offers)
+        ];
     }
 }
