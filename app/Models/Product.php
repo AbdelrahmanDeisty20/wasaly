@@ -63,4 +63,25 @@ class Product extends Model
     {
         return $this->hasMany(Offer::class);
     }
+
+    public function getDiscountedPriceAttribute()
+    {
+        $activeOffer = $this->offers()
+            ->where('is_active', true)
+            ->where(function ($query) {
+                $query->whereNull('start_date')
+                    ->orWhere('start_date', '<=', now());
+            })
+            ->where(function ($query) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', now());
+            })
+            ->first();
+
+        if ($activeOffer) {
+            return $this->price - ($this->price * ($activeOffer->discount_percentage / 100));
+        }
+
+        return $this->price;
+    }
 }
