@@ -2,7 +2,7 @@
 
 namespace App\Services\API\ForgetPassword;
 
-use App\Http\Resources\API\UserResource;
+use App\Http\Resources\API\AUTH\UserResource;
 use App\Mail\OtpMail;
 use App\Models\Otp;
 use App\Models\User;
