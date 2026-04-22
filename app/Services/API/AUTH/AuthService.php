@@ -97,6 +97,7 @@ class AuthService
             'password' => $data['password'],
             'avatar' => $avatarName,
             'type' => $data['type'],
+            'is_active'=>false,
         ]);
         if ($user) {
             $code = random_int(100000, 999999);
