@@ -22,7 +22,7 @@ class offerService
         return [
             'status' => true,
             'message' => __('messages.offers_retrieved_successfully'),
-            'data' => OfferResource::collection($offers)
+            'data' => $offers
         ];
     }
 }
