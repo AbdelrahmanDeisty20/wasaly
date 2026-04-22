@@ -183,4 +183,5 @@ return [
     'settings_not_found'=>' لا يوجد اعدادات',
     'sub_category_not_found'=>' لا يوجد تصنيف فرعي',
     'account_deleted_successfully' => 'تم حذف الحساب بنجاح',
+    'offer_retrieved_successfully'=>' تم استرجاع العرض بنجاح',
 ];

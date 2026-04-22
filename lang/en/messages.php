@@ -182,4 +182,7 @@ return [
     'settings_retrieved_successfully'=>'settings  recived successfully',
     'settings_not_found'=>'no settings found',
     'account_deleted_successfully' => 'Account deleted successfully',
+    'offer_retrieved_successfully'=>'offer  retrieved successfully',
+    'offer_not_found'=>'no offer found',
+    
 ];
