@@ -15,6 +15,6 @@ class offerService
         if ($offers->isEmpty()) {
             return $this->error(__('messages.offers_not_found'), 404);
         }
-        return $this->success(OfferResource::collection($offers), __('messages.offers_found'), 200);
+        return $this->success(OfferResource::collection($offers), __('messages.offers_retrieved_successfully'));
     }
 }
