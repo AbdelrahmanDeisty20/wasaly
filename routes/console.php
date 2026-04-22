@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Schedule;
 
-// تشغيل الـ Queue Worker كل دقيقة لمدة 25 ثانية
-Schedule::command('queue:work --stop-when-empty --max-time=25')
-    ->everyMinute();
+// هنخلي الـ Worker يشتغل لمدة 55 ثانية عشان يغطي الدقيقة كلها
+// ده هيخلي الإرسال أسرع بكتير لأن الـ Worker هيفضل مستني أي جوب جديد
+Schedule::command('queue:work --stop-when-empty --max-time=55')
+    ->everyMinute()
+    ->withoutOverlapping();
 
 // تنظيف التوكنات
 Schedule::command('auth:clear-resets')->hourly();
