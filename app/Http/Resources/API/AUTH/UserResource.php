@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             "avatar" => $this->avatar,
             "type" => $this->type,
             'is_active' => $this->is_active,
+            'created_at' => $this->created_at,
         ];
     }
 }
