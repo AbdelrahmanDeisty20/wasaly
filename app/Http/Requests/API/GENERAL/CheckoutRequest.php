@@ -27,6 +27,10 @@ class CheckoutRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'customer_name.required' => __('messages.customer_name_required'),
+            'customer_phone.required' => __('messages.customer_phone_required'),
+            'customer_address.required' => __('messages.delivery_address_required'),
+            'governorate_id.required' => __('messages.governorate_required'),
             'governorate_id.exists' => __('messages.governorate_not_found'),
             'address_id.exists' => __('messages.address_not_found'),
             'payment_method.in' => __('messages.payment_method_invalid'),
