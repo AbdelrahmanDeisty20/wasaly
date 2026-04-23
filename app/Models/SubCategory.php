@@ -29,8 +29,8 @@ class SubCategory extends Model
     {
         return app()->getLocale() == 'ar' ? $this->name_ar : $this->name_en;
     }
-    public function getImageAttribute($value)
+    public function getImagePathAttribute()
     {
-        return asset('storage/' . $value);
+        return asset('storage/subCategories/' . $this->image);
     }
 }
