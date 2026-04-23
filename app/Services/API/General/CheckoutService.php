@@ -59,16 +59,17 @@ class CheckoutService
             $order = Order::create([
                 'order_number'     => 'ORD-' . strtoupper(bin2hex(random_bytes(3))),
                 'user_id'          => $user->id,
-                'address_id'       => $address->id,
+                'address_id'       => $address ? $address->id : null,
                 'unit_price'       => $totalPrice, // السعر الإجمالي هنا
                 'quantity'         => $totalQuantity,
                 'total_price'      => $totalPrice,
-                'customer_name'    => $user->full_name ?? $user->name,
-                'customer_phone'   => $user->phone,
-                'customer_address' => $address->address,
+                'customer_name'    => $data['customer_name'] ?? ($user->full_name ?? $user->name),
+                'customer_phone'   => $data['customer_phone'] ?? $user->phone,
+                'customer_address' => $address ? $address->address : ($data['customer_address'] ?? null),
                 'payment_method'   => $data['payment_method'] ?? 'cash',
                 'status'           => 'pending',
                 'governorate_id'   => $data['governorate_id'] ?? null,
+                'region'           => $data['region'] ?? null,
             ]);
 
             // 3. نقل العناصر وخصم المخزون
