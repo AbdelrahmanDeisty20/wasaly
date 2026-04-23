@@ -184,5 +184,5 @@ return [
     'account_deleted_successfully' => 'Account deleted successfully',
     'offer_retrieved_successfully'=>'offer  retrieved successfully',
     'offer_not_found'=>'no offer found',
-    
+    'governorate_not_found'=>'no governorate found',
 ];
