@@ -97,6 +97,7 @@ return [
     'address_required' => 'Full address is required',
     'password_nullable' => 'Password is required',
     'password_string' => 'Password must be a string',
+    'password_min' => 'Password must be at least 8 characters',
     'password_max' => 'Password must be at most 255 characters',
     'current_password_required' => 'Current password is required',
     'current_password_string' => 'Current password must be a string',

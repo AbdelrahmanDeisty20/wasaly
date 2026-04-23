@@ -48,8 +48,9 @@ class UpdateProfileRequest extends FormRequest
             'password.nullable' => __('messages.password_nullable'),
             'password.string' => __('messages.password_string'),
             'password.confirmed' => __('messages.password_confirmed'),
+            'password.min' => __('messages.password_min'),
             'password.max' => __('messages.password_max'),
-            'current_password.required' => __('messages.current_password_required'),
+            'current_password.required_with' => __('messages.current_password_required'),
             'current_password.string' => __('messages.current_password_string'),
             'current_password.max' => __('messages.current_password_max'),
         ];
