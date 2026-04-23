@@ -2,6 +2,7 @@
 
 namespace App\Services\API\General;
 
+use App\Http\Resources\API\OrderResource;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -95,11 +96,7 @@ class CheckoutService
             return [
                 'status' => true,
                 'message' => __('messages.checkout_success'),
-                'data' => [
-                    'order_id' => $order->id,
-                    'order_number' => $order->order_number,
-                    'total_price' => $order->total_price
-                ]
+                'data'=>OrderResource::make($order)
             ];
 
         } catch (\Exception $e) {

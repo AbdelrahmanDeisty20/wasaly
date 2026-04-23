@@ -53,7 +53,7 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::post("logout",[AuthController::class,"logoutCurrentDevice"]);
         Route::post("logout-all-devices",[AuthController::class,"logoutAllDevices"]);
         Route::get("show-profile",[AuthController::class,"showProfile"]);
-        Route::put("update-profile",[AuthController::class,"updateProfile"]);
+        Route::post("update-profile",[AuthController::class,"updateProfile"]);
         Route::delete("delete-account",[AuthController::class,"deleteAccount"]);
         // Cart Routes
         Route::get("carts", [CartController::class, "getCart"]);
