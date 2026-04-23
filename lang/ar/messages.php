@@ -185,4 +185,5 @@ return [
     'account_deleted_successfully' => 'تم حذف الحساب بنجاح',
     'offer_retrieved_successfully'=>' تم استرجاع العرض بنجاح',
     'governorate_not_found'=>' لا يوجد محافظه',
+    'region_required' => 'المنطقة مطلوبة',
 ];

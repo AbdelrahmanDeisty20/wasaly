@@ -185,4 +185,5 @@ return [
     'offer_retrieved_successfully'=>'offer  retrieved successfully',
     'offer_not_found'=>'no offer found',
     'governorate_not_found'=>'no governorate found',
+    'region_required' => 'Region is required',
 ];
