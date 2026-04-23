@@ -257,7 +257,7 @@ class AuthService
 
     public function handleProviderCallback($provider)
     {
-        $frontendUrl = rtrim(env('FRONTEND_URL', 'http://127.0.0.1:8000'), '/');
+        $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:5173'), '/');
         $callbackPath = '/auth/callback';
 
         try {
