@@ -8,9 +8,8 @@ use App\Models\Otp;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Hash;
-use Mail;
-
 use Laravel\Socialite\Facades\Socialite;
+use Mail;
 
 class AuthService
 {
@@ -45,7 +44,7 @@ class AuthService
                     'provider_id' => $socialUser->getId(),
                     'is_active' => true,
                     'email_verified_at' => now(),
-                    'type' => 'user', // Default type
+                    'type' => 'user',  // Default type
                 ]);
             } else {
                 // Link account if not already linked
@@ -97,7 +96,7 @@ class AuthService
             'password' => $data['password'],
             'avatar' => $avatarName,
             'type' => $data['type'],
-            'is_active'=>false,
+            'is_active' => false,
         ]);
         if ($user) {
             $code = random_int(100000, 999999);
@@ -125,7 +124,7 @@ class AuthService
 
     public function verifyOtp(array $data)
     {
-        $email = User::where('email',$data['email'])->first();
+        $email = User::where('email', $data['email'])->first();
         if (!$email) {
             return [
                 'status' => false,
@@ -134,10 +133,10 @@ class AuthService
             ];
         }
         $otp = Otp::where('email', $data['email'])
-        ->where('type', 'register')
-        ->where('expires_at', '>', now())
-        ->latest()
-        ->first();
+            ->where('type', 'register')
+            ->where('expires_at', '>', now())
+            ->latest()
+            ->first();
         if (!$otp || !Hash::check($data['code'], $otp->code)) {
             return [
                 'status' => false,
@@ -212,6 +211,7 @@ class AuthService
             ]
         ];
     }
+
     public function showProfile()
     {
         $user = auth()->user();
@@ -221,6 +221,7 @@ class AuthService
             'data' => new UserResource($user)
         ];
     }
+
     public function updateProfile(array $data)
     {
         $user = auth()->user();
@@ -231,6 +232,7 @@ class AuthService
             'data' => new UserResource($user)
         ];
     }
+
     public function logoutCurrentDevice()
     {
         $user = auth()->user();
@@ -246,19 +248,11 @@ class AuthService
     {
         $user = auth()->user();
         $user->tokens()->delete();
-        
     }
 
     public function redirectToProvider($provider)
     {
-        $url = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
-        return [
-            'status' => true,
-            'message' => 'Redirect URL generated',
-            'data' => [
-                'url' => $url
-            ]
-        ];
+        return Socialite::driver($provider)->stateless()->redirect();
     }
 
     public function handleProviderCallback($provider)
@@ -290,22 +284,22 @@ class AuthService
 
         if (!$user) {
             $user = User::create([
-                'full_name'         => $socialUser->getName() ?? $socialUser->getNickname(),
-                'email'             => $socialUser->getEmail(),
-                'avatar'            => $socialUser->getAvatar(),
-                'provider'          => $provider,
-                'provider_id'       => $socialUser->getId(),
-                'password'          => Hash::make($socialUser->getId()),
-                'is_active'         => true,
+                'full_name' => $socialUser->getName() ?? $socialUser->getNickname(),
+                'email' => $socialUser->getEmail(),
+                'avatar' => $socialUser->getAvatar(),
+                'provider' => $provider,
+                'provider_id' => $socialUser->getId(),
+                'password' => Hash::make($socialUser->getId()),
+                'is_active' => true,
                 'email_verified_at' => now(),
-                'type'              => 'user',
+                'type' => 'user',
             ]);
         } else {
             if (!$user->provider) {
                 $user->update([
-                    'provider'    => $provider,
+                    'provider' => $provider,
                     'provider_id' => $socialUser->getId(),
-                    'is_active'   => true,
+                    'is_active' => true,
                     'email_verified_at' => $user->email_verified_at ?? now(),
                 ]);
             }
@@ -315,23 +309,24 @@ class AuthService
         $userResource = new UserResource($user);
 
         $query = http_build_query([
-            'token'     => $token,
-            'id'        => $userResource->id,
+            'token' => $token,
+            'id' => $userResource->id,
             'full_name' => $user->full_name,
-            'email'     => $user->email,
-            'avatar'    => $user->avatar,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
         ]);
 
         return [
-            'status'  => true,
+            'status' => true,
             'message' => __('messages.user_logged_in_successfully'),
-            'data'    => [
+            'data' => [
                 'user' => $userResource,
                 'token' => $token,
                 'redirect_url' => $frontendUrl . $callbackPath . '?' . $query,
             ],
         ];
     }
+
     public function deleteAccount()
     {
         $user = auth()->user();
