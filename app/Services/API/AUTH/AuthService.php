@@ -251,7 +251,14 @@ class AuthService
 
     public function redirectToProvider($provider)
     {
-        return Socialite::driver($provider)->stateless()->redirect();
+        $url = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+        return [
+            'status' => true,
+            'message' => 'Redirect URL generated',
+            'data' => [
+                'url' => $url
+            ]
+        ];
     }
 
     public function handleProviderCallback($provider)

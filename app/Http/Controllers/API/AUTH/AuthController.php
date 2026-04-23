@@ -98,7 +98,8 @@ class AuthController extends Controller
 
     public function redirectToProvider(Request $request, $provider)
     {
-        return $this->AuthService->redirectToProvider($provider);
+        $result = $this->AuthService->redirectToProvider($provider);
+        return $this->success($result['data'], $result['message']);
     }
 
     public function handleProviderCallback($provider)
