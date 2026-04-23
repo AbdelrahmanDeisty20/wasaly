@@ -248,6 +248,11 @@ class AuthService
     {
         $user = auth()->user();
         $user->tokens()->delete();
+        return [
+            'status' => true,
+            'message' => __('messages.logout_all_devices_successfully'),
+            'data' => []
+        ];
     }
 
     public function redirectToProvider($provider)

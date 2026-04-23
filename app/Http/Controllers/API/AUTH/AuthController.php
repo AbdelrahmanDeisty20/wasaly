@@ -36,7 +36,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $result = $this->AuthService->register($request->validated());
-        if (!$result) {
+        if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
@@ -45,7 +45,7 @@ class AuthController extends Controller
     public function verifyOtp(VerifyOtpRequest $request)
     {
         $result = $this->AuthService->verifyOtp($request->validated());
-        if (!$result) {
+        if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
@@ -54,7 +54,7 @@ class AuthController extends Controller
     public function resendOtp(ResendOtpRequest $request)
     {
         $result = $this->AuthService->resendOtp($request->validated());
-        if (!$result) {
+        if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
@@ -63,7 +63,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $result = $this->AuthService->login($request->validated());
-        if (!$result) {
+        if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
@@ -72,7 +72,7 @@ class AuthController extends Controller
     public function showProfile()
     {
         $result = $this->AuthService->showProfile();
-        if (!$result) {
+        if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
@@ -81,7 +81,7 @@ class AuthController extends Controller
     public function updateProfile(UpdateProfileRequest $request)
     {
         $result = $this->AuthService->updateProfile($request->validated());
-        if (!$result) {
+        if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
@@ -90,7 +90,7 @@ class AuthController extends Controller
     public function logoutCurrentDevice()
     {
         $result = $this->AuthService->logoutCurrentDevice();
-        if (!$result) {
+        if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
@@ -99,7 +99,7 @@ class AuthController extends Controller
     public function logoutAllDevices()
     {
         $result = $this->AuthService->logoutAllDevices();
-        if (!$result) {
+        if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
@@ -122,7 +122,7 @@ class AuthController extends Controller
     public function deleteAccount()
     {
         $result = $this->AuthService->deleteAccount();
-        if (!$result) {
+        if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
