@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API\GENERAL;
 
-use App\Http\Requests\API\GENERAL\AddToCartRequest;
-use App\Http\Requests\API\GENERAL\UpdateCartQuantityRequest;
-use App\Http\Requests\API\GENERAL\RemoveCartItemRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\GENERAL\AddToCartRequest;
+use App\Http\Requests\API\GENERAL\RemoveCartItemRequest;
+use App\Http\Requests\API\GENERAL\UpdateCartQuantityRequest;
 use App\Services\API\General\CartService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     use ApiResponse;
+
     protected $cartService;
 
     public function __construct(CartService $cartService)

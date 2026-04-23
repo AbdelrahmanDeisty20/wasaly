@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\API;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 class CartResource extends JsonResource
 {
@@ -21,8 +21,8 @@ class CartResource extends JsonResource
         $subTotal = collect($itemResources->resolve())->sum('total_price');
 
         return [
-            'id'        => $this->id,
-            'items'     => $itemResources,
+            'id' => $this->id,
+            'items' => $itemResources,
             'sub_total' => round($subTotal, 2),
         ];
     }

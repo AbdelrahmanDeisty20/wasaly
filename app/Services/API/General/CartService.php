@@ -15,7 +15,7 @@ class CartService
 
     public function getCart()
     {
-        $cart = Cart::with('items.product')->firstOrCreate([
+        $cart = Cart::with('items.offers')->firstOrCreate([
             'user_id' => auth()->id(),
         ]);
 
