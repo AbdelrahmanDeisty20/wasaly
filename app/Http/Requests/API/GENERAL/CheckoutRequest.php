@@ -20,7 +20,7 @@ class CheckoutRequest extends FormRequest
             'governorate_id' => 'required|exists:governorates,id',
             'address_id'     => 'nullable|exists:addresses,id',
             'payment_method' => 'nullable|in:cash,card',
-            'region' => 'nullable|string|max:255',
+            'region' => 'required|string|max:255',
         ];
     }
 
@@ -30,6 +30,7 @@ class CheckoutRequest extends FormRequest
             'governorate_id.exists' => __('messages.governorate_not_found'),
             'address_id.exists' => __('messages.address_not_found'),
             'payment_method.in' => __('messages.payment_method_invalid'),
+            'region.required' => __('messages.region_required'),
         ];
     }
 }
