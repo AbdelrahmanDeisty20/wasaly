@@ -27,7 +27,7 @@ class UpdateProfileRequest extends FormRequest
             'full_name' => 'nullable|string|max:255',
             'email' => 'nullable|email|unique:users,email,' . auth()->user()->id,
             'phone' => 'nullable|string|max:255',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'avatar' => 'nullable|image',
             'password' => 'nullable|string|confirmed|min:8|max:255',
             'current_password' => 'required_with:password|string|max:255',
         ];
@@ -43,8 +43,6 @@ class UpdateProfileRequest extends FormRequest
             'phone.string' => __('messages.phone_invalid'),
             'avatar.nullable' => __('messages.avatar_nullable'),
             'avatar.image' => __('messages.avatar_image'),
-            'avatar.mimes' => __('messages.avatar_mimes'),
-            'avatar.max' => __('messages.avatar_max'),
             'password.nullable' => __('messages.password_nullable'),
             'password.string' => __('messages.password_string'),
             'password.confirmed' => __('messages.password_confirmed'),
