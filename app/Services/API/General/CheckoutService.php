@@ -53,13 +53,7 @@ class CheckoutService
 
             $address = Address::find($data['address_id'] ?? null) ?? $user->addresses()->where('is_default', 1)->first();
             
-            if (!$address) {
-                return [
-                    'status' => false,
-                    'message' => __('messages.address_required'),
-                    'data' => []
-                ];
-            }
+            
 
             // 2. إنشاء الطلب برقم مميز
             $order = Order::create([
