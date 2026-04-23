@@ -28,8 +28,8 @@ class UpdateProfileRequest extends FormRequest
             'email' => 'nullable|email|unique:users,email,' . auth()->user()->id,
             'phone' => 'nullable|string|max:255',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'password' => 'nullable|string|confirmed|max:255',
-            'current_password' => 'required|string|max:255',
+            'password' => 'nullable|string|confirmed|min:8|max:255',
+            'current_password' => 'required_with:password|string|max:255',
         ];
     }
     public function messages(): array
@@ -57,8 +57,10 @@ class UpdateProfileRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if (!Hash::check($this->current_password, auth()->user()->password)) {
-                $validator->errors()->add('current_password', __('messages.current_password_mismatch'));
+            if ($this->filled('current_password')) {
+                if (!Hash::check($this->current_password, auth()->user()->password)) {
+                    $validator->errors()->add('current_password', __('messages.current_password_mismatch'));
+                }
             }
         });
     }

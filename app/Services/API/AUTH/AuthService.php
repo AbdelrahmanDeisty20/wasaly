@@ -225,10 +225,32 @@ class AuthService
     public function updateProfile(array $data)
     {
         $user = auth()->user();
+
+        // Handle Avatar Upload
+        if (isset($data['avatar']) && $data['avatar'] instanceof \Illuminate\Http\UploadedFile) {
+            $path = public_path('storage/users/avatars');
+            if (!file_exists($path)) {
+                mkdir($path, 0755, true);
+            }
+            $avatarName = time() . '.' . $data['avatar']->getClientOriginalExtension();
+            $data['avatar']->move($path, $avatarName);
+            $data['avatar'] = $avatarName;
+        }
+
+        // Handle Password Update
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        unset($data['current_password']);
+
         $user->update($data);
+
         return [
             'status' => true,
-            'message' => __('messages.user_profile_successfully'),
+            'message' => __('messages.profile_updated_successfully'),
             'data' => new UserResource($user)
         ];
     }
