@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\AUTH;
 
+use Hash;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,6 +28,8 @@ class UpdateProfileRequest extends FormRequest
             'email' => 'nullable|email|unique:users,email,' . auth()->user()->id,
             'phone' => 'nullable|string|max:255',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'password' => 'nullable|string|confirmed|max:255',
+            'current_password' => 'required|string|max:255',
         ];
     }
     public function messages(): array
@@ -42,6 +45,21 @@ class UpdateProfileRequest extends FormRequest
             'avatar.image' => __('messages.avatar_image'),
             'avatar.mimes' => __('messages.avatar_mimes'),
             'avatar.max' => __('messages.avatar_max'),
+            'password.nullable' => __('messages.password_nullable'),
+            'password.string' => __('messages.password_string'),
+            'password.confirmed' => __('messages.password_confirmed'),
+            'password.max' => __('messages.password_max'),
+            'current_password.required' => __('messages.current_password_required'),
+            'current_password.string' => __('messages.current_password_string'),
+            'current_password.max' => __('messages.current_password_max'),
         ];
+    }
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (!Hash::check($this->current_password, auth()->user()->password)) {
+                $validator->errors()->add('current_password', __('messages.current_password_mismatch'));
+            }
+        });
     }
 }

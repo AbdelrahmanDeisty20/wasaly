@@ -186,5 +186,12 @@ return [
     'offer_retrieved_successfully'=>' تم استرجاع العرض بنجاح',
     'governorate_not_found'=>' لا يوجد محافظه',
     'region_required' => 'المنطقة مطلوبة',
-    
+    'password_nullable' => 'كلمة المرور مطلوبة',
+    'password_string' => 'كلمة المرور يجب ان تكون نص',
+    'password_max' => 'كلمة المرور يجب ان تكون 255 حرف على الاكثر',
+    'current_password_required' => 'كلمة المرور الحالية مطلوبة',
+    'current_password_string' => 'كلمة المرور الحالية يجب ان تكون نص',
+    'current_password_max' => 'كلمة المرور الحالية يجب ان تكون 255 حرف على الاكثر',
+    'current_password_mismatch' => 'كلمة المرور الحالية غير صحيحة',
+    'profile_updated_successfully' => 'تم تحديث الملف الشخصي بنجاح',
 ];
