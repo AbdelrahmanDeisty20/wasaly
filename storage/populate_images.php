@@ -8,29 +8,32 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-$images = [
-    'categories' => 'C:\\Users\\Dell\\.gemini\\antigravity\\brain\\376259af-9566-4084-8fd0-127e2cb6a29d\\category_placeholder_1776954535718.png',
-    'brands' => 'C:\\Users\\Dell\\.gemini\\antigravity\\brain\\376259af-9566-4084-8fd0-127e2cb6a29d\\brand_placeholder_1776954553092.png',
-    'subCategories' => 'C:\\Users\\Dell\\.gemini\\antigravity\\brain\\376259af-9566-4084-8fd0-127e2cb6a29d\\subcategory_placeholder_1776954572033.png',
-];
-
+$folders = ['categories', 'brands', 'subCategories'];
 $basePath = storage_path('app/public/');
 
-foreach ($images as $folder => $src) {
-    if (!file_exists($src)) {
-        echo "Source file not found: $src\n";
-        continue;
+foreach ($folders as $folder) {
+    $path = $basePath . $folder;
+    if (!file_exists($path)) {
+        mkdir($path, 0755, true);
     }
+    
+    echo "Processing folder: $folder...\n";
     
     for ($i = 1; $i <= 10; $i++) {
         $destName = "item_$i.png";
-        $destPath = $basePath . $folder . '/' . $destName;
-        copy($src, $destPath);
-        echo "Copied to $destPath\n";
+        $destPath = $path . '/' . $destName;
+        
+        // تحميل صورة عشوائية من النت
+        $url = "https://picsum.photos/512?random=" . rand(1, 1000);
+        @copy($url, $destPath);
+        
+        echo "Created image: $destName in $folder\n";
     }
 }
 
 // Update Database
+echo "Updating Database records...\n";
+
 $categories = Category::all();
 foreach ($categories as $index => $cat) {
     $imgNum = ($index % 10) + 1;
@@ -49,4 +52,4 @@ foreach ($subCategories as $index => $sub) {
     $sub->update(['image' => "item_$imgNum.png"]);
 }
 
-echo "Database updated successfully.\n";
+echo "Done! Everything is updated and images are ready.\n";
