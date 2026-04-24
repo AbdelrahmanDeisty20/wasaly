@@ -96,7 +96,7 @@ class CheckoutService
             return [
                 'status' => true,
                 'message' => __('messages.checkout_success'),
-                'data'=>OrderResource::make($order)
+                'data'=>OrderResource::make($order->load(['items.product', 'governorate']))
             ];
 
         } catch (\Exception $e) {
