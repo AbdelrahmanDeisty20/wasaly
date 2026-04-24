@@ -116,7 +116,7 @@ class AuthController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 400, $result['data'] ?? []);
         }
-        return $this->success($result['data'], $result['message'], 200);
+        return redirect($result['data']['redirect_url']);
     }
 
     public function deleteAccount()

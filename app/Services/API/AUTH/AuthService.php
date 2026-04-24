@@ -284,7 +284,7 @@ class AuthService
 
     public function handleProviderCallback($provider)
     {
-        $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:5173'), '/');
+        $frontendUrl = rtrim(env('FRONTEND_URL', 'https://wasly-two.vercel.app'), '/');
         $callbackPath = '/auth/callback';
 
         try {
