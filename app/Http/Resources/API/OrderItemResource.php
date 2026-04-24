@@ -19,7 +19,7 @@ class OrderItemResource extends JsonResource
             'product' => ProductResource::make($this->whenLoaded('product')),
             'price' => (float) ($this->unit_price),
             'quantity' => $this->quantity,
-            'total_price' => $this->total_price,
+            'total_price' => (float) ($this->total_price),
         ];
     }
 }
