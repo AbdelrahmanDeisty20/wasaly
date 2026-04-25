@@ -12,7 +12,7 @@ echo "--- Start Local Fix Script ---\n";
 
 // 1. إنشاء المجلدات لو مش موجودة
 $folders = ['categories', 'brands', 'subCategories'];
-$basePath = storage_path('app/public/');
+$basePath = public_path('storage/');
 
 foreach ($folders as $folder) {
     $path = $basePath . $folder;

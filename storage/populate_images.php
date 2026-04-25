@@ -9,7 +9,7 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 $folders = ['categories', 'brands', 'subCategories'];
-$basePath = storage_path('app/public/');
+$basePath = public_path('storage/');
 
 foreach ($folders as $folder) {
     $path = $basePath . $folder;
