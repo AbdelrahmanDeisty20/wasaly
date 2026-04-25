@@ -11,10 +11,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+
 #[Fillable(['full_name', 'email', 'phone', 'password', 'avatar', 'type', 'is_active', 'email_verified_at', 'provider', 'provider_id'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true; // مبدئيا هنخلي الكل يدخل، وممكن نخصصها بعدين بالـ type
+    }
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable,HasApiTokens;
 
