@@ -116,6 +116,19 @@ class AuthController extends Controller
         return redirect()->away($redirectUrl);
     }
 
+    /**
+     * Handle mobile callback - shows page that redirects to app
+     */
+    public function handleMobileCallback(Request $request)
+    {
+        $query = $request->getQueryString();
+        $appUrl = 'wasly://auth/callback?' . $query;
+
+        return response()->view('auth.mobile_redirect', [
+            'appUrl' => $appUrl
+        ]);
+    }
+
     public function deleteAccount()
     {
         $result = $this->AuthService->deleteAccount();

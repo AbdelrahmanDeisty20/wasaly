@@ -308,7 +308,7 @@ class AuthService
         
         // Final Fallbacks for safety
         $webFallback = rtrim(env('FRONTEND_URL', 'https://wasly-two.vercel.app'), '/') . '/auth/callback';
-        $mobileFallback = env('MOBILE_APP_URL', 'wasly://auth/callback');
+        $mobileFallback = env('MOBILE_CALLBACK_URL', 'https://wasly.bynona.store/auth/mobile-callback');
 
         if ($platform === 'mobile') {
             $redirectBase = $mobileFallback;
