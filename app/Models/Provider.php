@@ -37,4 +37,18 @@ class Provider extends Model
     {
         return $this->hasMany(Review::class);
     }
+    public function getImagePathAttribute()
+    {
+        return asset('storage/providers/' . $this->user->image);
+    }
+    public function getTitleAttribute()
+    {
+        return app()->getLocale() == 'ar' ? $this->title_ar : $this->title_en;
+    }
+    public function getServiceDescriptionAttribute()
+    {
+        return app()->getLocale() == 'ar' ? $this->service_description_ar : $this->service_description_en;
+    }
+    
+    
 }
