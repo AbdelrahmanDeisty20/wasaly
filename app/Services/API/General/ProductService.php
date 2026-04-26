@@ -28,7 +28,7 @@ class ProductService
     }
     public function getProduct($data)
     {
-        $product = Product::with(['specifications','images','subCategory','brand','offers'])->find($data['product_id']);
+        $product = Product::with(['specifications','images','subCategory','brand','offers','reviews'])->find($data['product_id']);
         if(!$product){
             return [
                 'status' => false,
