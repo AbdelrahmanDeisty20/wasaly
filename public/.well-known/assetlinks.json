@@ -1,13 +1,11 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.example.wassaly",
-      "sha256_cert_fingerprints": [
-        "FC:89:9E:9E:A8:17:87:D4:7A:A2:D4:CD:DC:80:B9:56:0F:56:8C:1C:D3:96:48:47:F3:B9:EC:C8:D2:48:21:6E",
-        "94:F0:62:98:20:4D:F7:07:F5:48:B9:C1:C3:41:23:86:6B:06:3D:5E:C5:E0:E4:66:E1:96:AE:CB:48:AC:EB:39"
-      ]
-    }
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.example.wassaly",
+    "sha256_cert_fingerprints": [
+      "FC:89:9E:9E:A8:17:87:D4:7A:A2:D4:CD:DC:80:B9:56:0F:56:8C:1C:D3:96:48:47:F3:B9:EC:C8:D2:48:21:6E",
+      "94:F0:62:98:20:4D:F7:07:F5:48:B9:C1:C3:41:23:86:6B:06:3D:5E:C5:E0:E4:66:E1:96:AE:CB:48:AC:EB:39"
+    ]
   }
-]
+}]
