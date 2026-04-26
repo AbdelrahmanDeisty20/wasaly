@@ -8,6 +8,9 @@ use App\Models\Otp;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 use Mail;
 
@@ -280,18 +283,26 @@ class AuthService
     public function redirectToProvider($provider)
     {
         $platform = request('platform', 'web');
+        // Generate a unique state to track this specific request
+        $state = Str::random(40);
+        
+        // Store platform in cache for 10 minutes
+        Cache::put("social_auth_platform_{$state}", $platform, now()->addMinutes(10));
+
         return Socialite::driver($provider)
             ->stateless()
-            ->with(['state' => "platform={$platform}"])
+            ->with(['state' => $state])
             ->redirect();
     }
 
     public function handleProviderCallback($provider)
     {
-        // Check platform from state
+        Log::info("Social callback reached for provider: {$provider}", ['request' => request()->all()]);
+
+        // Get the state from the request
         $state = request('state');
-        parse_str($state, $stateParams);
-        $platform = $stateParams['platform'] ?? 'web';
+        // Get platform from cache and default to 'web'
+        $platform = Cache::pull("social_auth_platform_{$state}", 'web');
 
         if ($platform === 'mobile') {
             $redirectBase = env('MOBILE_APP_URL', 'wassaly://auth/callback');
