@@ -7,8 +7,8 @@ use App\Mail\OtpMail;
 use App\Models\Otp;
 use App\Models\User;
 use App\Traits\ApiResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 use Mail;
@@ -282,18 +282,19 @@ class AuthService
     public function redirectToProvider($provider)
     {
         $platform = request('platform', 'web');
-        // Store platform in a cookie for 10 minutes
-        Cookie::queue('social_platform', $platform, 10);
-
+        
         return Socialite::driver($provider)
             ->stateless()
+            ->with(['state' => 'platform=' . $platform])
             ->redirect();
     }
 
     public function handleProviderCallback($provider)
     {
-        // Get platform from cookie and default to 'web'
-        $platform = request()->cookie('social_platform', 'web');
+        // Get platform from state (passed back by Google)
+        $state = request('state');
+        parse_str($state, $result);
+        $platform = $result['platform'] ?? 'web';
         
         if ($platform === 'mobile') {
             $redirectBase = env('MOBILE_APP_URL', 'wassaly://auth/callback');
