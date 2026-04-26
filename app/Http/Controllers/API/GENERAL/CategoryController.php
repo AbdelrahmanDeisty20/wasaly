@@ -38,9 +38,7 @@ class CategoryController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->paginated(SubCategoryResource::class, $result['data'], $result['message'], [
-            'category' => $result['category']
-        ]);
+        return $this->success($result['data'], $result['message'], 200);
     }
 
     public function getSubCategories()
@@ -58,8 +56,6 @@ class CategoryController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->paginated(ProductResource::class, $result['data'], $result['message'], [
-            'sub_category' => $result['sub_category']
-        ]);
+        return $this->success($result['data'], $result['message'], 200);
     }
 }

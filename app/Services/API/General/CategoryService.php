@@ -45,8 +45,18 @@ class CategoryService
         return [
             'status' => true,
             'message' => __('messages.category_retrieved_successfully'),
-            'data' => $subCategories,
-            'category' => new CategoryResource($category)
+            'data' => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'image' => $category->image_path,
+                'sub_categories' => SubCategoryResource::collection($subCategories),
+                'pagination' => [
+                    'current_page' => $subCategories->currentPage(),
+                    'per_page' => $subCategories->perPage(),
+                    'total' => $subCategories->total(),
+                    'last_page' => $subCategories->lastPage(),
+                ]
+            ]
         ];
     }
 
@@ -83,8 +93,18 @@ class CategoryService
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => $products,
-            'sub_category' => new SubCategoryResource($subCategory)
+            'data' => [
+                'id' => $subCategory->id,
+                'name' => $subCategory->name,
+                'image' => $subCategory->image_path,
+                'products' => ProductResource::collection($products),
+                'pagination' => [
+                    'current_page' => $products->currentPage(),
+                    'per_page' => $products->perPage(),
+                    'total' => $products->total(),
+                    'last_page' => $products->lastPage(),
+                ]
+            ]
         ];
     }
 }

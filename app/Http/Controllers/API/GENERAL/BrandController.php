@@ -32,8 +32,6 @@ class BrandController extends Controller
         if(!$result['status']){
             return $this->error($result['message'],404);
         }
-        return $this->paginated(ProductResource::class,$result['data'],$result['message'],[
-            'brand' => $result['brand']
-        ]);
+        return $this->success($result['data'],$result['message'],200);
     }
 }
