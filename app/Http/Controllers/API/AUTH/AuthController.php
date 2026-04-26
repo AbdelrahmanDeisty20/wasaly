@@ -112,11 +112,8 @@ class AuthController extends Controller
 
     public function handleProviderCallback($provider)
     {
-        $result = $this->AuthService->handleProviderCallback($provider);
-        if (!$result['status']) {
-            return $this->error($result['message'], 400, $result['data'] ?? []);
-        }
-        return redirect()->away($result['data']['redirect_url']);
+        $redirectUrl = $this->AuthService->handleProviderCallback($provider);
+        return redirect()->away($redirectUrl);
     }
 
     public function deleteAccount()

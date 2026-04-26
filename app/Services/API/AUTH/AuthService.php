@@ -281,9 +281,10 @@ class AuthService
 
     public function redirectToProvider($provider)
     {
-        $platform = request('platform', 'web');
+        $platform = request()->input('platform', 'web');
         
-        $state = base64_encode(json_encode([
+        // Encrypt state for maximum security
+        $state = encrypt(json_encode([
             'platform' => $platform
         ]));
 
@@ -295,37 +296,43 @@ class AuthService
 
     public function handleProviderCallback($provider)
     {
-        // Decode platform from state
-        $state = request('state');
-        $data = json_decode(base64_decode($state), true);
-        $platform = $data['platform'] ?? 'web';
+        // Gracefully decrypt platform from state
+        $state = request()->input('state');
+        try {
+            $data = json_decode(decrypt($state), true);
+            $platform = $data['platform'] ?? 'web';
+        } catch (\Exception $e) {
+            Log::warning("Social state decryption failed: " . $e->getMessage());
+            $platform = 'web';
+        }
         
+        // Final Fallbacks for safety
+        $webFallback = rtrim(env('FRONTEND_URL', 'https://wasly-two.vercel.app'), '/') . '/auth/callback';
+        $mobileFallback = env('MOBILE_APP_URL', 'wasly://auth/callback');
+
         if ($platform === 'mobile') {
-            $redirectBase = env('MOBILE_APP_URL', 'wasly://auth/callback');
+            $redirectBase = $mobileFallback;
         } else {
-            $redirectBase = rtrim(env('FRONTEND_URL', 'https://wasly-two.vercel.app'), '/') . '/auth/callback';
+            $redirectBase = $webFallback;
         }
 
         try {
             $socialUser = Socialite::driver($provider)->stateless()->user();
         } catch (\Exception $e) {
-            return [
-                'status' => false,
-                'message' => __('messages.social_login_failed'),
-                'data' => [
-                    'error' => $e->getMessage()
-                ],
-            ];
+            Log::error("Social login error: " . $e->getMessage());
+            return $redirectBase . '?status=error&message=login_failed';
+        }
+
+        // Check if Google returned an email
+        if (!$socialUser->getEmail()) {
+            return $redirectBase . '?status=error&message=no_email';
         }
 
         $user = User::where('email', $socialUser->getEmail())->first();
 
+        // Block service providers from social login
         if ($user && $user->type === 'service_provider') {
-            return [
-                'status' => false,
-                'message' => __('messages.service_provider_social_login_blocked'),
-                'data' => [],
-            ];
+            return $redirectBase . '?status=error&message=service_provider_blocked';
         }
 
         if (!$user) {
@@ -354,23 +361,17 @@ class AuthService
         $token = $user->createToken('auth_token')->plainTextToken;
         $userResource = new UserResource($user);
 
+        // Standardized naming for Flutter
         $query = http_build_query([
+            'status' => 'success',
             'token' => $token,
-            'id' => $userResource->id,
+            'user_id' => $userResource->id,
             'full_name' => $user->full_name,
             'email' => $user->email,
             'avatar' => $user->avatar,
         ]);
 
-        return [
-            'status' => true,
-            'message' => __('messages.user_logged_in_successfully'),
-            'data' => [
-                'user' => $userResource,
-                'token' => $token,
-                'redirect_url' => $redirectBase . '?' . $query,
-            ],
-        ];
+        return $redirectBase . '?' . $query;
     }
 
     public function deleteAccount()
