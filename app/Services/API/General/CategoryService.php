@@ -41,22 +41,12 @@ class CategoryService
         }
 
         $subCategories = $category->subCategories()->paginate(10);
+        $category->setRelation('subCategories', $subCategories);
 
         return [
             'status' => true,
             'message' => __('messages.category_retrieved_successfully'),
-            'data' => [
-                'id' => $category->id,
-                'name' => $category->name,
-                'image' => $category->image_path,
-                'sub_categories' => SubCategoryResource::collection($subCategories),
-                'pagination' => [
-                    'current_page' => $subCategories->currentPage(),
-                    'per_page' => $subCategories->perPage(),
-                    'total' => $subCategories->total(),
-                    'last_page' => $subCategories->lastPage(),
-                ]
-            ]
+            'data' => new CategoryResource($category)
         ];
     }
 
@@ -89,22 +79,12 @@ class CategoryService
         }
 
         $products = $subCategory->products()->with('offers', 'reviews')->paginate(10);
+        $subCategory->setRelation('products', $products);
 
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => [
-                'id' => $subCategory->id,
-                'name' => $subCategory->name,
-                'image' => $subCategory->image_path,
-                'products' => ProductResource::collection($products),
-                'pagination' => [
-                    'current_page' => $products->currentPage(),
-                    'per_page' => $products->perPage(),
-                    'total' => $products->total(),
-                    'last_page' => $products->lastPage(),
-                ]
-            ]
+            'data' => new SubCategoryResource($subCategory)
         ];
     }
 }
