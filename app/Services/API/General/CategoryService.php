@@ -41,12 +41,12 @@ class CategoryService
         }
 
         $subCategories = $category->subCategories()->paginate(10);
-        $category->setRelation('subCategories', $subCategories);
 
         return [
             'status' => true,
             'message' => __('messages.category_retrieved_successfully'),
-            'data' => new CategoryResource($category)
+            'data' => $subCategories,
+            'category' => new CategoryResource($category)
         ];
     }
 
@@ -79,12 +79,12 @@ class CategoryService
         }
 
         $products = $subCategory->products()->with('offers', 'reviews')->paginate(10);
-        $subCategory->setRelation('products', $products);
 
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => new SubCategoryResource($subCategory)
+            'data' => $products,
+            'sub_category' => new SubCategoryResource($subCategory)
         ];
     }
 }

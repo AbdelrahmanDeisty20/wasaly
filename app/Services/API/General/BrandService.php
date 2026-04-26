@@ -39,12 +39,12 @@ class BrandService
         }
 
         $products = $brand->products()->with('offers','reviews')->paginate(10);
-        $brand->setRelation('products', $products);
 
         return[
             'status'=>true,
             "message"=>__('messages.brand_fetched_successfully'),
-            "data"=>new BrandResource($brand)
+            "data"=>$products,
+            "brand"=>new BrandResource($brand)
         ];
     }
     
