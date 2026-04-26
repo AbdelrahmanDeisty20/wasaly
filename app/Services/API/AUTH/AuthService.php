@@ -289,7 +289,82 @@ class AuthService
 
     public function handleProviderCallback($provider)
     {
-        return "Connection Success! We reached the server.";
+        // Get the state from the request
+        $state = request('state');
+        // Get platform from cache and default to 'web'
+        $platform = Cache::pull("social_auth_platform_{$state}", 'web');
+
+        if ($platform === 'mobile') {
+            $redirectBase = env('MOBILE_APP_URL', 'wassaly://auth/callback');
+        } else {
+            $redirectBase = rtrim(env('FRONTEND_URL', 'https://wasly-two.vercel.app'), '/') . '/auth/callback';
+        }
+
+        try {
+            $socialUser = Socialite::driver($provider)->stateless()->user();
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => __('messages.social_login_failed'),
+                'data' => [
+                    'error' => $e->getMessage()
+                ],
+            ];
+        }
+
+        $user = User::where('email', $socialUser->getEmail())->first();
+
+        if ($user && $user->type === 'service_provider') {
+            return [
+                'status' => false,
+                'message' => __('messages.service_provider_social_login_blocked'),
+                'data' => [],
+            ];
+        }
+
+        if (!$user) {
+            $user = User::create([
+                'full_name' => $socialUser->getName() ?? $socialUser->getNickname(),
+                'email' => $socialUser->getEmail(),
+                'avatar' => $socialUser->getAvatar(),
+                'provider' => $provider,
+                'provider_id' => $socialUser->getId(),
+                'password' => Hash::make($socialUser->getId()),
+                'is_active' => true,
+                'email_verified_at' => now(),
+                'type' => 'user',
+            ]);
+        } else {
+            if (!$user->provider) {
+                $user->update([
+                    'provider' => $provider,
+                    'provider_id' => $socialUser->getId(),
+                    'is_active' => true,
+                    'email_verified_at' => $user->email_verified_at ?? now(),
+                ]);
+            }
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+        $userResource = new UserResource($user);
+
+        $query = http_build_query([
+            'token' => $token,
+            'id' => $userResource->id,
+            'full_name' => $user->full_name,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
+        ]);
+
+        return [
+            'status' => true,
+            'message' => __('messages.user_logged_in_successfully'),
+            'data' => [
+                'user' => $userResource,
+                'token' => $token,
+                'redirect_url' => $redirectBase . '?' . $query,
+            ],
+        ];
     }
 
     public function deleteAccount()
