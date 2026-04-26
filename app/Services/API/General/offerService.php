@@ -11,7 +11,7 @@ class offerService
     use ApiResponse;
     public function getAllActiveOffer()
     {
-        $offers = Offer::where('is_active',true)->with('product')->paginate(10);
+        $offers = Offer::where('is_active',true)->with('product.offers','product.reviews')->paginate(10);
         if ($offers->isEmpty()) {
            return [
             'status' => false,
