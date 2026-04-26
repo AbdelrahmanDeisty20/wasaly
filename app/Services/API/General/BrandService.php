@@ -29,7 +29,7 @@ class BrandService
         ];
     }
     public function getBrand(array $data){
-        $brand = Brand::with('products')->find($data['brand_id']);
+        $brand = Brand::with('products.offers')->find($data['brand_id']);
         if(!$brand){
             return[
                 'status'=>false,
