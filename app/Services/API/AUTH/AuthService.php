@@ -283,18 +283,22 @@ class AuthService
     {
         $platform = request('platform', 'web');
         
+        $state = base64_encode(json_encode([
+            'platform' => $platform
+        ]));
+
         return Socialite::driver($provider)
             ->stateless()
-            ->with(['state' => 'platform=' . $platform])
+            ->with(['state' => $state])
             ->redirect();
     }
 
     public function handleProviderCallback($provider)
     {
-        // Get platform from state (passed back by Google)
+        // Decode platform from state
         $state = request('state');
-        parse_str($state, $result);
-        $platform = $result['platform'] ?? 'web';
+        $data = json_decode(base64_decode($state), true);
+        $platform = $data['platform'] ?? 'web';
         
         if ($platform === 'mobile') {
             $redirectBase = env('MOBILE_APP_URL', 'wasly://auth/callback');
