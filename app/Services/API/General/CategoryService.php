@@ -31,7 +31,7 @@ class CategoryService
 
     public function getCategory($data)
     {
-        $category = Category::with('subCategories')->find($data['category_id']);
+        $category = Category::find($data['category_id']);
         if (!$category) {
             return [
                 'status' => false,
@@ -39,10 +39,14 @@ class CategoryService
                 'data' => []
             ];
         }
+
+        $subCategories = $category->subCategories()->paginate(10);
+
         return [
             'status' => true,
             'message' => __('messages.category_retrieved_successfully'),
-            'data' => new CategoryResource($category)
+            'data' => $subCategories,
+            'category' => new CategoryResource($category)
         ];
     }
 

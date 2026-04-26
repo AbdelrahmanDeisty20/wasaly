@@ -29,7 +29,7 @@ class BrandService
         ];
     }
     public function getBrand(array $data){
-        $brand = Brand::with('products.offers','products.reviews')->find($data['brand_id']);
+        $brand = Brand::find($data['brand_id']);
         if(!$brand){
             return[
                 'status'=>false,
@@ -37,10 +37,14 @@ class BrandService
                 "data"=>[]
             ];
         }
+
+        $products = $brand->products()->with('offers','reviews')->paginate(10);
+
         return[
             'status'=>true,
             "message"=>__('messages.brand_fetched_successfully'),
-            "data"=>new BrandResource($brand)
+            "data"=>$products,
+            "brand"=>new BrandResource($brand)
         ];
     }
     

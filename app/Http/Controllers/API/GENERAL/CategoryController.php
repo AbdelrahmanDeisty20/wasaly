@@ -25,29 +25,31 @@ class CategoryController extends Controller
 
     public function getCategories()
     {
-        $categories = $this->CategoryService->getAllCategories();
-        if (!$categories) {
-            return $this->error($categories['message'], 404);
+        $result = $this->CategoryService->getAllCategories();
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
         }
-        return $this->success($categories['data'], $categories['message'], 200);
+        return $this->success($result['data'], $result['message'], 200);
     }
 
     public function getCategory(CategoryRequest $request)
     {
-        $category = $this->CategoryService->getCategory($request->validated());
-        if (!$category) {
-            return $this->error($category['message'], 404);
+        $result = $this->CategoryService->getCategory($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
         }
-        return $this->success($category['data'], $category['message'], 200);
+        return $this->paginated(SubCategoryResource::class, $result['data'], $result['message'], [
+            'category' => $result['category']
+        ]);
     }
 
     public function getSubCategories()
     {
-        $subCategories = $this->CategoryService->getSubCategories();
-        if (!$subCategories) {
-            return $this->error($subCategories['message'], 404);
+        $result = $this->CategoryService->getSubCategories();
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
         }
-        return $this->paginated(SubCategoryResource::class, $subCategories['data'], $subCategories['message']);
+        return $this->paginated(SubCategoryResource::class, $result['data'], $result['message']);
     }
 
     public function getSubCategory(SubCategoryRequest $request)

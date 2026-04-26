@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\GENERAL;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\BrandRequest;
 use App\Http\Resources\API\BrandResource;
+use App\Http\Resources\API\ProductResource;
 use App\Services\API\General\BrandService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -19,18 +20,20 @@ class BrandController extends Controller
     }
     public function getBrands()
     {
-        $brands = $this->BrandService->getAllBrands();
-        if(!$brands){
-            return $this->error($brands['message'],404);
+        $result = $this->BrandService->getAllBrands();
+        if(!$result['status']){
+            return $this->error($result['message'],404);
         }
-        return $this->paginated(BrandResource::class,$brands['data'],$brands['message']);
+        return $this->paginated(BrandResource::class,$result['data'],$result['message']);
     }
     public function getBrand(BrandRequest $request)
     {
-        $brand = $this->BrandService->getBrand($request->validated());
-        if(!$brand){
-            return $this->error($brand['message'],404);
+        $result = $this->BrandService->getBrand($request->validated());
+        if(!$result['status']){
+            return $this->error($result['message'],404);
         }
-        return $this->success($brand['data'],$brand['message'],200);
+        return $this->paginated(ProductResource::class,$result['data'],$result['message'],[
+            'brand' => $result['brand']
+        ]);
     }
 }
