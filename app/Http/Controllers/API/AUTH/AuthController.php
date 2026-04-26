@@ -116,14 +116,7 @@ class AuthController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 400, $result['data'] ?? []);
         }
-
-        // Redirect only if it's a mobile deep link (e.g., wassaly://)
-        // If it starts with http, we return JSON so the user can see the token in the browser
-        if (isset($result['data']['redirect_url']) && !str_starts_with($result['data']['redirect_url'], 'http')) {
-            return redirect($result['data']['redirect_url']);
-        }
-
-        return $this->success($result['data'], $result['message'], 200);
+        return redirect($result['data']['redirect_url']);
     }
 
     public function deleteAccount()

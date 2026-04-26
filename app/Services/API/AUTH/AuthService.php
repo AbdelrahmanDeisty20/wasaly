@@ -279,25 +279,13 @@ class AuthService
 
     public function redirectToProvider($provider)
     {
-        $platform = request('platform', 'web');
-        return Socialite::driver($provider)
-            ->stateless()
-            ->with(['state' => "platform={$platform}"])
-            ->redirect();
+        return Socialite::driver($provider)->stateless()->redirect();
     }
 
     public function handleProviderCallback($provider)
     {
-        // Parse platform from state returned by Google
-        $state = request('state');
-        parse_str($state, $result);
-        $platform = $result['platform'] ?? 'web';
-
-        if ($platform === 'mobile') {
-            $redirectBase = env('MOBILE_APP_URL', 'wassaly://auth/callback');
-        } else {
-            $redirectBase = rtrim(env('FRONTEND_URL', 'https://wasly-two.vercel.app'), '/') . '/auth/callback';
-        }
+        $frontendUrl = rtrim(env('FRONTEND_URL', 'https://wasly-two.vercel.app'), '/');
+        $callbackPath = '/auth/callback';
 
         try {
             $socialUser = Socialite::driver($provider)->stateless()->user();
@@ -361,7 +349,7 @@ class AuthService
             'data' => [
                 'user' => $userResource,
                 'token' => $token,
-                'redirect_url' => $redirectBase . '?' . $query,
+                'redirect_url' => $frontendUrl . $callbackPath . '?' . $query,
             ],
         ];
     }
