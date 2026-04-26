@@ -18,6 +18,7 @@ class BrandResource extends JsonResource
             'id'=>$this->id,
             'name'=>$this->name,
             'image'=>$this->image_path,
+            'products'=>ProductResource::collection($this->whenLoaded('products')),
         ];
     }
 }
