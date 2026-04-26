@@ -45,10 +45,12 @@ class CategoryController extends Controller
     }
     public function getSubCategory(SubCategoryRequest $request)
     {
-        $subCategories = $this->CategoryService->getSubCategory($request->validated());
-        if(!$subCategories){
-            return $this->error($subCategories['message'],404);
+        $result = $this->CategoryService->getSubCategory($request->validated());
+        if(!$result['status']){
+            return $this->error($result['message'],404);
         }
-        return $this->success($subCategories['data'],$subCategories['message'],200);
+        return $this->paginated(ProductResource::class, $result['data'], $result['message'], [
+            'sub_category' => $result['sub_category']
+        ]);
     }
 }

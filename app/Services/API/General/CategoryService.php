@@ -56,23 +56,27 @@ class CategoryService
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => SubCategoryResource::collection($subCategories)
+            'data' => $subCategories
         ];
     }
     public function getSubCategory($data)
     {
-        $subCategories = SubCategory::with('products.offers','products.reviews')->find($data['sub_category_id']);
-        if(!$subCategories){
+        $subCategory = SubCategory::find($data['sub_category_id']);
+        if(!$subCategory){
             return [
                 'status' => false,
                 'message' => __('messages.sub_category_not_found'),
                 'data' => []
             ];
         }
+
+        $products = $subCategory->products()->with('offers','reviews')->paginate(10);
+
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => new SubCategoryResource($subCategories)
+            'data' => $products,
+            'sub_category' => new SubCategoryResource($subCategory)
         ];
     }
 }
