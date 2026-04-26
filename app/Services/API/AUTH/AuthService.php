@@ -297,7 +297,7 @@ class AuthService
         $platform = $result['platform'] ?? 'web';
         
         if ($platform === 'mobile') {
-            $redirectBase = env('MOBILE_APP_URL', 'wassaly://auth/callback');
+            $redirectBase = env('MOBILE_APP_URL', 'wasly://auth/callback');
         } else {
             $redirectBase = rtrim(env('FRONTEND_URL', 'https://wasly-two.vercel.app'), '/') . '/auth/callback';
         }
