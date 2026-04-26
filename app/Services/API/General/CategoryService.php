@@ -11,10 +11,11 @@ use App\Traits\ApiResponse;
 class CategoryService
 {
     use ApiResponse;
+
     public function getAllCategories()
     {
         $categories = Category::all();
-        if($categories->isEmpty()){
+        if ($categories->isEmpty()) {
             return [
                 'status' => false,
                 'message' => __('messages.no_categories_found'),
@@ -27,10 +28,11 @@ class CategoryService
             'data' => CategoryResource::collection($categories)
         ];
     }
+
     public function getCategory($data)
     {
         $category = Category::with('subCategories')->find($data['category_id']);
-        if(!$category){
+        if (!$category) {
             return [
                 'status' => false,
                 'message' => __('messages.category_not_found'),
@@ -43,10 +45,11 @@ class CategoryService
             'data' => new CategoryResource($category)
         ];
     }
+
     public function getSubCategories()
     {
         $subCategories = SubCategory::paginate(10);
-        if($subCategories->isEmpty()){
+        if ($subCategories->isEmpty()) {
             return [
                 'status' => false,
                 'message' => __('messages.sub_category_not_found'),
@@ -59,10 +62,11 @@ class CategoryService
             'data' => $subCategories
         ];
     }
+
     public function getSubCategory($data)
     {
         $subCategory = SubCategory::find($data['sub_category_id']);
-        if(!$subCategory){
+        if (!$subCategory) {
             return [
                 'status' => false,
                 'message' => __('messages.sub_category_not_found'),
@@ -70,7 +74,7 @@ class CategoryService
             ];
         }
 
-        $products = $subCategory->products()->with('offers','reviews')->paginate(10);
+        $products = $subCategory->products()->with('offers', 'reviews')->paginate(10);
 
         return [
             'status' => true,
