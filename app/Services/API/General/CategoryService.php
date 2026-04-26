@@ -61,7 +61,7 @@ class CategoryService
     }
     public function getSubCategory($data)
     {
-        $subCategories = SubCategory::with('products')->find($data['sub_category_id']);
+        $subCategories = SubCategory::with('products.offers','products.reviews')->find($data['sub_category_id']);
         if(!$subCategories){
             return [
                 'status' => false,
