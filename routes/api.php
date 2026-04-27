@@ -51,6 +51,7 @@ Route::group(["middleware"=>SetLang::class],function(){
     Route::post("forget-verify-otp",[ForgetPasswordController::class,"verifyOtp"]);
     Route::post("reset-password",[ForgetPasswordController::class,"resetPassword"]);
     Route::post("forget-resend-otp",[ForgetPasswordController::class,"resendOtp"]);
+    Route::get('reviews/all/general/get',[ReviewController::class, 'getGeneralReviews']);
     // Authenticated Routes
     Route::group(["middleware"=>"auth:sanctum"],function(){
         Route::post("logout",[AuthController::class,"logoutCurrentDevice"]);
@@ -65,7 +66,6 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::post('reviews/general/create',[ReviewController::class, 'storeGeneralReview']);
         Route::get('reviews/product/get',[ReviewController::class, 'getProductReviews']);
         Route::get('reviews/general/get',[ReviewController::class, 'getMyGeneralReviews']);
-        Route::get('reviews/all/general/get',[ReviewController::class, 'getGeneralReviews']);
         Route::put('reviews/update/product/{id}',[ReviewController::class, 'updateProductReview']);
         Route::put('reviews/update/general/{id}',[ReviewController::class, 'updateGeneralReview']);
         Route::delete('reviews/{id}',[ReviewController::class, 'deleteReview']);
