@@ -65,6 +65,7 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::post("carts/checkout", [CheckoutController::class, "checkout"]);
         // Favorite Routes
         Route::get("favorites", [FavoriteController::class, "getFavorites"]);
-        Route::post("favorites/toggle", [FavoriteController::class, "toggleFavorite"]);
+        Route::post("favorites/add", [FavoriteController::class, "toggleFavorite"]);
+        Route::post("favorites/remove", [FavoriteController::class, "toggleFavorite"]);
     });
 });
