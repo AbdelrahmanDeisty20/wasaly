@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\GENERAL\ReviewRequest;
+use App\Http\Requests\API\GENERAL\StoreProductReviewRequest;
+use App\Http\Requests\API\GENERAL\StoreGeneralReviewRequest;
+use App\Http\Requests\API\GENERAL\UpdateReviewRequest;
 use App\Services\API\General\ReviewService;
 use App\Traits\ApiResponse;
 
@@ -13,10 +15,9 @@ class ReviewController extends Controller
 
     public function __construct(private ReviewService $reviewService)
     {
-        $this->reviewService = $reviewService;
     }
 
-    public function storeProductReview(ReviewRequest $request)
+    public function storeProductReview(StoreProductReviewRequest $request)
     {
         $result = $this->reviewService->storeProductReview($request->validated());
         if (!$result['status']) {
@@ -25,7 +26,7 @@ class ReviewController extends Controller
         return $this->success($result['data'], $result['message'], 201);
     }
 
-    public function storeGeneralReview(ReviewRequest $request)
+    public function storeGeneralReview(StoreGeneralReviewRequest $request)
     {
         $result = $this->reviewService->storeGeneralReview($request->validated());
         if (!$result['status']) {
@@ -49,7 +50,7 @@ class ReviewController extends Controller
         return $this->success($result['data'], $result['message']);
     }
 
-    public function updateProductReview(int $id, ReviewRequest $request)
+    public function updateProductReview(int $id, UpdateReviewRequest $request)
     {
         $result = $this->reviewService->updateProductReview($id, $request->validated());
         if (!$result['status']) {
