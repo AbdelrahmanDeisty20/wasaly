@@ -7,7 +7,7 @@ use App\Models\Provider;
 
 class ProviderService
 {
-    public function providerProfile($id){
+    public function providerProfile(){
         $provider = Provider::with('user','services')->where('user_id', auth()->id())->first();
         if(!$provider){
             return [

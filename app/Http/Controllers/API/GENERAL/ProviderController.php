@@ -17,9 +17,9 @@ class ProviderController extends Controller
         $this->providerService = $providerService;
     }
 
-    public function providerProfile($id)
+    public function providerProfile()
     {
-        $result = $this->providerService->providerProfile($id);
+        $result = $this->providerService->providerProfile();
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
