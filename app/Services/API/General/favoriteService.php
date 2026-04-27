@@ -66,7 +66,7 @@ class favoriteService
             return [
                 'status' => true,
                 'message' => $message,
-                'data' => new FavouriteResource($favorite)
+                'data' => new FavouriteResource($favorite->load('product'))
             ];
         }
 
