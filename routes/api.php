@@ -12,6 +12,7 @@ use App\Http\Controllers\API\GENERAL\ProviderController;
 use App\Http\Controllers\API\GENERAL\SettingController;
 use App\Http\Controllers\API\GENERAL\CartController;
 use App\Http\Controllers\API\GENERAL\CheckoutController;
+use App\Http\Controllers\API\GENERAL\ReviewController;
 use App\Http\Middleware\SetLang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,14 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::delete("delete-account",[AuthController::class,"deleteAccount"]);
         // Provider Routes
         Route::get("provider-profile",[ProviderController::class,"providerProfile"]);
+        //Review Routes
+        Route::post('reviews/product',          [ReviewController::class, 'storeProductReview']);
+        Route::post('reviews/general',           [ReviewController::class, 'storeGeneralReview']);
+        Route::get('reviews/product/{productId}',[ReviewController::class, 'getProductReviews']);
+        Route::get('reviews/general',            [ReviewController::class, 'getGeneralReviews']);
+        Route::put('reviews/{id}',               [ReviewController::class, 'updateProductReview']);
+        Route::delete('reviews/{id}',            [ReviewController::class, 'deleteReview']);
+
         // Cart Routes
         Route::get("carts", [CartController::class, "getCart"]);
         Route::post("carts/add", [CartController::class, "addToCart"]);

@@ -82,13 +82,20 @@ class ReviewService
             'data' => new ReviewResource($review->load('user', 'provider', 'product'))
         ];
     }
-    public function storeGeneralReview(array $data){
-        $review =Review::create([
-            'comment'=>$data['comment'],
-            'rate'=>$data['rate'],
-            'user_id'=>auth()->id(),
+    public function storeGeneralReview(array $data)
+    {
+        $review = Review::create([
+            'comment' => $data['comment'] ?? null,
+            'rating'  => $data['rating'],
+            'user_id' => auth()->id(),
         ]);
-    }   
+
+        return [
+            'status'  => true,
+            'message' => __('messages.review_added_successfully'),
+            'data'    => new ReviewResource($review->load('user')),
+        ];
+    }
 
     public function updateProductReview(int $id, array $data)
     {
