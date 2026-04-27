@@ -47,22 +47,27 @@ class Product extends Model
     {
         return $this->hasMany(Favorite::class);
     }
+
     public function getNameAttribute()
     {
         return app()->getLocale() == 'ar' ? $this->name_ar : $this->name_en;
     }
+
     public function getDescriptionAttribute()
     {
         return app()->getLocale() == 'ar' ? $this->description_ar : $this->description_en;
     }
+
     public function specifications()
     {
         return $this->hasMany(Specification::class);
     }
+
     public function offers()
     {
         return $this->hasMany(Offer::class);
     }
+
     public function reviews()
     {
         return $this->hasMany(Review::class);
@@ -70,14 +75,17 @@ class Product extends Model
 
     public function getDiscountedPriceAttribute()
     {
-        $activeOffer = $this->offers()
+        $activeOffer = $this
+            ->offers()
             ->where('is_active', true)
             ->where(function ($query) {
-                $query->whereNull('start_date')
+                $query
+                    ->whereNull('start_date')
                     ->orWhere('start_date', '<=', now());
             })
             ->where(function ($query) {
-                $query->whereNull('end_date')
+                $query
+                    ->whereNull('end_date')
                     ->orWhere('end_date', '>=', now());
             })
             ->first();
