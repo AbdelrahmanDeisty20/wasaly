@@ -8,7 +8,18 @@ use App\Models\Provider;
 class ProviderService
 {
     public function providerProfile(){
-        $provider = Provider::with('user','services')->where('user_id', auth()->id())->first();
+        $user = auth()->user();
+        
+        if ($user->type != 'service_provider') {
+            return [
+                'status' => false,
+                'message' => __('messages.unauthorized_provider'),
+                'data' => []
+            ];
+        }
+
+        $provider = Provider::with('user','services')->where('user_id', $user->id)->first();
+        
         if(!$provider){
             return [
                 'status' => false,
