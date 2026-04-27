@@ -2,6 +2,7 @@
 
 namespace App\Services\API\General;
 
+use App\Http\Resources\API\GENERAL\FavouriteResource;
 use App\Http\Resources\API\ProductListResource;
 use App\Models\Favorite;
 use App\Models\Product;
@@ -65,9 +66,7 @@ class favoriteService
             return [
                 'status' => true,
                 'message' => $message,
-                'data' => [
-                    'is_favorite' => $favorite->is_active
-                ]
+                'data' => new FavouriteResource($favorite)
             ];
         }
 
