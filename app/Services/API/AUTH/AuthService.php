@@ -371,11 +371,13 @@ class AuthService
         $token = $user->createToken('auth_token')->plainTextToken;
         $userResource = new UserResource($user);
 
-        // Standardized naming for Flutter
+        // Standardized naming for both Web and Mobile (Flutter)
         $query = http_build_query([
             'status' => 'success',
             'token' => $token,
-            'user_id' => $userResource->id,
+            'id' => $user->id,
+            'user_id' => $user->id,
+            'name' => $user->full_name,
             'full_name' => $user->full_name,
             'email' => $user->email,
             'avatar' => $user->avatar,
