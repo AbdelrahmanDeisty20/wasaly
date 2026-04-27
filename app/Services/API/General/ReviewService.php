@@ -73,8 +73,6 @@ class ReviewService
             'approved' => true,  // Auto-approve for now, or false to require admin approval
         ]);
 
-        // 3. Update Product Rating
-        $product->updateRating();
 
         return [
             'status' => true,
