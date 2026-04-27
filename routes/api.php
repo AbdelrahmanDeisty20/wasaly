@@ -66,7 +66,8 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::get('reviews/product/get',[ReviewController::class, 'getProductReviews']);
         Route::get('reviews/general/get',[ReviewController::class, 'getMyGeneralReviews']);
         Route::get('reviews/all/general/get',[ReviewController::class, 'getGeneralReviews']);
-        Route::put('reviews/{id}',[ReviewController::class, 'updateProductReview']);
+        Route::put('reviews/update/product/{id}',[ReviewController::class, 'updateProductReview']);
+        Route::put('reviews/update/general/{id}',[ReviewController::class, 'updateGeneralReview']);
         Route::delete('reviews/{id}',[ReviewController::class, 'deleteReview']);
 
         // Cart Routes
