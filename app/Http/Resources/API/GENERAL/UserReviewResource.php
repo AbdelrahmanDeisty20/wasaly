@@ -18,6 +18,7 @@ class UserReviewResource extends JsonResource
             'id' => $this->id,
             'name' => $this->full_name,
             'avatar' => $this->avatar,
+            'type' => $this->type,
         ];
     }
 }
