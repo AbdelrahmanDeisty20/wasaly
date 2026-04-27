@@ -12,7 +12,7 @@ class ProductService
     use ApiResponse;
     public function getProducts()
     {
-        $products = Product::with(['offers'])->paginate(10);
+        $products = Product::with(['offers','reviews'])->paginate(10);
         if($products->isEmpty()){
             return [
                 'status' => false,
