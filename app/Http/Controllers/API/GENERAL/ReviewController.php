@@ -38,9 +38,6 @@ class ReviewController extends Controller
     public function getProductReviews()
     {
         $result = $this->reviewService->getProductReviews();
-        if (!$result['status']) {
-            return $this->notFound($result['message']);
-        }
         return $this->success($result['data'], $result['message']);
     }
 
@@ -49,24 +46,38 @@ class ReviewController extends Controller
         $result = $this->reviewService->getMyGeneralReviews();
         return $this->success($result['data'], $result['message']);
     }
+
     public function getGeneralReviews()
     {
         $result = $this->reviewService->getGeneralReviews();
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
         return $this->success($result['data'], $result['message']);
+        
     }
 
-    public function updateProductReview(int $id, UpdateReviewRequest $request)
+    public function updateProductReview($id, UpdateReviewRequest $request)
     {
-        $result = $this->reviewService->updateProductReview($id, $request->validated());
+        $result = $this->reviewService->updateProductReview((int) $id, $request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }
         return $this->success($result['data'], $result['message']);
     }
 
-    public function deleteReview(int $id)
+    public function updateGeneralReview($id, UpdateReviewRequest $request)
     {
-        $result = $this->reviewService->deleteReview($id);
+        $result = $this->reviewService->updateProductReview((int) $id, $request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message']);
+    }
+
+    public function deleteReview($id)
+    {
+        $result = $this->reviewService->deleteReview((int) $id);
         if (!$result['status']) {
             return $this->error($result['message']);
         }
