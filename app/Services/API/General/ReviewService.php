@@ -68,7 +68,7 @@ class ReviewService
         $review = Review::create([
             'product_id' => $data['product_id'],
             'user_id' => auth()->id(),
-            'provider_id' => $product->provider_id ?? null,  // Handle cases where product might not have provider_id
+            'provider_id' => null,  // Product reviews are now separate from provider reviews
             'rating' => $data['rating'],
             'comment' => $data['comment'] ?? null,
             'approved' => true,  // Auto-approve for now, or false to require admin approval
@@ -173,8 +173,7 @@ class ReviewService
         $review->delete();
 
         // Update Rating
-        $review->product?->updateRating();
-        $review->provider?->updateRating();
+
 
         return [
             'status' => true,

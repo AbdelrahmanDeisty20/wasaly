@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use App\Models\Provider;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -13,8 +14,9 @@ class ReviewSeeder extends Seeder
     {
         $users = User::all();
         $products = Product::all();
+        $providers = Provider::all();
 
-        if ($users->isEmpty() || $products->isEmpty()) {
+        if ($users->isEmpty()) {
             return;
         }
 
@@ -35,29 +37,42 @@ class ReviewSeeder extends Seeder
             'Fast delivery and well packaged',
         ];
 
-        // Generate 100 reviews
+        // Generate 100 reviews distributed among General, Product, and Provider
         for ($i = 0; $i < 100; $i++) {
-            $isProductReview = rand(0, 10) > 3; // 70% product reviews, 30% general
+            $type = rand(1, 3); // 1: General, 2: Product, 3: Provider
 
             $user = $users->random();
-            $rating = rand(3, 5); // Mostly good ratings for seed data
+            $rating = rand(3, 5);
             $comment = $comments[array_rand($comments)];
 
-            if ($isProductReview) {
+            if ($type === 1) {
+                // General Review
+                Review::create([
+                    'user_id'     => $user->id,
+                    'product_id'  => null,
+                    'provider_id' => null,
+                    'rating'      => $rating,
+                    'comment'     => $comment,
+                ]);
+            } elseif ($type === 2 && !$products->isEmpty()) {
+                // Product Review
                 $product = $products->random();
                 Review::create([
                     'user_id'     => $user->id,
                     'product_id'  => $product->id,
-                    'provider_id' => $product->provider_id,
+                    'provider_id' => null, // Just product as requested
                     'rating'      => $rating,
                     'comment'     => $comment,
                 ]);
-                $product->updateRating();
-            } else {
+            } elseif ($type === 3 && !$providers->isEmpty()) {
+                // Provider Review
+                $provider = $providers->random();
                 Review::create([
-                    'user_id'  => $user->id,
-                    'rating'   => $rating,
-                    'comment'  => $comment,
+                    'user_id'     => $user->id,
+                    'product_id'  => null,
+                    'provider_id' => $provider->id,
+                    'rating'      => $rating,
+                    'comment'     => $comment,
                 ]);
             }
         }
