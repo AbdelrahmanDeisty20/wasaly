@@ -13,14 +13,22 @@ class ReviewService
 {
     use ApiResponse;
 
-    public function getGeneralReviews(){
+    public function getMyGeneralReviews(){
         $reviews = Review::with('user')->where('provider_id' , null)->where('product_id', null)->where('user_id',auth()->id())->get();
         return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
             'data' => ReviewResource::collection($reviews)
         ];
-    }   
+    }
+    public function getGeneralReviews(){
+        $reviews = Review::with('user')->where('provider_id' , null)->where('product_id', null)->get();
+        return [
+            'status' => true,
+            'message' => __('messages.reviews_fetched_successfully'),
+            'data' => ReviewResource::collection($reviews)
+        ];
+    }      
     public function getProductReviews()
     {
        $reviews = Review::with('user','product')->whereNotNull('product_id')->where('user_id',auth()->id())->get();

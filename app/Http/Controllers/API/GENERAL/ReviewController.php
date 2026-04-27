@@ -44,6 +44,11 @@ class ReviewController extends Controller
         return $this->success($result['data'], $result['message']);
     }
 
+    public function getMyGeneralReviews()
+    {
+        $result = $this->reviewService->getMyGeneralReviews();
+        return $this->success($result['data'], $result['message']);
+    }
     public function getGeneralReviews()
     {
         $result = $this->reviewService->getGeneralReviews();
