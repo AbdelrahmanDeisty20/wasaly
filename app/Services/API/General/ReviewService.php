@@ -35,7 +35,7 @@ class ReviewService
         ];
     }
 
-    public function storeReview(array $data)
+    public function storeProductReview(array $data)
     {
         $product = Product::find($data['product_id']);
         if (!$product) {
@@ -78,8 +78,13 @@ class ReviewService
             'data' => new ReviewResource($review->load('user', 'provider', 'product'))
         ];
     }
+    public function storeGeneralReview(array $data){
+        $review =Review::create([
+            ''
+        ]);
+    }   
 
-    public function updateReview(int $id, array $data)
+    public function updateProductReview(int $id, array $data)
     {
         $review = Review::find($id);
         if (!$review) {

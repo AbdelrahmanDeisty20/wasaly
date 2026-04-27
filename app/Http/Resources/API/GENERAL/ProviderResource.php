@@ -17,8 +17,6 @@ class ProviderResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'name'=>$this->name,
-            'image'=>$this->image_path,
             'user'=>new UserResource($this->whenLoaded('user')),
             'title'=>$this->title,
             'service_description'=>$this->service_description,
