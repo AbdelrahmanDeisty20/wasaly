@@ -13,7 +13,7 @@ class favoriteService
 
     public function getFavorites()
     {
-        $favorites = Favorite::with('product.images', 'product.specifications', 'product.subCategory', 'product.brand')
+        $favorites = Favorite::with('product.offers')
             ->where('user_id', auth()->id())
             ->where('is_active', true)
             ->latest()
