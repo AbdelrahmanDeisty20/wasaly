@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\General\ReviewRequest;
+use App\Http\Requests\API\GENERAL\ReviewRequest;
 use App\Services\API\General\ReviewService;
 use App\Traits\ApiResponse;
 
