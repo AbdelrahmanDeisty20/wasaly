@@ -23,7 +23,7 @@ class ReviewService
     }   
     public function getProductReviews()
     {
-       $reviews = Review::whereNotNull('product_id')->get();
+       $reviews = Review::with('user','product')->whereNotNull('product_id')->get();
        
        return [
             'status' => true,
