@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AUTH\AuthController;
 use App\Http\Controllers\API\ForgetPassword\ForgetPasswordController;
 use App\Http\Controllers\API\GENERAL\BrandController;
 use App\Http\Controllers\API\GENERAL\CategoryController;
+use App\Http\Controllers\API\GENERAL\FavoriteController;
 use App\Http\Controllers\API\GENERAL\OfferController;
 use App\Http\Controllers\API\GENERAL\PageController;
 use App\Http\Controllers\API\GENERAL\ProductController;
@@ -62,5 +63,8 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::delete("carts/remove", [CartController::class, "removeItem"]);
         Route::delete("carts/clear", [CartController::class, "clearCart"]);
         Route::post("carts/checkout", [CheckoutController::class, "checkout"]);
+        // Favorite Routes
+        Route::get("favorites", [FavoriteController::class, "getFavorites"]);
+        Route::post("favorites/toggle", [FavoriteController::class, "toggleFavorite"]);
     });
 });

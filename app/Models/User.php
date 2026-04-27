@@ -78,6 +78,13 @@ class User extends Authenticatable implements FilamentUser
     }
     public function getAvatarAttribute($value)
     {
+        if (!$value) return null;
+        
+        // If it's already a full URL (social login), return it as is
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
+            return $value;
+        }
+
         return asset('storage/users/avatars/' . $value);
     }
 }

@@ -283,27 +283,36 @@ class AuthService
     {
         $platform = request()->input('platform', 'web');
         
-        // Encrypt state for maximum security
-        $state = encrypt(json_encode([
-            'platform' => $platform
-        ]));
+        $driver = Socialite::driver($provider)->stateless();
 
-        return Socialite::driver($provider)
-            ->stateless()
-            ->with(['state' => $state])
-            ->redirect();
+        // Only add state if it's not web (to keep web flow as clean as possible)
+        if ($platform !== 'web') {
+            $driver->with(['state' => $platform]);
+        }
+
+        return $driver->redirect();
     }
 
     public function handleProviderCallback($provider)
     {
-        // Gracefully decrypt platform from state
         $state = request()->input('state');
-        try {
-            $data = json_decode(decrypt($state), true);
-            $platform = $data['platform'] ?? 'web';
-        } catch (\Exception $e) {
-            Log::warning("Social state decryption failed: " . $e->getMessage());
-            $platform = 'web';
+        $platform = 'web'; // Default
+
+        if ($state) {
+            // Try to decrypt if it looks like encrypted JSON (for backward compatibility)
+            try {
+                if (str_contains($state, '{') || strlen($state) > 50) {
+                    $decrypted = decrypt($state);
+                    $data = json_decode($decrypted, true);
+                    $platform = $data['platform'] ?? 'web';
+                } else {
+                    // Plain text platform (new approach)
+                    $platform = $state;
+                }
+            } catch (\Exception $e) {
+                // Fallback to plain text if decryption fails
+                $platform = $state;
+            }
         }
         
         // Final Fallbacks for safety
@@ -320,7 +329,8 @@ class AuthService
             $socialUser = Socialite::driver($provider)->stateless()->user();
         } catch (\Exception $e) {
             Log::error("Social login error: " . $e->getMessage());
-            return $redirectBase . '?status=error&message=login_failed';
+            // Pass the error message for debugging
+            return $redirectBase . '?status=error&message=' . urlencode($e->getMessage());
         }
 
         // Check if Google returned an email
