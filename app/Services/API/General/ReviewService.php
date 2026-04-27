@@ -21,21 +21,14 @@ class ReviewService
             'data' => ReviewResource::collection($reviews)
         ];
     }   
-    public function getProductReviews(int $productId)
+    public function getProductReviews()
     {
-       $reviews = Review::where('product_id' , $productId)->where('provider_id', null)->get();
-       if($reviews->isEmpty()){
-           return[
-            'status'=>false,
-            "message"=>__('messages.reviews_not_found'),
-            "data"=>[]
-           ];
-       }
-       return[
-            'status'=>true,
-            "message"=>__('messages.reviews_fetched_successfully'),
-            "data"=>ReviewResource::collection($reviews),
-            'product' => new ProductResource($reviews->first()->product),
+       $reviews = Review::whereNotNull('product_id')->get();
+       
+       return [
+            'status' => true,
+            'message' => __('messages.reviews_fetched_successfully'),
+            'data' => ReviewResource::collection($reviews),
        ];
     }
 

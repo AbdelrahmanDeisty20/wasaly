@@ -35,9 +35,9 @@ class ReviewController extends Controller
         return $this->success($result['data'], $result['message'], 201);
     }
 
-    public function getProductReviews(int $productId)
+    public function getProductReviews()
     {
-        $result = $this->reviewService->getProductReviews($productId);
+        $result = $this->reviewService->getProductReviews();
         if (!$result['status']) {
             return $this->notFound($result['message']);
         }
