@@ -132,8 +132,6 @@ class ReviewService
         ]);
 
         // 6. Update Rating
-        $review->product?->updateRating();
-        $review->provider?->updateRating();
 
         return [
             'status' => true,
