@@ -14,7 +14,7 @@ class ReviewService
     use ApiResponse;
 
     public function getGeneralReviews(){
-        $reviews = Review::where('provider_id' , null)->where('product_id', null)->get();
+        $reviews = Review::with('user')->where('provider_id' , null)->where('product_id', null)->where('user_id',auth()->id())->get();
         return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
