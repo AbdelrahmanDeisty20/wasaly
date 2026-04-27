@@ -24,6 +24,7 @@ class ReviewResource extends JsonResource
             'user'=>new UserReviewResource($this->whenLoaded('user')),
             'product'=>new ProductResource($this->whenLoaded('product')),
             'provider'=>new ProviderResource($this->whenLoaded('provider')),
+            'created_at'=>date('Y-m-d H:i:s',strtotime($this->created_at)),
         ];
     }
 }
