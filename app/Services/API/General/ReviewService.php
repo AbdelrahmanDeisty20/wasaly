@@ -13,26 +13,30 @@ class ReviewService
 {
     use ApiResponse;
 
-    public function getProductReviews(int $productId)
-    {
-        $product = Product::with(['reviews' => function ($query) {
-            $query->with('user', 'provider')->latest();
-        }])->find($productId);
-
-        if (!$product) {
-            return [
-                'status' => false,
-                'message' => __('messages.product_not_found'),
-                'data' => []
-            ];
-        }
-
+    public function getGeneralReviews(){
+        $reviews = Review::where('provider_id' , null)->where('product_id', null)->get();
         return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
-            'data' => ReviewResource::collection($product->reviews),
-            'product' => new ProductResource($product)
+            'data' => ReviewResource::collection($reviews)
         ];
+    }   
+    public function getProductReviews(int $productId)
+    {
+       $reviews = Review::where('product_id' , $productId)->where('provider_id', null)->get();
+       if($reviews->isEmpty()){
+           return[
+            'status'=>false,
+            "message"=>__('messages.reviews_not_found'),
+            "data"=>[]
+           ];
+       }
+       return[
+            'status'=>true,
+            "message"=>__('messages.reviews_fetched_successfully'),
+            "data"=>ReviewResource::collection($reviews),
+            'product' => new ProductResource($reviews->first()->product),
+       ];
     }
 
     public function storeProductReview(array $data)
@@ -80,7 +84,9 @@ class ReviewService
     }
     public function storeGeneralReview(array $data){
         $review =Review::create([
-            ''
+            'comment'=>$data['comment'],
+            'rate'=>$data['rate'],
+            'user_id'=>auth()->id(),
         ]);
     }   
 

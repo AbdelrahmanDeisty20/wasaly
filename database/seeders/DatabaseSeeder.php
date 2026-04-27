@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             GovernorateSeeder::class,
             MainDataSeeder::class,
             OfferSeeder::class,
+            ProductImageSeeder::class,
         ]);
     }
 }

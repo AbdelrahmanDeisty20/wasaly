@@ -16,18 +16,18 @@ class ProviderResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->id,
-            'user'=>new UserResource($this->whenLoaded('user')),
-            'title'=>$this->title,
-            'service_description'=>$this->service_description,
-            'phone'=>$this->phone,
-            'price'=>$this->price,
-            'from_day'=>$this->from_day,
-            'to_day'=>$this->to_day,
-            'start_time'=>$this->start_time,
-            'end_time'=>$this->end_time,
-            'status'=>$this->status,
-            'services'=>$this->whenLoaded('services'),
+            'id'                  => $this->id,
+            'user'                => new UserResource($this->whenLoaded('user')),
+            'title'               => $this->title,
+            'service_description' => $this->service_description,
+            'phone'               => $this->phone,
+            'price'               => $this->price,
+            'from_day'            => $this->from_day,
+            'to_day'              => $this->to_day,
+            'start_time'          => $this->start_time,
+            'end_time'            => $this->end_time,
+            'status'              => $this->status,
+            'services'            => ServiceResource::collection($this->whenLoaded('services')),
         ];
     }
 }

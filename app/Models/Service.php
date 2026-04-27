@@ -10,7 +10,8 @@ class Service extends Model
     use HasFactory;
     protected $fillable = [
         'provider_id',
-        'service',
+        'service_ar',
+        'service_en',
     ];
 
     public function provider()
@@ -18,5 +19,8 @@ class Service extends Model
         return $this->belongsTo(Provider::class);
     }
 
-    
+    public function getServiceAttribute()
+    {
+        return app()->getLocale() == 'ar' ? $this->service_ar : $this->service_en;
+    }
 }
