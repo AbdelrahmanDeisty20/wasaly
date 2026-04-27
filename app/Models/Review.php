@@ -30,4 +30,9 @@ class Review extends Model
     {
         return $this->belongsTo(Provider::class);
     }
+
+    public function canEdit()
+    {
+        return $this->created_at->diffInMinutes(now()) < 60;
+    }
 }

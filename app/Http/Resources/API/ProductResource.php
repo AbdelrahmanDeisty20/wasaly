@@ -23,7 +23,7 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'offers' => OfferResource::collection($this->whenLoaded('offers')),
             'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
-            'is_favorite' => auth('sanctum')->check() ? $this->favorites()->where('user_id', auth('sanctum')->id())->where('is_active', true)->exists() : false,
+            'is_favorite' => (bool) ($this->is_favorite ?? false),
         ];
     }
 }

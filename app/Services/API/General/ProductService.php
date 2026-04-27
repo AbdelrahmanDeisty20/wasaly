@@ -12,7 +12,13 @@ class ProductService
     use ApiResponse;
     public function getProducts()
     {
-        $products = Product::with(['offers'])->paginate(10);
+        $products = Product::with(['offers'])
+            ->when(auth('sanctum')->check(), function ($query) {
+                $query->withExists(['favorites as is_favorite' => function ($query) {
+                    $query->where('user_id', auth('sanctum')->id())->where('is_active', true);
+                }]);
+            })
+            ->paginate(10);
         if($products->isEmpty()){
             return [
                 'status' => false,
@@ -28,7 +34,13 @@ class ProductService
     }
     public function getProduct($data)
     {
-        $product = Product::with(['specifications','images','subCategory','brand','offers','reviews.user'])->find($data['product_id']);
+        $product = Product::with(['specifications','images','subCategory','brand','offers','reviews.user'])
+            ->when(auth('sanctum')->check(), function ($query) {
+                $query->withExists(['favorites as is_favorite' => function ($query) {
+                    $query->where('user_id', auth('sanctum')->id())->where('is_active', true);
+                }]);
+            })
+            ->find($data['product_id']);
         if(!$product){
             return [
                 'status' => false,

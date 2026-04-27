@@ -24,7 +24,9 @@ class ReviewResource extends JsonResource
             'user'=>new UserReviewResource($this->whenLoaded('user')),
             'product'=>new ProductResource($this->whenLoaded('product')),
             'provider'=>new ProviderResource($this->whenLoaded('provider')),
-            'created_at'=>date('Y-m-d H:i:s',strtotime($this->created_at)),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'can_edit' => $this->canEdit(),
+            'remaining_time_to_edit' => max(0, 60 - $this->created_at->diffInMinutes(now())),
         ];
     }
 }
