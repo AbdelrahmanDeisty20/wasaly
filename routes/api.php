@@ -8,6 +8,7 @@ use App\Http\Controllers\API\GENERAL\FavoriteController;
 use App\Http\Controllers\API\GENERAL\OfferController;
 use App\Http\Controllers\API\GENERAL\PageController;
 use App\Http\Controllers\API\GENERAL\ProductController;
+use App\Http\Controllers\API\GENERAL\ProviderController;
 use App\Http\Controllers\API\GENERAL\SettingController;
 use App\Http\Controllers\API\GENERAL\CartController;
 use App\Http\Controllers\API\GENERAL\CheckoutController;
@@ -56,6 +57,8 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::get("show-profile",[AuthController::class,"showProfile"]);
         Route::post("update-profile",[AuthController::class,"updateProfile"]);
         Route::delete("delete-account",[AuthController::class,"deleteAccount"]);
+        // Provider Routes
+        Route::get("provider-profile",[ProviderController::class,"providerProfile"]);
         // Cart Routes
         Route::get("carts", [CartController::class, "getCart"]);
         Route::post("carts/add", [CartController::class, "addToCart"]);

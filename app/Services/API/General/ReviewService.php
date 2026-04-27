@@ -1,0 +1,168 @@
+<?php
+
+namespace App\Services\API\General;
+
+use App\Http\Resources\API\GENERAL\ReviewResource;
+use App\Http\Resources\API\ProductResource;
+use App\Models\Product;
+use App\Models\Review;
+use App\Traits\ApiResponse;
+use Illuminate\Support\Carbon;
+
+class ReviewService
+{
+    use ApiResponse;
+
+    public function getProductReviews(int $productId)
+    {
+        $product = Product::with(['reviews' => function ($query) {
+            $query->with('user', 'provider')->latest();
+        }])->find($productId);
+
+        if (!$product) {
+            return [
+                'status' => false,
+                'message' => __('messages.product_not_found'),
+                'data' => []
+            ];
+        }
+
+        return [
+            'status' => true,
+            'message' => __('messages.reviews_fetched_successfully'),
+            'data' => ReviewResource::collection($product->reviews),
+            'product' => new ProductResource($product)
+        ];
+    }
+
+    public function storeReview(array $data)
+    {
+        $product = Product::find($data['product_id']);
+        if (!$product) {
+            return [
+                'status' => false,
+                'message' => __('messages.product_not_found'),
+                'data' => []
+            ];
+        }
+
+        // 1. Check if user already has review for this product
+        $existingReview = Review::where('product_id', $data['product_id'])
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($existingReview) {
+            return [
+                'status' => false,
+                'message' => __('messages.already_reviewed'),
+                'data' => []
+            ];
+        }
+
+        // 2. Create the review
+        $review = Review::create([
+            'product_id' => $data['product_id'],
+            'user_id' => auth()->id(),
+            'provider_id' => $product->provider_id,  // Assuming provider_id is on product
+            'rating' => $data['rating'],
+            'comment' => $data['comment'] ?? null,
+            'approved' => true,  // Auto-approve for now, or false to require admin approval
+        ]);
+
+        // 3. Update Product Rating
+        $product->updateRating();
+
+        return [
+            'status' => true,
+            'message' => __('messages.review_added_successfully'),
+            'data' => new ReviewResource($review->load('user', 'provider', 'product'))
+        ];
+    }
+
+    public function updateReview(int $id, array $data)
+    {
+        $review = Review::find($id);
+        if (!$review) {
+            return [
+                'status' => false,
+                'message' => __('messages.review_not_found'),
+                'data' => []
+            ];
+        }
+
+        // 4. Check Ownership & Time Limit (60 minutes)
+        if ($review->user_id != auth()->id()) {
+            return [
+                'status' => false,
+                'message' => __('messages.unauthorized'),
+                'data' => []
+            ];
+        }
+
+        $createdAt = Carbon::parse($review->created_at);
+        if ($createdAt->addMinutes(60)->isPast()) {
+            return [
+                'status' => false,
+                'message' => __('messages.review_edit_window_expired'),
+                'data' => []
+            ];
+        }
+
+        // 5. Update the review
+        $review->update([
+            'rating' => $data['rating'] ?? $review->rating,
+            'comment' => $data['comment'] ?? $review->comment,
+        ]);
+
+        // 6. Update Product Rating
+        $review->product->updateRating();
+
+        return [
+            'status' => true,
+            'message' => __('messages.review_updated_successfully'),
+            'data' => new ReviewResource($review->load('user', 'provider', 'product'))
+        ];
+    }
+
+    public function deleteReview(int $id)
+    {
+        $review = Review::find($id);
+        if (!$review) {
+            return [
+                'status' => false,
+                'message' => __('messages.review_not_found'),
+                'data' => []
+            ];
+        }
+
+        // 4. Check Ownership & Time Limit (60 minutes)
+        if ($review->user_id != auth()->id()) {
+            return [
+                'status' => false,
+                'message' => __('messages.unauthorized'),
+                'data' => []
+            ];
+        }
+
+        $createdAt = Carbon::parse($review->created_at);
+        if ($createdAt->addMinutes(60)->isPast()) {
+            return [
+                'status' => false,
+                'message' => __('messages.review_delete_window_expired'),
+                'data' => []
+            ];
+        }
+
+        // Delete the review
+        $review->delete();
+
+        // Update Product Rating
+        $review->product->updateRating();
+
+        return [
+            'status' => true,
+            'message' => __('messages.review_deleted_successfully'),
+            'data' => []
+        ];
+    }
+}
