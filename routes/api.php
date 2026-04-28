@@ -42,6 +42,8 @@ Route::group(["middleware"=>SetLang::class],function(){
     Route::get("offer",[OfferController::class,"getOffer"]);
     //Pages Routes
     Route::get("pages",[PageController::class,"getPages"]);
+    //Services Routes
+    Route::get("services",[ProviderController::class,"services"]);
     //Settings Routes
     Route::get("settings",[SettingController::class,"getSettings"]);
     //Governorates Routes

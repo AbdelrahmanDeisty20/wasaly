@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\API\GENERAL\ServiceResource;
 use App\Services\API\General\ProviderService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -30,6 +31,6 @@ class ProviderController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->paginated($result['data'], $result['message'], 200);
+        return $this->paginated(ServiceResource::class,$result['data'], $result['message']);
     }
 }
