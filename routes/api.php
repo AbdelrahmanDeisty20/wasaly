@@ -5,6 +5,7 @@ use App\Http\Controllers\API\ForgetPassword\ForgetPasswordController;
 use App\Http\Controllers\API\GENERAL\BrandController;
 use App\Http\Controllers\API\GENERAL\CategoryController;
 use App\Http\Controllers\API\GENERAL\FavoriteController;
+use App\Http\Controllers\API\GENERAL\GovernorateController;
 use App\Http\Controllers\API\GENERAL\OfferController;
 use App\Http\Controllers\API\GENERAL\PageController;
 use App\Http\Controllers\API\GENERAL\ProductController;
