@@ -10,13 +10,11 @@ class CenterService
 {
     use ApiResponse;
 
-    public function getCentersByGovernorate($governorateId)
+    public function getCentersByGovernorate(array $data)
     {
         $centers = Center::with('governorate')
-            ->when($governorateId, function($query) use ($governorateId) {
-                return $query->where('governorate_id', $governorateId);
-            })
-            ->paginate(10);
+            ->where('governorate_id', $data['governorate_id'])
+            ->get();
 
         if ($centers->isNotEmpty()) {
             return [

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\GENERAL\CenterRequest;
 use App\Http\Resources\API\GENERAL\CenterResource;
 use App\Services\API\General\CenterService;
 use App\Traits\ApiResponse;
@@ -19,9 +20,9 @@ class CenterController extends Controller
         $this->centerService = $centerService;
     }
 
-    public function getCenters(Request $request)
+    public function getCenters(CenterRequest $request)
     {
-        $response = $this->centerService->getCentersByGovernorate($request->governorate_id);
+        $response = $this->centerService->getCentersByGovernorate($request->validated());
         
         if ($response['status']) {
             return $this->paginated(CenterResource::class, $response['data'], $response['message']);
@@ -30,3 +31,4 @@ class CenterController extends Controller
         return $this->error($response['message'], 400);
     }
 }
+
