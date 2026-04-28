@@ -223,4 +223,6 @@ return [
     'coupon_invalid' => 'الكوبون غير صالح أو انتهت صلاحيته',
     'coupon_applied_successfully' => 'تم تطبيق الكوبون بنجاح',
     'coupons_fetched_successfully' => 'تم استرجاع الكوبونات بنجاح',
+    'banners_not_found' => 'لا يوجد بانرات',
+    'banners_fetched_successfully' => 'تم استرجاع البانرات بنجاح',
 ];

@@ -223,4 +223,6 @@ return [
     'coupon_invalid' => 'Coupon is invalid or expired',
     'coupon_applied_successfully' => 'Coupon applied successfully',
     'coupons_fetched_successfully' => 'Coupons fetched successfully',
+    'banners_not_found' => 'No banners found',
+    'banners_fetched_successfully' => 'Banners fetched successfully',
 ];
