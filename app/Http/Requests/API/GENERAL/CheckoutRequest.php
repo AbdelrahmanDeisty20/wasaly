@@ -19,9 +19,9 @@ class CheckoutRequest extends FormRequest
             'customer_address' => 'required|string|max:255',
             'governorate_id' => 'required|exists:governorates,id',
             'center_id' => 'required|exists:centers,id,governorate_id,' . $this->governorate_id,
-            'address_id'     => 'nullable|exists:addresses,id',
+            'address_id' => 'nullable|exists:addresses,id',
             'payment_method' => 'nullable|in:cash,card',
-            'coupon_code'    => 'nullable|string|exists:coupons,code',
+            'coupon_code' => 'nullable|string|exists:coupons,code',
             'region' => 'required|string|max:255',
         ];
     }

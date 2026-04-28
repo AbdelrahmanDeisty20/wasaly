@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Coupon extends Model
 {
     protected $fillable = [
+        'user_id',
         'code',
         'title_ar',
         'title_en',
@@ -22,6 +23,11 @@ class Coupon extends Model
         'is_active',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function getTitleAttribute()
     {
         return app()->getLocale() === 'ar' ? $this->title_ar : $this->title_en;
@@ -32,9 +38,14 @@ class Coupon extends Model
         return app()->getLocale() === 'ar' ? $this->description_ar : $this->description_en;
     }
 
-    public function isValidForOrder($orderTotal)
+    public function isValidForOrder($orderTotal, $userId = null)
     {
         if (!$this->is_active) return false;
+
+        // التحقق من صاحب الكوبون إذا كان خاصاً بمستخدم معين
+        if ($this->user_id !== null && $this->user_id != $userId) {
+            return false;
+        }
         
         $now = now();
         if ($this->start_date && $now->lt($this->start_date)) return false;

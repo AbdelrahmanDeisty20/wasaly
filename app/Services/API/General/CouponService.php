@@ -12,7 +12,12 @@ class CouponService
 
     public function getCoupons()
     {
+        $userId = auth()->id();
         $coupons = Coupon::where('is_active', 1)
+            ->where(function($query) use ($userId) {
+                $query->whereNull('user_id')
+                      ->orWhere('user_id', $userId);
+            })
             ->where(function($query) {
                 $query->whereNull('end_date')
                       ->orWhere('end_date', '>=', now()->toDateString());
@@ -28,6 +33,7 @@ class CouponService
 
     public function applyCoupon($code, $orderTotal)
     {
+        $userId = auth()->id();
         $coupon = Coupon::where('code', $code)->first();
 
         if (!$coupon) {
@@ -37,7 +43,7 @@ class CouponService
             ];
         }
 
-        if (!$coupon->isValidForOrder($orderTotal)) {
+        if (!$coupon->isValidForOrder($orderTotal, $userId)) {
             return [
                 'status' => false,
                 'message' => __('messages.coupon_invalid'),
