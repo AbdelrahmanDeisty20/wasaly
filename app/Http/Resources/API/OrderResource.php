@@ -5,6 +5,8 @@ namespace App\Http\Resources\API;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use App\Http\Resources\API\GENERAL\CenterResource;
+
 class OrderResource extends JsonResource
 {
     /**
@@ -20,7 +22,9 @@ class OrderResource extends JsonResource
             'status' => $this->status,
             'total_price' => (float) ($this->total_price),
             'payment_method' => $this->payment_method,
-            'delivery_fees' => (float) ($this->governorate->shipping_cost ?? 0),
+            'delivery_fees' => (float) ($this->shipping_cost ?? 0),
+            'governorate' => GovernorateResource::make($this->whenLoaded('governorate')),
+            'center' => CenterResource::make($this->whenLoaded('center')),
             'items' => OrderItemResource::collection($this->whenLoaded('items')),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];

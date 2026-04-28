@@ -21,6 +21,8 @@ class Order extends Model
         'payment_method',
         'status',
         'governorate_id',
+        'center_id',
+        'shipping_cost',
         'region',
     ];
 
@@ -37,6 +39,11 @@ class Order extends Model
     public function governorate()
     {
         return $this->belongsTo(Governorate::class);
+    }
+
+    public function center()
+    {
+        return $this->belongsTo(Center::class);
     }
 
     public function items()

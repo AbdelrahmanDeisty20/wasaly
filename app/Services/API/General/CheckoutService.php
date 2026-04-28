@@ -52,24 +52,29 @@ class CheckoutService
                 $totalQuantity += $item->quantity;
             }
 
-            $address = Address::find($data['address_id'] ?? null) ?? $user->addresses()->where('is_default', 1)->first();
+            $address = Address::with('center')->find($data['address_id'] ?? null) ?? $user->addresses()->with('center')->where('is_default', 1)->first();
             
-            
+            $shippingCost = 0;
+            if ($address && $address->center) {
+                $shippingCost = $address->center->shipping_cost;
+            }
 
             // 2. إنشاء الطلب برقم مميز
             $order = Order::create([
                 'order_number'     => 'ORD-' . strtoupper(bin2hex(random_bytes(3))),
                 'user_id'          => $user->id,
                 'address_id'       => $address ? $address->id : null,
-                'unit_price'       => $totalPrice, // السعر الإجمالي هنا
+                'unit_price'       => $totalPrice, // سعر المنتجات
                 'quantity'         => $totalQuantity,
-                'total_price'      => $totalPrice,
+                'shipping_cost'    => $shippingCost,
+                'total_price'      => $totalPrice + $shippingCost,
                 'customer_name'    => $data['customer_name'] ?? ($user->full_name ?? $user->name),
                 'customer_phone'   => $data['customer_phone'] ?? $user->phone,
                 'customer_address' => $address ? $address->address : ($data['customer_address'] ?? null),
                 'payment_method'   => $data['payment_method'] ?? 'cash',
                 'status'           => 'pending',
-                'governorate_id'   => $data['governorate_id'] ?? null,
+                'governorate_id'   => $address ? $address->governorate_id : ($data['governorate_id'] ?? null),
+                'center_id'        => $address ? $address->center_id : null,
                 'region'           => $data['region'] ?? null,
             ]);
 
@@ -96,7 +101,7 @@ class CheckoutService
             return [
                 'status' => true,
                 'message' => __('messages.checkout_success'),
-                'data'=>OrderResource::make($order->load(['items.product.offers', 'governorate']))
+                'data'=>OrderResource::make($order->load(['items.product.offers', 'governorate', 'center']))
             ];
 
         } catch (\Exception $e) {
