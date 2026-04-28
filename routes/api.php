@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AUTH\AuthController;
 use App\Http\Controllers\API\ForgetPassword\ForgetPasswordController;
+use App\Http\Controllers\API\GENERAL\BannerController;
 use App\Http\Controllers\API\GENERAL\BrandController;
 use App\Http\Controllers\API\GENERAL\CategoryController;
 use App\Http\Controllers\API\GENERAL\FavoriteController;
