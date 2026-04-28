@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\API\GENERAL\CenterResource;
 use App\Services\API\General\CenterService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class CenterController extends Controller
         $response = $this->centerService->getCentersByGovernorate($request->governorate_id);
         
         if ($response['status']) {
-            return $this->success($response['data'], $response['message'], 200);
+            return $this->paginated(CenterResource::class,$response['data'], $response['message'], 200);
         }
         
         return $this->error($response['message'], 400);
