@@ -18,9 +18,9 @@ class CouponController extends Controller
         $this->couponService = $couponService;
     }
 
-    public function getCoupons(Request $request)
+    public function getCoupons()
     {
-        $response = $this->couponService->getCoupons($request->user_id);
+        $response = $this->couponService->getCoupons();
         return $this->success($response['data'], $response['message'], 200);
     }
 

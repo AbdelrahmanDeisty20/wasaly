@@ -10,9 +10,9 @@ class CouponService
 {
     use ApiResponse;
 
-    public function getCoupons($userId = null)
+    public function getCoupons()
     {
-        $userId = $userId ?? auth()->id();
+        $userId = auth()->id();
         $coupons = Coupon::where('is_active', 1)
             ->where(function($query) use ($userId) {
                 $query->whereNull('user_id')
