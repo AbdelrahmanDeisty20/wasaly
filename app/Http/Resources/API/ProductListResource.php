@@ -18,14 +18,14 @@ class ProductListResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->image,
+            'image' => $this->image_path,
             'price' => $this->price,
             'description' => $this->description,
             'specifications' => SpecificationResource::collection($this->whenLoaded('specifications')),
             'images' => ProductImageResource::collection($this->whenLoaded('images')),
             'sub_category' => SubCategoryResource::make($this->whenLoaded('subCategory')),
             'brand' => BrandResource::make($this->whenLoaded('brand')),
-            'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
+            'reviews'=>ReviewResource::collection($this->whenLoaded('reviews')),    
             'is_favorite' => auth('sanctum')->check() ? $this->favorites()->where('user_id', auth('sanctum')->id())->where('is_active', true)->exists() : false,
         ];
     }
