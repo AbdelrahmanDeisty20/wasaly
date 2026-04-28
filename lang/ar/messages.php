@@ -208,6 +208,8 @@ return [
     'unauthorized' => 'غير مصرح لك بالقيام بهذا الإجراء',
     'unauthorized_provider' => 'هذا الحساب ليس حساب مقدم خدمة',
     'address_created_failed' => 'فشل إضافة العنوان',
+    'address_updated_failed'=> 'فشل تحديث العنوان',
+    'address_updated_successfully'=> 'تم تحديث العنوان بنجاح',
     'addresses_fetched_failed'=> 'فشل استرجاع العناوين',
     'addresses_fetched_successfully'=> 'تم استرجاع العناوين بنجاح',
 ];

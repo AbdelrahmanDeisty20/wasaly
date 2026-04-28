@@ -208,6 +208,7 @@ return [
     'unauthorized' => 'Unauthorized action',
     'unauthorized_provider' => 'This account is not a service provider account',
     'address_created_failed'=> 'Failed to create address',
+    'address_updated_failed'=> 'Failed to update address',
     'addresses_fetched_failed'=> 'Failed to fetch addresses',
     'addresses_fetched_successfully'=> 'Addresses fetched successfully',
     

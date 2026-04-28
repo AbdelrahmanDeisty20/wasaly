@@ -86,5 +86,8 @@ Route::group(["middleware"=>SetLang::class],function(){
         // Address Routes
         Route::get("addresses", [AddressController::class, "getUserAddresses"]);
         Route::post("addresses/create", [AddressController::class, "store"]);
+        Route::post("addresses/update", [AddressController::class, "updateAddress"]);
+        Route::delete("addresses/delete", [AddressController::class, "deleteAddress"]);
+        Route::post("addresses/make-default", [AddressController::class, "makeDefaultAddress"]);
     });
 });
