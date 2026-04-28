@@ -16,6 +16,7 @@ use App\Http\Controllers\API\GENERAL\CheckoutController;
 use App\Http\Controllers\API\GENERAL\ReviewController;
 use App\Http\Controllers\API\GENERAL\AddressController;
 use App\Http\Controllers\API\GENERAL\CenterController;
+use App\Http\Controllers\API\GENERAL\CouponController;
 use App\Http\Middleware\SetLang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,8 @@ Route::group(["middleware"=>SetLang::class],function(){
     Route::get("governorates",[GovernorateController::class,"getAllGovernorates"]);
     //Centers Routes
     Route::get("centers",[CenterController::class,"getCenters"]);
+    //Coupons Routes
+    Route::get("coupons",[CouponController::class,"getCoupons"]);
     // Auth Routes
     Route::post("register",[AuthController::class,"register"]);
     Route::post("verify-otp",[AuthController::class,"verifyOtp"]);

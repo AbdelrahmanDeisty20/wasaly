@@ -2,12 +2,29 @@
 
 namespace App\Services\API\General;
 
+use App\Http\Resources\API\GENERAL\CouponResource;
 use App\Models\Coupon;
 use App\Traits\ApiResponse;
 
 class CouponService
 {
     use ApiResponse;
+
+    public function getCoupons()
+    {
+        $coupons = Coupon::where('is_active', 1)
+            ->where(function($query) {
+                $query->whereNull('end_date')
+                      ->orWhere('end_date', '>=', now()->toDateString());
+            })
+            ->get();
+
+        return [
+            'status' => true,
+            'message' => __('messages.coupons_fetched_successfully'),
+            'data' => CouponResource::collection($coupons),
+        ];
+    }
 
     public function applyCoupon($code, $orderTotal)
     {

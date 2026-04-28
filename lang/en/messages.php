@@ -222,4 +222,5 @@ return [
     'coupon_not_found' => 'Coupon not found',
     'coupon_invalid' => 'Coupon is invalid or expired',
     'coupon_applied_successfully' => 'Coupon applied successfully',
+    'coupons_fetched_successfully' => 'Coupons fetched successfully',
 ];

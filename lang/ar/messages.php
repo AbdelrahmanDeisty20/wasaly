@@ -222,4 +222,5 @@ return [
     'coupon_not_found' => 'الكوبون غير موجود',
     'coupon_invalid' => 'الكوبون غير صالح أو انتهت صلاحيته',
     'coupon_applied_successfully' => 'تم تطبيق الكوبون بنجاح',
+    'coupons_fetched_successfully' => 'تم استرجاع الكوبونات بنجاح',
 ];
