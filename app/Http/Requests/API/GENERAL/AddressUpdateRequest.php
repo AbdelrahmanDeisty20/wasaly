@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\GENERAL;
 
+use App\Models\Address;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,7 +28,7 @@ class AddressUpdateRequest extends FormRequest
             'title' => 'nullable|string|max:255',
             'address' => 'nullable|string',
             'governorate_id' => 'nullable|exists:governorates,id',
-            'center_id' => 'nullable|exists:centers,id',
+            'center_id' => 'nullable|exists:centers,id,governorate_id,' . ($this->governorate_id ?? Address::find($this->address_id)?->governorate_id),
             'is_default' => 'nullable|boolean',
         ];
     }

@@ -26,7 +26,7 @@ class AddressRequest extends FormRequest
             'title' => 'required|string|max:255',
             'address' => 'required|string',
             'governorate_id' => 'required|exists:governorates,id',
-            'center_id' => 'required|exists:centers,id',
+            'center_id' => 'required|exists:centers,id,governorate_id,' . $this->governorate_id,
             'is_default' => 'nullable|boolean',
         ];
     }

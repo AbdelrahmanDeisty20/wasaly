@@ -13,7 +13,7 @@ class CenterService
     public function getCentersByGovernorate($governorateId)
     {
         $centers = Center::with('governorate')->paginate(10);
-        if($centers){
+        if ($centers) {
             return [
                 'status' => true,
                 'message' => __('messages.centers_fetched_successfully'),
