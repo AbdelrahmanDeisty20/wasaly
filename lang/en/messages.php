@@ -215,4 +215,8 @@ return [
     'address_not_found' => 'Address not found',
     'governorates_fetched_failed'=> 'Failed to fetch governorates',
     'governorates_fetched_successfully'=> 'Governorates fetched successfully',
+    'centers_fetched_successfully'=> 'Centers fetched successfully',
+    'centers_fetched_failed'=> 'Failed to fetch centers',
+    'center_required' => 'Center is required',
+    'center_exists' => 'Center does not exist',
 ];

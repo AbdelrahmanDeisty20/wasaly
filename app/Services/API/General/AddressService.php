@@ -11,7 +11,7 @@ class AddressService
     use ApiResponse;
     public function getUserAddresses()
     {
-        $addresses = Address::with('governorate')->where('user_id', auth()->id())->get();
+        $addresses = Address::with(['governorate', 'center'])->where('user_id', auth()->id())->get();
         if ($addresses) {
             return [
                 'status' => true,
@@ -38,7 +38,7 @@ class AddressService
             return [
                 'status' => true,
                 'message' => __('messages.address_created_successfully'),
-                'data' => AddressResource::make($address->load('governorate')),
+                'data' => AddressResource::make($address->load(['governorate', 'center'])),
             ];
         }
         return [
@@ -66,7 +66,7 @@ class AddressService
         return [
             'status' => true,
             'message' => __('messages.address_updated_successfully'),
-            'data' => AddressResource::make($address->load('governorate')),
+            'data' => AddressResource::make($address->load(['governorate', 'center'])),
         ];
     }
 
@@ -105,7 +105,7 @@ class AddressService
         return [
             'status' => true,
             'message' => __('messages.address_updated_successfully'),
-            'data' => AddressResource::make($address->load('governorate')),
+            'data' => AddressResource::make($address->load(['governorate', 'center'])),
         ];
     }
 }

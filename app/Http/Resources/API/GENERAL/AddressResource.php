@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\GENERAL;
 
+use App\Http\Resources\API\GENERAL\CenterResource;
 use App\Http\Resources\API\GovernorateResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
@@ -19,7 +20,9 @@ class AddressResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'address' => $this->address,
+            'is_default' => (bool) $this->is_default,
             'governorate' => GovernorateResource::make($this->whenLoaded('governorate')),
+            'center' => CenterResource::make($this->whenLoaded('center')),
         ];
     }
 }

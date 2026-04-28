@@ -5,31 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Address extends Model
+class Center extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'name_ar',
+        'name_en',
         'governorate_id',
-        'center_id',
-        'title',
-        'address',
-        'is_default',
     ];
 
-    public function user()
+    public function getNameAttribute()
     {
-        return $this->belongsTo(User::class);
+        return app()->getLocale() == 'ar' ? $this->name_ar : $this->name_en;
     }
 
     public function governorate()
     {
         return $this->belongsTo(Governorate::class);
-    }
-
-    public function center()
-    {
-        return $this->belongsTo(Center::class);
     }
 }

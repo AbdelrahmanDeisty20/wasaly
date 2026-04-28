@@ -27,6 +27,7 @@ class AddressUpdateRequest extends FormRequest
             'title' => 'nullable|string|max:255',
             'address' => 'nullable|string',
             'governorate_id' => 'nullable|exists:governorates,id',
+            'center_id' => 'nullable|exists:centers,id',
             'is_default' => 'nullable|boolean',
         ];
     }
@@ -40,6 +41,8 @@ class AddressUpdateRequest extends FormRequest
             'address.required' => __('messages.address_required'),
             'governorate_id.required' => __('messages.governorate_required'),
             'governorate_id.exists' => __('messages.governorate_exists'),
+            'center_id.required' => __('messages.center_required'),
+            'center_id.exists' => __('messages.center_exists'),
         ];
     }
 }

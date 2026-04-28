@@ -215,4 +215,8 @@ return [
     'address_id_required' => 'رقم العنوان مطلوب',
     'governorates_fetched_failed'=> 'فشل استرجاع المحافظات',
     'governorates_fetched_successfully'=> 'تم استرجاع المحافظات بنجاح',
+    'centers_fetched_successfully'=> 'تم استرجاع المراكز بنجاح',
+    'centers_fetched_failed'=> 'فشل استرجاع المراكز',
+    'center_required' => 'المركز مطلوب',
+    'center_exists' => 'المركز غير موجود',
 ];
