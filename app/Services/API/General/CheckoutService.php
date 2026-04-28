@@ -52,11 +52,11 @@ class CheckoutService
                 $totalQuantity += $item->quantity;
             }
 
-            $address = Address::with('center')->find($data['address_id'] ?? null) ?? $user->addresses()->with('center')->where('is_default', 1)->first();
+            $address = Address::with(['governorate', 'center'])->find($data['address_id'] ?? null) ?? $user->addresses()->with(['governorate', 'center'])->where('is_default', 1)->first();
             
             $shippingCost = 0;
-            if ($address && $address->center) {
-                $shippingCost = $address->center->shipping_cost;
+            if ($address && $address->governorate) {
+                $shippingCost = $address->governorate->shipping_cost;
             }
 
             // 2. إنشاء الطلب برقم مميز

@@ -13,7 +13,6 @@ class Center extends Model
         'name_ar',
         'name_en',
         'governorate_id',
-        'shipping_cost',
     ];
 
     public function getNameAttribute()

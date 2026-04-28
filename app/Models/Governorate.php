@@ -9,6 +9,7 @@ class Governorate extends Model
     protected $fillable = [
         'name_ar',
         'name_en',
+        'shipping_cost',
     ];
     public function getNameAttribute()
     {
