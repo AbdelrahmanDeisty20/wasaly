@@ -57,6 +57,9 @@ class CheckoutService
             $shippingCost = 0;
             if ($address && $address->governorate) {
                 $shippingCost = $address->governorate->shipping_cost;
+            } elseif (isset($data['governorate_id'])) {
+                $governorate = \App\Models\Governorate::find($data['governorate_id']);
+                $shippingCost = $governorate ? $governorate->shipping_cost : 0;
             }
 
             // 2. إنشاء الطلب برقم مميز
@@ -74,7 +77,7 @@ class CheckoutService
                 'payment_method'   => $data['payment_method'] ?? 'cash',
                 'status'           => 'pending',
                 'governorate_id'   => $address ? $address->governorate_id : ($data['governorate_id'] ?? null),
-                'center_id'        => $address ? $address->center_id : null,
+                'center_id'        => $address ? $address->center_id : ($data['center_id'] ?? null),
                 'region'           => $data['region'] ?? null,
             ]);
 
