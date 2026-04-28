@@ -8,6 +8,10 @@ class Coupon extends Model
 {
     protected $fillable = [
         'code',
+        'title_ar',
+        'title_en',
+        'description_ar',
+        'description_en',
         'type',
         'value',
         'min_order_value',
@@ -17,6 +21,16 @@ class Coupon extends Model
         'used_count',
         'is_active',
     ];
+
+    public function getTitleAttribute()
+    {
+        return app()->getLocale() === 'ar' ? $this->title_ar : $this->title_en;
+    }
+
+    public function getDescriptionAttribute()
+    {
+        return app()->getLocale() === 'ar' ? $this->description_ar : $this->description_en;
+    }
 
     public function isValidForOrder($orderTotal)
     {
