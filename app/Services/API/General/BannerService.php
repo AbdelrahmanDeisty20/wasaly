@@ -11,8 +11,7 @@ class BannerService
     use ApiResponse;
     public function getBanners()
     {
-        $banners = Banner::where('is_active', 1)
-            ->get();
+        $banners = Banner::all();
 
         if($banners->isEmpty()){
             return [
