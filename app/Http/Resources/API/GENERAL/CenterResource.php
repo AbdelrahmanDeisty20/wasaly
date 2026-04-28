@@ -18,6 +18,7 @@ class CenterResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'governorate_id' => $this->governorate_id,
             'governorate'=>GovernorateResource::make($this->whenLoaded('governorate')),
         ];
     }

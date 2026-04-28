@@ -12,8 +12,13 @@ class CenterService
 
     public function getCentersByGovernorate($governorateId)
     {
-        $centers = Center::with('governorate')->paginate(10);
-        if ($centers) {
+        $centers = Center::with('governorate')
+            ->when($governorateId, function($query) use ($governorateId) {
+                return $query->where('governorate_id', $governorateId);
+            })
+            ->paginate(10);
+
+        if ($centers->isNotEmpty()) {
             return [
                 'status' => true,
                 'message' => __('messages.centers_fetched_successfully'),
