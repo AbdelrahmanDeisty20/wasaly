@@ -2,8 +2,9 @@
 
 namespace App\Http\Resources\API\GENERAL;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\API\GovernorateResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 class AddressResource extends JsonResource
 {
@@ -14,6 +15,12 @@ class AddressResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [];
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'address' => $this->address,
+            'is_default' => (bool) $this->is_default,
+            'governorate' => GovernorateResource::make($this->whenLoaded('governorate')),
+        ];
     }
 }

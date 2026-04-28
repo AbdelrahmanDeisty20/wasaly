@@ -207,4 +207,7 @@ return [
     'provider_retrieved_successfully' => 'تم استرجاع بيانات مقدم الخدمة بنجاح',
     'unauthorized' => 'غير مصرح لك بالقيام بهذا الإجراء',
     'unauthorized_provider' => 'هذا الحساب ليس حساب مقدم خدمة',
+    'address_created_failed' => 'فشل إضافة العنوان',
+    'addresses_fetched_failed'=> 'فشل استرجاع العناوين',
+    'addresses_fetched_successfully'=> 'تم استرجاع العناوين بنجاح',
 ];

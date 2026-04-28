@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Address extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
+        'governorate_id',
         'title',
         'address',
         'is_default',
@@ -18,5 +20,10 @@ class Address extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function governorate()
+    {
+        return $this->belongsTo(Governorate::class);
     }
 }

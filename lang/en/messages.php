@@ -207,4 +207,8 @@ return [
     'provider_retrieved_successfully' => 'Provider profile retrieved successfully',
     'unauthorized' => 'Unauthorized action',
     'unauthorized_provider' => 'This account is not a service provider account',
+    'address_created_failed'=> 'Failed to create address',
+    'addresses_fetched_failed'=> 'Failed to fetch addresses',
+    'addresses_fetched_successfully'=> 'Addresses fetched successfully',
+    
 ];
