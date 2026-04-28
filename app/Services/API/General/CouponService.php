@@ -10,13 +10,15 @@ class CouponService
 {
     use ApiResponse;
 
-    public function getCoupons()
+    public function getCoupons($userId = null)
     {
-        $userId = auth()->id();
+        $userId = $userId ?? auth()->id();
         $coupons = Coupon::where('is_active', 1)
             ->where(function($query) use ($userId) {
                 $query->whereNull('user_id')
-                      ->orWhere('user_id', $userId);
+                      ->when($userId, function($q) use ($userId) {
+                          return $q->orWhere('user_id', $userId);
+                      });
             })
             ->where(function($query) {
                 $query->whereNull('end_date')
