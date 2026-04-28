@@ -213,4 +213,6 @@ return [
     'addresses_fetched_successfully'=> 'Addresses fetched successfully',
     'address_id_required' => 'Address ID is required',
     'address_not_found' => 'Address not found',
+    'governorates_fetched_failed'=> 'Failed to fetch governorates',
+    'governorates_fetched_successfully'=> 'Governorates fetched successfully',
 ];

@@ -213,4 +213,6 @@ return [
     'addresses_fetched_failed'=> 'فشل استرجاع العناوين',
     'addresses_fetched_successfully'=> 'تم استرجاع العناوين بنجاح',
     'address_id_required' => 'رقم العنوان مطلوب',
+    'governorates_fetched_failed'=> 'فشل استرجاع المحافظات',
+    'governorates_fetched_successfully'=> 'تم استرجاع المحافظات بنجاح',
 ];

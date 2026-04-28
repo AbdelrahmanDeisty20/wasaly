@@ -38,6 +38,8 @@ Route::group(["middleware"=>SetLang::class],function(){
     Route::get("pages",[PageController::class,"getPages"]);
     //Settings Routes
     Route::get("settings",[SettingController::class,"getSettings"]);
+    //Governorates Routes
+    Route::get("governorates",[GovernorateController::class,"getGovernorates"]);
     // Auth Routes
     Route::post("register",[AuthController::class,"register"]);
     Route::post("verify-otp",[AuthController::class,"verifyOtp"]);
