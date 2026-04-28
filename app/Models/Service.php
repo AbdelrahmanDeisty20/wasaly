@@ -12,7 +12,13 @@ class Service extends Model
         'provider_id',
         'service_ar',
         'service_en',
+        'image',
     ];
+
+    public function getImageAttribute($value)
+    {
+        return $value ? asset('storage/services/' . $value) : null;
+    }
 
     public function provider()
     {
