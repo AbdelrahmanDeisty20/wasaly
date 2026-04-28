@@ -23,6 +23,7 @@ class OrderResource extends JsonResource
             'total_price' => (float) ($this->total_price),
             'payment_method' => $this->payment_method,
             'delivery_fees' => (float) ($this->shipping_cost ?? 0),
+            'coupon_code' => $this->coupon_code,
             'governorate' => GovernorateResource::make($this->whenLoaded('governorate')),
             'center' => CenterResource::make($this->whenLoaded('center')),
             'items' => OrderItemResource::collection($this->whenLoaded('items')),

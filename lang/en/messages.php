@@ -219,4 +219,7 @@ return [
     'centers_fetched_failed'=> 'Failed to fetch centers',
     'center_required' => 'Center is required',
     'center_exists' => 'Center does not exist',
+    'coupon_not_found' => 'Coupon not found',
+    'coupon_invalid' => 'Coupon is invalid or expired',
+    'coupon_applied_successfully' => 'Coupon applied successfully',
 ];

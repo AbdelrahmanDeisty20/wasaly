@@ -219,4 +219,7 @@ return [
     'centers_fetched_failed'=> 'فشل استرجاع المراكز',
     'center_required' => 'المركز مطلوب',
     'center_exists' => 'المركز غير موجود',
+    'coupon_not_found' => 'الكوبون غير موجود',
+    'coupon_invalid' => 'الكوبون غير صالح أو انتهت صلاحيته',
+    'coupon_applied_successfully' => 'تم تطبيق الكوبون بنجاح',
 ];

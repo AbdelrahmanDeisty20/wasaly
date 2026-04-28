@@ -62,6 +62,18 @@ class CheckoutService
                 $shippingCost = $governorate ? $governorate->shipping_cost : 0;
             }
 
+            // 1.5 التعامل مع الكوبون
+            $discountAmount = 0;
+            $couponCode = null;
+            if (isset($data['coupon_code'])) {
+                $coupon = \App\Models\Coupon::where('code', $data['coupon_code'])->first();
+                if ($coupon && $coupon->isValidForOrder($totalPrice)) {
+                    $discountAmount = $coupon->calculateDiscount($totalPrice);
+                    $couponCode = $coupon->code;
+                    $coupon->increment('used_count');
+                }
+            }
+
             // 2. إنشاء الطلب برقم مميز
             $order = Order::create([
                 'order_number'     => 'ORD-' . strtoupper(bin2hex(random_bytes(3))),
@@ -70,7 +82,8 @@ class CheckoutService
                 'unit_price'       => $totalPrice, // سعر المنتجات
                 'quantity'         => $totalQuantity,
                 'shipping_cost'    => $shippingCost,
-                'total_price'      => $totalPrice + $shippingCost,
+                'coupon_code'      => $couponCode,
+                'total_price'      => ($totalPrice - $discountAmount) + $shippingCost,
                 'customer_name'    => $data['customer_name'] ?? ($user->full_name ?? $user->name),
                 'customer_phone'   => $data['customer_phone'] ?? $user->phone,
                 'customer_address' => $address ? $address->address : ($data['customer_address'] ?? null),
