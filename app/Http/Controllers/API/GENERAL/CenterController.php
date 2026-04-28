@@ -25,7 +25,7 @@ class CenterController extends Controller
         $response = $this->centerService->getCentersByGovernorate($request->validated());
         
         if ($response['status']) {
-            return $this->paginated(CenterResource::class, $response['data'], $response['message']);
+            return $this->success($response['data'], $response['message'], 200);
         }
         
         return $this->error($response['message'], 400);

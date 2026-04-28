@@ -20,7 +20,7 @@ class CenterService
             return [
                 'status' => true,
                 'message' => __('messages.centers_fetched_successfully'),
-                'data' => $centers,
+                'data' => CenterResource::collection($centers),
             ];
         }
         return [
