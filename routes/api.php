@@ -40,7 +40,7 @@ Route::group(["middleware"=>SetLang::class],function(){
     //Settings Routes
     Route::get("settings",[SettingController::class,"getSettings"]);
     //Governorates Routes
-    Route::get("governorates",[GovernorateController::class,"getGovernorates"]);
+    Route::get("governorates",[GovernorateController::class,"getAllGovernorates"]);
     // Auth Routes
     Route::post("register",[AuthController::class,"register"]);
     Route::post("verify-otp",[AuthController::class,"verifyOtp"]);
