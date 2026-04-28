@@ -20,7 +20,6 @@ class AddressResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'address' => $this->address,
-            'is_default' => (bool) $this->is_default,
             'governorate' => GovernorateResource::make($this->whenLoaded('governorate')),
             'center' => CenterResource::make($this->whenLoaded('center')),
         ];
