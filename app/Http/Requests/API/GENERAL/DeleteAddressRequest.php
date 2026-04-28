@@ -26,4 +26,12 @@ class DeleteAddressRequest extends FormRequest
             'address_id' => 'required|exists:addresses,id',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'address_id.required' => __('messages.address_id_required'),
+            'address_id.exists' => __('messages.address_not_found'),
+        ];
+    }
 }

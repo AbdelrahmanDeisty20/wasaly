@@ -211,5 +211,6 @@ return [
     'address_updated_failed'=> 'Failed to update address',
     'addresses_fetched_failed'=> 'Failed to fetch addresses',
     'addresses_fetched_successfully'=> 'Addresses fetched successfully',
-    
+    'address_id_required' => 'Address ID is required',
+    'address_not_found' => 'Address not found',
 ];

@@ -30,4 +30,16 @@ class AddressUpdateRequest extends FormRequest
             'is_default' => 'nullable|boolean',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'address_id.required' => __('messages.address_id_required'),
+            'address_id.exists' => __('messages.address_not_found'),
+            'title.required' => __('messages.address_title_required'),
+            'address.required' => __('messages.address_required'),
+            'governorate_id.required' => __('messages.governorate_required'),
+            'governorate_id.exists' => __('messages.governorate_exists'),
+        ];
+    }
 }

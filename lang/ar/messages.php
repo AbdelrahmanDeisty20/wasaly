@@ -212,4 +212,5 @@ return [
     'address_updated_successfully'=> 'تم تحديث العنوان بنجاح',
     'addresses_fetched_failed'=> 'فشل استرجاع العناوين',
     'addresses_fetched_successfully'=> 'تم استرجاع العناوين بنجاح',
+    'address_id_required' => 'رقم العنوان مطلوب',
 ];
