@@ -3,7 +3,9 @@
 namespace App\Services\API\General;
 
 use App\Http\Resources\API\GENERAL\ProviderResource;
+use App\Http\Resources\API\GENERAL\ServiceResource;
 use App\Models\Provider;
+use App\Models\Service;
 
 class ProviderService
 {
@@ -31,6 +33,21 @@ class ProviderService
             'status' => true,
             'message' => __('messages.provider_retrieved_successfully'),
             'data' => new ProviderResource($provider)
+        ];
+    }
+    public function services(){
+        $services = Service::paginate(10);
+        if($services->isEmpty()){
+            return [
+                'status' => false,
+                'message' => __('messages.services_fetched_failed'),
+                'data' => []
+            ];
+        }
+        return [
+            'status' => true,
+            'message' => __('messages.services_fetched_successfully'),
+            'data' => $services
         ];
     }
 }

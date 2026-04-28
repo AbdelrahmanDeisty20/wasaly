@@ -225,4 +225,6 @@ return [
     'coupons_fetched_successfully' => 'Coupons fetched successfully',
     'banners_not_found' => 'No banners found',
     'banners_fetched_successfully' => 'Banners fetched successfully',
+    'services_fetched_successfully' => 'Services fetched successfully',
+    'services_fetched_failed' => 'Failed to fetch services',
 ];

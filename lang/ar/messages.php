@@ -225,4 +225,6 @@ return [
     'coupons_fetched_successfully' => 'تم استرجاع الكوبونات بنجاح',
     'banners_not_found' => 'لا يوجد بانرات',
     'banners_fetched_successfully' => 'تم استرجاع البانرات بنجاح',
+    'services_fetched_successfully' => 'تم استرجاع الخدمات بنجاح',
+    'services_fetched_failed' => 'فشل استرجاع الخدمات',
 ];

@@ -25,4 +25,11 @@ class ProviderController extends Controller
         }
         return $this->success($result['data'], $result['message'], 200);
     }
+    public function services(){
+        $result = $this->providerService->services();
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
+        }
+        return $this->paginated($result['data'], $result['message'], 200);
+    }
 }
