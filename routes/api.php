@@ -50,8 +50,7 @@ Route::group(["middleware"=>SetLang::class],function(){
     Route::get("governorates",[GovernorateController::class,"getAllGovernorates"]);
     //Centers Routes
     Route::get("centers",[CenterController::class,"getCenters"]);
-    //Coupons Routes
-    Route::get("coupons",[CouponController::class,"getCoupons"]);
+
     // Auth Routes
     Route::post("register",[AuthController::class,"register"]);
     Route::post("verify-otp",[AuthController::class,"verifyOtp"]);
@@ -103,5 +102,7 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::post("addresses/update", [AddressController::class, "updateAddress"]);
         Route::delete("addresses/delete", [AddressController::class, "deleteAddress"]);
         Route::post("addresses/make-default", [AddressController::class, "makeDefaultAddress"]);
+        // Coupons Routes
+        Route::get("coupons",[CouponController::class,"getCoupons"]);
     });
 });
