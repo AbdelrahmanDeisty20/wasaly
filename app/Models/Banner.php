@@ -24,7 +24,7 @@ class Banner extends Model
     {
         return app()->getLocale() == 'ar' ? $this->desc_ar : $this->desc_en;
     }
-    public function getImageAttribute()
+    public function getImagePathAttribute()
     {
         return asset('storage/banners/' . $this->image);
     }
