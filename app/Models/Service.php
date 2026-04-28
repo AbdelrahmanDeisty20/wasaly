@@ -15,7 +15,7 @@ class Service extends Model
         'image',
     ];
 
-    public function getImageAttribute($value)
+    public function getImagePathAttribute($value)
     {
         return $value ? asset('storage/services/' . $value) : null;
     }
