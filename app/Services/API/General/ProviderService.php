@@ -36,7 +36,7 @@ class ProviderService
         ];
     }
     public function services(){
-        $services = Service::paginate(10);
+        $services = Provider::paginate(10);
         if($services->isEmpty()){
             return [
                 'status' => false,
