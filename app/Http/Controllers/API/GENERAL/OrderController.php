@@ -32,4 +32,32 @@ class OrderController extends Controller
         }
         return $this->success($order['data'], $order['message']);
     }
+
+    public function searchOrders(Request $request){
+        $searchTerm = $request->query('search_term');
+        if(!$searchTerm){
+            return $this->error(__('messages.search_required'), 422);
+        }
+        $orders = $this->orderService->searchOrders($searchTerm);
+        if(!$orders['status']){
+            return $this->error($orders['message'], 404);
+        }
+        return $this->paginated(OrderResource::class, $orders['data'], $orders['message']);
+    }
+
+    public function cancelOrder($orderId){
+        $response = $this->orderService->cancelOrder($orderId);
+        if(!$response['status']){
+            return $this->error($response['message'], 422);
+        }
+        return $this->success($response['data'], $response['message']);
+    }
+
+    public function deleteOrder($orderId){
+        $response = $this->orderService->deleteOrder($orderId);
+        if(!$response['status']){
+            return $this->error($response['message'], 422);
+        }
+        return $this->success($response['data'], $response['message']);
+    }
 }

@@ -95,7 +95,10 @@ Route::group(["middleware"=>SetLang::class],function(){
 
         //Orders Routes
         Route::get("orders", [OrderController::class, "getMyOrders"]);
+        Route::get("orders/search", [OrderController::class, "searchOrders"]);
         Route::get("orders/{id}", [OrderController::class, "getOrderDetails"]);
+        Route::post("orders/{id}/cancel", [OrderController::class, "cancelOrder"]);
+        Route::delete("orders/{id}/delete", [OrderController::class, "deleteOrder"]);
         
         // Favorite Routes
         Route::get("favorites", [FavoriteController::class, "getFavorites"]);

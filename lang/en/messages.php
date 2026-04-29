@@ -148,6 +148,7 @@ return [
     'coupon_code_max' => 'Coupon code must not exceed 50 characters',
     'coupon_code' => 'Coupon code',
     'coupon_not_for_you' => 'Sorry, this coupon is not assigned to you',
+    'unauthorized_action' => 'You are not authorized to perform this action',
     'order_cancelled_successfully' => 'Order cancelled successfully',
     'order_deleted_successfully' => 'Order deleted successfully',
     'cannot_cancel_order' => 'Cannot cancel order in its current status',

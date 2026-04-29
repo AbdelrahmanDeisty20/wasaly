@@ -138,6 +138,7 @@ return [
     'coupon_code_max' => 'كود الكوبون يجب ألا يتجاوز 50 حرفاً',
     'coupon_code' => 'كود الكوبون',
     'coupon_not_for_you' => 'عذراً، هذا الكوبون غير مخصص لك',
+    'unauthorized_action' => 'غير مصرح لك بالقيام بهذا الإجراء',
     'order_cancelled_successfully' => 'تم إلغاء الطلب بنجاح',
     'order_deleted_successfully' => 'تم حذف الطلب بنجاح',
     'cannot_cancel_order' => 'لا يمكن إلغاء الطلب في حالته الحالية',
