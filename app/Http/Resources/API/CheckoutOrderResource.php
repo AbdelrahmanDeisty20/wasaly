@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources\API;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\API\GENERAL\CenterResource;
+use App\Http\Resources\API\GovernorateResource;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 class CheckoutOrderResource extends JsonResource
 {
@@ -26,7 +27,7 @@ class CheckoutOrderResource extends JsonResource
             'customer_name' => $this->customer_name,
             'customer_phone' => $this->customer_phone,
             'delivery_address' => $this->customer_address,
-            'governorate' => $this->governorate ? $this->governorate->title : null,
+            'governorate' => GovernorateResource::make($this->whenLoaded('governorate')),
             'center' => new CenterResource($this->whenLoaded('center')),
             'delivery_fees' => (float) ($this->shipping_cost ?? 0),
             'items' => OrderItemResource::collection($this->whenLoaded('items')),
