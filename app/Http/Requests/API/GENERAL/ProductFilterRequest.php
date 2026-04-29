@@ -30,7 +30,9 @@ class ProductFilterRequest extends FormRequest
         return [
             'category_id.exists' => __('messages.category_not_found'),
             'min_price.numeric' => __('messages.min_price_numeric'),
+            'min_price.min' => __('messages.price_min'),
             'max_price.numeric' => __('messages.max_price_numeric'),
+            'max_price.min' => __('messages.price_min'),
             'special_offers.boolean' => __('messages.special_offers_boolean'),
             'ratings.integer' => __('messages.ratings_integer'),
             'ratings.in' => __('messages.ratings_in'),
