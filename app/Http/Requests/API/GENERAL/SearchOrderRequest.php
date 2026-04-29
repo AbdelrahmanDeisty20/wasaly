@@ -23,23 +23,16 @@ class SearchOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search_term' => 'required|string|max:255',
+            'search' => 'required|string|max:255',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'search_term.required' => __('messages.search_required'),
+            'search.required' => __('messages.search_required'),
         ];
     }
 
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json([
-            'status' => false,
-            'message' => $validator->errors()->first(),
-            'data' => [],
-        ], 422));
-    }
+    
 }
