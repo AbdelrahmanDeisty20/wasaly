@@ -24,7 +24,7 @@ class OrderService
     }
 
     public function getOrderDetails($orderId){
-        $order = Order::with(['items', 'governorate', 'center'])->find($orderId);
+        $order = Order::with(['items.product', 'governorate', 'center'])->find($orderId);
         if(!$order){
             return [
                 'status' => false,
