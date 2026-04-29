@@ -6,6 +6,8 @@ use App\Http\Resources\API\GENERAL\CouponResource;
 use App\Models\Coupon;
 use App\Traits\ApiResponse;
 
+use App\Models\Order;
+
 class CouponService
 {
     use ApiResponse;
@@ -45,10 +47,54 @@ class CouponService
             ];
         }
 
-        if (!$coupon->isValidForOrder($orderTotal, $userId)) {
+        $isValid = $coupon->is_active;
+        $message = $isValid ? __('messages.success') : __('messages.coupon_not_active');
+
+        if ($isValid && $coupon->start_date && now()->lt($coupon->start_date)) {
+            $isValid = false;
+            $message = __('messages.coupon_not_started');
+        }
+
+        if ($isValid && $coupon->end_date && now()->gt($coupon->end_date)) {
+            $isValid = false;
+            $message = __('messages.coupon_expired');
+        }
+
+        if ($isValid && $coupon->usage_limit !== null && $coupon->used_count >= $coupon->usage_limit) {
+            $isValid = false;
+            $message = __('messages.coupon_usage_limit_reached');
+        }
+
+        if ($isValid && $userId) {
+            // التحقق من صاحب الكوبون إذا كان خاصاً بمستخدم معين
+            if ($coupon->user_id !== null && $coupon->user_id != $userId) {
+                $isValid = false;
+                $message = __('messages.coupon_not_found'); // أو أي رسالة تدل على أنه ليس لهذا المستخدم
+            }
+
+            // التحقق من عدد مرات استخدام المستخدم الواحد من خلال جدول الطلبات
+            if ($isValid) {
+                $userUsage = Order::where('user_id', $userId)
+                    ->where('coupon_code', $coupon->code)
+                    ->whereNotIn('status', ['cancelled'])
+                    ->count();
+
+                if ($coupon->user_usage_limit !== null && $userUsage >= $coupon->user_usage_limit) {
+                    $isValid = false;
+                    $message = __('messages.coupon_user_usage_limit_reached');
+                }
+            }
+        }
+
+        if ($isValid && $orderTotal < $coupon->min_order_value) {
+            $isValid = false;
+            $message = __('messages.coupon_min_order_value_not_reached', ['min' => $coupon->min_order_value]);
+        }
+
+        if (!$isValid) {
             return [
                 'status' => false,
-                'message' => __('messages.coupon_invalid'),
+                'message' => $message,
             ];
         }
 
@@ -58,9 +104,9 @@ class CouponService
             'status' => true,
             'message' => __('messages.coupon_applied_successfully'),
             'data' => [
-                'code' => $coupon->code,
-                'discount_amount' => $discount,
-                'new_total' => $orderTotal - $discount,
+                'coupon' => CouponResource::make($coupon),
+                'discount_amount' => (float) $discount,
+                'new_total' => (float) ($orderTotal - $discount),
             ],
         ];
     }

@@ -110,5 +110,6 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::post("addresses/make-default", [AddressController::class, "makeDefaultAddress"]);
         // Coupons Routes
         Route::get("coupons",[CouponController::class,"getCoupons"]);
+        Route::post("coupons/apply",[CouponController::class,"applyCoupon"]);
     });
 });

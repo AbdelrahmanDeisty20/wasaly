@@ -21,6 +21,7 @@ class CouponResource extends JsonResource
             'description' => $this->description,
             'value' => (float) $this->value,
             'type' => $this->type,
+            'user_usage_limit' => $this->user_usage_limit,
         ];
     }
 }
