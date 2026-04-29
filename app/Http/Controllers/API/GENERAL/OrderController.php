@@ -21,7 +21,7 @@ class OrderController extends Controller
         if(!$orders['status']){
             return $this->error($orders['message'],404);
         }
-        return $this->success(OrderResource::class,$orders['data'], $orders['message']);
+        return $this->paginated(OrderResource::class,$orders['data'], $orders['message']);
     }
 
     public function getOrderDetails($orderId){
