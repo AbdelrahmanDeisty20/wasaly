@@ -5,8 +5,6 @@ namespace Database\Seeders;
 use App\Models\Banner;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Http;
 
 class BannerSeeder extends Seeder
 {
@@ -19,10 +17,12 @@ class BannerSeeder extends Seeder
         Banner::truncate();
         Schema::enableForeignKeyConstraints();
 
-        // التأكد من وجود المجلد
-        $directory = 'public/banners';
-        if (!Storage::exists($directory)) {
-            Storage::makeDirectory($directory);
+        // --- إنشاء مجلد التخزين (نفس نمط ProductImageSeeder) ---
+        $basePath = public_path('storage/');
+        $bannerDir = $basePath . 'banners';
+
+        if (!file_exists($bannerDir)) {
+            mkdir($bannerDir, 0755, true);
         }
 
         $banners = [
@@ -68,22 +68,29 @@ class BannerSeeder extends Seeder
             ],
         ];
 
+        $this->command->info('📥 Handling banner images...');
+
         foreach ($banners as $index => $bannerData) {
-            // تحميل صورة تجريبية إذا لم تكن موجودة
-            $imagePath = $directory . '/' . $bannerData['image'];
-            if (!Storage::exists($imagePath)) {
-                try {
-                    $imageUrl = "https://placehold.co/1200x400/007bff/ffffff/png?text=Banner+" . ($index + 1);
-                    $imageContent = file_get_contents($imageUrl);
-                    if ($imageContent) {
-                        Storage::put($imagePath, $imageContent);
-                    }
-                } catch (\Exception $e) {
-                    // في حال فشل التحميل، لا نفعل شيئاً
+            $filename = $bannerData['image'];
+            $destPath = "{$bannerDir}/{$filename}";
+
+            if (!file_exists($destPath)) {
+                // تحميل صورة عشوائية 1200x400
+                $url = 'https://picsum.photos/1200/400?random=' . rand(1, 9999);
+                $result = @copy($url, $destPath);
+
+                if ($result) {
+                    $this->command->line("  ✅ Created: {$filename}");
+                } else {
+                    $this->command->warn("  ⚠️  Failed to create: {$filename}");
                 }
+            } else {
+                $this->command->line("  ⏭️  Skipped (exists): {$filename}");
             }
 
             Banner::create($bannerData);
         }
+
+        $this->command->info('✅ Banners seeded successfully.');
     }
 }
