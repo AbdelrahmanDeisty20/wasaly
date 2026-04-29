@@ -124,7 +124,7 @@ class ProductService
 
     public function searchProducts($searchTerm)
     {
-        $products = Product::with(['offers', 'images', 'reviews'])
+        $products = Product::with(['offers', 'reviews'])
             ->where(function($query) use ($searchTerm) {
                 $query->where('name_ar', 'LIKE', '%' . $searchTerm . '%')
                       ->orWhere('name_en', 'LIKE', '%' . $searchTerm . '%')
