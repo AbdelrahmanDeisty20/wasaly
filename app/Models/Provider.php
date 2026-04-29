@@ -40,6 +40,11 @@ class Provider extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function availableDates()
+    {
+        return $this->hasMany(AvailableDate::class);
+    }
+
     public function getTitleAttribute()
     {
         return app()->getLocale() == 'ar' ? $this->title_ar : $this->title_en;
