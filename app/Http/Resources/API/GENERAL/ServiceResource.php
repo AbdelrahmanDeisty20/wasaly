@@ -11,11 +11,10 @@ class ServiceResource extends JsonResource
     {
         return [
             'id'         => $this->id,
-            'title' => $this->provider->title,
+            'title' => $this->title,
+            'description' => $this->service_description,
             'image' => $this->image_path,
-            'description' => $this->provider->description,
-            'service_ar' => $this->service_ar,
-            'service_en' => $this->service_en,
+            
         ];
     }
 }
