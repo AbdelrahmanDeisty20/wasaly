@@ -52,8 +52,13 @@ class CouponService
 
         // 1. التحقق من الملكية (الأولوية الأولى)
         if ($userId && $coupon->user_id !== null && $coupon->user_id != $userId) {
-            $isValid = false;
-            $message = __('messages.coupon_not_for_you');
+            return [
+                'status' => true,
+                'message' => __('messages.coupon_not_for_you'),
+                'data' => [
+                    'is_valid' => false,
+                ],
+            ];
         }
 
         // 2. التحقق من الحالة العامة
