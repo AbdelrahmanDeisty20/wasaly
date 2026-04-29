@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\GENERAL\SearchOrderRequest;
 use App\Http\Resources\API\GENERAL\OrderListResource;
 use App\Http\Resources\API\OrderResource;
 use App\Services\API\General\OrderService;
@@ -38,17 +39,13 @@ class OrderController extends Controller
         return $this->success($order['data'], $order['message']);
     }
 
-    public function searchOrders(Request $request)
+    public function searchOrders(SearchOrderRequest $request)
     {
-        $searchTerm = $request->query('search_term');
-        if (!$searchTerm) {
-            return $this->error(__('messages.search_required'), 422);
-        }
-        $orders = $this->orderService->searchOrders($searchTerm);
+        $orders = $this->orderService->searchOrders($request->search_term);
         if (!$orders['status']) {
             return $this->error($orders['message'], 404);
         }
-        return $this->paginated(OrderResource::class, $orders['data'], $orders['message']);
+        return $this->paginated(OrderListResource::class, $orders['data'], $orders['message']);
     }
 
     public function cancelOrder($orderId)
