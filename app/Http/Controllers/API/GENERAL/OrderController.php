@@ -19,7 +19,7 @@ class OrderController extends Controller
     public function getMyOrders(){
         $orders = $this->orderService->getMyOrders();
         if(!$orders['status']){
-            return $this->error($orders['message'],400);
+            return $this->error($orders['message'],404);
         }
         return $this->success(OrderResource::class,$orders['data'], $orders['message']);
     }
