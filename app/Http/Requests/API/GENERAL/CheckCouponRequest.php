@@ -24,7 +24,22 @@ class CheckCouponRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|max:50',
+            'code' => 'required|max:50',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'code.required' => __('messages.coupon_code_required'),
+            'code.max' => __('messages.coupon_code_max'),
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'code' => __('messages.coupon_code'),
         ];
     }
 
