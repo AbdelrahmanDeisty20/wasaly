@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\GENERAL\CheckCouponRequest;
 use App\Services\API\General\CouponService;
 use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
@@ -24,18 +24,10 @@ class CouponController extends Controller
         return $this->success($response['data'], $response['message'], 200);
     }
 
-    public function applyCoupon(Request $request)
+    public function applyCoupon(CheckCouponRequest $request)
     {
-        $request->validate([
-            'code' => 'required|string',
-            'total_price' => 'required|numeric|min:0',
-        ]);
-
-        $response = $this->couponService->applyCoupon($request->code, $request->total_price);
-
-        if (!$response['status']) {
-            return $this->error($response['message'], 422);
-        }
+        $response = $this->couponService->getCouponInfo($request->code, $request->total_price);
 
         return $this->success($response['data'], $response['message'], 200);
-    }}
+    }
+}

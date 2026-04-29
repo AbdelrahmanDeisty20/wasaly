@@ -35,7 +35,7 @@ class CouponService
         ];
     }
 
-    public function applyCoupon($code, $orderTotal)
+    public function getCouponInfo($code, $orderTotal = null)
     {
         $userId = auth()->id();
         $coupon = Coupon::where('code', $code)->first();
@@ -69,7 +69,7 @@ class CouponService
             // التحقق من صاحب الكوبون إذا كان خاصاً بمستخدم معين
             if ($coupon->user_id !== null && $coupon->user_id != $userId) {
                 $isValid = false;
-                $message = __('messages.coupon_not_found'); // أو أي رسالة تدل على أنه ليس لهذا المستخدم
+                $message = __('messages.coupon_not_found');
             }
 
             // التحقق من عدد مرات استخدام المستخدم الواحد من خلال جدول الطلبات
@@ -86,27 +86,24 @@ class CouponService
             }
         }
 
-        if ($isValid && $orderTotal < $coupon->min_order_value) {
+        if ($isValid && $orderTotal !== null && $orderTotal < $coupon->min_order_value) {
             $isValid = false;
             $message = __('messages.coupon_min_order_value_not_reached', ['min' => $coupon->min_order_value]);
         }
 
-        if (!$isValid) {
-            return [
-                'status' => false,
-                'message' => $message,
-            ];
+        $discount = 0;
+        if ($isValid && $orderTotal !== null) {
+            $discount = $coupon->calculateDiscount($orderTotal);
         }
-
-        $discount = $coupon->calculateDiscount($orderTotal);
 
         return [
             'status' => true,
-            'message' => __('messages.coupon_applied_successfully'),
+            'message' => $message,
             'data' => [
                 'coupon' => CouponResource::make($coupon),
-                'discount_amount' => (float) $discount,
-                'new_total' => (float) ($orderTotal - $discount),
+                'is_valid' => $isValid,
+                'discount_amount' => $orderTotal !== null ? (float) $discount : null,
+                'new_total' => $orderTotal !== null ? (float) ($orderTotal - $discount) : null,
             ],
         ];
     }
