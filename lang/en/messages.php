@@ -227,4 +227,13 @@ return [
     'banners_fetched_successfully' => 'Banners fetched successfully',
     'services_fetched_successfully' => 'Services fetched successfully',
     'services_fetched_failed' => 'Failed to fetch services',
+    'no_orders_found' => 'No orders found',
+    'pending' => 'Pending',
+    'accepted' => 'Accepted',
+    'processing' => 'Processing',
+    'shipped' => 'Shipped',
+    'delivered' => 'Delivered',
+    'cancelled' => 'Cancelled',
+    'cash' => 'Cash',
+    'card' => 'Card',
 ];

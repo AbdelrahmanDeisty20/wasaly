@@ -227,4 +227,13 @@ return [
     'banners_fetched_successfully' => 'تم استرجاع البانرات بنجاح',
     'services_fetched_successfully' => 'تم استرجاع الخدمات بنجاح',
     'services_fetched_failed' => 'فشل استرجاع الخدمات',
+    'no_orders_found' => 'لا يوجد طلبات',
+    'pending' => 'قيد الانتظار',
+    'accepted' => 'تم القبول',
+    'processing' => 'جاري التجهيز',
+    'shipped' => 'تم الشحن',
+    'delivered' => 'تم التوصيل',
+    'cancelled' => 'ملغي',
+    'cash' => 'كاش',
+    'card' => 'بطاقة ائتمان',
 ];

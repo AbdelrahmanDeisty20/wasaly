@@ -5,8 +5,8 @@ namespace App\Http\Resources\API\GENERAL;
 use App\Http\Resources\API\GovernorateResource;
 use App\Http\Resources\API\OrderItemResource;
 use App\Http\Resources\API\GENERAL\CenterResource;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 class OrderListResource extends JsonResource
 {
@@ -20,8 +20,8 @@ class OrderListResource extends JsonResource
         return [
             'id'                => $this->id,
             'order_number'      => $this->order_number,
-            'status'            => $this->status,
-            'payment_method'    => $this->payment_method,
+            'status'            => __('messages.' . $this->status),
+            'payment_method'    => __('messages.' . $this->payment_method),
             'customer_name'     => $this->customer_name,
             'customer_phone'    => $this->customer_phone,
             'delivery_address'  => $this->customer_address,
