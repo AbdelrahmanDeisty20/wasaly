@@ -39,6 +39,7 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::get('products', [ProductController::class, 'getProducts']);
     Route::get('product', [ProductController::class, 'getProduct']);
     Route::get('products-filter', [ProductController::class, 'filter']);
+    Route::get('products-search', [ProductController::class, 'search']);
     // Offers Routes
     Route::get('offers', [OfferController::class, 'getAllActiveOffer']);
     Route::get('offer', [OfferController::class, 'getOffer']);

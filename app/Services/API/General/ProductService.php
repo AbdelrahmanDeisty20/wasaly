@@ -121,4 +121,30 @@ class ProductService
             'data' => $products, // Will be wrapped in Controller if needed, or use Resource here
         ];
     }
+
+    public function searchProducts($searchTerm)
+    {
+        $products = Product::with(['offers', 'images', 'reviews'])
+            ->where(function($query) use ($searchTerm) {
+                $query->where('name_ar', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('name_en', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('description_ar', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('description_en', 'LIKE', '%' . $searchTerm . '%');
+            })
+            ->paginate(10);
+
+        if ($products->isEmpty()) {
+            return [
+                'status' => false,
+                'message' => __('messages.products_not_found'),
+                'data' => [],
+            ];
+        }
+
+        return [
+            'status' => true,
+            'message' => __('messages.products_retrieved_successfully'),
+            'data' => $products,
+        ];
+    }
 }
