@@ -2,6 +2,7 @@
 
 namespace App\Services\API\General;
 
+use App\Http\Resources\API\CheckoutOrderResource;
 use App\Http\Resources\API\OrderResource;
 use App\Models\Address;
 use App\Models\Cart;
@@ -117,7 +118,7 @@ class CheckoutService
             return [
                 'status' => true,
                 'message' => __('messages.checkout_success'),
-                'data' => OrderResource::make($order->load(['items.product.offers', 'governorate', 'center']))
+                'data' => CheckoutOrderResource::make($order->load(['items.product.offers', 'governorate', 'center']))
             ];
         } catch (\Exception $e) {
             DB::rollBack();
