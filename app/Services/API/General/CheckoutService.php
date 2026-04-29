@@ -11,10 +11,18 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
+use App\Services\API\General\CouponService;
 
 class CheckoutService
 {
     use ApiResponse;
+
+    protected $couponService;
+
+    public function __construct(CouponService $couponService)
+    {
+        $this->couponService = $couponService;
+    }
 
     public function checkout($data)
     {
@@ -63,16 +71,24 @@ class CheckoutService
                 $shippingCost = $governorate ? $governorate->shipping_cost : 0;
             }
 
-            // 1.5 التعامل مع الكوبون
+            // 1.5 التعامل مع الكوبون بشكل صارم
             $discountAmount = 0;
             $couponCode = null;
             if (isset($data['coupon_code'])) {
-                $coupon = \App\Models\Coupon::where('code', $data['coupon_code'])->first();
-                if ($coupon && $coupon->isValidForOrder($totalPrice, $user->id)) {
-                    $discountAmount = $coupon->calculateDiscount($totalPrice);
-                    $couponCode = $coupon->code;
-                    $coupon->increment('used_count');
+                $couponResponse = $this->couponService->getCouponInfo($data['coupon_code'], $totalPrice);
+                
+                if (!$couponResponse['data']['is_valid']) {
+                    return [
+                        'status' => false,
+                        'message' => $couponResponse['message'],
+                        'data' => []
+                    ];
                 }
+
+                $coupon = \App\Models\Coupon::where('code', $data['coupon_code'])->first();
+                $discountAmount = $coupon->calculateDiscount($totalPrice);
+                $couponCode = $coupon->code;
+                $coupon->increment('used_count');
             }
 
             // 2. إنشاء الطلب برقم مميز
