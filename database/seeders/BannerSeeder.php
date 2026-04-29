@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Banner;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 class BannerSeeder extends Seeder
 {
@@ -16,6 +18,12 @@ class BannerSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
         Banner::truncate();
         Schema::enableForeignKeyConstraints();
+
+        // التأكد من وجود المجلد
+        $directory = 'public/banners';
+        if (!Storage::exists($directory)) {
+            Storage::makeDirectory($directory);
+        }
 
         $banners = [
             [
@@ -60,8 +68,22 @@ class BannerSeeder extends Seeder
             ],
         ];
 
-        foreach ($banners as $banner) {
-            Banner::create($banner);
+        foreach ($banners as $index => $bannerData) {
+            // تحميل صورة تجريبية إذا لم تكن موجودة
+            $imagePath = $directory . '/' . $bannerData['image'];
+            if (!Storage::exists($imagePath)) {
+                try {
+                    $imageUrl = "https://placehold.co/1200x400/007bff/ffffff/png?text=Banner+" . ($index + 1);
+                    $imageContent = file_get_contents($imageUrl);
+                    if ($imageContent) {
+                        Storage::put($imagePath, $imageContent);
+                    }
+                } catch (\Exception $e) {
+                    // في حال فشل التحميل، لا نفعل شيئاً
+                }
+            }
+
+            Banner::create($bannerData);
         }
     }
 }
