@@ -249,5 +249,5 @@ return [
     'ratings_integer'=>'Ratings must be an integer',
     'ratings_in'=>'Ratings must be between 1 and 5',
     'ratings_unique'=>'You have already rated this product',
-    'price_min' => 'Price must be 0 or more',
+    'price_min' => 'Price must be 1 or more',
 ];
