@@ -22,6 +22,7 @@ class Provider extends Model
         'start_time',
         'end_time',
         'status',
+        'image',
     ];
 
     public function user()
@@ -49,5 +50,8 @@ class Provider extends Model
         return app()->getLocale() == 'ar' ? $this->service_description_ar : $this->service_description_en;
     }
 
-    
+    public function getImagePathAttribute()
+    {
+        return $this->image ? asset('storage/providers/' . $this->image) : null;
+    }
 }
