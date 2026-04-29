@@ -38,6 +38,7 @@ Route::group(['middleware' => SetLang::class], function () {
     // products Routes
     Route::get('products', [ProductController::class, 'getProducts']);
     Route::get('product', [ProductController::class, 'getProduct']);
+    Route::get('products-filter', [ProductController::class, 'filter']);
     // Offers Routes
     Route::get('offers', [OfferController::class, 'getAllActiveOffer']);
     Route::get('offer', [OfferController::class, 'getOffer']);
@@ -75,7 +76,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('update-profile', [AuthController::class, 'updateProfile']);
         Route::delete('delete-account', [AuthController::class, 'deleteAccount']);
         // Provider Routes
-        Route::group(['middleware'=>['auth:sanctum',serviceProviderOnly::class]], function () {
+        Route::group(['middleware' => ['auth:sanctum', serviceProviderOnly::class]], function () {
             Route::get('provider-profile', [ProviderController::class, 'providerProfile']);
         });
         // Review Routes

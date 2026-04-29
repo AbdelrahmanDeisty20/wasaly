@@ -33,6 +33,4 @@ class SearchOrderRequest extends FormRequest
             'search.required' => __('messages.search_required'),
         ];
     }
-
-    
 }
