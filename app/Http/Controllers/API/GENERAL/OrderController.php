@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\API\GENERAL\OrderListResource;
 use App\Http\Resources\API\OrderResource;
 use App\Traits\ApiResponse;
 use App\Services\API\General\OrderService;

@@ -8,7 +8,7 @@ use App\Models\Order;
 class OrderService
 {
     public function getMyOrders(){
-       $orders = Order::where('user_id', auth()->id())->paginate(10);
+       $orders = Order::with(['items', 'governorate', 'center'])->where('user_id', auth()->id())->paginate(10);
        if($orders->isEmpty()){
         return [
             'status' => false,
@@ -24,7 +24,7 @@ class OrderService
     }
 
     public function getOrderDetails($orderId){
-        $order = Order::with('packages')->find($orderId);
+        $order = Order::with(['items', 'governorate', 'center'])->find($orderId);
         if(!$order){
             return [
                 'status' => false,
