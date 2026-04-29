@@ -21,6 +21,8 @@ class OrderListResource extends JsonResource
             'id'                => $this->id,
             'order_number'      => $this->order_number,
             'status'            => __('messages.' . $this->status),
+            'sub_total'         => (float) $this->unit_price,
+            'discount_amount'    => (float) $this->discount_amount,
             'payment_method'    => __('messages.' . $this->payment_method),
             'customer_name'     => $this->customer_name,
             'customer_phone'    => $this->customer_phone,

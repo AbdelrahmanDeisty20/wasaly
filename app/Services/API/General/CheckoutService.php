@@ -81,6 +81,7 @@ class CheckoutService
                 'user_id' => $user->id,
                 'address_id' => $address ? $address->id : null,
                 'unit_price' => $totalPrice,  // سعر المنتجات
+                'discount_amount' => $discountAmount,
                 'quantity' => $totalQuantity,
                 'shipping_cost' => $shippingCost,
                 'coupon_code' => $couponCode,

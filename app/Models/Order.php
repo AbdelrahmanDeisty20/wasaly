@@ -14,6 +14,7 @@ class Order extends Model
         'user_id',
         'address_id',
         'unit_price',
+        'discount_amount',
         'quantity',
         'total_price',
         'customer_name',
