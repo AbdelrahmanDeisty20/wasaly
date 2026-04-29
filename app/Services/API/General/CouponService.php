@@ -69,7 +69,7 @@ class CouponService
             // التحقق من صاحب الكوبون إذا كان خاصاً بمستخدم معين
             if ($coupon->user_id !== null && $coupon->user_id != $userId) {
                 $isValid = false;
-                $message = __('messages.coupon_not_found');
+                $message = __('messages.coupon_not_for_you');
             }
 
             // التحقق من عدد مرات استخدام المستخدم الواحد من خلال جدول الطلبات
