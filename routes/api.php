@@ -8,6 +8,7 @@ use App\Http\Controllers\API\GENERAL\CategoryController;
 use App\Http\Controllers\API\GENERAL\FavoriteController;
 use App\Http\Controllers\API\GENERAL\GovernorateController;
 use App\Http\Controllers\API\GENERAL\OfferController;
+use App\Http\Controllers\API\GENERAL\OrderController;
 use App\Http\Controllers\API\GENERAL\PageController;
 use App\Http\Controllers\API\GENERAL\ProductController;
 use App\Http\Controllers\API\GENERAL\ProviderController;
@@ -91,6 +92,11 @@ Route::group(["middleware"=>SetLang::class],function(){
         Route::delete("carts/remove", [CartController::class, "removeItem"]);
         Route::delete("carts/clear", [CartController::class, "clearCart"]);
         Route::post("carts/checkout", [CheckoutController::class, "checkout"]);
+
+        //Orders Routes
+        Route::get("orders", [OrderController::class, "getMyOrders"]);
+        Route::get("orders/{id}", [OrderController::class, "getOrderDetails"]);
+        
         // Favorite Routes
         Route::get("favorites", [FavoriteController::class, "getFavorites"]);
         Route::post("favorites/add", [FavoriteController::class, "toggleFavorite"]);
