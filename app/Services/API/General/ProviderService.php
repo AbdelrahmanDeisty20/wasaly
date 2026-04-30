@@ -23,7 +23,7 @@ class ProviderService
             ];
         }
 
-        $provider = Provider::with('user','services')->where('user_id', $user->id)->first();
+        $provider = Provider::with('user','services','reviews')->where('user_id', $user->id)->first();
         
         if(!$provider){
             return [

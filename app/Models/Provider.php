@@ -58,4 +58,14 @@ class Provider extends Model
     {
         return $this->image ? asset('storage/providers/' . $this->image) : null;
     }
+
+    public function getAverageRatingAttribute()
+    {
+        return round($this->reviews()->avg('rating'), 1) ?? 0.0;
+    }
+
+    public function getReviewsCountAttribute()
+    {
+        return $this->reviews()->count();
+    }
 }

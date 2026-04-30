@@ -26,6 +26,9 @@ class ProviderResource extends JsonResource
             'end_time' => $this->end_time,
             'status' => $this->status,
             'cover' => $this->cover_path,
+            'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
+            'average_rating' => (float) $this->average_rating,
+            'reviews_count' => (int) $this->reviews_count,
             'services' => ServiceResource::collection($this->whenLoaded('services')),
         ];
     }
