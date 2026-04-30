@@ -4,15 +4,15 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Models\Contracts\HasName;
-use Filament\Panel;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['full_name', 'email', 'phone', 'password', 'avatar', 'type', 'is_active', 'email_verified_at', 'provider', 'provider_id'])]
@@ -35,6 +35,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         return $this->hasRole(['admin', 'sub_admin']);
     }
+
     /** @use HasFactory<UserFactory> */
 
     /**
@@ -84,14 +85,17 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         return $this->hasMany(Otp::class);
     }
+
     public function addresses()
     {
         return $this->hasMany(Address::class);
     }
+
     public function getAvatarAttribute($value)
     {
-        if (!$value) return null;
-        
+        if (!$value)
+            return null;
+
         // If it's already a full URL (social login), return it as is
         if (filter_var($value, FILTER_VALIDATE_URL)) {
             return $value;
