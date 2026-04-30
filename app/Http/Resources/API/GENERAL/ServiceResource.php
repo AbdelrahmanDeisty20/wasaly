@@ -12,7 +12,7 @@ class ServiceResource extends JsonResource
         return [
             'id' => $this->id,
             'service' => $this->service,
-            'description' => $this->service_description,
+            'description' => $this->description,
             'image' => $this->image_path,
             'price' => (float)$this->price,
         ];
