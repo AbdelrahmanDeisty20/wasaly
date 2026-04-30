@@ -11,7 +11,7 @@ class ServiceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->service,
+            'service' => $this->service,
             'price' => (float)$this->price,
         ];
     }
