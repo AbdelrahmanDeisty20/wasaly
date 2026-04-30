@@ -20,16 +20,7 @@ class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    public function getNameAttribute()
-    {
-        return $this->full_name;
-    }
-
-    public function getFilamentName(): string
-    {
-        return $this->full_name ?? $this->name ?? $this->email ?? 'User';
-    }
-
+    
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->hasRole(['admin', 'sub_admin']);
