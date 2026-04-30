@@ -13,7 +13,10 @@ class Service extends Model
         'provider_id',
         'service_ar',
         'service_en',
+        'description_ar',
+        'description_en',
         'price',
+        'image',
     ];
 
     public function provider()
@@ -24,5 +27,25 @@ class Service extends Model
     public function getServiceAttribute()
     {
         return app()->getLocale() == 'ar' ? $this->service_ar : $this->service_en;
+    }
+
+    public function getTitleAttribute()
+    {
+        return $this->service;
+    }
+
+    public function getDescriptionAttribute()
+    {
+        return app()->getLocale() == 'ar' ? $this->description_ar : $this->description_en;
+    }
+
+    public function getServiceDescriptionAttribute()
+    {
+        return $this->description;
+    }
+
+    public function getImagePathAttribute()
+    {
+        return $this->image ? asset('storage/services/' . $this->image) : null;
     }
 }
