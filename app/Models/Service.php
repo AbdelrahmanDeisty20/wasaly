@@ -41,7 +41,7 @@ class Service extends Model
 
     public function getServiceDescriptionAttribute()
     {
-        return $this->description;
+        return app()->getLocale() == 'ar' ? $this->description_ar : $this->description_en;
     }
 
     public function getImagePathAttribute()
