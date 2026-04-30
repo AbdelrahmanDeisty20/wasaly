@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\GENERAL\ServiceResource;
+use App\Http\Resources\API\GENERAL\ServicesResource;
 use App\Services\API\General\ProviderService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class ProviderController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->paginated(ServiceResource::class,$result['data'], $result['message']);
+        return $this->paginated(ServicesResource::class,$result['data'], $result['message']);
     }
 
     public function bookService(Request $request)
