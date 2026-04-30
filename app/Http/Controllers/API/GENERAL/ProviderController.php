@@ -33,4 +33,13 @@ class ProviderController extends Controller
         }
         return $this->paginated(ServiceResource::class,$result['data'], $result['message']);
     }
+
+    public function bookService(Request $request)
+    {
+        $result = $this->providerService->bookService($request->all());
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 201);
+    }
 }
