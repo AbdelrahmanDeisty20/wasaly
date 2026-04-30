@@ -12,6 +12,7 @@ class Service extends Model
         'provider_id',
         'service_ar',
         'service_en',
+        'price',
     ];
 
     public function provider()

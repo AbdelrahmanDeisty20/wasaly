@@ -26,7 +26,12 @@ class Order extends Model
         'center_id',
         'coupon_code',
         'shipping_cost',
-        'region',
+        'provider_id',
+        'service_id',
+        'booking_id',
+        'available_date_id',
+        'available_time_id',
+        'problem_description'
     ];
 
     public function user()

@@ -250,4 +250,7 @@ return [
     'ratings_in'=>'التقييم يجب أن يكون بين 1 و 5',
     'ratings_unique'=>'لا يمكن التقييم مرة أخرى',
     'price_min' => 'السعر يجب أن يكون 1 أو أكثر',
+    'service_booked_successfully'=> 'تم حجز الخدمة بنجاح',
+    'service_not_found'=> 'الخدمة غير موجودة',
+    'provider_not_found'=> 'المزود غير موجود',
 ];

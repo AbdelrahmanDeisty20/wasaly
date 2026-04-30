@@ -250,4 +250,7 @@ return [
     'ratings_in'=>'Ratings must be between 1 and 5',
     'ratings_unique'=>'You have already rated this product',
     'price_min' => 'Price must be 1 or more',
+    'service_booked_successfully'=> 'Service booked successfully',
+    'service_not_found'=> 'Service not found',
+    'provider_not_found'=> 'Provider not found',
 ];

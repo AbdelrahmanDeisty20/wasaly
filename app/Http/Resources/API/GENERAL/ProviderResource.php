@@ -20,8 +20,6 @@ class ProviderResource extends JsonResource
             'user' => new UserResource($this->whenLoaded('user')),
             'title' => $this->title,
             'service_description' => $this->service_description,
-            'phone' => $this->phone,
-            'price' => $this->price,
             'from_day' => $this->from_day,
             'to_day' => $this->to_day,
             'start_time' => $this->start_time,

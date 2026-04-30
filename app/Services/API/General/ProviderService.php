@@ -50,4 +50,19 @@ class ProviderService
             'data' => $services
         ];
     }
+    public function bookingServices(array $data){
+        $service = Service::find($data['service_id']);
+        if(!$service){
+            return [
+                'status' => false,
+                'message' => __('messages.service_not_found'),
+                'data' => []
+            ];
+        }
+        return [
+            'status' => true,
+            'message' => __('messages.service_retrieved_successfully'),
+            'data' => $service
+        ];
+    }
 }
