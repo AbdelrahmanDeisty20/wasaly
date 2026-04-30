@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Order;
 
 class Provider extends Model
 {
@@ -67,5 +68,10 @@ class Provider extends Model
     public function getReviewsCountAttribute()
     {
         return $this->reviews()->count();
+    }
+
+    public function getSuccessfulOrdersCountAttribute()
+    {
+        return Order::where('provider_id', $this->id)->where('status', 'accepted')->count();
     }
 }
