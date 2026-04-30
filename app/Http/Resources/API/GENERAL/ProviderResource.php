@@ -25,7 +25,7 @@ class ProviderResource extends JsonResource
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
             'status' => $this->status,
-            'image' => $this->image_path,
+            'cover' => $this->cover_path,
             'services' => ServiceResource::collection($this->whenLoaded('services')),
         ];
     }
