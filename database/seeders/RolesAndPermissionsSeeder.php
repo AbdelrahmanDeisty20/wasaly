@@ -41,7 +41,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Create default users
         $admin = User::firstOrCreate(
-            ['email' => 'admin@wasaly.com'],
+            ['email' => 'admin@admin.com'],
             [
                 'full_name' => 'Admin User',
                 'phone' => '01000000000',
