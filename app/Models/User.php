@@ -26,7 +26,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->full_name;
     }
 
-    public function getFilamentName()
+    public function getFilamentName(): string
     {
         return strval($this->full_name ?? $this->name ?? $this->email ?? 'Admin');
     }
