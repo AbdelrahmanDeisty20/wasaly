@@ -58,8 +58,25 @@ class CategoryController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->paginated(ProductResource::class, $result['data'], $result['message'], [
-            'sub_category' => $result['sub_category']
-        ]);
+
+        return $this->success([
+            'sub_category' => $result['sub_category'],
+            'data' => [
+                'products' => ProductResource::collection($result['products']),
+                'products_pagination' => [
+                    'total' => $result['products']->total(),
+                    'per_page' => $result['products']->perPage(),
+                    'current_page' => $result['products']->currentPage(),
+                    'last_page' => $result['products']->lastPage(),
+                ],
+                'services' => \App\Http\Resources\API\GENERAL\ServiceResource::collection($result['services']),
+                'services_pagination' => [
+                    'total' => $result['services']->total(),
+                    'per_page' => $result['services']->perPage(),
+                    'current_page' => $result['services']->currentPage(),
+                    'last_page' => $result['services']->lastPage(),
+                ],
+            ]
+        ], $result['message'], 200);
     }
 }

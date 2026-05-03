@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SubCategory extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name_ar',
         'name_en',
@@ -25,14 +26,17 @@ class SubCategory extends Model
     {
         return $this->hasMany(Provider::class);
     }
+
     public function products()
     {
         return $this->hasMany(Product::class);
     }
+
     public function getNameAttribute()
     {
         return app()->getLocale() == 'ar' ? $this->name_ar : $this->name_en;
     }
+
     public function getImagePathAttribute()
     {
         return asset('storage/subCategories/' . $this->image);
