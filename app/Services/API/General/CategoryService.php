@@ -69,7 +69,7 @@ class CategoryService
 
     public function getSubCategory($data)
     {
-        $subCategory = SubCategory::find($data['sub_category_id']);
+        $subCategory = SubCategory::with('products', 'services')->find($data['sub_category_id'])->paginate(10);
         if (!$subCategory) {
             return [
                 'status' => false,
@@ -78,14 +78,10 @@ class CategoryService
             ];
         }
 
-        $products = $subCategory->products()->with('offers', 'reviews')->paginate(10);
-        $services = $subCategory->services()->paginate(10);
-
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => $products->merge($services),
-            'sub_category' => new SubCategoryResource($subCategory)
+            'data' => $subCategory,
         ];
     }
 }
