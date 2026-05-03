@@ -33,7 +33,7 @@ class Provider extends Model
 
     public function subCategory()
     {
-        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+        return $this->belongsTo(SubCategory::class);
     }
 
     public function services()
