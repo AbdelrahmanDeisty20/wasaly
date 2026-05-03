@@ -79,11 +79,12 @@ class CategoryService
         }
 
         $products = $subCategory->products()->with('offers', 'reviews')->paginate(10);
+        $services = $subCategory->services()->paginate(10);
 
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => $products,
+            'data' => $products->merge($services),
             'sub_category' => new SubCategoryResource($subCategory)
         ];
     }
