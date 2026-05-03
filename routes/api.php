@@ -33,6 +33,7 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::get('category', [CategoryController::class, 'getCategory']);
     Route::get('sub-categories', [CategoryController::class, 'getSubCategories']);
     Route::get('sub-category', [CategoryController::class, 'getSubCategory']);
+    Route::get('sub-category-services', [CategoryController::class, 'getSubCategoryServices']);
     // Banners Routes
     Route::get('banners', [BannerController::class, 'getBanners']);
     // products Routes

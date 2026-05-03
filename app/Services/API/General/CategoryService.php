@@ -3,8 +3,6 @@
 namespace App\Services\API\General;
 
 use App\Http\Resources\API\CategoryResource;
-use App\Http\Resources\API\GENERAL\ServicesResource;
-use App\Http\Resources\API\ProductResource;
 use App\Http\Resources\API\SubCategoryResource;
 use App\Models\Category;
 use App\Models\SubCategory;
@@ -80,19 +78,33 @@ class CategoryService
             ];
         }
 
-        if ($subCategory->products()->exists()) {
-            $items = $subCategory->products()->paginate(10);
-            $resource = ProductResource::class;
-        } else {
-            $items = $subCategory->providers()->paginate(10);
-            $resource = ServicesResource::class;
-        }
+        $products = $subCategory->products()->paginate(10);
 
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => $items,
-            'resource' => $resource,
+            'data' => $products,
+            'sub_category' => new SubCategoryResource($subCategory)
+        ];
+    }
+
+    public function getSubCategoryServices($data)
+    {
+        $subCategory = SubCategory::find($data['sub_category_id']);
+        if (!$subCategory) {
+            return [
+                'status' => false,
+                'message' => __('messages.sub_category_not_found'),
+                'data' => []
+            ];
+        }
+
+        $providers = $subCategory->providers()->paginate(10);
+
+        return [
+            'status' => true,
+            'message' => __('messages.sub_category_retrieved_successfully'),
+            'data' => $providers,
             'sub_category' => new SubCategoryResource($subCategory)
         ];
     }
