@@ -58,8 +58,6 @@ class CategoryController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->paginated($result['resource'], $result['data'], $result['message'], [
-            'sub_category' => $result['sub_category']
-        ]);
+        return $this->paginated(SubCategoryResource::class, $result['data'], $result['message']);
     }
 }

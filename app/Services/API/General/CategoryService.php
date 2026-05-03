@@ -2,8 +2,8 @@
 
 namespace App\Services\API\General;
 
-use App\Http\Resources\API\CategoryResource;
 use App\Http\Resources\API\GENERAL\ServicesResource;
+use App\Http\Resources\API\CategoryResource;
 use App\Http\Resources\API\ProductResource;
 use App\Http\Resources\API\SubCategoryResource;
 use App\Models\Category;
@@ -71,7 +71,7 @@ class CategoryService
 
     public function getSubCategory($data)
     {
-        $subCategory = SubCategory::find($data['sub_category_id']);
+        $subCategory = SubCategory::with('products','providers')->where('sub_category_id', $data['sub_category_id'])->paginate(10);
         if (!$subCategory) {
             return [
                 'status' => false,
@@ -80,20 +80,10 @@ class CategoryService
             ];
         }
 
-        if ($subCategory->products()->exists()) {
-            $items = $subCategory->products()->paginate(10);
-            $resource = ProductResource::class;
-        } else {
-            $items = $subCategory->providers()->paginate(10);
-            $resource = ServicesResource::class;
-        }
-
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => $items,
-            'resource' => $resource,
-            'sub_category' => new SubCategoryResource($subCategory)
+            'data' => $subCategory,
         ];
     }
-    }
+}
