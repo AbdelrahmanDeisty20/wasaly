@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\CategoryRequest;
 use App\Http\Requests\API\GENERAL\SubCategoryRequest;
 use App\Http\Resources\API\CategoryResource;
-use App\Http\Resources\API\GENERAL\ServicesResource;
 use App\Http\Resources\API\ProductResource;
 use App\Http\Resources\API\SubCategoryResource;
 use App\Services\API\General\CategoryService;
@@ -59,18 +58,7 @@ class CategoryController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->paginated(ProductResource::class, $result['data'], $result['message'], [
-            'sub_category' => $result['sub_category']
-        ]);
-    }
-
-    public function getSubCategoryServices(SubCategoryRequest $request)
-    {
-        $result = $this->CategoryService->getSubCategoryServices($request->validated());
-        if (!$result['status']) {
-            return $this->error($result['message'], 404);
-        }
-        return $this->paginated(ServicesResource::class, $result['data'], $result['message'], [
+        return $this->paginated($result['resource'], $result['data'], $result['message'], [
             'sub_category' => $result['sub_category']
         ]);
     }
