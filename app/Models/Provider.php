@@ -12,6 +12,7 @@ class Provider extends Model
 
     protected $fillable = [
         'user_id',
+        'sub_category_id',
         'title_ar',
         'title_en',
         'service_description_ar',
@@ -28,6 +29,11 @@ class Provider extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
     }
 
     public function services()
