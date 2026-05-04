@@ -71,7 +71,7 @@ class CategoryService
 
     public function getSubCategory($data)
     {
-        $subCategory = SubCategory::with('products', 'providers')->where('id', $data['sub_category_id'])->paginate(10);
+        $subCategory = SubCategory::with('products.reviews', 'products.offers', 'providers')->where('id', $data['sub_category_id'])->paginate(10);
         if (!$subCategory) {
             return [
                 'status' => false,
