@@ -10,10 +10,12 @@ class ServiceImage extends Model
         'provider_id',
         'images',
     ];
+
     public function getImagesPathAttribute()
     {
         return asset('storage/services/' . $this->images);
     }
+
     public function provider()
     {
         return $this->belongsTo(Provider::class);
