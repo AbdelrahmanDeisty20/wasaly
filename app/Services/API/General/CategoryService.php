@@ -71,7 +71,7 @@ class CategoryService
 
     public function getSubCategory($data)
     {
-        $subCategory = SubCategory::with('products.reviews', 'products.offers', 'providers')->where('id', $data['sub_category_id'])->paginate(10);
+        $subCategory = SubCategory::find($data['sub_category_id']);
         if (!$subCategory) {
             return [
                 'status' => false,
@@ -80,10 +80,33 @@ class CategoryService
             ];
         }
 
+        $hasProducts = $subCategory->products()->exists();
+
+        if ($hasProducts) {
+            $items = $subCategory->products()
+                ->with(['reviews', 'offers'])
+                ->paginate(10);
+            $subCategory->setRelation('products', $items->getCollection());
+            $total = $items->total();
+        } else {
+            $items = $subCategory->providers()
+                ->paginate(10);
+            $subCategory->setRelation('providers', $items->getCollection());
+            $total = $items->total();
+        }
+
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+            collect([$subCategory]),
+            $total,
+            10,
+            $items->currentPage(),
+            ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()]
+        );
+
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => $subCategory,
+            'data' => $paginator,
         ];
     }
 }
