@@ -8,7 +8,6 @@ use App\Http\Requests\API\GENERAL\SubCategoryRequest;
 use App\Http\Resources\API\CategoryResource;
 use App\Http\Resources\API\ProductResource;
 use App\Http\Resources\API\SubCategoryResource;
-use App\Http\Resources\API\GENERAL\ProviderResource;
 use App\Services\API\General\CategoryService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -59,30 +58,6 @@ class CategoryController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-
-        $subCategory = $result['data']['sub_category'];
-        $isProducts = isset($result['data']['products']);
-        $itemsPaginator = $isProducts ? $result['data']['products'] : $result['data']['services'];
-        $resourceClass = $isProducts ? ProductResource::class : ProviderResource::class;
-        $key = $isProducts ? 'products' : 'services';
-
-        return response()->json([
-            'status' => true,
-            'message' => $result['message'],
-            'data' => [
-                [
-                    'id' => $subCategory->id,
-                    'name' => $subCategory->name,
-                    'image' => $subCategory->image_path,
-                    $key => $resourceClass::collection($itemsPaginator->items())
-                ]
-            ],
-            'pagination' => [
-                'current_page' => $itemsPaginator->currentPage(),
-                'per_page' => $itemsPaginator->perPage(),
-                'total' => $itemsPaginator->total(),
-                'last_page' => $itemsPaginator->lastPage(),
-            ]
-        ]);
+        return $this->paginated(SubCategoryResource::class, $result['data'], $result['message']);
     }
 }
