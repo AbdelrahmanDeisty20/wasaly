@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class serviceImage extends Model
+class ServiceImage extends Model
 {
     protected $fillable = [
         'provider_id',
