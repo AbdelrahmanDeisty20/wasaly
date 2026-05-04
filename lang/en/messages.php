@@ -254,4 +254,6 @@ return [
     'service_not_found'=> 'Service not found',
     'service_retrieved_successfully'=> 'Service retrieved successfully',
     'provider_not_found'=> 'Provider not found',
+    'service_id_required'=> 'Service ID is required',
+    
 ];

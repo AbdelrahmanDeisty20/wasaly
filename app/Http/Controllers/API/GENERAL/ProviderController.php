@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\GENERAL\ServiceRequest;
 use App\Http\Resources\API\GENERAL\ServiceResource;
 use App\Http\Resources\API\GENERAL\ServicesResource;
 use App\Services\API\General\ProviderService;
@@ -34,9 +35,9 @@ class ProviderController extends Controller
         }
         return $this->paginated(ServicesResource::class,$result['data'], $result['message']);
     }
-    public function getService(Request $request)
+    public function getService(ServiceRequest $request)
     {
-        $result = $this->providerService->getservice($request->id);
+        $result = $this->providerService->getservice($request->validated());
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }

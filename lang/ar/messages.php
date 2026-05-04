@@ -254,5 +254,6 @@ return [
     'service_not_found'=> 'الخدمة غير موجودة',
     'provider_not_found'=> 'المزود غير موجود',
     'service_retrieved_successfully'=> 'تم استرجاع الخدمة بنجاح',
+    'service_id_required'=> 'معرف الخدمة مطلوب',
     
 ];
