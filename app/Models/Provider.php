@@ -80,4 +80,9 @@ class Provider extends Model
     {
         return Order::where('provider_id', $this->id)->where('status', 'accepted')->count();
     }
+
+    public function serviceImages()
+    {
+        return $this->hasMany(ServiceImage::class);
+    }
 }
