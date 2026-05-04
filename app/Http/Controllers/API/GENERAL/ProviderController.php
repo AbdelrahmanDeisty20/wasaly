@@ -34,8 +34,9 @@ class ProviderController extends Controller
         }
         return $this->paginated(ServicesResource::class,$result['data'], $result['message']);
     }
-    public function getService($id){
-        $result = $this->providerService->getService($id);
+    public function getService(Request $request)
+    {
+        $result = $this->providerService->getservice($request->id);
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }

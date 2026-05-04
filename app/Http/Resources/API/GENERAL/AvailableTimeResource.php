@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources\API\GENERAL;
 
-use App\Http\Resources\API\GENERAL\AvailableTimeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AvailableDateResource extends JsonResource
+class AvailableTimeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +16,7 @@ class AvailableDateResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'date' => $this->date,
-            'available_times' => AvailableTimeResource::collection($this->whenLoaded('availableTimes')),
+            'time' => $this->time,
         ];
     }
 }
