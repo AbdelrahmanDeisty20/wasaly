@@ -20,8 +20,8 @@ class SubCategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image' => $this->image_path,
-            'services' => ServicesResource::collection($this->whenLoaded('providers')),
-            'products' => ProductResource::collection($this->whenLoaded('products')),
+            'services' => $this->when($this->relationLoaded('providers') && $this->providers->count() > 0, ServicesResource::collection($this->providers)),
+            'products' => $this->when($this->relationLoaded('products') && $this->products->count() > 0, ProductResource::collection($this->products)),
         ];
     }
 }
