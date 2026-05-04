@@ -10,6 +10,7 @@ class ServiceSeeder extends Seeder
 {
     public function run(): void
     {
+        Service::query()->delete();
         $servicesData = [
             // صيانة كهرباء (ID: 3 غالباً بناءً على الفحص السابق)
             3 => [
