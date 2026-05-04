@@ -20,7 +20,7 @@ class ServicesResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'image' => $this->image_path,
-            'sub_category' => SubCategoryResource::make($this->whenLoaded('subCategory')),
+            'sub_category' => SubCategoryResource::make($this->provider->subCategory ?? null),
         ];
     }
 }

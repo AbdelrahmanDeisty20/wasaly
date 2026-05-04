@@ -27,7 +27,7 @@ class ServicesListResource extends JsonResource
             'images' => ServiceImageResource::collection($this->whenLoaded('serviceImages')),
             'rating' => $this->average_rating,
             'review_count' => $this->reviews_count,
-            'sub_category' => SubCategoryResource::make($this->whenLoaded('subCategory')),
+            'sub_category' => SubCategoryResource::make($this->provider->subCategory ?? null),
             'available_dates' => AvailableDateResource::collection($this->availableDates),
             'reviews' => ReviewResource::collection($this->reviews),
         ];
