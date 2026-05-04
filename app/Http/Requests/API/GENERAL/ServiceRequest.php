@@ -23,14 +23,14 @@ class ServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'provider_id' => 'required|exists:providers,id'
+            'service_id' => 'required|exists:services,id'
         ];
     }
     public function messages(): array
     {
         return [
-            'provider_id.required' => __('messages.service_id_required'),
-            'provider_id.exists' => __('messages.service_id_not_found')
+            'service_id.required' => __('messages.service_id_required'),
+            'service_id.exists' => __('messages.service_id_not_found')
         ];
     }
 }

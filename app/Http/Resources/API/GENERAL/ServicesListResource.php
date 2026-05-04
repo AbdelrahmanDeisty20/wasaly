@@ -22,6 +22,7 @@ class ServicesListResource extends JsonResource
             'id' => $this->id,
             'name' => $this->title,
             'description' => $this->service_description,
+            'services' => ServiceResource::collection($this->whenLoaded('services')),
             'image' => $this->image_path,
             'images' => ServiceImageResource::collection($this->whenLoaded('serviceImages')),
             'rating' => $this->average_rating,
