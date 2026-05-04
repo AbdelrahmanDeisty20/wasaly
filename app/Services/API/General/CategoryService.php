@@ -71,9 +71,7 @@ class CategoryService
 
     public function getSubCategory($data)
     {
-        $subCategory = SubCategory::withCount(['products', 'providers'])
-            ->find($data['sub_category_id']);
-
+        $subCategory = SubCategory::with('products.reviews', 'products.offers', 'providers')->where('id', $data['sub_category_id'])->paginate(10);
         if (!$subCategory) {
             return [
                 'status' => false,
@@ -82,29 +80,10 @@ class CategoryService
             ];
         }
 
-        // decide automatically
-        if ($subCategory->products_count > 0) {
-            $result = $subCategory
-                ->products()
-                ->with(['reviews', 'offers'])
-                ->paginate(10);
-
-            $key = 'products';
-        } else {
-            $result = $subCategory
-                ->providers()
-                ->paginate(10);
-
-            $key = 'services';
-        }
-
         return [
             'status' => true,
             'message' => __('messages.sub_category_retrieved_successfully'),
-            'data' => [
-                'sub_category' => $subCategory,
-                $key => $result
-            ],
+            'data' => $subCategory,
         ];
     }
 }

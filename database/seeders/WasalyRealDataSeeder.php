@@ -29,11 +29,22 @@ class WasalyRealDataSeeder extends Seeder
     private function downloadImage($url, $folder)
     {
         try {
-            $contents = file_get_contents($url);
             $name = Str::random(10) . '.png';
             $path = $folder . '/' . $name;
-            Storage::disk('public')->put($path, $contents);
-            return $name;
+            
+            // Basic curl to download
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            $contents = curl_exec($ch);
+            curl_close($ch);
+
+            if ($contents) {
+                Storage::disk('public')->put($path, $contents);
+                return $name;
+            }
+            return 'default.png';
         } catch (\Exception $e) {
             return 'default.png';
         }
