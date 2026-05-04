@@ -252,5 +252,6 @@ return [
     'price_min' => 'Price must be 1 or more',
     'service_booked_successfully'=> 'Service booked successfully',
     'service_not_found'=> 'Service not found',
+    'service_retrieved_successfully'=> 'Service retrieved successfully',
     'provider_not_found'=> 'Provider not found',
 ];

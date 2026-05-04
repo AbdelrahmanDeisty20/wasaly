@@ -253,4 +253,6 @@ return [
     'service_booked_successfully'=> 'تم حجز الخدمة بنجاح',
     'service_not_found'=> 'الخدمة غير موجودة',
     'provider_not_found'=> 'المزود غير موجود',
+    'service_retrieved_successfully'=> 'تم استرجاع الخدمة بنجاح',
+    
 ];

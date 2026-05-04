@@ -4,6 +4,7 @@ namespace App\Services\API\General;
 
 use App\Http\Resources\API\GENERAL\ProviderResource;
 use App\Http\Resources\API\GENERAL\ServiceResource;
+use App\Http\Resources\API\GENERAL\ServicesListResource;
 use App\Models\Booking;
 use App\Models\Order;
 use App\Models\Provider;
@@ -39,7 +40,7 @@ class ProviderService
         ];
     }
     public function services(){
-        $services = Provider::with('subCategory')->paginate(10);
+        $services = Provider::with('subCategory','availableDates.availableTimes','reviews.user')->paginate(10);
         if($services->isEmpty()){
             return [
                 'status' => false,
@@ -51,6 +52,21 @@ class ProviderService
             'status' => true,
             'message' => __('messages.services_fetched_successfully'),
             'data' => $services
+        ];
+    }
+    public function getservice($id){
+        $service = Service::find($id);
+        if(!$service){
+            return [
+                'status' => false,
+                'message' => __('messages.service_not_found'),
+                'data' => []
+            ];
+        }
+        return [
+            'status' => true,
+            'message' => __('messages.service_retrieved_successfully'),
+            'data' => new ServicesListResource($service)
         ];
     }
     public function bookService(array $data)
