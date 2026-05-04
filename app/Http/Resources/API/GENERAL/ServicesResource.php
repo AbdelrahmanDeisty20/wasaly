@@ -18,7 +18,7 @@ class ServicesResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'description' => $this->service_description,
+            'description' => $this->description,
             'image' => $this->image_path,
             'sub_category' => SubCategoryResource::make($this->whenLoaded('subCategory')),
         ];
