@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources\API\GENERAL;
 
-use App\Http\Resources\API\SubCategoryResource;
-use App\Http\Resources\API\GENERAL\ProviderResource;
 use App\Http\Resources\API\GENERAL\AvailableDateResource;
+use App\Http\Resources\API\GENERAL\ProviderResource;
 use App\Http\Resources\API\GENERAL\ReviewResource;
-use Illuminate\Http\Request;
+use App\Http\Resources\API\SubCategoryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 class ServicesListResource extends JsonResource
 {
@@ -19,16 +19,16 @@ class ServicesListResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            "name" => $this->title,
-            "description" => $this->service_description,
-            "image" => $this->image_path,
-            'images'=> ServiceImageResource::collection($this->whenLoaded('serviceImages')),
-            "rating" => $this->average_rating,
-            "review_count" => $this->reviews_count,
-            "sub_category" => SubCategoryResource::make($this->whenLoaded('subCategory')),
-            "available_dates" => AvailableDateResource::collection($this->availableDates),
-            "reviews" => ReviewResource::collection($this->reviews),
+            'id' => $this->id,
+            'name' => $this->title,
+            'description' => $this->service_description,
+            'image' => $this->image_path,
+            'images' => ServiceImageResource::collection($this->whenLoaded('serviceImages')),
+            'rating' => $this->average_rating,
+            'review_count' => $this->reviews_count,
+            'sub_category' => SubCategoryResource::make($this->whenLoaded('subCategory')),
+            'available_dates' => AvailableDateResource::collection($this->availableDates),
+            'reviews' => ReviewResource::collection($this->reviews),
         ];
     }
 }

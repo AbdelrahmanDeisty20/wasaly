@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\DB;
 
 class ProviderService
 {
-    public function providerProfile(){
+    public function providerProfile()
+    {
         $user = auth()->user();
-        
+
         if ($user->type != 'service_provider') {
             return [
                 'status' => false,
@@ -24,9 +25,9 @@ class ProviderService
             ];
         }
 
-        $provider = Provider::with('user','services','reviews.user')->where('user_id', $user->id)->first();
-        
-        if(!$provider){
+        $provider = Provider::with('user', 'services', 'reviews.user')->where('user_id', $user->id)->first();
+
+        if (!$provider) {
             return [
                 'status' => false,
                 'message' => __('messages.provider_not_found'),
@@ -39,9 +40,11 @@ class ProviderService
             'data' => new ProviderResource($provider)
         ];
     }
-    public function services(){
+
+    public function services()
+    {
         $services = Provider::paginate(10);
-        if($services->isEmpty()){
+        if ($services->isEmpty()) {
             return [
                 'status' => false,
                 'message' => __('messages.services_fetched_failed'),
@@ -54,9 +57,11 @@ class ProviderService
             'data' => $services
         ];
     }
-    public function getservice(array $data){
-        $service = Provider::with('subCategory','availableDates.availableTimes','reviews.user','serviceImages')->find($data['provider_id']);
-        if(!$service){
+
+    public function getservice(array $data)
+    {
+        $service = Provider::with('subCategory', 'availableDates.availableTimes', 'reviews.user', 'serviceImages')->find($data['provider_id']);
+        if (!$service) {
             return [
                 'status' => false,
                 'message' => __('messages.service_not_found'),
@@ -69,12 +74,13 @@ class ProviderService
             'data' => new ServicesListResource($service)
         ];
     }
+
     public function bookService(array $data)
     {
         DB::beginTransaction();
         try {
             $user = auth()->user();
-            
+
             $service = Service::with('provider')->find($data['service_id']);
             if (!$service) {
                 return [
@@ -105,7 +111,6 @@ class ProviderService
                 'available_date_id' => $data['available_date_id'],
                 'available_time_id' => $data['available_time_id'],
                 'problem_description' => $data['problem_description'],
-                
                 // بيانات العميل والموقع
                 'customer_name' => $data['customer_name'] ?? ($user->full_name ?? $user->name),
                 'customer_phone' => $data['customer_phone'] ?? $user->phone,
@@ -113,7 +118,6 @@ class ProviderService
                 'governorate_id' => $data['governorate_id'],
                 'center_id' => $data['center_id'],
                 'region' => $data['region'] ?? null,
-                
                 'unit_price' => $service->price ?? 0,
                 'total_price' => $service->price ?? 0,
                 'quantity' => 1,
