@@ -40,7 +40,7 @@ class ProviderService
         ];
     }
     public function services(){
-        $services = Provider::with('subCategory','availableDates.availableTimes','reviews.user')->paginate(10);
+        $services = Provider::paginate(10);
         if($services->isEmpty()){
             return [
                 'status' => false,
@@ -55,7 +55,7 @@ class ProviderService
         ];
     }
     public function getservice($id){
-        $service = Service::find($id);
+        $service = Service::with('subCategory','availableDates.availableTimes','reviews.user')->find($id);
         if(!$service){
             return [
                 'status' => false,
