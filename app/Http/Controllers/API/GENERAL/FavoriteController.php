@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\GENERAL;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\ToggleFavoriteRequest;
 use App\Http\Resources\API\ProductListResource;
+use App\Http\Resources\API\ProductResource;
 use App\Services\API\General\favoriteService;
 use App\Traits\ApiResponse;
 
@@ -25,7 +26,7 @@ class FavoriteController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 200);
         }
-        return $this->paginated(ProductListResource::class, $result['data'], $result['message']);
+        return $this->paginated(ProductResource::class, $result['data'], $result['message']);
     }
 
     public function toggleFavorite(ToggleFavoriteRequest $request)
