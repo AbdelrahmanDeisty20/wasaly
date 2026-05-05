@@ -43,8 +43,8 @@ class GovernorateSeeder extends Seeder
         ];
 
         foreach ($governorates as $governorate) {
-            Governorate::firstOrCreate(
-                ['name_en' => $governorate['name_en']],
+            Governorate::updateOrCreate(
+                ['name_ar' => $governorate['name_ar']],
                 $governorate
             );
         }
