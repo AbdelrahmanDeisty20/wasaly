@@ -285,6 +285,11 @@ class AuthService
         
         $driver = Socialite::driver($provider)->stateless();
 
+        // Support forcing account selection (useful for logout/switch account)
+        if (request()->input('prompt') === 'select_account') {
+            $driver->with(['prompt' => 'select_account']);
+        }
+
         // Only add state if it's not web (to keep web flow as clean as possible)
         if ($platform !== 'web') {
             $driver->with(['state' => $platform]);
