@@ -124,12 +124,11 @@ class ProductService
 
     public function searchProducts($searchTerm)
     {
+        $locale = app()->getLocale();
         $products = Product::with(['offers', 'reviews'])
-            ->where(function($query) use ($searchTerm) {
-                $query->where('name_ar', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('name_en', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('description_ar', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('description_en', 'LIKE', '%' . $searchTerm . '%');
+            ->where(function($query) use ($searchTerm, $locale) {
+                $query->where("name_{$locale}", 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere("description_{$locale}", 'LIKE', '%' . $searchTerm . '%');
             })
             ->paginate(10);
 
