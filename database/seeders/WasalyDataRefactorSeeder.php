@@ -28,17 +28,36 @@ class WasalyDataRefactorSeeder extends Seeder
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
             $contents = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
-            if ($contents) {
+            if ($contents && $httpCode == 200) {
                 Storage::disk('public')->put($path, $contents);
                 return $name;
             }
             return 'default.png';
         } catch (\Exception $e) {
             return 'default.png';
+        }
+    }
+
+    private function cleanDirectory($directory)
+    {
+        if (Storage::disk('public')->exists($directory)) {
+            $files = Storage::disk('public')->files($directory);
+            foreach ($files as $file) {
+                if (basename($file) !== '.gitignore') {
+                    Storage::disk('public')->delete($file);
+                }
+            }
+            $subDirs = Storage::disk('public')->directories($directory);
+            foreach ($subDirs as $subDir) {
+                $this->cleanDirectory($subDir);
+                Storage::disk('public')->deleteDirectory($subDir);
+            }
         }
     }
 
@@ -74,12 +93,13 @@ class WasalyDataRefactorSeeder extends Seeder
         }
         $brands = Brand::all();
 
-        // Ensure directories exist
-        Storage::disk('public')->makeDirectory('categories');
-        Storage::disk('public')->makeDirectory('subCategories');
-        Storage::disk('public')->makeDirectory('products');
-        Storage::disk('public')->makeDirectory('providers');
-        Storage::disk('public')->makeDirectory('services');
+        // Clean directories
+        $dirs = ['categories', 'subCategories', 'products', 'providers', 'services'];
+        foreach ($dirs as $dir) {
+            $this->cleanDirectory($dir);
+            Storage::disk('public')->makeDirectory($dir);
+        }
+        Storage::disk('public')->makeDirectory('products/images');
 
         // 1. Guaranteed Food/Service Images Pool
         $subCategoryImages = [
@@ -227,7 +247,7 @@ class WasalyDataRefactorSeeder extends Seeder
                     'category_id' => $category->id,
                     'name_ar' => $sub['ar'],
                     'name_en' => $sub['en'],
-                    'image' => 'subCategories/' . ($localSubImages[$index % 20] ?? 'default.png'),
+                    'image' => ($localSubImages[$index % 20] ?? 'default.png'),
                     'status' => 'active'
                 ]);
 
@@ -245,7 +265,7 @@ class WasalyDataRefactorSeeder extends Seeder
                             'description_en' => 'High quality ' . $sub['en'] . ' product, carefully selected to ensure complete satisfaction.',
                             'price' => rand(10, 200),
                             'stock' => rand(20, 150),
-                            'image' => 'products/' . ($localProdImages[$imgIndex] ?? 'item.png'),
+                            'image' => ($localProdImages[$imgIndex] ?? 'item.png'),
                             'status' => 'active',
                             'is_featured' => rand(0, 1)
                         ]);
@@ -254,6 +274,22 @@ class WasalyDataRefactorSeeder extends Seeder
                         Specification::create(['product_id' => $product->id, 'key_ar' => 'بلد المنشأ', 'key_en' => 'Origin', 'value_ar' => 'محلي', 'value_en' => 'Local', 'icon' => 'flag']);
                         Specification::create(['product_id' => $product->id, 'key_ar' => 'الوزن', 'key_en' => 'Weight', 'value_ar' => '1 كجم تقريباً', 'value_en' => '1 Kg Approx', 'icon' => 'scale']);
                         Specification::create(['product_id' => $product->id, 'key_ar' => 'الحالة', 'key_en' => 'Condition', 'value_ar' => 'طازج', 'value_en' => 'Fresh', 'icon' => 'eco']);
+
+                        // Add Product Gallery Images
+                        for ($g = 1; $g <= 2; $g++) {
+                            $galleryImgIndex = ($productCounter + $g) % 10;
+                            // Re-download to the images subfolder or just copy
+                            $galleryImgName = ($localProdImages[$galleryImgIndex] ?? 'item.png');
+                            ProductImage::create([
+                                'product_id' => $product->id,
+                                'images' => $galleryImgName
+                            ]);
+                            
+                            // Ensure the file exists in the images subfolder too
+                            if ($galleryImgName != 'item.png') {
+                                Storage::disk('public')->copy('products/' . $galleryImgName, 'products/images/' . $galleryImgName);
+                            }
+                        }
                     }
                 } else {
                     // Distribute 30 services across all service categories
@@ -275,7 +311,7 @@ class WasalyDataRefactorSeeder extends Seeder
                             'start_time' => '09:00:00',
                             'end_time' => '21:00:00',
                             'status' => 'active',
-                            'cover' => 'providers/' . ($localServImages[$imgIndex] ?? 'provider.png')
+                            'cover' => ($localServImages[$imgIndex] ?? 'provider.png')
                         ]);
 
                         Service::create([
@@ -285,12 +321,14 @@ class WasalyDataRefactorSeeder extends Seeder
                             'description_ar' => 'تشمل الخدمة فحصاً دقيقاً لجميع المشاكل في قسم ' . $sub['ar'] . ' مع توفير الحلول الفورية واستخدام مواد آمنة وفعالة.',
                             'description_en' => 'The service includes a thorough inspection of all issues in the ' . $sub['en'] . ' section, providing immediate solutions using safe and effective materials.',
                             'price' => rand(100, 1000),
-                            'image' => 'services/' . ($localServImages[$imgIndex] ?? 'service.png')
+                            'image' => ($localServImages[$imgIndex] ?? 'service.png')
                         ]);
                     }
                 }
             }
         }
+
+        Storage::disk('public')->makeDirectory('products/images');
 
         // Fill up to exact counts if missed due to rand()
         while ($productCounter < 50) {
@@ -306,12 +344,25 @@ class WasalyDataRefactorSeeder extends Seeder
                 'description_en' => 'Carefully selected best quality from ' . $sub->name_en . ' section.',
                 'price' => rand(15, 150),
                 'stock' => rand(10, 100),
-                'image' => 'products/' . ($localProdImages[$imgIndex] ?? 'item.png'),
+                'image' => ($localProdImages[$imgIndex] ?? 'item.png'),
                 'status' => 'active'
             ]);
 
             Specification::create(['product_id' => $product->id, 'key_ar' => 'التعبئة', 'key_en' => 'Packaging', 'value_ar' => 'مغلف بعناية', 'value_en' => 'Carefully Packaged', 'icon' => 'inventory']);
             Specification::create(['product_id' => $product->id, 'key_ar' => 'الجودة', 'key_en' => 'Quality', 'value_ar' => 'درجة أولى', 'value_en' => 'Grade A', 'icon' => 'verified']);
+
+            // Add Product Gallery Images
+            for ($g = 1; $g <= 2; $g++) {
+                $galleryImgIndex = ($productCounter + $g) % 10;
+                $galleryImgName = ($localProdImages[$galleryImgIndex] ?? 'item.png');
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'images' => $galleryImgName
+                ]);
+                if ($galleryImgName != 'item.png') {
+                    Storage::disk('public')->copy('products/' . $galleryImgName, 'products/images/' . $galleryImgName);
+                }
+            }
         }
 
         while ($serviceCounter < 30) {
@@ -333,7 +384,7 @@ class WasalyDataRefactorSeeder extends Seeder
                 'start_time' => '09:00:00',
                 'end_time' => '21:00:00',
                 'status' => 'active',
-                'cover' => 'providers/' . ($localServImages[$imgIndex] ?? 'provider.png')
+                'cover' => ($localServImages[$imgIndex] ?? 'provider.png')
             ]);
 
             Service::create([
@@ -343,7 +394,7 @@ class WasalyDataRefactorSeeder extends Seeder
                 'description_ar' => 'باقة احترافية تشمل التنظيف العميق والتنظيم وإعادة التأهيل.',
                 'description_en' => 'A professional package including deep cleaning, organizing, and rehabilitation.',
                 'price' => rand(100, 1000),
-                'image' => 'services/' . ($localServImages[$imgIndex] ?? 'service.png')
+                'image' => ($localServImages[$imgIndex] ?? 'service.png')
             ]);
         }
 

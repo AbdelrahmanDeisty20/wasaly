@@ -23,7 +23,7 @@ class Provider extends Model
         'start_time',
         'end_time',
         'status',
-        'image',
+        'cover',
     ];
 
     public function user()
@@ -63,7 +63,7 @@ class Provider extends Model
 
     public function getImagePathAttribute()
     {
-        return $this->image ? asset('storage/providers/' . $this->image) : null;
+        return $this->cover ? asset('storage/providers/' . $this->cover) : null;
     }
 
     public function getAverageRatingAttribute()
