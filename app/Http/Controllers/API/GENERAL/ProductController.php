@@ -53,6 +53,6 @@ class ProductController extends Controller
         if ($result['status']) {
             return $this->paginated(ProductResource::class, $result['data'], $result['message']);
         }
-        return $this->error($result['message'], 404);
+        return $this->error($result['message'],200);
     }
 }

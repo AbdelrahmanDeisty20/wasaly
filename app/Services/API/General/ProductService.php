@@ -134,7 +134,7 @@ class ProductService
 
         if ($products->isEmpty()) {
             return [
-                'status' => false,
+                'status' => true,
                 'message' => __('messages.products_not_found'),
                 'data' => [],
             ];
