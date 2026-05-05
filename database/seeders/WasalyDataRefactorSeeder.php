@@ -23,19 +23,26 @@ class WasalyDataRefactorSeeder extends Seeder
     {
         try {
             $name = Str::random(10) . '.png';
-            $path = $folder . '/' . $name;
+            $relativePath = $folder . '/' . $name;
+            $fullPath = public_path('storage/' . $relativePath);
             
+            // Ensure directory exists in public/storage
+            $fullDir = public_path('storage/' . $folder);
+            if (!file_exists($fullDir)) {
+                mkdir($fullDir, 0777, true);
+            }
+
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
             $contents = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
             if ($contents && $httpCode == 200) {
-                Storage::disk('public')->put($path, $contents);
+                file_put_contents($fullPath, $contents);
                 return $name;
             }
             return 'default.png';
@@ -46,17 +53,16 @@ class WasalyDataRefactorSeeder extends Seeder
 
     private function cleanDirectory($directory)
     {
-        if (Storage::disk('public')->exists($directory)) {
-            $files = Storage::disk('public')->files($directory);
+        $fullPath = public_path('storage/' . $directory);
+        if (file_exists($fullPath)) {
+            $files = glob($fullPath . '/*');
             foreach ($files as $file) {
-                if (basename($file) !== '.gitignore') {
-                    Storage::disk('public')->delete($file);
+                if (is_file($file) && basename($file) !== '.gitignore') {
+                    unlink($file);
+                } elseif (is_dir($file)) {
+                    $this->cleanDirectory($directory . '/' . basename($file));
+                    @rmdir($file);
                 }
-            }
-            $subDirs = Storage::disk('public')->directories($directory);
-            foreach ($subDirs as $subDir) {
-                $this->cleanDirectory($subDir);
-                Storage::disk('public')->deleteDirectory($subDir);
             }
         }
     }
@@ -97,9 +103,15 @@ class WasalyDataRefactorSeeder extends Seeder
         $dirs = ['categories', 'subCategories', 'products', 'providers', 'services'];
         foreach ($dirs as $dir) {
             $this->cleanDirectory($dir);
-            Storage::disk('public')->makeDirectory($dir);
+            $fullDir = public_path('storage/' . $dir);
+            if (!file_exists($fullDir)) {
+                mkdir($fullDir, 0777, true);
+            }
         }
-        Storage::disk('public')->makeDirectory('products/images');
+        $galleryDir = public_path('storage/products/images');
+        if (!file_exists($galleryDir)) {
+            mkdir($galleryDir, 0777, true);
+        }
 
         // 1. Guaranteed Food/Service Images Pool
         $subCategoryImages = [
@@ -287,7 +299,7 @@ class WasalyDataRefactorSeeder extends Seeder
                             
                             // Ensure the file exists in the images subfolder too
                             if ($galleryImgName != 'item.png') {
-                                Storage::disk('public')->copy('products/' . $galleryImgName, 'products/images/' . $galleryImgName);
+                                @copy(public_path('storage/products/' . $galleryImgName), public_path('storage/products/images/' . $galleryImgName));
                             }
                         }
                     }
@@ -360,7 +372,7 @@ class WasalyDataRefactorSeeder extends Seeder
                     'images' => $galleryImgName
                 ]);
                 if ($galleryImgName != 'item.png') {
-                    Storage::disk('public')->copy('products/' . $galleryImgName, 'products/images/' . $galleryImgName);
+                    @copy(public_path('storage/products/' . $galleryImgName), public_path('storage/products/images/' . $galleryImgName));
                 }
             }
         }
