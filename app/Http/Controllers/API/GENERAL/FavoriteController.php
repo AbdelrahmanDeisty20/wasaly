@@ -23,7 +23,7 @@ class FavoriteController extends Controller
     {
         $result = $this->favoriteService->getFavorites();
         if (!$result['status']) {
-            return $this->error($result['message'], 404);
+            return $this->error($result['message'], 200);
         }
         return $this->paginated(ProductListResource::class, $result['data'], $result['message']);
     }
