@@ -18,10 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             GovernorateSeeder::class,
             CenterSeeder::class,
-            MainDataSeeder::class,
-            OfferSeeder::class,
-            ProductImageSeeder::class,
-            ReviewSeeder::class,
+            WasalyDataRefactorSeeder::class,
             BannerSeeder::class,
         ]);
     }
