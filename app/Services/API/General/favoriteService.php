@@ -14,7 +14,7 @@ class favoriteService
 
     public function getFavorites()
     {
-        $favorites = Favorite::with('product.offers','product.review')
+        $favorites = Favorite::with('product.offers','product.reviews')
             ->where('user_id', auth()->id())
             ->where('is_active', true)
             ->latest()
