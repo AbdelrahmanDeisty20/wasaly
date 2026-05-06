@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\GENERAL;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\ServiceRequest;
 use App\Http\Requests\API\GENERAL\ServiceStoreRequest;
+use App\Http\Requests\API\GENERAL\UpdateProviderProfileRequest;
 use App\Http\Resources\API\GENERAL\ServiceResource;
 use App\Http\Resources\API\GENERAL\ServicesResource;
 use App\Services\API\General\ProviderService;
@@ -29,6 +30,16 @@ class ProviderController extends Controller
         }
         return $this->success($result['data'], $result['message'], 200);
     }
+
+    public function updateProviderProfile(UpdateProviderProfileRequest $request)
+    {
+        $result = $this->providerService->updateProviderProfile($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
+
     public function services(){
         $result = $this->providerService->services();
         if (!$result['status']) {

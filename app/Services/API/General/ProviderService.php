@@ -44,6 +44,76 @@ class ProviderService
         ];
     }
 
+    public function updateProviderProfile(array $data)
+    {
+        DB::beginTransaction();
+        try {
+            $user = auth()->user();
+            $provider = Provider::where('user_id', $user->id)->first();
+
+            if (!$provider) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.provider_not_found'),
+                    'data' => []
+                ];
+            }
+
+            // Update User data
+            if (isset($data['full_name'])) {
+                $user->full_name = $data['full_name'];
+            }
+            if (isset($data['phone'])) {
+                $user->phone = $data['phone'];
+            }
+            if (isset($data['avatar']) && $data['avatar'] instanceof \Illuminate\Http\UploadedFile) {
+                $avatarName = time() . '_' . uniqid() . '.' . $data['avatar']->getClientOriginalExtension();
+                $data['avatar']->move(public_path('storage/users/avatars'), $avatarName);
+                $user->avatar = $avatarName;
+            }
+            $user->save();
+
+            // Update Provider data
+            $providerFields = [
+                'title_ar', 'title_en', 'service_description_ar', 
+                'service_description_en', 'start_time', 'end_time'
+            ];
+
+            foreach ($providerFields as $field) {
+                if (isset($data[$field])) {
+                    $provider->$field = $data[$field];
+                }
+            }
+            
+            // If provider has a separate phone field
+            if (isset($data['phone'])) {
+                $provider->phone = $data['phone'];
+            }
+
+            if (isset($data['cover']) && $data['cover'] instanceof \Illuminate\Http\UploadedFile) {
+                $coverName = time() . '_' . uniqid() . '.' . $data['cover']->getClientOriginalExtension();
+                $data['cover']->move(public_path('storage/providers'), $coverName);
+                $provider->cover = $coverName;
+            }
+
+            $provider->save();
+
+            DB::commit();
+            return [
+                'status' => true,
+                'message' => __('messages.profile_updated_successfully'),
+                'data' => new ProviderResource($provider->load('user'))
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
     public function services()
     {
         $services = Service::with('provider.subCategory')->paginate(10);
