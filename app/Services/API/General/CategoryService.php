@@ -91,7 +91,7 @@ class CategoryService
         } else {
             $items = $subCategory->providers()
                 ->paginate(10);
-            $subCategory->setRelation('providers', $items->getCollection());
+            $subCategory->setRelation('services', $items->getCollection());
             $total = $items->total();
         }
 
