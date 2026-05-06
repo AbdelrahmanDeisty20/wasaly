@@ -22,9 +22,9 @@ class favoriteService
 
         if ($favorites->isEmpty()) {
             return [
-                'status' => false,
+                'status' => true,
                 'message' => __('messages.favorites_not_found'),
-                'data' => []
+                'data' => $favorites
             ];
         }
 
