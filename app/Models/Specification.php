@@ -31,16 +31,6 @@ class Specification extends Model
 
     public function getIconPathAttribute($value)
     {
-        if (!$value) return null;
-        
-        // If it's already a full URL, return it
-        if (filter_var($value, FILTER_VALIDATE_URL)) {
-            return $value;
-        }
-
-        // Add extension if missing
-        $fileName = str_contains($value, '.') ? $value : $value . '.png';
-
-        return asset('storage/specifications/' . $fileName);
+        return asset('storage/specifications/' . $this->icon);
     }
 }
