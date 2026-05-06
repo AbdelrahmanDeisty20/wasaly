@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\GENERAL;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\ServiceRequest;
 use App\Http\Requests\API\GENERAL\ServiceStoreRequest;
+use App\Http\Requests\API\GENERAL\UpdateServiceRequest;
 use App\Http\Requests\API\GENERAL\UpdateProviderProfileRequest;
 use App\Http\Resources\API\GENERAL\ServiceResource;
 use App\Http\Resources\API\GENERAL\ServicesResource;
@@ -72,6 +73,24 @@ class ProviderController extends Controller
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 201);
+    }
+
+    public function updateService(UpdateServiceRequest $request)
+    {
+        $result = $this->providerService->updateService($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
+
+    public function deleteService(Request $request)
+    {
+        $result = $this->providerService->deleteService($request->service_id);
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
     }
 
     public function servicesSubCategory()

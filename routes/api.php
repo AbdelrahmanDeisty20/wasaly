@@ -84,6 +84,8 @@ Route::group(['middleware' => SetLang::class], function () {
             Route::get('provider-profile', [ProviderController::class, 'providerProfile']);
             Route::post('update-provider-profile', [ProviderController::class, 'updateProviderProfile']);
             Route::post('services/create', [ProviderController::class, 'createService']);
+            Route::post('services/update', [ProviderController::class, 'updateService']);
+            Route::post('services/delete', [ProviderController::class, 'deleteService']);
             
         });
         // Review Routes

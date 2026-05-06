@@ -235,6 +235,107 @@ class ProviderService
             ];
         }
     }
+
+    public function updateService(array $data)
+    {
+        DB::beginTransaction();
+        try {
+            $user = auth()->user();
+            $provider = $user->providers()->first();
+            
+            $service = Service::where('id', $data['service_id'])
+                             ->where('provider_id', $provider->id)
+                             ->first();
+
+            if (!$service) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.service_not_found'),
+                    'data' => []
+                ];
+            }
+
+            // Update main fields
+            $fields = ['sub_category_id', 'service_ar', 'service_en', 'description_ar', 'description_en', 'price'];
+            foreach ($fields as $field) {
+                if (isset($data[$field])) {
+                    $service->$field = $data[$field];
+                }
+            }
+
+            // Handle main image update
+            if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+                $imageName = time() . '_' . uniqid() . '.' . $data['image']->getClientOriginalExtension();
+                $data['image']->move(public_path('storage/services'), $imageName);
+                $service->image = $imageName;
+            }
+
+            $service->save();
+
+            // Handle gallery images (Add new ones)
+            if (isset($data['images']) && is_array($data['images'])) {
+                foreach ($data['images'] as $img) {
+                    if ($img instanceof \Illuminate\Http\UploadedFile) {
+                        $galleryImageName = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+                        $img->move(public_path('storage/services'), $galleryImageName);
+                        
+                        \App\Models\ServiceImage::create([
+                            'service_id' => $service->id,
+                            'images' => $galleryImageName,
+                        ]);
+                    }
+                }
+            }
+
+            DB::commit();
+            return [
+                'status' => true,
+                'message' => __('messages.service_updated_successfully'),
+                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory'))
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
+    public function deleteService($service_id)
+    {
+        try {
+            $user = auth()->user();
+            $provider = $user->providers()->first();
+
+            $service = Service::where('id', $service_id)
+                             ->where('provider_id', $provider->id)
+                             ->first();
+
+            if (!$service) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.service_not_found'),
+                    'data' => []
+                ];
+            }
+
+            $service->delete();
+
+            return [
+                'status' => true,
+                'message' => __('messages.service_deleted_successfully'),
+                'data' => []
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
     public function bookService(array $data)
     {
         DB::beginTransaction();
