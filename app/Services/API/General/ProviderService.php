@@ -116,7 +116,7 @@ class ProviderService
 
     public function services()
     {
-        $services = Service::with('provider.subCategory')->paginate(10);
+        $services = Service::with('subCategory')->paginate(10);
         if ($services->isEmpty()) {
             return [
                 'status' => false,
