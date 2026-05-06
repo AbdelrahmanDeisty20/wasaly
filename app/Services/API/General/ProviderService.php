@@ -10,6 +10,7 @@ use App\Models\Booking;
 use App\Models\Order;
 use App\Models\Provider;
 use App\Models\Service;
+use App\Models\SubCategory;
 use Illuminate\Support\Facades\DB;
 
 class ProviderService
@@ -73,6 +74,22 @@ class ProviderService
             'status' => true,
             'message' => __('messages.service_retrieved_successfully'),
             'data' => new ServicesListResource($service)
+        ];
+    }
+    public function servicesSubCategory()
+    {
+        $services = SubCategory::where('id',2)->get();
+        if ($services->isEmpty()) {
+            return [
+                'status' => false,
+                'message' => __('messages.services_fetched_failed'),
+                'data' => []
+            ];
+        }
+        return [
+            'status' => true,
+            'message' => __('messages.services_fetched_successfully'),
+            'data' => $services
         ];
     }
 
