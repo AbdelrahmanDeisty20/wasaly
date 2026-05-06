@@ -29,16 +29,15 @@ class Specification extends Model
         return app()->getLocale() === 'ar' ? $this->value_ar : $this->value_en;
     }
 
-    public function getIconPathAttribute()
+    public function getIconAttribute($value)
     {
-        $value = $this->icon;
         if (!$value) return null;
         
-        // If it's a font icon name (no extension), return as is
-        if (!str_contains($value, '.')) {
+        // If it's already a full URL, return it
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
             return $value;
         }
 
-        return asset('storage/specifications/' . $value);
+        return asset('storage/specifications/' . $value . '.png');
     }
 }
