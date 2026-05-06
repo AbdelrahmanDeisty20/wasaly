@@ -263,4 +263,12 @@ return [
     'images_image'=>'الصور يجب أن تكون صورة',
     'images_mimes'=>'الصور يجب أن تكون من نوع jpeg,png,jpg,gif',
     'images_max'=>'الصور يجب أن تكون بحجم 2 ميجابايت على الأكثر',
+    'service_ar_required' => 'اسم الخدمة بالعربية مطلوب',
+    'service_en_required' => 'اسم الخدمة بالإنجليزية مطلوب',
+    'description_ar_required' => 'وصف الخدمة بالعربية مطلوب',
+    'description_en_required' => 'وصف الخدمة بالإنجليزية مطلوب',
+    'price_required' => 'سعر الخدمة مطلوب',
+    'price_numeric' => 'السعر يجب أن يكون رقماً',
+    'image_required' => 'الصورة الأساسية مطلوبة',
+    'image_image' => 'يجب أن يكون الملف المرفوع صورة',
 ];

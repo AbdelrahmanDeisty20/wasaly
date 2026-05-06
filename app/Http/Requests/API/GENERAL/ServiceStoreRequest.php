@@ -23,37 +23,32 @@ class ServiceStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images' => 'required|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'service_ar' => 'required|string',
-            'image' => 'required|string',
-            'service_en' => 'required|string',
+            'service_ar' => 'required|string|max:255',
+            'service_en' => 'required|string|max:255',
             'description_ar' => 'required|string',
             'description_en' => 'required|string',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|min:0',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'images.required' => __('messages.images_required'),
+            'service_ar.required' => __('messages.service_ar_required'),
+            'service_en.required' => __('messages.service_en_required'),
+            'description_ar.required' => __('messages.description_ar_required'),
+            'description_en.required' => __('messages.description_en_required'),
+            'price.required' => __('messages.price_required'),
+            'price.numeric' => __('messages.price_numeric'),
+            'image.required' => __('messages.image_required'),
+            'image.image' => __('messages.image_image'),
             'images.array' => __('messages.images_array'),
             'images.*.image' => __('messages.images_image'),
             'images.*.mimes' => __('messages.images_mimes'),
             'images.*.max' => __('messages.images_max'),
-            'service_ar.required' => __('messages.service_ar_required'),
-            'service_ar.string' => __('messages.service_ar_string'),
-            'image.required' => __('messages.image_required'),
-            'image.string' => __('messages.image_string'),
-            'service_en.required' => __('messages.service_en_required'),
-            'service_en.string' => __('messages.service_en_string'),
-            'description_ar.required' => __('messages.description_ar_required'),
-            'description_ar.string' => __('messages.description_ar_string'),
-            'description_en.required' => __('messages.description_en_required'),
-            'description_en.string' => __('messages.description_en_string'),
-            'price.required' => __('messages.price_required'),
-            'price.numeric' => __('messages.price_numeric'),
         ];
     }
 }
