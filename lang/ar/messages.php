@@ -271,4 +271,6 @@ return [
     'price_numeric' => 'السعر يجب أن يكون رقماً',
     'image_required' => 'الصورة الأساسية مطلوبة',
     'image_image' => 'يجب أن يكون الملف المرفوع صورة',
+    'service_updated_successfully' => 'تم تحديث الخدمة بنجاح',
+    'service_deleted_successfully' => 'تم حذف الخدمة بنجاح',
 ];

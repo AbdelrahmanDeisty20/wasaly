@@ -241,6 +241,8 @@ return [
     'service_id_not_found'=> 'Service not found',
     'service_created_successfully'=> 'Service created successfully',
     'service_created_failed'=> 'Failed to create service',
+    'service_updated_successfully' => 'Service updated successfully',
+    'service_deleted_successfully' => 'Service deleted successfully',
     'service_ar_required' => 'Service name in Arabic is required',
     'service_en_required' => 'Service name in English is required',
     'description_ar_required' => 'Service description in Arabic is required',
