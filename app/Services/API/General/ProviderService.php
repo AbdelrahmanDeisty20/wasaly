@@ -198,9 +198,9 @@ class ProviderService
                 'provider_id' => $provider->id,
                 'sub_category_id' => $data['sub_category_id'],
                 'service_ar' => $data['service_ar'],
-                'service_en' => $data['service_en'],
+                'service_en' => $data['service_en'] ?? null,
                 'description_ar' => $data['description_ar'],
-                'description_en' => $data['description_en'],
+                'description_en' => $data['description_en'] ?? null,
                 'price' => $data['price'],
                 'image' => $imageName,
             ]);
