@@ -38,6 +38,9 @@ class Specification extends Model
             return $value;
         }
 
-        return asset('storage/specifications/' . $value . '.png');
+        // Add extension if missing
+        $fileName = str_contains($value, '.') ? $value : $value . '.png';
+
+        return asset('storage/specifications/' . $fileName);
     }
 }
