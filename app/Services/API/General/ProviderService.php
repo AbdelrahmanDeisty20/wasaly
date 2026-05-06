@@ -6,6 +6,7 @@ use App\Http\Resources\API\GENERAL\ProviderResource;
 use App\Http\Resources\API\GENERAL\ServiceCreate;
 use App\Http\Resources\API\GENERAL\ServiceResource;
 use App\Http\Resources\API\GENERAL\ServicesListResource;
+use App\Http\Resources\API\SubCategoryResource;
 use App\Models\Booking;
 use App\Models\Order;
 use App\Models\Provider;
@@ -78,7 +79,7 @@ class ProviderService
     }
     public function servicesSubCategory()
     {
-        $services = SubCategory::where('id',2)->get();
+        $services = SubCategory::where('category_id',2)->get();
         if ($services->isEmpty()) {
             return [
                 'status' => false,
@@ -89,7 +90,7 @@ class ProviderService
         return [
             'status' => true,
             'message' => __('messages.services_fetched_successfully'),
-            'data' => $services
+            'data' => SubCategoryResource::collection($services)
         ];
     }
 
