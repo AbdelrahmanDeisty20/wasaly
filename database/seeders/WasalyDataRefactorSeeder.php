@@ -283,9 +283,9 @@ class WasalyDataRefactorSeeder extends Seeder
                         ]);
 
                         // Add Specifications for Products
-                        Specification::create(['product_id' => $product->id, 'key_ar' => 'بلد المنشأ', 'key_en' => 'Origin', 'value_ar' => 'محلي', 'value_en' => 'Local', 'icon' => 'flag']);
-                        Specification::create(['product_id' => $product->id, 'key_ar' => 'الوزن', 'key_en' => 'Weight', 'value_ar' => '1 كجم تقريباً', 'value_en' => '1 Kg Approx', 'icon' => 'scale']);
-                        Specification::create(['product_id' => $product->id, 'key_ar' => 'الحالة', 'key_en' => 'Condition', 'value_ar' => 'طازج', 'value_en' => 'Fresh', 'icon' => 'eco']);
+                        Specification::create(['product_id' => $product->id, 'key_ar' => 'بلد المنشأ', 'key_en' => 'Origin', 'value_ar' => 'محلي', 'value_en' => 'Local', 'icon' => 'globe']);
+                        Specification::create(['product_id' => $product->id, 'key_ar' => 'الوزن', 'key_en' => 'Weight', 'value_ar' => '1 كجم تقريباً', 'value_en' => '1 Kg Approx', 'icon' => 'package']);
+                        Specification::create(['product_id' => $product->id, 'key_ar' => 'الحالة', 'key_en' => 'Condition', 'value_ar' => 'طازج', 'value_en' => 'Fresh', 'icon' => 'leaf']);
 
                         // Add Product Gallery Images
                         for ($g = 1; $g <= 2; $g++) {
@@ -360,8 +360,8 @@ class WasalyDataRefactorSeeder extends Seeder
                 'status' => 'active'
             ]);
 
-            Specification::create(['product_id' => $product->id, 'key_ar' => 'التعبئة', 'key_en' => 'Packaging', 'value_ar' => 'مغلف بعناية', 'value_en' => 'Carefully Packaged', 'icon' => 'inventory']);
-            Specification::create(['product_id' => $product->id, 'key_ar' => 'الجودة', 'key_en' => 'Quality', 'value_ar' => 'درجة أولى', 'value_en' => 'Grade A', 'icon' => 'verified']);
+            Specification::create(['product_id' => $product->id, 'key_ar' => 'التعبئة', 'key_en' => 'Packaging', 'value_ar' => 'مغلف بعناية', 'value_en' => 'Carefully Packaged', 'icon' => 'box']);
+            Specification::create(['product_id' => $product->id, 'key_ar' => 'الجودة', 'key_en' => 'Quality', 'value_ar' => 'درجة أولى', 'value_en' => 'Grade A', 'icon' => 'award']);
 
             // Add Product Gallery Images
             for ($g = 1; $g <= 2; $g++) {

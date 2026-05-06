@@ -143,12 +143,12 @@ class MainDataSeeder extends Seeder
                         ProductImage::factory(2)->create(['product_id' => $product->id]);
 
                         // Add contextual Specifications
-                        if ($prod['type'] == 'service') {
-                            Specification::create(['product_id' => $product->id, 'key_ar' => 'مدة الخدمة', 'key_en' => 'Duration', 'value_ar' => 'ساعة - ساعتين', 'value_en' => '1 - 2 Hours', 'icon' => 'schedule']);
+                        if ($category->name_en == 'Home Services') {
+                            Specification::create(['product_id' => $product->id, 'key_ar' => 'مدة الخدمة', 'key_en' => 'Duration', 'value_ar' => 'ساعة - ساعتين', 'value_en' => '1 - 2 Hours', 'icon' => 'clock']);
                             Specification::create(['product_id' => $product->id, 'key_ar' => 'الضمان', 'key_en' => 'Warranty', 'value_ar' => 'متوفر', 'value_en' => 'Available', 'icon' => 'shield']);
                         } else {
-                            Specification::create(['product_id' => $product->id, 'key_ar' => 'الوزن/الحجم', 'key_en' => 'Weight/Volume', 'value_ar' => 'قطعة/عبوة', 'value_en' => 'Unit/Pack', 'icon' => 'scale']);
-                            Specification::create(['product_id' => $product->id, 'key_ar' => 'بلد المنشأ', 'key_en' => 'Origin', 'value_ar' => 'محلي', 'value_en' => 'Local', 'icon' => 'flag']);
+                            Specification::create(['product_id' => $product->id, 'key_ar' => 'الوزن/الحجم', 'key_en' => 'Weight/Volume', 'value_ar' => 'قطعة/عبوة', 'value_en' => 'Unit/Pack', 'icon' => 'package']);
+                            Specification::create(['product_id' => $product->id, 'key_ar' => 'بلد المنشأ', 'key_en' => 'Origin', 'value_ar' => 'محلي', 'value_en' => 'Local', 'icon' => 'globe']);
                         }
                     }
                 }

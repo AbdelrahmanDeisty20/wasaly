@@ -28,4 +28,17 @@ class Specification extends Model
     {
         return app()->getLocale() === 'ar' ? $this->value_ar : $this->value_en;
     }
+
+    public function getIconPathAttribute()
+    {
+        $value = $this->icon;
+        if (!$value) return null;
+        
+        // If it's a font icon name (no extension), return as is
+        if (!str_contains($value, '.')) {
+            return $value;
+        }
+
+        return asset('storage/specifications/' . $value);
+    }
 }
