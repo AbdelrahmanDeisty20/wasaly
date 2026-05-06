@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\GENERAL;
 
+use App\Http\Resources\API\SubCategoryResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +18,7 @@ class ServiceCreate extends JsonResource
         return [
             'service_ar' => $this->service_ar,
             'service_en' => $this->service_en,
-            'sub_category_id' => $this->sub_category_id,
+            'sub_category' => new SubCategoryResource($this->whenLoaded('subCategory')),
             'description_ar' => $this->description_ar,
             'description_en' => $this->description_en,
             'price' => (float) $this->price,
