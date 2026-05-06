@@ -33,6 +33,7 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::get('category', [CategoryController::class, 'getCategory']);
     Route::get('sub-categories', [CategoryController::class, 'getSubCategories']);
     Route::get('sub-category', [CategoryController::class, 'getSubCategory']);
+    Route::get('services/sub-category', [ProviderController::class, 'servicesSubCategory']);
     // Banners Routes
     Route::get('banners', [BannerController::class, 'getBanners']);
     // products Routes
@@ -82,6 +83,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::group(['middleware' => ['auth:sanctum', serviceProviderOnly::class]], function () {
             Route::get('provider-profile', [ProviderController::class, 'providerProfile']);
             Route::post('services/create', [ProviderController::class, 'createService']);
+            
         });
         // Review Routes
         Route::post('reviews/product/create', [ReviewController::class, 'storeProductReview']);

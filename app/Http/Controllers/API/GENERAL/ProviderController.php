@@ -62,4 +62,13 @@ class ProviderController extends Controller
         }
         return $this->success($result['data'], $result['message'], 201);
     }
+
+    public function servicesSubCategory()
+    {
+        $result = $this->providerService->servicesSubCategory();
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
 }
