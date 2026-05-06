@@ -60,43 +60,22 @@ class ProviderService
             }
 
             // Update User data
-            if (isset($data['full_name'])) {
-                $user->full_name = $data['full_name'];
-            }
-            if (isset($data['phone'])) {
-                $user->phone = $data['phone'];
-            }
+            $user->update($data);
+            
             if (isset($data['avatar']) && $data['avatar'] instanceof \Illuminate\Http\UploadedFile) {
                 $avatarName = time() . '_' . uniqid() . '.' . $data['avatar']->getClientOriginalExtension();
                 $data['avatar']->move(public_path('storage/users/avatars'), $avatarName);
-                $user->avatar = $avatarName;
+                $user->update(['avatar' => $avatarName]);
             }
-            $user->save();
 
             // Update Provider data
-            $providerFields = [
-                'title_ar', 'title_en', 'service_description_ar', 
-                'service_description_en', 'start_time', 'end_time'
-            ];
-
-            foreach ($providerFields as $field) {
-                if (isset($data[$field])) {
-                    $provider->$field = $data[$field];
-                }
-            }
-            
-            // If provider has a separate phone field
-            if (isset($data['phone'])) {
-                $provider->phone = $data['phone'];
-            }
+            $provider->update($data);
 
             if (isset($data['cover']) && $data['cover'] instanceof \Illuminate\Http\UploadedFile) {
                 $coverName = time() . '_' . uniqid() . '.' . $data['cover']->getClientOriginalExtension();
                 $data['cover']->move(public_path('storage/providers'), $coverName);
-                $provider->cover = $coverName;
+                $provider->update(['cover' => $coverName]);
             }
-
-            $provider->save();
 
             DB::commit();
             return [

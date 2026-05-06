@@ -26,6 +26,7 @@ class ProductListResource extends JsonResource
             'sub_category' => SubCategoryResource::make($this->whenLoaded('subCategory')),
             'brand' => BrandResource::make($this->whenLoaded('brand')),
             'reviews'=>ReviewResource::collection($this->whenLoaded('reviews')),    
+            'offers'=>OfferResource::collection($this->whenLoaded('offers')),
             'is_favorite' => auth('sanctum')->check() ? $this->favorites()->where('user_id', auth('sanctum')->id())->where('is_active', true)->exists() : false,
         ];
     }
