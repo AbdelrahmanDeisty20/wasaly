@@ -16,7 +16,7 @@ class ServiceImageResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image' => $this->images_path,
-        ];;
+            'image' => $this->images,
+        ];
     }
 }
