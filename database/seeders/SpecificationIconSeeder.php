@@ -7,33 +7,63 @@ use Illuminate\Database\Seeder;
 
 class SpecificationIconSeeder extends Seeder
 {
+    private function downloadImage($url, $folder)
+    {
+        try {
+            $name = \Illuminate\Support\Str::random(10) . '.png';
+            $fullPath = public_path('storage/' . $folder . '/' . $name);
+            
+            // Ensure directory exists
+            $fullDir = public_path('storage/' . $folder);
+            if (!file_exists($fullDir)) {
+                mkdir($fullDir, 0777, true);
+            }
+
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+            $contents = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($contents && $httpCode == 200) {
+                file_put_contents($fullPath, $contents);
+                return $name;
+            }
+            return null;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     public function run(): void
     {
-        // 1. بلد المنشأ (Origin)
-        Specification::where('key_ar', 'like', '%بلد%')
-            ->orWhere('key_en', 'like', '%Origin%')
-            ->update(['icon' => 'https://cdn-icons-png.flaticon.com/512/2099/2099165.png']);
+        $icons = [
+            'Origin' => 'https://cdn-icons-png.flaticon.com/512/2099/2099165.png',
+            'Weight' => 'https://cdn-icons-png.flaticon.com/512/679/679821.png',
+            'Condition' => 'https://cdn-icons-png.flaticon.com/512/490/490333.png',
+            'Packaging' => 'https://cdn-icons-png.flaticon.com/512/709/709841.png',
+            'Quality' => 'https://cdn-icons-png.flaticon.com/512/190/190411.png',
+        ];
 
-        // 2. الوزن (Weight)
-        Specification::where('key_ar', 'like', '%وزن%')
-            ->orWhere('key_en', 'like', '%Weight%')
-            ->update(['icon' => 'https://cdn-icons-png.flaticon.com/512/679/679821.png']);
+        foreach ($icons as $key => $url) {
+            $imageName = $this->downloadImage($url, 'specifications');
+            if ($imageName) {
+                $query = ($key == 'Origin') ? ['بلد', 'Origin'] : 
+                         (($key == 'Weight') ? ['وزن', 'Weight'] : 
+                         (($key == 'Condition') ? ['حالة', 'Condition'] : 
+                         (($key == 'Packaging') ? ['تعبئة', 'Packaging'] : 
+                         ['جودة', 'Quality'])));
 
-        // 3. الحالة (Condition)
-        Specification::where('key_ar', 'like', '%حالة%')
-            ->orWhere('key_en', 'like', '%Condition%')
-            ->update(['icon' => 'https://cdn-icons-png.flaticon.com/512/490/490333.png']);
+                Specification::where(function($q) use ($query) {
+                    $q->where('key_ar', 'like', '%' . $query[0] . '%')
+                      ->orWhere('key_en', 'like', '%' . $query[1] . '%');
+                })->update(['icon' => $imageName]);
+            }
+        }
 
-        // 4. التعبئة (Packaging)
-        Specification::where('key_ar', 'like', '%تعبئة%')
-            ->orWhere('key_en', 'like', '%Packaging%')
-            ->update(['icon' => 'https://cdn-icons-png.flaticon.com/512/709/709841.png']);
-
-        // 5. الجودة (Quality)
-        Specification::where('key_ar', 'like', '%جودة%')
-            ->orWhere('key_en', 'like', '%Quality%')
-            ->update(['icon' => 'https://cdn-icons-png.flaticon.com/512/190/190411.png']);
-
-        echo "Specification Icons Updated Successfully with CDN Links!\n";
+        echo "Specification Icons Downloaded and Updated Successfully!\n";
     }
 }
