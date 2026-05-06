@@ -17,7 +17,7 @@ class Provider extends Model
         'title_en',
         'service_description_ar',
         'service_description_en',
-        'phone',
+        'price_from',
         'from_day',
         'to_day',
         'start_time',
