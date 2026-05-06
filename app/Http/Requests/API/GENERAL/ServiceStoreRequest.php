@@ -23,6 +23,7 @@ class ServiceStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'sub_category_id' => 'required|exists:sub_categories,id',
             'service_ar' => 'required|string|max:255',
             'service_en' => 'required|string|max:255',
             'description_ar' => 'required|string',
@@ -37,6 +38,8 @@ class ServiceStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'sub_category_id.required' => __('messages.sub_category_id_required'),
+            'sub_category_id.exists' => __('messages.sub_category_id_exists'),
             'service_ar.required' => __('messages.service_ar_required'),
             'service_en.required' => __('messages.service_en_required'),
             'description_ar.required' => __('messages.description_ar_required'),

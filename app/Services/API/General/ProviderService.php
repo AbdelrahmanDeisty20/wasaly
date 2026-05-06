@@ -107,6 +107,7 @@ class ProviderService
 
             $service = Service::create([
                 'provider_id' => $provider->id,
+                'sub_category_id' => $data['sub_category_id'],
                 'service_ar' => $data['service_ar'],
                 'service_en' => $data['service_en'],
                 'description_ar' => $data['description_ar'],

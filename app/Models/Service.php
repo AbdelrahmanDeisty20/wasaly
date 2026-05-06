@@ -17,6 +17,7 @@ class Service extends Model
         'description_en',
         'price',
         'image',
+        'sub_category_id',
     ];
 
     public function provider()
@@ -66,13 +67,6 @@ class Service extends Model
 
     public function subCategory()
     {
-        return $this->hasOneThrough(
-            SubCategory::class,
-            Provider::class,
-            'id', // Foreign key on providers table (Provider ID)
-            'id', // Foreign key on sub_categories table (SubCategory ID)
-            'provider_id', // Local key on services table
-            'sub_category_id' // Local key on providers table
-        );
+        return $this->belongsTo(SubCategory::class);
     }
 }
