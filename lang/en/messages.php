@@ -247,6 +247,7 @@ return [
     'end_time_format' => 'End time format is invalid (should be HH:mm)',
     'full_name_string' => 'Full name must be a string',
     'phone_string' => 'Phone must be a string',
+    'price_from_numeric' => 'Price must be a number',
     'avatar_image' => 'Avatar must be an image',
     'cover_image' => 'Cover must be an image',
     'profile_updated_successfully' => 'Profile updated successfully',
