@@ -263,4 +263,6 @@ return [
     'images_image' => 'Each file must be an image',
     'images_mimes' => 'Images must be of type: jpeg, png, jpg, gif',
     'images_max' => 'Image size must not exceed 2MB',
+    'from_day_string' => 'From day must be a string',
+    'to_day_string' => 'To day must be a string',
 ];
