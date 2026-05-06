@@ -15,4 +15,9 @@ class ServiceImage extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
+    public function getImagesPathAttribute($value)
+    {
+        return asset('storage/services/' . $value);
+    }
 }
