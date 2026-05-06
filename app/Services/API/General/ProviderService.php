@@ -89,17 +89,46 @@ class ProviderService
                 ];
             }
 
+            $provider = $user->providers()->first();
+            if (!$provider) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.provider_not_found'),
+                    'data' => []
+                ];
+            }
+
+            // Handle main image
+            $imageName = null;
+            if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+                $imageName = time() . '_' . uniqid() . '.' . $data['image']->getClientOriginalExtension();
+                $data['image']->move(public_path('storage/services'), $imageName);
+            }
+
             $service = Service::create([
-                'provider_id' => $user->providers()->first()->id,
-                'sub_category_id' => $data['sub_category_id'],
-                'name_ar' => $data['name_ar'],
-                'name_en' => $data['name_en'],
+                'provider_id' => $provider->id,
+                'service_ar' => $data['service_ar'],
+                'service_en' => $data['service_en'],
                 'description_ar' => $data['description_ar'],
                 'description_en' => $data['description_en'],
                 'price' => $data['price'],
-                'duration' => $data['duration'],
-                'is_active' => $data['is_active'],
+                'image' => $imageName,
             ]);
+
+            // Handle gallery images
+            if (isset($data['images']) && is_array($data['images'])) {
+                foreach ($data['images'] as $img) {
+                    if ($img instanceof \Illuminate\Http\UploadedFile) {
+                        $galleryImageName = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+                        $img->move(public_path('storage/services'), $galleryImageName);
+                        
+                        \App\Models\ServiceImage::create([
+                            'service_id' => $service->id,
+                            'images' => $galleryImageName,
+                        ]);
+                    }
+                }
+            }
 
             DB::commit();
             return [
