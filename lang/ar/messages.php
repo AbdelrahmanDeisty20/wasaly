@@ -273,4 +273,11 @@ return [
     'image_image' => 'يجب أن يكون الملف المرفوع صورة',
     'service_updated_successfully' => 'تم تحديث الخدمة بنجاح',
     'service_deleted_successfully' => 'تم حذف الخدمة بنجاح',
+    'start_time_format' => 'تنسيق وقت البدء غير صحيح (يجب أن يكون HH:mm)',
+    'end_time_format' => 'تنسيق وقت الانتهاء غير صحيح (يجب أن يكون HH:mm)',
+    'full_name_string' => 'الاسم يجب أن يكون نصاً',
+    'phone_string' => 'رقم الهاتف يجب أن يكون نصاً',
+    'avatar_image' => 'الصورة الشخصية يجب أن تكون ملف صورة',
+    'cover_image' => 'صورة الغلاف يجب أن تكون ملف صورة',
+    'profile_updated_successfully' => 'تم تحديث الملف الشخصي بنجاح',
 ];
