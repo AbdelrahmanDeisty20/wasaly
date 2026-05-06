@@ -81,6 +81,7 @@ Route::group(['middleware' => SetLang::class], function () {
         // Provider Routes
         Route::group(['middleware' => ['auth:sanctum', serviceProviderOnly::class]], function () {
             Route::get('provider-profile', [ProviderController::class, 'providerProfile']);
+            Route::post('services/create', [ProviderController::class, 'createService']);
         });
         // Review Routes
         Route::post('reviews/product/create', [ReviewController::class, 'storeProductReview']);

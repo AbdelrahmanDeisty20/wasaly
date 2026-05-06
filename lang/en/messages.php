@@ -256,5 +256,6 @@ return [
     'provider_not_found'=> 'Provider not found',
     'service_id_required'=> 'Service ID is required',
     'service_id_not_found'=> 'Service not found',
-    
+    'service_created_successfully'=> 'Service created successfully',
+    'service_created_failed'=> 'Failed to create service',
 ];

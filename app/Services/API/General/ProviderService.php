@@ -75,6 +75,47 @@ class ProviderService
         ];
     }
 
+    public function createService(array $data)
+    {
+        DB::beginTransaction();
+        try {
+            $user = auth()->user();
+
+            if ($user->type != 'service_provider') {
+                return [
+                    'status' => false,
+                    'message' => __('messages.unauthorized_provider'),
+                    'data' => []
+                ];
+            }
+
+            $service = Service::create([
+                'provider_id' => $user->providers()->first()->id,
+                'sub_category_id' => $data['sub_category_id'],
+                'name_ar' => $data['name_ar'],
+                'name_en' => $data['name_en'],
+                'description_ar' => $data['description_ar'],
+                'description_en' => $data['description_en'],
+                'price' => $data['price'],
+                'duration' => $data['duration'],
+                'is_active' => $data['is_active'],
+            ]);
+
+            DB::commit();
+            return [
+                'status' => true,
+                'message' => __('messages.service_created_successfully'),
+                'data' => $service
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
     public function bookService(array $data)
     {
         DB::beginTransaction();

@@ -256,5 +256,11 @@ return [
     'service_retrieved_successfully'=> 'تم استرجاع الخدمة بنجاح',
     'service_id_required'=> 'معرف الخدمة مطلوب',
     'service_id_not_found'=> 'الخدمة غير موجودة',
-    
+    'service_created_successfully'=>'تم إضافة الخدمة بنجاح',
+    'service_created_failed'=>'فشل إضافة الخدمة',
+    'images_required'=>'الصور مطلوبة',
+    'images_array'=>'الصور يجب أن تكون مصفوفة',
+    'images_image'=>'الصور يجب أن تكون صورة',
+    'images_mimes'=>'الصور يجب أن تكون من نوع jpeg,png,jpg,gif',
+    'images_max'=>'الصور يجب أن تكون بحجم 2 ميجابايت على الأكثر',
 ];
