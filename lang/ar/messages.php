@@ -282,5 +282,9 @@ return [
     'cover_image' => 'صورة الغلاف يجب أن تكون ملف صورة',
     'from_day_string' => 'من يوم يجب أن يكون نصاً',
     'to_day_string' => 'إلى يوم يجب أن يكون نصاً',
+    'current_password_min' => 'كلمة المرور الحالية يجب أن لا تقل عن 8 أحرف',
+    'current_password_incorrect' => 'كلمة المرور الحالية غير صحيحة',
+    'password_min' => 'كلمة المرور الجديدة يجب أن لا تقل عن 8 أحرف',
+    'password_confirmed' => 'تأكيد كلمة المرور غير متطابق',
     'profile_updated_successfully' => 'تم تحديث الملف الشخصي بنجاح',
 ];

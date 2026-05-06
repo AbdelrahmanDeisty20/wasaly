@@ -61,6 +61,19 @@ class ProviderService
 
             // Update User data
             $user->update($data);
+
+            // Handle Password Update
+            if (isset($data['password'])) {
+                if (!isset($data['current_password']) || !\Illuminate\Support\Facades\Hash::check($data['current_password'], $user->password)) {
+                    return [
+                        'status' => false,
+                        'message' => __('messages.current_password_incorrect'),
+                        'data' => []
+                    ];
+                }
+                $user->password = \Illuminate\Support\Facades\Hash::make($data['password']);
+                $user->save();
+            }
             
             if (isset($data['avatar']) && $data['avatar'] instanceof \Illuminate\Http\UploadedFile) {
                 $avatarName = time() . '_' . uniqid() . '.' . $data['avatar']->getClientOriginalExtension();
