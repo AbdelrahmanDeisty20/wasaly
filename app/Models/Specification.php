@@ -29,7 +29,7 @@ class Specification extends Model
         return app()->getLocale() === 'ar' ? $this->value_ar : $this->value_en;
     }
 
-    public function getIconAttribute($value)
+    public function getIconPathAttribute($value)
     {
         if (!$value) return null;
         
