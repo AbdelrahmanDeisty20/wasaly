@@ -29,7 +29,7 @@ class ServiceStoreRequest extends FormRequest
             'description_en' => 'required|string',
             'price' => 'required|numeric|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'images' => 'nullable|array',
+            'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
@@ -45,6 +45,7 @@ class ServiceStoreRequest extends FormRequest
             'price.numeric' => __('messages.price_numeric'),
             'image.required' => __('messages.image_required'),
             'image.image' => __('messages.image_image'),
+            'images.required' => __('messages.images_required'),
             'images.array' => __('messages.images_array'),
             'images.*.image' => __('messages.images_image'),
             'images.*.mimes' => __('messages.images_mimes'),
