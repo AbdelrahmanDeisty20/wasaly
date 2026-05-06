@@ -3,6 +3,7 @@
 namespace App\Services\API\General;
 
 use App\Http\Resources\API\GENERAL\ProviderResource;
+use App\Http\Resources\API\GENERAL\ServiceCreate;
 use App\Http\Resources\API\GENERAL\ServiceResource;
 use App\Http\Resources\API\GENERAL\ServicesListResource;
 use App\Models\Booking;
@@ -135,7 +136,7 @@ class ProviderService
             return [
                 'status' => true,
                 'message' => __('messages.service_created_successfully'),
-                'data' => $service
+                'data' => new ServiceCreate($service->load('serviceImages'))
             ];
         } catch (\Exception $e) {
             DB::rollBack();
