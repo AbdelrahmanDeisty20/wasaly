@@ -61,7 +61,7 @@ class Service extends Model
 
     public function serviceImages()
     {
-        return $this->hasMany(ServiceImage::class, 'provider_id', 'provider_id');
+        return $this->hasMany(ServiceImage::class, 'service_id');
     }
 
     public function subCategory()
