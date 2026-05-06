@@ -18,6 +18,7 @@ class SpecificationResource extends JsonResource
             'id' => $this->id,
             'key' => $this->key,
             'value' => $this->value,
+            'icon' => $this->icon,
         ];  
     }
 }
