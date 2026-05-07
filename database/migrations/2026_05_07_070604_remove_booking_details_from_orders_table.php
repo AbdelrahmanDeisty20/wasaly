@@ -12,22 +12,29 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            // Drop foreign keys first
-            $table->dropForeign(['provider_id']);
-            $table->dropForeign(['service_id']);
-            $table->dropForeign(['booking_id']);
-            $table->dropForeign(['available_date_id']);
-            $table->dropForeign(['available_time_id']);
-
-            // Now drop columns
-            $table->dropColumn([
-                'provider_id',
-                'service_id',
-                'booking_id',
-                'available_date_id',
-                'available_time_id',
-                'problem_description'
-            ]);
+            if (Schema::hasColumn('orders', 'provider_id')) {
+                $table->dropForeign(['provider_id']);
+                $table->dropColumn('provider_id');
+            }
+            if (Schema::hasColumn('orders', 'service_id')) {
+                $table->dropForeign(['service_id']);
+                $table->dropColumn('service_id');
+            }
+            if (Schema::hasColumn('orders', 'booking_id')) {
+                $table->dropForeign(['booking_id']);
+                $table->dropColumn('booking_id');
+            }
+            if (Schema::hasColumn('orders', 'available_date_id')) {
+                $table->dropForeign(['available_date_id']);
+                $table->dropColumn('available_date_id');
+            }
+            if (Schema::hasColumn('orders', 'available_time_id')) {
+                $table->dropForeign(['available_time_id']);
+                $table->dropColumn('available_time_id');
+            }
+            if (Schema::hasColumn('orders', 'problem_description')) {
+                $table->dropColumn('problem_description');
+            }
         });
     }
 
