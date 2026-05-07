@@ -37,7 +37,7 @@ class ProviderService
     }
     public function filterProvider(array $data)
     {
-        $query = Provider::with(['user', 'services', 'reviews']);
+        $query = Provider::with(['user']);
 
         // 1. Filter by SubCategory (Provider directly OR via services)
         if (!empty($data['sub_category_id'])) {
