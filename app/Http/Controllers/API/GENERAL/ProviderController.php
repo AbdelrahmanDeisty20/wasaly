@@ -7,6 +7,7 @@ use App\Http\Requests\API\GENERAL\ServiceRequest;
 use App\Http\Requests\API\GENERAL\ServiceStoreRequest;
 use App\Http\Requests\API\GENERAL\UpdateServiceRequest;
 use App\Http\Requests\API\GENERAL\UpdateProviderProfileRequest;
+use App\Http\Resources\API\GENERAL\ProviderResource;
 use App\Http\Resources\API\GENERAL\ServiceResource;
 use App\Http\Resources\API\GENERAL\ServicesResource;
 use App\Services\API\General\ProviderService;
@@ -115,6 +116,6 @@ class ProviderController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->success($result['data'], $result['message'], 200);
+        return $this->success(ProviderResource::class,$result['data'], $result['message'], 200);
     }
 }
