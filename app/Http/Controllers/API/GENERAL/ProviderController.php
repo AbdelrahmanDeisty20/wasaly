@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\GENERAL\BookingStoreRequest;
 use App\Http\Requests\API\GENERAL\ProviderFilterRequest;
 use App\Http\Requests\API\GENERAL\searchProviderRequest;
 use App\Http\Requests\API\GENERAL\ServiceRequest;
@@ -69,9 +70,9 @@ class ProviderController extends Controller
         return $this->success($result['data'], $result['message'], 201);
     }
 
-    public function bookService(Request $request)
+    public function bookService(BookingStoreRequest $request)
     {
-        $result = $this->providerService->bookService($request->all());
+        $result = $this->providerService->bookService($request->validated());
         if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
