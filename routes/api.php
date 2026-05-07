@@ -111,7 +111,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('carts/checkout', [CheckoutController::class, 'checkout']);
 
         // Bookings Routes
-        Route::post('bookings', [ProviderController::class, 'bookService']);
+        Route::post('booking', [ProviderController::class, 'bookService']);
         
 
         // Orders Routes
