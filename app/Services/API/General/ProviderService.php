@@ -37,12 +37,15 @@ class ProviderService
     }
     public function filterProvider(array $data)
     {
-        $query = Provider::with(['user']);
+        $query = Provider::with(['user', 'services', 'reviews']);
 
-        // 1. Filter by SubCategory (via services)
+        // 1. Filter by SubCategory (Provider directly OR via services)
         if (!empty($data['sub_category_id'])) {
-            $query->whereHas('services', function ($q) use ($data) {
-                $q->where('sub_category_id', $data['sub_category_id']);
+            $query->where(function($q) use ($data) {
+                $q->where('sub_category_id', $data['sub_category_id'])
+                  ->orWhereHas('services', function ($sq) use ($data) {
+                      $sq->where('sub_category_id', $data['sub_category_id']);
+                  });
             });
         }
 
