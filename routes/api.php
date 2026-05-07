@@ -50,6 +50,9 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::get('services', [ProviderController::class, 'services']);
     Route::get('service', [ProviderController::class, 'getService']);
     Route::post('services/book', [ProviderController::class, 'bookService'])->middleware('auth:sanctum');
+    // Providers Routes
+    Route::get('providers/get/{id}', [ProviderController::class, 'getProviderById']);
+
     // Settings Routes
     Route::get('settings', [SettingController::class, 'getSettings']);
     // Governorates Routes
@@ -86,7 +89,6 @@ Route::group(['middleware' => SetLang::class], function () {
             Route::post('services/create', [ProviderController::class, 'createService']);
             Route::post('services/update', [ProviderController::class, 'updateService']);
             Route::delete('services/delete', [ProviderController::class, 'deleteService']);
-            Route::get('providers/get/{id}', [ProviderController::class, 'getProviderById']);
         });
         // Review Routes
         Route::post('reviews/product/create', [ReviewController::class, 'storeProductReview']);
