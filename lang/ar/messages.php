@@ -309,4 +309,7 @@ return [
     'available_time' => 'وقت الحجز',
     'problem_description' => 'وصف المشكلة',
     'center_not_found_in_governorate' => 'المركز المختار لا ينتمي للمحافظة المختارة',
+    'customer_email_required' => 'البريد الإلكتروني للعميل مطلوب',
+    'governorate_id_required' => 'المحافظة مطلوبة',
+    'center_id_required' => 'المركز مطلوب',
 ];

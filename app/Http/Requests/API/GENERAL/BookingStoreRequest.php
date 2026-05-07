@@ -46,6 +46,11 @@ class BookingStoreRequest extends FormRequest
             'available_time_id.exists' => __('messages.available_time_not_found'),
             'problem_description.required' => __('messages.problem_description_required'),
             'center_id.exists' => __('messages.center_not_found_in_governorate'),
+            'customer_name.required' => __('messages.customer_name_required'),
+            'customer_phone.required' => __('messages.customer_phone_required'),
+            'customer_email.required' => __('messages.customer_email_required'),
+            'governorate_id.required' => __('messages.governorate_id_required'),
+            'center_id.required' => __('messages.center_id_required'),
         ];
     }
 }
