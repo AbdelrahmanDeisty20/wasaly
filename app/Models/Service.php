@@ -18,6 +18,7 @@ class Service extends Model
         'price',
         'image',
         'sub_category_id',
+        'review_id',
     ];
 
     public function provider()
