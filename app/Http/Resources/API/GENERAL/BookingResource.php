@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Http\Resources\API\GENERAL;
+
+use App\Http\Resources\API\GovernorateResource;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class BookingResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'customer_name' => $this->customer_name,
+            'customer_phone' => $this->customer_phone,
+            'customer_email' => $this->customer_email,
+            'provider' => ProviderResource::make($this->whenLoaded('provider')),
+            'service' => ServiceResource::make($this->whenLoaded('service')),
+            'governorate' => GovernorateResource::make($this->whenLoaded('governorate')),
+            'center' => CenterResource::make($this->whenLoaded('center')),
+            'available_date' => AvailableDateResource::make($this->whenLoaded('availableDate')),
+            'available_time' => AvailableTimeResource::make($this->whenLoaded('availableTime')),
+        ];
+    }
+}

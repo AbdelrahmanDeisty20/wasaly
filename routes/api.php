@@ -52,6 +52,7 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::post('services/book', [ProviderController::class, 'bookService'])->middleware('auth:sanctum');
     // Providers Routes
     Route::get('providers', [ProviderController::class, 'providers']);
+    Route::get('providers/search', [ProviderController::class, 'searchProvider']);
     Route::get('providers/filter', [ProviderController::class, 'filterProvider']);
     Route::get('providers/get/{id}', [ProviderController::class, 'getProviderById']);
 
@@ -108,6 +109,10 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::delete('carts/remove', [CartController::class, 'removeItem']);
         Route::delete('carts/clear', [CartController::class, 'clearCart']);
         Route::post('carts/checkout', [CheckoutController::class, 'checkout']);
+
+        // Bookings Routes
+        Route::post('bookings', [ProviderController::class, 'bookService']);
+        
 
         // Orders Routes
         Route::get('orders', [OrderController::class, 'getMyOrders']);

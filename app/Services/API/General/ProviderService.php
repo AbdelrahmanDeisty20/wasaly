@@ -2,6 +2,7 @@
 
 namespace App\Services\API\General;
 
+use App\Http\Resources\API\GENERAL\BookingResource;
 use App\Http\Resources\API\GENERAL\ProviderListResource;
 use App\Http\Resources\API\GENERAL\ProviderResource;
 use App\Http\Resources\API\GENERAL\ServiceCreate;
@@ -382,6 +383,33 @@ class ProviderService
             'data' => new ProviderListResource($provider)
         ];
     }
+    public function searchProvider($searchTerm)
+    {
+        $locale = app()->getLocale();
+        $providers = Provider::with(['user'])
+            ->where(function($query) use ($searchTerm, $locale) {
+                $query->where("title_{$locale}", 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere("service_description_{$locale}", 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhereHas('user', function($q) use ($searchTerm) {
+                          $q->where('full_name', 'LIKE', '%' . $searchTerm . '%');
+                      });
+            })
+            ->paginate(10);
+
+        if ($providers->isEmpty()) {
+            return [
+                'status' => false,
+                'message' => __('messages.providers_fetched_failed'),
+                'data' => [],
+            ];
+        }
+
+        return [
+            'status' => true,
+            'message' => __('messages.providers_fetched_successfully'),
+            'data' => $providers,
+        ];
+    }
     public function deleteService($service_id)
     {
         try {
@@ -434,6 +462,11 @@ class ProviderService
             // 1. إنشاء الحجز
             $booking = Booking::create([
                 'user_id' => $user->id,
+                'customer_name' => $data['customer_name'] ?? null,
+                'customer_phone' => $data['customer_phone'] ?? null,
+                'customer_email' => $data['customer_email'] ?? null,
+                'governorate_id' => $data['governorate_id'] ?? null,
+                'center_id' => $data['center_id'] ?? null,
                 'provider_id' => $service->provider_id,
                 'service_id' => $service->id,
                 'available_date_id' => $data['available_date_id'],
@@ -446,9 +479,7 @@ class ProviderService
             return [
                 'status' => true,
                 'message' => __('messages.service_booked_successfully'),
-                'data' => [
-                    'booking' => $booking
-                ]
+                'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))   
             ];
         } catch (\Exception $e) {
             DB::rollBack();

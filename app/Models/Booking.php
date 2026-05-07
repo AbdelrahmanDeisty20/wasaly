@@ -8,6 +8,11 @@ class Booking extends Model
 {
     protected $fillable = [
         'user_id',
+        'customer_name',
+        'customer_phone',
+        'customer_email',
+        'governorate_id',
+        'center_id',
         'provider_id',
         'service_id',
         'available_date_id',
@@ -39,5 +44,15 @@ class Booking extends Model
     public function time()
     {
         return $this->belongsTo(AvailableTime::class, 'available_time_id');
+    }
+
+    public function governorate()
+    {
+        return $this->belongsTo(Governorate::class);
+    }
+
+    public function center()
+    {
+        return $this->belongsTo(Center::class);
     }
 }

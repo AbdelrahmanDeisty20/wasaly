@@ -127,4 +127,13 @@ class ProviderController extends Controller
         }
         return $this->paginated(ProviderResource::class,$result['data'], $result['message']);
     }
+
+    public function searchProvider(Request $request)
+    {
+        $result = $this->providerService->searchProvider($request->search_term);
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
+        }
+        return $this->paginated(ProviderResource::class, $result['data'], $result['message']);
+    }
 }
