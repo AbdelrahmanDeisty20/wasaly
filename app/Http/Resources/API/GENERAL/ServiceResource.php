@@ -16,7 +16,11 @@ class ServiceResource extends JsonResource
             'description' => $this->description,
             'category' => SubCategoryResource::make($this->whenLoaded('subCategory')),
             'image' => $this->image_path,
+            'images' => ServiceImageResource::collection($this->whenLoaded('serviceImages')),
             'price' => (float)$this->price,
+            'provider' => ProviderResource::make($this->whenLoaded('provider')),
+            'available_dates' => AvailableDateResource::collection($this->whenLoaded('availableDates')),
+            'available_times' => AvailableTimeResource::collection($this->whenLoaded('availableTimes')),
         ];
     }
 }

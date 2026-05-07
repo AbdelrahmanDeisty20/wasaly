@@ -133,7 +133,7 @@ class ProviderService
 
     public function getservice(array $data)
     {
-        $service = Service::with('provider.subCategory', 'availableDates.availableTimes', 'reviews.user', 'serviceImages')->find($data['service_id']);
+        $service = Service::with('availableDates.availableTimes','serviceImages')->find($data['service_id']);
         if (!$service) {
             return [
                 'status' => false,
@@ -144,7 +144,7 @@ class ProviderService
         return [
             'status' => true,
             'message' => __('messages.service_retrieved_successfully'),
-            'data' => new ServicesListResource($service)
+            'data' => new ServiceResource($service)
         ];
     }
     public function servicesSubCategory()
