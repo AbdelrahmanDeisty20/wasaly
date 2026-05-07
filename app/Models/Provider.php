@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Order;
+use App\Models\Booking;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -78,7 +79,7 @@ class Provider extends Model
 
     public function getSuccessfulOrdersCountAttribute()
     {
-        return Order::where('provider_id', $this->id)->where('status', 'accepted')->count();
+        return Booking::where('provider_id', $this->id)->where('status', 'accepted')->count();
     }
 
     public function serviceImages()
