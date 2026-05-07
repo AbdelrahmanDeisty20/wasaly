@@ -49,21 +49,17 @@ class ProviderService
             });
         }
 
-        // 2. Filter by Price Range (price_from)
-        if (isset($data['min_price']) || isset($data['max_price'])) {
-            $min = $data['min_price'] ?? 0;
-            $max = $data['max_price'] ?? 999999;
-            $query->whereBetween('price_from', [$min, $max]);
+        // 2. Filter by Rating (Average Stars)
+        if (!empty($data['ratings'])) {
+            $query->withAvg('reviews', 'rating')
+                ->having('reviews_avg_rating', '>=', $data['ratings']);
         }
 
         // 3. Sorting
         $sort = $data['sort'] ?? 'latest';
         switch ($sort) {
-            case 'min_price':
-                $query->orderBy('price_from', 'asc');
-                break;
-            case 'max_price':
-                $query->orderBy('price_from', 'desc');
+            case 'top_rated':
+                $query->withAvg('reviews', 'rating')->orderByDesc('reviews_avg_rating');
                 break;
             case 'latest':
             default:

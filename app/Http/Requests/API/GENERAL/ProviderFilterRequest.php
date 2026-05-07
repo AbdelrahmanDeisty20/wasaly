@@ -24,9 +24,8 @@ class ProviderFilterRequest extends FormRequest
     {
         return [
             'sub_category_id' => 'nullable|exists:sub_categories,id',
-            'min_price' => 'nullable|numeric',
-            'max_price' => 'nullable|numeric',
-            'sort' => 'nullable|in:min_price,max_price,latest',
+            'ratings' => 'nullable|integer|min:1|max:5',
+            'sort' => 'nullable|in:top_rated,latest',
         ];
     }
 
@@ -34,9 +33,10 @@ class ProviderFilterRequest extends FormRequest
     {
         return [
             'sub_category_id.exists' => __('messages.sub_category_not_found'),
-            'min_price.numeric' => __('messages.min_price_must_be_numeric'),
-            'max_price.numeric' => __('messages.max_price_must_be_numeric'),
-            'sort.in' => __('messages.sort_must_be_in_min_price_max_price_latest'),
+            'ratings.integer' => __('messages.ratings_integer'),
+            'ratings.min' => __('messages.ratings_in'),
+            'ratings.max' => __('messages.ratings_in'),
+            'sort.in' => __('messages.sort_must_be_in_top_rated_latest'),
         ];
     }
 
@@ -44,8 +44,7 @@ class ProviderFilterRequest extends FormRequest
     {
         return [
             'sub_category_id' => __('attributes.sub_category_id'),
-            'min_price' => __('attributes.min_price'),
-            'max_price' => __('attributes.max_price'),
+            'ratings' => __('attributes.ratings'),
             'sort' => __('attributes.sort'),
         ];
     }

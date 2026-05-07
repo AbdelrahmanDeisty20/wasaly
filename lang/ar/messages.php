@@ -293,6 +293,6 @@ return [
 
     'min_price_must_be_numeric' => 'أقل سعر يجب أن يكون رقماً',
     'max_price_must_be_numeric' => 'أعلى سعر يجب أن يكون رقماً',
-    'sort_must_be_in_min_price_max_price_latest' => 'ترتيب البحث يجب أن يكون من الأدنى للأعلى، من الأعلى للأقل، أو الأحدث',
+    'sort_must_be_in_top_rated_latest' => 'ترتيب البحث يجب أن يكون حسب الأعلى تقييماً، أو الأحدث',
     'sub_category_not_found' => 'التصنيف الفرعي غير موجود',
 ];
