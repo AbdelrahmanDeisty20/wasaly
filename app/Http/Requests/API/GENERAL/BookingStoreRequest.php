@@ -25,13 +25,13 @@ class BookingStoreRequest extends FormRequest
         return [
             'service_id' => 'required|exists:services,id',
             'available_date_id' => 'required|exists:available_dates,id',
-            'available_time_id' => 'required|exists:available_times,id',
+            'available_time_id' => 'required|exists:available_times,id,available_date_id,' . $this->available_date_id,
             'problem_description' => 'required|string',
-            'customer_name' => 'nullable|string|max:255',
-            'customer_phone' => 'nullable|string|max:20',
-            'customer_email' => 'nullable|email|max:255',
-            'governorate_id' => 'nullable|exists:governorates,id',
-            'center_id' => 'nullable|exists:centers,id',
+            'customer_name' => 'required|string|max:255',
+            'customer_phone' => 'required|string|max:20',
+            'customer_email' => 'required|email|max:255',
+            'governorate_id' => 'required|exists:governorates,id',
+            'center_id' => 'required|exists:centers,id,governorate_id,' . $this->governorate_id,
         ];
     }
 
@@ -45,6 +45,7 @@ class BookingStoreRequest extends FormRequest
             'available_time_id.required' => __('messages.available_time_required'),
             'available_time_id.exists' => __('messages.available_time_not_found'),
             'problem_description.required' => __('messages.problem_description_required'),
+            'center_id.exists' => __('messages.center_not_found_in_governorate'),
         ];
     }
 }

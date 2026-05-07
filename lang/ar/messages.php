@@ -308,4 +308,5 @@ return [
     'available_date' => 'تاريخ الحجز',
     'available_time' => 'وقت الحجز',
     'problem_description' => 'وصف المشكلة',
+    'center_not_found_in_governorate' => 'المركز المختار لا ينتمي للمحافظة المختارة',
 ];

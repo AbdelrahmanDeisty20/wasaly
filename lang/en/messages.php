@@ -291,4 +291,5 @@ return [
     'available_date' => 'Booking Date',
     'available_time' => 'Booking Time',
     'problem_description' => 'Problem Description',
+    'center_not_found_in_governorate' => 'Selected center does not belong to the selected governorate',
 ];
