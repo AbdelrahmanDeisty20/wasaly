@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\ProviderFilterRequest;
+use App\Http\Requests\API\GENERAL\searchProviderRequest;
 use App\Http\Requests\API\GENERAL\ServiceRequest;
 use App\Http\Requests\API\GENERAL\ServiceStoreRequest;
 use App\Http\Requests\API\GENERAL\UpdateServiceRequest;
