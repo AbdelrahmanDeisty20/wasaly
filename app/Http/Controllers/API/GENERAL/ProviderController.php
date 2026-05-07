@@ -114,8 +114,8 @@ class ProviderController extends Controller
     public function providers(){
         $result = $this->providerService->providers();
         if (!$result['status']) {
-            return $this->error($result['message'], 404);
+            return $this->error($result['message']);
         }
-        return $this->paginated(ProviderResource::class,$result['data'], $result['message'],200);
+        return $this->paginated(ProviderResource::class,$result['data'], $result['message']);
     }
 }
