@@ -11,31 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            if (Schema::hasColumn('orders', 'provider_id')) {
-                $table->dropForeign(['provider_id']);
-                $table->dropColumn('provider_id');
+        $columns = ['provider_id', 'service_id', 'booking_id', 'available_date_id', 'available_time_id'];
+        
+        foreach ($columns as $column) {
+            if (Schema::hasColumn('orders', $column)) {
+                try {
+                    Schema::table('orders', function (Blueprint $table) use ($column) {
+                        $table->dropForeign([$column]);
+                    });
+                } catch (\Exception $e) {
+                    // Ignore if foreign key doesn't exist
+                }
+                
+                Schema::table('orders', function (Blueprint $table) use ($column) {
+                    $table->dropColumn($column);
+                });
             }
-            if (Schema::hasColumn('orders', 'service_id')) {
-                $table->dropForeign(['service_id']);
-                $table->dropColumn('service_id');
-            }
-            if (Schema::hasColumn('orders', 'booking_id')) {
-                $table->dropForeign(['booking_id']);
-                $table->dropColumn('booking_id');
-            }
-            if (Schema::hasColumn('orders', 'available_date_id')) {
-                $table->dropForeign(['available_date_id']);
-                $table->dropColumn('available_date_id');
-            }
-            if (Schema::hasColumn('orders', 'available_time_id')) {
-                $table->dropForeign(['available_time_id']);
-                $table->dropColumn('available_time_id');
-            }
-            if (Schema::hasColumn('orders', 'problem_description')) {
+        }
+
+        if (Schema::hasColumn('orders', 'problem_description')) {
+            Schema::table('orders', function (Blueprint $table) {
                 $table->dropColumn('problem_description');
-            }
-        });
+            });
+        }
     }
 
     /**
