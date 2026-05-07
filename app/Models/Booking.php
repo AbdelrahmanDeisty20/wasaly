@@ -36,12 +36,12 @@ class Booking extends Model
         return $this->belongsTo(Service::class);
     }
 
-    public function date()
+    public function availableDate()
     {
         return $this->belongsTo(AvailableDate::class, 'available_date_id');
     }
 
-    public function time()
+    public function availableTime()
     {
         return $this->belongsTo(AvailableTime::class, 'available_time_id');
     }
