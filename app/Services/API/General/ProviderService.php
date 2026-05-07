@@ -381,8 +381,17 @@ class ProviderService
             return [
                 'status' => true,
                 'message' => __('messages.service_booked_successfully'),
-                
+                'data' => [
+                    'booking' => $booking
+                ]
             ];
-        } 
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
     }
 }
