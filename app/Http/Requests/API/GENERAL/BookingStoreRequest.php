@@ -34,4 +34,17 @@ class BookingStoreRequest extends FormRequest
             'center_id' => 'nullable|exists:centers,id',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'service_id.required' => __('messages.service_id_required'),
+            'service_id.exists' => __('messages.service_not_found'),
+            'available_date_id.required' => __('messages.available_date_required'),
+            'available_date_id.exists' => __('messages.available_date_not_found'),
+            'available_time_id.required' => __('messages.available_time_required'),
+            'available_time_id.exists' => __('messages.available_time_not_found'),
+            'problem_description.required' => __('messages.problem_description_required'),
+        ];
+    }
 }
