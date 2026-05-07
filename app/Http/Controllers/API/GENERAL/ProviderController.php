@@ -109,4 +109,12 @@ class ProviderController extends Controller
         }
         return $this->success($result['data'], $result['message'], 200);
     }
+
+    public function providers(){
+        $result = $this->providerService->providers();
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
 }

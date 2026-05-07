@@ -2,6 +2,7 @@
 
 namespace App\Services\API\General;
 
+use App\Http\Resources\API\GENERAL\ProviderListResource;
 use App\Http\Resources\API\GENERAL\ProviderResource;
 use App\Http\Resources\API\GENERAL\ServiceCreate;
 use App\Http\Resources\API\GENERAL\ServiceResource;
@@ -16,6 +17,21 @@ use Illuminate\Support\Facades\DB;
 
 class ProviderService
 {
+    public function providers(){
+        $providers = Provider::with('user')->paginate(10);
+        if($providers->isEmpty()){
+            return [
+                'status' => false,
+                'message' => __('messages.providers_fetched_failed'),
+                'data' => []
+            ];
+        }
+        return [
+            'status' => true,
+            'message' => __('messages.providers_fetched_successfully'),
+            'data' => $providers
+        ];
+    }
     public function providerProfile()
     {
         $user = auth()->user();
@@ -40,7 +56,7 @@ class ProviderService
         return [
             'status' => true,
             'message' => __('messages.provider_retrieved_successfully'),
-            'data' => new ProviderResource($provider)
+            'data' => new ProviderListResource($provider)
         ];
     }
 
@@ -100,7 +116,7 @@ class ProviderService
             return [
                 'status' => true,
                 'message' => __('messages.profile_updated_successfully'),
-                'data' => new ProviderResource($provider->load('user'))
+                'data' => new ProviderListResource($provider->load('user'))
             ];
         } catch (\Exception $e) {
             DB::rollBack();
@@ -312,7 +328,7 @@ class ProviderService
         return [
             'status' => true,
             'message' => __('messages.provider_found'),
-            'data' => new ProviderResource($provider)
+            'data' => new ProviderListResource($provider)
         ];
     }
     public function deleteService($service_id)

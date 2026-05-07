@@ -271,4 +271,6 @@ return [
     'from_day_string' => 'From day must be a string',
     'to_day_string' => 'To day must be a string',
     'provider_found' => 'Provider found successfully',
+    'providers_fetched_successfully' => 'Providers fetched successfully',
+    'providers_fetched_failed' => 'Failed to fetch providers',
 ];

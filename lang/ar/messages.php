@@ -288,4 +288,6 @@ return [
     'password_min' => 'كلمة المرور الجديدة يجب أن لا تقل عن 8 أحرف',
     'password_confirmed' => 'تأكيد كلمة المرور غير متطابق',
     'profile_updated_successfully' => 'تم تحديث الملف الشخصي بنجاح',
+    'providers_fetched_successfully' => 'تم استرجاع مقدمي الخدمة بنجاح',
+    'providers_fetched_failed' => 'فشل استرجاع مقدمي الخدمة',
 ];

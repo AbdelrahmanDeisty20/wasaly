@@ -51,6 +51,7 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::get('service', [ProviderController::class, 'getService']);
     Route::post('services/book', [ProviderController::class, 'bookService'])->middleware('auth:sanctum');
     // Providers Routes
+    Route::get('providers', [ProviderController::class, 'providers']);
     Route::get('providers/get/{id}', [ProviderController::class, 'getProviderById']);
 
     // Settings Routes

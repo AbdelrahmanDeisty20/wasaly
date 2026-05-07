@@ -3,10 +3,10 @@
 namespace App\Http\Resources\API\GENERAL;
 
 use App\Http\Resources\API\AUTH\UserResource;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProviderResource extends JsonResource
+class ProviderListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,6 +20,12 @@ class ProviderResource extends JsonResource
             'user' => new UserResource($this->whenLoaded('user')),
             'title' => $this->title,
             'service_description' => $this->service_description,
+            'price_from' => $this->price_from,
+            'from_day' => $this->from_day,
+            'to_day' => $this->to_day,
+            'start_time' => $this->start_time,
+            'end_time' => $this->end_time,
+            'status' => $this->status,
             'cover' => $this->image_path,
             'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
             'average_rating' => (float) $this->average_rating,
