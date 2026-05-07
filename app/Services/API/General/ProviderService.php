@@ -149,7 +149,7 @@ class ProviderService
 
     public function getservice(array $data)
     {
-        $service = Service::with('availableDates.availableTimes','serviceImages','subCategory','provider.user',)->find($data['service_id']);
+        $service = Service::with('availableDates.availableTimes','serviceImages','subCategory','provider.user','reviews.user')->find($data['service_id']);
         if (!$service) {
             return [
                 'status' => false,
