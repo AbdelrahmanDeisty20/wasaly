@@ -290,4 +290,9 @@ return [
     'profile_updated_successfully' => 'تم تحديث الملف الشخصي بنجاح',
     'providers_fetched_successfully' => 'تم استرجاع مقدمي الخدمة بنجاح',
     'providers_fetched_failed' => 'فشل استرجاع مقدمي الخدمة',
+
+    'min_price_must_be_numeric' => 'أقل سعر يجب أن يكون رقماً',
+    'max_price_must_be_numeric' => 'أعلى سعر يجب أن يكون رقماً',
+    'sort_must_be_in_min_price_max_price_latest' => 'ترتيب البحث يجب أن يكون من الأدنى للأعلى، من الأعلى للأقل، أو الأحدث',
+    'sub_category_not_found' => 'التصنيف الفرعي غير موجود',
 ];

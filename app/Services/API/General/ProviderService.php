@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\Provider;
 use App\Models\Service;
 use App\Models\SubCategory;
+use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -28,6 +29,55 @@ class ProviderService
                 'data' => []
             ];
         }
+        return [
+            'status' => true,
+            'message' => __('messages.providers_fetched_successfully'),
+            'data' => $providers
+        ];
+    }
+    public function filterProvider(array $data)
+    {
+        $query = Provider::with(['user']);
+
+        // 1. Filter by SubCategory (via services)
+        if (!empty($data['sub_category_id'])) {
+            $query->whereHas('services', function ($q) use ($data) {
+                $q->where('sub_category_id', $data['sub_category_id']);
+            });
+        }
+
+        // 2. Filter by Price Range (price_from)
+        if (isset($data['min_price']) || isset($data['max_price'])) {
+            $min = $data['min_price'] ?? 0;
+            $max = $data['max_price'] ?? 999999;
+            $query->whereBetween('price_from', [$min, $max]);
+        }
+
+        // 3. Sorting
+        $sort = $data['sort'] ?? 'latest';
+        switch ($sort) {
+            case 'min_price':
+                $query->orderBy('price_from', 'asc');
+                break;
+            case 'max_price':
+                $query->orderBy('price_from', 'desc');
+                break;
+            case 'latest':
+            default:
+                $query->orderByDesc('id');
+                break;
+        }
+
+        $providers = $query->paginate(10);
+
+        if ($providers->isEmpty()) {
+            return [
+                'status' => false,
+                'message' => __('messages.providers_fetched_failed'),
+                'data' => []
+            ];
+        }
+
         return [
             'status' => true,
             'message' => __('messages.providers_fetched_successfully'),
