@@ -303,7 +303,7 @@ class ProviderService
         }
     }
     public  function getProviderById($id){
-        $provider = Provider::with('user')->find($id);
+        $provider = Provider::with('user','services','reviews')->find($id);
         if (!$provider) {
             return [
                 'status' => false,
