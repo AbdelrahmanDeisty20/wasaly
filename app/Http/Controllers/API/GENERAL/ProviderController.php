@@ -130,7 +130,7 @@ class ProviderController extends Controller
 
     public function searchProvider(Request $request)
     {
-        $result = $this->providerService->searchProvider($request->search_term);
+        $result = $this->providerService->searchProvider($request->search);
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
