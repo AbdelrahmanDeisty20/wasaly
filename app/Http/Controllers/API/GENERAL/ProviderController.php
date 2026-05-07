@@ -84,6 +84,14 @@ class ProviderController extends Controller
         return $this->success($result['data'], $result['message'], 200);
     }
 
+    public function getProviderById(Request $request, $id) {
+        $result = $this->providerService->getProviderById($id);
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
+
     public function deleteService(Request $request)
     {
         $result = $this->providerService->deleteService($request->service_id);

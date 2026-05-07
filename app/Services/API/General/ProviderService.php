@@ -302,7 +302,21 @@ class ProviderService
             ];
         }
     }
-
+    public  function getProviderById($id){
+        $provider = Provider::with('user')->find($id);
+        if (!$provider) {
+            return [
+                'status' => false,
+                'message' => __('messages.provider_not_found'),
+                'data' => []
+            ];
+        }
+        return [
+            'status' => true,
+            'message' => __('messages.provider_found'),
+            'data' => new ProviderResource($provider)
+        ];
+    }
     public function deleteService($service_id)
     {
         try {
@@ -336,6 +350,7 @@ class ProviderService
             ];
         }
     }
+
     public function bookService(array $data)
     {
         DB::beginTransaction();
