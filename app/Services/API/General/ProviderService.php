@@ -59,36 +59,44 @@ class ProviderService
                 ];
             }
 
-            // Update User data
-            $user->update($data);
-
-            // Handle Password Update
+            // Handle password verification first
             if (isset($data['password'])) {
-                if (!isset($data['current_password']) || !\Illuminate\Support\Facades\Hash::check($data['current_password'], $user->password)) {
+                if (!isset($data['current_password']) || !\Illuminate\Support\Facades\Hash::check($data['current_password'], $user->getAuthPassword())) {
                     return [
                         'status' => false,
                         'message' => __('messages.current_password_incorrect'),
                         'data' => []
                     ];
                 }
-                $user->password = \Illuminate\Support\Facades\Hash::make($data['password']);
-                $user->save();
             }
-            
+
+            // Prepare and Update User data
+            $userData = $data;
             if (isset($data['avatar']) && $data['avatar'] instanceof \Illuminate\Http\UploadedFile) {
                 $avatarName = time() . '_' . uniqid() . '.' . $data['avatar']->getClientOriginalExtension();
                 $data['avatar']->move(public_path('storage/users/avatars'), $avatarName);
-                $user->update(['avatar' => $avatarName]);
+                $userData['avatar'] = $avatarName;
             }
+            
+            // Explicitly set password if it's being updated
+            if (isset($data['password'])) {
+                $userData['password'] = $data['password']; // Hashed by model cast
+            }
+            
+            // Remove current_password as it's not in fillable and already verified
+            unset($userData['current_password']);
+            
+            $user->update($userData);
 
-            // Update Provider data
-            $provider->update($data);
-
+            // Prepare and Update Provider data
+            $providerData = $data;
             if (isset($data['cover']) && $data['cover'] instanceof \Illuminate\Http\UploadedFile) {
                 $coverName = time() . '_' . uniqid() . '.' . $data['cover']->getClientOriginalExtension();
                 $data['cover']->move(public_path('storage/providers'), $coverName);
-                $provider->update(['cover' => $coverName]);
+                $providerData['cover'] = $coverName;
             }
+            
+            $provider->update($providerData);
 
             DB::commit();
             return [
