@@ -38,6 +38,7 @@ class UpdateProviderProfileRequest extends FormRequest
             'full_name.string' => __('messages.full_name_string'),
             'phone.string' => __('messages.phone_string'),
             'price_from.numeric' => __('messages.price_from_numeric'),
+            'current_password.required' => __('messages.current_password_required'),
             'current_password.min' => __('messages.current_password_min'),
             'password.min' => __('messages.password_min'),
             'password.confirmed' => __('messages.password_confirmed'),
