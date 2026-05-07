@@ -12,6 +12,7 @@ class Review extends Model
         'product_id',
         'user_id',
         'provider_id',
+        'service_id',
         'rating',
         'comment',
     ];
@@ -19,6 +20,11 @@ class Review extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
     }
 
     public function user()

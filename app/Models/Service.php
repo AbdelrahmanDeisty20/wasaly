@@ -18,7 +18,6 @@ class Service extends Model
         'price',
         'image',
         'sub_category_id',
-        'review_id',
     ];
 
     public function provider()
@@ -53,7 +52,7 @@ class Service extends Model
 
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'provider_id', 'provider_id');
+        return $this->hasMany(Review::class, 'service_id');
     }
 
     public function availableDates()
