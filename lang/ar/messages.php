@@ -295,4 +295,7 @@ return [
     'max_price_must_be_numeric' => 'أعلى سعر يجب أن يكون رقماً',
     'sort_must_be_in_top_rated_latest' => 'ترتيب البحث يجب أن يكون حسب الأعلى تقييماً، أو الأحدث',
     'sub_category_not_found' => 'التصنيف الفرعي غير موجود',
+    'search_required' => 'البحث مطلوب',
+    'search_string' => 'البحث يجب أن يكون نصاً',
+    'search_max' => 'البحث يجب أن لا يزيد عن 255 حرفاً',
 ];

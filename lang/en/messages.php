@@ -278,4 +278,7 @@ return [
     'max_price_must_be_numeric' => 'Maximum price must be a number',
     'sort_must_be_in_min_price_max_price_latest' => 'Sort order must be one of: min_price, max_price, latest',
     'sub_category_not_found' => 'Sub category not found',
+    'search_required' => 'Search is required',
+    'search_string' => 'Search must be a string',
+    'search_max' => 'Search must not exceed 255 characters',
 ];

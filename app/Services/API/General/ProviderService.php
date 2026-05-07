@@ -383,15 +383,15 @@ class ProviderService
             'data' => new ProviderListResource($provider)
         ];
     }
-    public function searchProvider($searchTerm)
+    public function searchProvider(array $data)
     {
         $locale = app()->getLocale();
         $providers = Provider::with(['user'])
-            ->where(function($query) use ($searchTerm, $locale) {
-                $query->where("title_{$locale}", 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere("service_description_{$locale}", 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhereHas('user', function($q) use ($searchTerm) {
-                          $q->where('full_name', 'LIKE', '%' . $searchTerm . '%');
+            ->where(function($query) use ($data, $locale) {
+                $query->where("title_{$locale}", 'LIKE', '%' . $data['search'] . '%')
+                      ->orWhere("service_description_{$locale}", 'LIKE', '%' . $data['search'] . '%')
+                      ->orWhereHas('user', function($q) use ($data) {
+                          $q->where('full_name', 'LIKE', '%' . $data['search'] . '%');
                       });
             })
             ->paginate(10);

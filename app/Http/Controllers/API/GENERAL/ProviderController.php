@@ -128,9 +128,9 @@ class ProviderController extends Controller
         return $this->paginated(ProviderResource::class,$result['data'], $result['message']);
     }
 
-    public function searchProvider(Request $request)
+    public function searchProvider(searchProviderRequest $request)
     {
-        $result = $this->providerService->searchProvider($request->search);
+        $result = $this->providerService->searchProvider($request->validated());
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
