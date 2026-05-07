@@ -116,6 +116,6 @@ class ProviderController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->success(ProviderResource::class,$result['data'], $result['message'], 200);
+        return $this->paginated(ProviderResource::class,$result['data'], $result['message'],200);
     }
 }
