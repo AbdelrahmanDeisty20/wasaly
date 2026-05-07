@@ -13,10 +13,12 @@ use App\Models\Order;
 use App\Models\Provider;
 use App\Models\Service;
 use App\Models\SubCategory;
+use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
 
 class ProviderService
 {
+    use ApiResponse;
     public function providers(){
         $providers = Provider::with('user')->paginate(10);
         if($providers->isEmpty()){
@@ -147,7 +149,7 @@ class ProviderService
 
     public function getservice(array $data)
     {
-        $service = Service::with('availableDates.availableTimes','serviceImages')->find($data['service_id']);
+        $service = Service::with('availableDates.availableTimes','serviceImages','subCategory','provider.user',)->find($data['service_id']);
         if (!$service) {
             return [
                 'status' => false,
