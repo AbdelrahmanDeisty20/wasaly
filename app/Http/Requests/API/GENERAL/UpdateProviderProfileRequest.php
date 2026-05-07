@@ -17,7 +17,7 @@ class UpdateProviderProfileRequest extends FormRequest
             'full_name' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20', // This is for the User model
             'price_from' => 'nullable|numeric|min:0', // This is for the Provider model
-            'current_password' => 'nullable|string|min:8',
+            'current_password' => 'required|string|min:8',
             'password' => 'nullable|string|min:8|confirmed',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

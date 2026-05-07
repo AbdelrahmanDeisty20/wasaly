@@ -59,15 +59,13 @@ class ProviderService
                 ];
             }
 
-            // Handle password verification first
-            if (isset($data['password'])) {
-                if (!isset($data['current_password']) || !\Illuminate\Support\Facades\Hash::check($data['current_password'], $user->getAuthPassword())) {
-                    return [
-                        'status' => false,
-                        'message' => __('messages.current_password_incorrect'),
-                        'data' => []
-                    ];
-                }
+            // Handle password verification - ALWAYS REQUIRED for any update
+            if (!isset($data['current_password']) || !\Illuminate\Support\Facades\Hash::check($data['current_password'], $user->getAuthPassword())) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.current_password_incorrect'),
+                    'data' => []
+                ];
             }
 
             // Prepare and Update User data
