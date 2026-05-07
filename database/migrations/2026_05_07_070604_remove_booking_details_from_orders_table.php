@@ -12,6 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
+            // Drop foreign keys first
+            $table->dropForeign(['provider_id']);
+            $table->dropForeign(['service_id']);
+            $table->dropForeign(['booking_id']);
+            $table->dropForeign(['available_date_id']);
+            $table->dropForeign(['available_time_id']);
+
+            // Now drop columns
             $table->dropColumn([
                 'provider_id',
                 'service_id',

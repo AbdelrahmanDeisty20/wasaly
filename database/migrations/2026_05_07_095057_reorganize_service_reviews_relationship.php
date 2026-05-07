@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::table('services', function (Blueprint $table) {
             if (Schema::hasColumn('services', 'review_id')) {
+                // Drop foreign key first
+                $table->dropForeign(['review_id']);
                 $table->dropColumn('review_id');
             }
         });
