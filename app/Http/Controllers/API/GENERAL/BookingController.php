@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\BookingStoreRequest;
+use App\Http\Resources\API\GENERAL\BookingResource;
 use App\Services\API\General\BookingService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -31,6 +32,6 @@ class BookingController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->success($result['data'], $result['message'], 200);
+        return $this->paginated(BookingResource::class,$result['data'], $result['message']);
     }
 }

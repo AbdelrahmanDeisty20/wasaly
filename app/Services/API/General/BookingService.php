@@ -22,11 +22,13 @@ class BookingService
                 'data' => []
             ];
         }
-        $bookings = Booking::where('provider_id', $provider->id)->get();
+        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'])
+            ->where('provider_id', $provider->id)
+            ->paginate(10);
         return [
             'status' => true,
             'message' => __('messages.bookings_fetched_successfully'),
-            'data' => BookingResource::collection($bookings->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
+            'data' => $bookings
         ];
     }
 
