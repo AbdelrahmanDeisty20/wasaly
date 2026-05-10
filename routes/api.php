@@ -93,8 +93,7 @@ Route::group(['middleware' => SetLang::class], function () {
             Route::post('services/create', [ProviderController::class, 'createService']);
             Route::post('services/update', [ProviderController::class, 'updateService']);
             Route::delete('services/delete', [ProviderController::class, 'deleteService']);
-            Route::get('bookings', [BookingController::class, 'providerBookings']);
-            Route::post('provider/bookings/status', [BookingController::class, 'updateStatus']);
+            Route::get('provider/bookings', [BookingController::class, 'bookings']);
         });
         // Review Routes
         Route::post('reviews/product/create', [ReviewController::class, 'storeProductReview']);
