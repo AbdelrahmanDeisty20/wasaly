@@ -69,16 +69,6 @@ class ProviderController extends Controller
         }
         return $this->success($result['data'], $result['message'], 201);
     }
-
-    public function bookService(BookingStoreRequest $request)
-    {
-        $result = $this->providerService->bookService($request->validated());
-        if (!$result['status']) {
-            return $this->error($result['message'], 400);
-        }
-        return $this->success($result['data'], $result['message'], 201);
-    }
-
     public function updateService(UpdateServiceRequest $request)
     {
         $result = $this->providerService->updateService($request->validated());

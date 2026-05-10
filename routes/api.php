@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AUTH\AuthController;
 use App\Http\Controllers\API\ForgetPassword\ForgetPasswordController;
 use App\Http\Controllers\API\GENERAL\AddressController;
 use App\Http\Controllers\API\GENERAL\BannerController;
+use App\Http\Controllers\API\GENERAL\BookingController;
 use App\Http\Controllers\API\GENERAL\BrandController;
 use App\Http\Controllers\API\GENERAL\CartController;
 use App\Http\Controllers\API\GENERAL\CategoryController;
@@ -92,6 +93,7 @@ Route::group(['middleware' => SetLang::class], function () {
             Route::post('services/create', [ProviderController::class, 'createService']);
             Route::post('services/update', [ProviderController::class, 'updateService']);
             Route::delete('services/delete', [ProviderController::class, 'deleteService']);
+            Route::get('provider/bookings', [BookingController::class, 'bookings']);
         });
         // Review Routes
         Route::post('reviews/product/create', [ReviewController::class, 'storeProductReview']);
@@ -112,7 +114,8 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('carts/checkout', [CheckoutController::class, 'checkout']);
 
         // Bookings Routes
-        Route::post('booking', [ProviderController::class, 'bookService']);
+        Route::post('booking', [BookingController::class, 'bookService']);
+       
         
 
         // Orders Routes
