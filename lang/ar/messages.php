@@ -315,4 +315,11 @@ return [
     'must_book_first' => 'يجب حجز الخدمة أولاً قبل التقييم',
     'already_reviewed_service' => 'لقد قمت بتقييم هذه الخدمة بالفعل',
     'bookings_fetched_successfully' => 'تم استرجاع الحجوزات بنجاح',
+    'booking_not_found' => 'الحجز غير موجود',
+    'booking_updated_successfully' => 'تم تحديث الحجز بنجاح',
+    'cannot_edit_booking' => 'لا يمكن تعديل الحجز إلا في حالة الانتظار (Pending)',
+    'cannot_cancel_booking' => 'لا يمكن إلغاء الحجز إلا في حالة الانتظار (Pending)',
+    'cannot_delete_booking' => 'لا يمكن حذف الحجز إلا في حالة الانتظار (Pending) أو الانتهاء (Completed)',
+    'booking_cancelled_successfully' => 'تم إلغاء الحجز بنجاح',
+    'booking_deleted_successfully' => 'تم حذف الحجز بنجاح',
 ];

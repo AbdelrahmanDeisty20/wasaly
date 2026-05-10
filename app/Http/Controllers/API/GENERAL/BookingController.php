@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\BookingStoreRequest;
+use App\Http\Requests\API\GENERAL\UpdateBookingRequest;
 use App\Http\Resources\API\GENERAL\BookingResource;
 use App\Services\API\General\BookingService;
 use App\Traits\ApiResponse;
@@ -33,5 +34,32 @@ class BookingController extends Controller
             return $this->error($result['message'], 404);
         }
         return $this->paginated(BookingResource::class,$result['data'], $result['message']);
+    }
+
+    public function updateBooking(UpdateBookingRequest $request)
+    {
+        $result = $this->bookingService->updateBooking($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message']);
+    }
+
+    public function cancelBooking($id)
+    {
+        $result = $this->bookingService->cancelBooking((int) $id);
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message']);
+    }
+
+    public function deleteBooking($id)
+    {
+        $result = $this->bookingService->deleteBooking((int) $id);
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->deleted($result['message']);
     }
 }

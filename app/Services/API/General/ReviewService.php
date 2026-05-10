@@ -195,6 +195,48 @@ class ReviewService
         ];
     }
 
+    public function updateServiceReview(array $data)
+    {
+        $review = Review::find($data['review_id']);
+        if (!$review) {
+            return [
+                'status' => false,
+                'message' => __('messages.review_not_found'),
+                'data' => []
+            ];
+        }
+
+        // 1. Check Ownership & Time Limit (60 minutes)
+        if ($review->user_id != auth()->id()) {
+            return [
+                'status' => false,
+                'message' => __('messages.unauthorized'),
+                'data' => []
+            ];
+        }
+
+        $createdAt = Carbon::parse($review->created_at);
+        if ($createdAt->addMinutes(60)->isPast()) {
+            return [
+                'status' => false,
+                'message' => __('messages.review_edit_window_expired'),
+                'data' => []
+            ];
+        }
+
+        // 2. Update the review
+        $review->update([
+            'rating' => $data['rating'] ?? $review->rating,
+            'comment' => $data['comment'] ?? $review->comment,
+        ]);
+
+        return [
+            'status' => true,
+            'message' => __('messages.review_updated_successfully'),
+            'data' => new ReviewResource($review->load('user', 'provider', 'service'))
+        ];
+    }
+
     public function deleteReview(int $id)
     {
         $review = Review::find($id);

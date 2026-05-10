@@ -295,4 +295,11 @@ return [
     'must_book_first' => 'You must book the service first before reviewing it',
     'already_reviewed_service' => 'You have already reviewed this service',
     'bookings_fetched_successfully' => 'Bookings fetched successfully',
+    'booking_not_found' => 'Booking not found',
+    'booking_updated_successfully' => 'Booking updated successfully',
+    'cannot_edit_booking' => 'Cannot edit booking unless it is in Pending status',
+    'cannot_cancel_booking' => 'Cannot cancel booking unless it is in Pending status',
+    'cannot_delete_booking' => 'Cannot delete booking unless it is in Pending or Completed status',
+    'booking_cancelled_successfully' => 'Booking cancelled successfully',
+    'booking_deleted_successfully' => 'Booking deleted successfully',
 ];

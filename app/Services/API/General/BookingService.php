@@ -78,4 +78,112 @@ class BookingService
             ];
         }
     }
+
+    public function updateBooking(array $data)
+    {
+        $booking = Booking::find($data['booking_id']);
+        if (!$booking) {
+            return [
+                'status' => false,
+                'message' => __('messages.booking_not_found'),
+                'data' => []
+            ];
+        }
+
+        if ($booking->user_id != auth()->id()) {
+            return [
+                'status' => false,
+                'message' => __('messages.unauthorized'),
+                'data' => []
+            ];
+        }
+
+        if ($booking->status != 'pending') {
+            return [
+                'status' => false,
+                'message' => __('messages.cannot_edit_booking'),
+                'data' => []
+            ];
+        }
+
+        $booking->update($data);
+
+        return [
+            'status' => true,
+            'message' => __('messages.booking_updated_successfully'),
+            'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
+        ];
+    }
+
+    public function cancelBooking(int $id)
+    {
+        $booking = Booking::find($id);
+        if (!$booking) {
+            return [
+                'status' => false,
+                'message' => __('messages.booking_not_found'),
+                'data' => []
+            ];
+        }
+
+        if ($booking->user_id != auth()->id()) {
+            return [
+                'status' => false,
+                'message' => __('messages.unauthorized'),
+                'data' => []
+            ];
+        }
+
+        if ($booking->status != 'pending') {
+            return [
+                'status' => false,
+                'message' => __('messages.cannot_cancel_booking'),
+                'data' => []
+            ];
+        }
+
+        $booking->update(['status' => 'cancelled']);
+
+        return [
+            'status' => true,
+            'message' => __('messages.booking_cancelled_successfully'),
+            'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
+        ];
+    }
+
+    public function deleteBooking(int $id)
+    {
+        $booking = Booking::find($id);
+        if (!$booking) {
+            return [
+                'status' => false,
+                'message' => __('messages.booking_not_found'),
+                'data' => []
+            ];
+        }
+
+        if ($booking->user_id != auth()->id()) {
+            return [
+                'status' => false,
+                'message' => __('messages.unauthorized'),
+                'data' => []
+            ];
+        }
+
+        if (!in_array($booking->status, ['pending', 'completed'])) {
+            return [
+                'status' => false,
+                'message' => __('messages.cannot_delete_booking'),
+                'data' => []
+            ];
+        }
+
+        $booking->delete();
+
+        return [
+            'status' => true,
+            'message' => __('messages.booking_deleted_successfully'),
+            'data' => []
+        ];
+    }
 }

@@ -67,18 +67,27 @@ class ReviewController extends Controller
         
     }
 
-    public function updateProductReview($id, UpdateReviewRequest $request)
+    public function updateProductReview(UpdateReviewRequest $request)
     {
-        $result = $this->reviewService->updateProductReview((int) $id, $request->validated());
+        $result = $this->reviewService->updateProductReview($request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }
         return $this->success($result['data'], $result['message']);
     }
 
-    public function updateGeneralReview($id, UpdateReviewRequest $request)
+    public function updateGeneralReview(UpdateReviewRequest $request)
     {
-        $result = $this->reviewService->updateProductReview((int) $id, $request->validated());
+        $result = $this->reviewService->updateProductReview($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message']);
+    }
+
+    public function updateServiceReview(UpdateReviewRequest $request)
+    {
+        $result = $this->reviewService->updateServiceReview($request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }
