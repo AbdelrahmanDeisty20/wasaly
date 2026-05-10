@@ -60,6 +60,15 @@ class BookingService
                     'data' => []
                 ];
             }
+            
+            // منع مقدم الخدمة من حجز خدمته الخاصة
+            if ($service->provider->user_id == $user->id) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.cannot_book_own_service'),
+                    'data' => []
+                ];
+            }
 
             // 1. إنشاء الحجز
             $booking = Booking::create([

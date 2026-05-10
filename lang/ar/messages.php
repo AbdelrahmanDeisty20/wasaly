@@ -328,4 +328,5 @@ return [
     'booking_completed_successfully' => 'تم إنهاء الحجز بنجاح',
     'cannot_change_status' => 'لا يمكن تغيير حالة الحجز في وضعها الحالي',
     'status_required' => 'الحالة مطلوبة',
+    'cannot_book_own_service' => 'لا يمكنك حجز خدمتك الخاصة',
 ];

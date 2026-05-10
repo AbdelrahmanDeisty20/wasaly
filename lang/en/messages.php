@@ -308,4 +308,5 @@ return [
     'booking_completed_successfully' => 'Booking completed successfully',
     'cannot_change_status' => 'Cannot change booking status in its current state',
     'status_required' => 'Status is required',
+    'cannot_book_own_service' => 'You cannot book your own service',
 ];
