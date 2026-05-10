@@ -39,6 +39,8 @@ class UpdateBookingRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'booking_id.required' => __('messages.booking_id_required'),
+            'booking_id.exists' => __('messages.booking_not_found'),
             'service_id.exists' => __('messages.service_not_found'),
             'available_date_id.exists' => __('messages.available_date_not_found'),
             'available_time_id.exists' => __('messages.available_time_not_found'),

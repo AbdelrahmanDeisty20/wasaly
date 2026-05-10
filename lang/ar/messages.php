@@ -315,6 +315,8 @@ return [
     'must_book_first' => 'يجب حجز الخدمة أولاً قبل التقييم',
     'already_reviewed_service' => 'لقد قمت بتقييم هذه الخدمة بالفعل',
     'bookings_fetched_successfully' => 'تم استرجاع الحجوزات بنجاح',
+    'booking_id_required' => 'رقم الحجز مطلوب',
+    'review_id_required' => 'رقم التقييم مطلوب',
     'booking_not_found' => 'الحجز غير موجود',
     'booking_updated_successfully' => 'تم تحديث الحجز بنجاح',
     'cannot_edit_booking' => 'لا يمكن تعديل الحجز إلا في حالة الانتظار (Pending)',

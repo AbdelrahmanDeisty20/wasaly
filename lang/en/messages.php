@@ -295,6 +295,8 @@ return [
     'must_book_first' => 'You must book the service first before reviewing it',
     'already_reviewed_service' => 'You have already reviewed this service',
     'bookings_fetched_successfully' => 'Bookings fetched successfully',
+    'booking_id_required' => 'Booking ID is required',
+    'review_id_required' => 'Review ID is required',
     'booking_not_found' => 'Booking not found',
     'booking_updated_successfully' => 'Booking updated successfully',
     'cannot_edit_booking' => 'Cannot edit booking unless it is in Pending status',

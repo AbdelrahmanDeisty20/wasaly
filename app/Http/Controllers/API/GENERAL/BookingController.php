@@ -45,18 +45,18 @@ class BookingController extends Controller
         return $this->success($result['data'], $result['message']);
     }
 
-    public function cancelBooking($id)
+    public function cancelBooking(UpdateBookingRequest $request)
     {
-        $result = $this->bookingService->cancelBooking((int) $id);
+        $result = $this->bookingService->cancelBooking($request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }
         return $this->success($result['data'], $result['message']);
     }
 
-    public function deleteBooking($id)
+    public function deleteBooking(UpdateBookingRequest $request)
     {
-        $result = $this->bookingService->deleteBooking((int) $id);
+        $result = $this->bookingService->deleteBooking($request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }

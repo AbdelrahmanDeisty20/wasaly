@@ -23,6 +23,8 @@ class UpdateReviewRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'review_id.required' => __('messages.review_id_required'),
+            'review_id.exists'   => __('messages.review_not_found'),
             'rating.integer' => __('messages.rating_integer'),
             'rating.min'     => __('messages.rating_min'),
             'rating.max'     => __('messages.rating_max'),

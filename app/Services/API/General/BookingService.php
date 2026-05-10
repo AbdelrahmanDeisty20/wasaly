@@ -115,9 +115,9 @@ class BookingService
         ];
     }
 
-    public function cancelBooking(int $id)
+    public function cancelBooking(array $data)
     {
-        $booking = Booking::find($id);
+        $booking = Booking::find($data['booking_id']);
         if (!$booking) {
             return [
                 'status' => false,
@@ -151,9 +151,9 @@ class BookingService
         ];
     }
 
-    public function deleteBooking(int $id)
+    public function deleteBooking(array $data)
     {
-        $booking = Booking::find($id);
+        $booking = Booking::find($data['booking_id']);
         if (!$booking) {
             return [
                 'status' => false,
