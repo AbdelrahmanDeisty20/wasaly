@@ -117,8 +117,8 @@ Route::group(['middleware' => SetLang::class], function () {
         // Bookings Routes
         Route::post('booking', [BookingController::class, 'bookService']);
         Route::post('booking/update', [BookingController::class, 'updateBooking']);
-        Route::post('booking/cancel/{id}', [BookingController::class, 'cancelBooking']);
-        Route::delete('booking/delete/{id}', [BookingController::class, 'deleteBooking']);
+        Route::post('booking/cancel', [BookingController::class, 'cancelBooking']);
+        Route::delete('booking/delete', [BookingController::class, 'deleteBooking']);
        
         
 
