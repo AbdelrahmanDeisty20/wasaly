@@ -11,15 +11,17 @@ use DB;
 class BookingService
 {
     use ApiResponse;
-    protected $BookingService;
-
-    public function __construct(BookingService $bookingService)
-    {
-        $this->BookingService = $bookingService;
-    }
     public function bookings()
     {
-        $bookings = Booking::where('user_id', auth()->user()->id)->get();
+        $provider = auth()->user()->providers()->first();
+        if (!$provider) {
+             return [  
+                'status' => false,
+                'message' => __('messages.provider_not_found'),
+                'data' => []
+            ];
+        }
+        $bookings = Booking::where('provider_id', $provider->id)->get();
         return [  
             'status' => true,
             'message' => __('messages.bookings_fetched_successfully'),
