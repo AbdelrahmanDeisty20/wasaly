@@ -93,7 +93,8 @@ Route::group(['middleware' => SetLang::class], function () {
             Route::post('services/create', [ProviderController::class, 'createService']);
             Route::post('services/update', [ProviderController::class, 'updateService']);
             Route::delete('services/delete', [ProviderController::class, 'deleteService']);
-            Route::get('provider/bookings', [BookingController::class, 'bookings']);
+            Route::get('provider/bookings', [BookingController::class, 'providerBookings']);
+            Route::post('provider/bookings/status', [BookingController::class, 'updateStatus']);
         });
         // Review Routes
         Route::post('reviews/product/create', [ReviewController::class, 'storeProductReview']);
@@ -115,6 +116,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('carts/checkout', [CheckoutController::class, 'checkout']);
 
         // Bookings Routes
+        Route::get('my-bookings', [BookingController::class, 'myBookings']);
         Route::post('booking', [BookingController::class, 'bookService']);
         Route::post('booking/update', [BookingController::class, 'updateBooking']);
         Route::post('booking/cancel', [BookingController::class, 'cancelBooking']);

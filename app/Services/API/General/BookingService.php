@@ -12,7 +12,7 @@ class BookingService
 {
     use ApiResponse;
 
-    public function bookings()
+    public function providerBookings()
     {
         $provider = auth()->user()->providers()->first();
         if (!$provider) {
@@ -24,6 +24,20 @@ class BookingService
         }
         $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'])
             ->where('provider_id', $provider->id)
+            ->latest()
+            ->paginate(10);
+        return [
+            'status' => true,
+            'message' => __('messages.bookings_fetched_successfully'),
+            'data' => $bookings
+        ];
+    }
+
+    public function myBookings()
+    {
+        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'])
+            ->where('user_id', auth()->id())
+            ->latest()
             ->paginate(10);
         return [
             'status' => true,
@@ -184,6 +198,39 @@ class BookingService
             'status' => true,
             'message' => __('messages.booking_deleted_successfully'),
             'data' => []
+        ];
+    }
+
+    public function updateStatus(array $data)
+    {
+        $provider = auth()->user()->providers()->first();
+        if (!$provider) {
+            return [
+                'status' => false,
+                'message' => __('messages.provider_not_found'),
+                'data' => []
+            ];
+        }
+
+        $booking = Booking::where('id', $data['booking_id'])
+            ->where('provider_id', $provider->id)
+            ->first();
+
+        if (!$booking) {
+            return [
+                'status' => false,
+                'message' => __('messages.booking_not_found'),
+                'data' => []
+            ];
+        }
+
+        $newStatus = $data['status'];
+        $booking->update(['status' => $newStatus]);
+
+        return [
+            'status' => true,
+            'message' => __('messages.booking_updated_successfully'),
+            'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
         ];
     }
 }

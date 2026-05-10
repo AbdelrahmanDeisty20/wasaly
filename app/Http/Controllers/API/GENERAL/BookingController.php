@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\GENERAL;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\BookingStoreRequest;
 use App\Http\Requests\API\GENERAL\UpdateBookingRequest;
+use App\Http\Requests\API\GENERAL\UpdateBookingStatusRequest;
 use App\Http\Resources\API\GENERAL\BookingResource;
 use App\Services\API\General\BookingService;
 use App\Traits\ApiResponse;
@@ -27,13 +28,31 @@ class BookingController extends Controller
         }
         return $this->success($result['data'], $result['message'], 201);
     }
-    public function bookings()
+    public function providerBookings()
     {
-        $result = $this->bookingService->bookings();
+        $result = $this->bookingService->providerBookings();
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
-        return $this->paginated(BookingResource::class,$result['data'], $result['message']);
+        return $this->paginated(BookingResource::class, $result['data'], $result['message']);
+    }
+
+    public function myBookings()
+    {
+        $result = $this->bookingService->myBookings();
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
+        }
+        return $this->paginated(BookingResource::class, $result['data'], $result['message']);
+    }
+
+    public function updateStatus(UpdateBookingStatusRequest $request)
+    {
+        $result = $this->bookingService->updateStatus($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message']);
     }
 
     public function updateBooking(UpdateBookingRequest $request)

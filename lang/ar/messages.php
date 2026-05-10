@@ -324,4 +324,9 @@ return [
     'cannot_delete_booking' => 'لا يمكن حذف الحجز إلا في حالة الانتهاء (Completed) أو الإلغاء (Cancelled)',
     'booking_cancelled_successfully' => 'تم إلغاء الحجز بنجاح',
     'booking_deleted_successfully' => 'تم حذف الحجز بنجاح',
+    'booking_accepted_successfully' => 'تم قبول الحجز بنجاح',
+    'booking_rejected_successfully' => 'تم رفض الحجز بنجاح',
+    'booking_completed_successfully' => 'تم إنهاء الحجز بنجاح',
+    'cannot_change_status' => 'لا يمكن تغيير حالة الحجز في وضعها الحالي',
+    'status_required' => 'الحالة مطلوبة',
 ];

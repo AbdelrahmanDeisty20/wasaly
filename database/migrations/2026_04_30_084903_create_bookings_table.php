@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('available_date_id')->constrained('available_dates')->cascadeOnDelete();
             $table->foreignId('available_time_id')->constrained('available_times')->cascadeOnDelete();
             $table->text('problem_description');
-            $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
     }

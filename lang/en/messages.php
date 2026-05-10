@@ -304,4 +304,9 @@ return [
     'cannot_delete_booking' => 'Cannot delete booking unless it is in Completed or Cancelled status',
     'booking_cancelled_successfully' => 'Booking cancelled successfully',
     'booking_deleted_successfully' => 'Booking deleted successfully',
+    'booking_accepted_successfully' => 'Booking accepted successfully',
+    'booking_rejected_successfully' => 'Booking cancelled successfully',
+    'booking_completed_successfully' => 'Booking completed successfully',
+    'cannot_change_status' => 'Cannot change booking status in its current state',
+    'status_required' => 'Status is required',
 ];
