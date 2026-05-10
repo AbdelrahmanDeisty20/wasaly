@@ -6,6 +6,8 @@ use App\Http\Resources\API\GENERAL\ReviewResource;
 use App\Http\Resources\API\ProductResource;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\Service;
+use App\Models\Booking;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Carbon;
 
@@ -93,6 +95,59 @@ class ReviewService
             'status'  => true,
             'message' => __('messages.review_added_successfully'),
             'data'    => new ReviewResource($review->load('user')),
+        ];
+    }
+
+    public function storeServiceReview(array $data)
+    {
+        $service = Service::find($data['service_id']);
+        if (!$service) {
+            return [
+                'status' => false,
+                'message' => __('messages.service_not_found'),
+                'data' => []
+            ];
+        }
+
+        // 1. Check if user has a booking for this service
+        $hasBooking = Booking::where('service_id', $data['service_id'])
+            ->where('user_id', auth()->id())
+            ->exists();
+
+        if (!$hasBooking) {
+            return [
+                'status' => false,
+                'message' => __('messages.must_book_first'),
+                'data' => []
+            ];
+        }
+
+        // 2. Check if user already has review for this service
+        $existingReview = Review::where('service_id', $data['service_id'])
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($existingReview) {
+            return [
+                'status' => false,
+                'message' => __('messages.already_reviewed_service'),
+                'data' => []
+            ];
+        }
+
+        // 3. Create the review
+        $review = Review::create([
+            'service_id' => $data['service_id'],
+            'user_id' => auth()->id(),
+            'provider_id' => $service->provider_id,
+            'rating' => $data['rating'],
+            'comment' => $data['comment'] ?? null,
+        ]);
+
+        return [
+            'status' => true,
+            'message' => __('messages.review_added_successfully'),
+            'data' => new ReviewResource($review->load('user', 'provider', 'service'))
         ];
     }
 

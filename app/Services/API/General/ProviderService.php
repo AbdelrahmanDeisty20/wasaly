@@ -389,7 +389,10 @@ class ProviderService
         $providers = Provider::with(['user'])
             ->where(function($query) use ($data, $locale) {
                 $query->where("title_{$locale}", 'LIKE', '%' . $data['search'] . '%')
-                      ->orWhere("service_description_{$locale}", 'LIKE', '%' . $data['search'] . '%');
+                      ->orWhere("service_description_{$locale}", 'LIKE', '%' . $data['search'] . '%')
+                      ->orWhereHas('user', function($q) use ($data) {
+                          $q->where('full_name', 'LIKE', '%' . $data['search'] . '%');
+                      });
             })
             ->paginate(10);
 

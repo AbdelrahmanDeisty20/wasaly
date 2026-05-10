@@ -292,4 +292,6 @@ return [
     'available_time' => 'Booking Time',
     'problem_description' => 'Problem Description',
     'center_not_found_in_governorate' => 'Selected center does not belong to the selected governorate',
+    'must_book_first' => 'You must book the service first before reviewing it',
+    'already_reviewed_service' => 'You have already reviewed this service',
 ];

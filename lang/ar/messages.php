@@ -312,4 +312,6 @@ return [
     'customer_email_required' => 'البريد الإلكتروني للعميل مطلوب',
     'governorate_id_required' => 'المحافظة مطلوبة',
     'center_id_required' => 'المركز مطلوب',
+    'must_book_first' => 'يجب حجز الخدمة أولاً قبل التقييم',
+    'already_reviewed_service' => 'لقد قمت بتقييم هذه الخدمة بالفعل',
 ];

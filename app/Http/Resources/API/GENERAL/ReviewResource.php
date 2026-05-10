@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\GENERAL;
 
 use App\Http\Resources\API\GENERAL\ProviderResource;
+use App\Http\Resources\API\GENERAL\ServiceResource;
 use App\Http\Resources\API\GENERAL\UserReviewResource;
 use App\Http\Resources\API\ProductResource;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ class ReviewResource extends JsonResource
             'user' => new UserReviewResource($this->whenLoaded('user')),
             'product' => $this->when($this->product_id, new ProductResource($this->whenLoaded('product'))),
             'provider' => $this->when($this->provider_id, new ProviderResource($this->whenLoaded('provider'))),
+            'service' => $this->when($this->service_id, new ServiceResource($this->whenLoaded('service'))),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }

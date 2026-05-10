@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\GENERAL;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\StoreProductReviewRequest;
 use App\Http\Requests\API\GENERAL\StoreGeneralReviewRequest;
+use App\Http\Requests\API\GENERAL\StoreServiceReviewRequest;
 use App\Http\Requests\API\GENERAL\UpdateReviewRequest;
 use App\Services\API\General\ReviewService;
 use App\Traits\ApiResponse;
@@ -29,6 +30,15 @@ class ReviewController extends Controller
     public function storeGeneralReview(StoreGeneralReviewRequest $request)
     {
         $result = $this->reviewService->storeGeneralReview($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message'], 201);
+    }
+
+    public function storeServiceReview(StoreServiceReviewRequest $request)
+    {
+        $result = $this->reviewService->storeServiceReview($request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }
