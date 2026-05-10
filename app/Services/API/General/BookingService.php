@@ -11,18 +11,19 @@ use DB;
 class BookingService
 {
     use ApiResponse;
+
     public function bookings()
     {
         $provider = auth()->user()->providers()->first();
         if (!$provider) {
-             return [  
+            return [
                 'status' => false,
                 'message' => __('messages.provider_not_found'),
                 'data' => []
             ];
         }
         $bookings = Booking::where('provider_id', $provider->id)->get();
-        return [  
+        return [
             'status' => true,
             'message' => __('messages.bookings_fetched_successfully'),
             'data' => BookingResource::collection($bookings->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
@@ -64,7 +65,7 @@ class BookingService
             return [
                 'status' => true,
                 'message' => __('messages.service_booked_successfully'),
-                'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))   
+                'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
             ];
         } catch (\Exception $e) {
             DB::rollBack();

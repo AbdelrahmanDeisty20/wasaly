@@ -314,4 +314,5 @@ return [
     'center_id_required' => 'المركز مطلوب',
     'must_book_first' => 'يجب حجز الخدمة أولاً قبل التقييم',
     'already_reviewed_service' => 'لقد قمت بتقييم هذه الخدمة بالفعل',
+    'bookings_fetched_successfully' => 'تم استرجاع الحجوزات بنجاح',
 ];
