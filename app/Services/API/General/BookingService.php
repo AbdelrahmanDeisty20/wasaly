@@ -170,7 +170,7 @@ class BookingService
             ];
         }
 
-        if (!in_array($booking->status, ['pending', 'completed'])) {
+        if (!in_array($booking->status, ['completed', 'cancelled'])) {
             return [
                 'status' => false,
                 'message' => __('messages.cannot_delete_booking'),

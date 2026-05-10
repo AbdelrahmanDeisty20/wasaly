@@ -301,7 +301,7 @@ return [
     'booking_updated_successfully' => 'Booking updated successfully',
     'cannot_edit_booking' => 'Cannot edit booking unless it is in Pending status',
     'cannot_cancel_booking' => 'Cannot cancel booking unless it is in Pending status',
-    'cannot_delete_booking' => 'Cannot delete booking unless it is in Pending or Completed status',
+    'cannot_delete_booking' => 'Cannot delete booking unless it is in Completed or Cancelled status',
     'booking_cancelled_successfully' => 'Booking cancelled successfully',
     'booking_deleted_successfully' => 'Booking deleted successfully',
 ];

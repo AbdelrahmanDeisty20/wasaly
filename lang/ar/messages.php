@@ -321,7 +321,7 @@ return [
     'booking_updated_successfully' => 'تم تحديث الحجز بنجاح',
     'cannot_edit_booking' => 'لا يمكن تعديل الحجز إلا في حالة الانتظار (Pending)',
     'cannot_cancel_booking' => 'لا يمكن إلغاء الحجز إلا في حالة الانتظار (Pending)',
-    'cannot_delete_booking' => 'لا يمكن حذف الحجز إلا في حالة الانتظار (Pending) أو الانتهاء (Completed)',
+    'cannot_delete_booking' => 'لا يمكن حذف الحجز إلا في حالة الانتهاء (Completed) أو الإلغاء (Cancelled)',
     'booking_cancelled_successfully' => 'تم إلغاء الحجز بنجاح',
     'booking_deleted_successfully' => 'تم حذف الحجز بنجاح',
 ];
