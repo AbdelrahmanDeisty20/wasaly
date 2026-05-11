@@ -43,7 +43,7 @@ class favoriteService
 
     public function getServiceFavorites()
     {
-        $favorites = Favorite::with('service')
+        $favorites = Favorite::with('service.subCategory')
             ->where('user_id', auth()->id())
             ->whereNotNull('service_id')
             ->where('is_active', true)
