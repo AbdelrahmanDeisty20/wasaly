@@ -40,18 +40,36 @@ class FavoriteController extends Controller
         return $this->paginated(ServiceResource::class, $result['data'], $result['message']);
     }
 
-    public function toggleFavorite(ToggleFavoriteRequest $request)
+    public function addFavorite(ToggleFavoriteRequest $request)
     {
-        $result = $this->favoriteService->toggleFavorite($request->validated());
+        $result = $this->favoriteService->addFavorite($request->validated());
         if ($result['status']) {
             return $this->success($result['data'], $result['message']);
         }
         return $this->error($result['message'], 400);
     }
 
-    public function toggleServiceFavorite(ToggleServiceFavoriteRequest $request)
+    public function removeFavorite(ToggleFavoriteRequest $request)
     {
-        $result = $this->favoriteService->toggleServiceFavorite($request->validated());
+        $result = $this->favoriteService->removeFavorite($request->validated());
+        if ($result['status']) {
+            return $this->success($result['data'], $result['message']);
+        }
+        return $this->error($result['message'], 400);
+    }
+
+    public function addServiceFavorite(ToggleServiceFavoriteRequest $request)
+    {
+        $result = $this->favoriteService->addServiceFavorite($request->validated());
+        if ($result['status']) {
+            return $this->success($result['data'], $result['message']);
+        }
+        return $this->error($result['message'], 400);
+    }
+
+    public function removeServiceFavorite(ToggleServiceFavoriteRequest $request)
+    {
+        $result = $this->favoriteService->removeServiceFavorite($request->validated());
         if ($result['status']) {
             return $this->success($result['data'], $result['message']);
         }

@@ -134,9 +134,10 @@ Route::group(['middleware' => SetLang::class], function () {
         // Favorite Routes
         Route::get('favorites', [FavoriteController::class, 'getFavorites']);
         Route::get('favorites/service', [FavoriteController::class, 'getServiceFavorites']);
-        Route::post('favorites/add', [FavoriteController::class, 'toggleFavorite']);
-        Route::post('favorites/remove', [FavoriteController::class, 'toggleFavorite']);
-        Route::post('favorites/service/toggle', [FavoriteController::class, 'toggleServiceFavorite']);
+        Route::post('favorites/add', [FavoriteController::class, 'addFavorite']);
+        Route::post('favorites/remove', [FavoriteController::class, 'removeFavorite']);
+        Route::post('favorites/service/add', [FavoriteController::class, 'addServiceFavorite']);
+        Route::post('favorites/service/remove', [FavoriteController::class, 'removeServiceFavorite']);
 
         // Address Routes
         Route::get('addresses', [AddressController::class, 'getUserAddresses']);
