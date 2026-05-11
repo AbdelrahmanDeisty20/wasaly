@@ -361,4 +361,7 @@ return [
     'service_provider' => 'مقدم خدمة',
     'created_at' => 'تاريخ الإنشاء',
     'updated_at' => 'تاريخ التحديث',
+    'available_day_required' => 'يوم التوفر مطلوب',
+    'available_day_array' => 'يجب أن يكون يوم التوفر عبارة عن مصفوفة',
+    'available_day_not_found' => 'اليوم المختار غير موجود',
 ];

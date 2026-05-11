@@ -36,6 +36,7 @@ class UpdateServiceRequest extends FormRequest
         return [
             'service_id.required' => __('messages.service_id_required'),
             'service_id.exists' => __('messages.service_id_not_found'),
+            'available_day.required' => __('messages.available_day_required'),
             'available_day.array' => __('messages.available_day_array'),
             'available_time.array' => __('messages.available_time_array'),
         ];

@@ -287,4 +287,7 @@ return [
     'available_time_array' => 'Available time must be an array',
     'created_at' => 'Created At',
     'updated_at' => 'Updated At',
+    'available_day_required' => 'Available day is required',
+    'available_day_array' => 'Available day must be an array',
+    'available_day_not_found' => 'Selected day not found',
 ];
