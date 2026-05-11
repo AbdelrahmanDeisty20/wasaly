@@ -290,7 +290,7 @@ class ProviderService
             return [
                 'status' => true,
                 'message' => __('messages.service_created_successfully'),
-                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory'))
+                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory', 'availableDates', 'availableTimes'))
             ];
         } catch (\Exception $e) {
             DB::rollBack();

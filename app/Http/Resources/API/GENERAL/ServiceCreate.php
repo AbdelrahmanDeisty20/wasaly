@@ -20,6 +20,8 @@ class ServiceCreate extends JsonResource
             'service_en' => $this->service_en,
             'sub_category' => new SubCategoryResource($this->whenLoaded('subCategory')),
             'description_ar' => $this->description_ar,
+            'available_date' => AvailableDateResource::collection($this->whenLoaded('availableDates')),
+            'available_time' => AvailableTimeResource::collection($this->whenLoaded('availableTimes')),
             'description_en' => $this->description_en,
             'price' => (float) $this->price,
             'image' => $this->image_path,
