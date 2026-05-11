@@ -3,6 +3,8 @@
 namespace App\Http\Resources\API\GENERAL;
 
 use App\Http\Resources\API\ProductResource;
+use App\Http\Resources\API\GENERAL\ServiceResource;
+use App\Http\Resources\API\GENERAL\ProviderResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
 
@@ -19,7 +21,11 @@ class FavouriteResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'product_id' => $this->product_id,
-            'product' => new ProductResource($this->whenLoaded('product')),
+            'service_id' => $this->service_id,
+            'provider_id' => $this->provider_id,
+            'product' => $this->when($this->product_id, new ProductResource($this->whenLoaded('product'))),
+            'service' => $this->when($this->service_id, new ServiceResource($this->whenLoaded('service'))),
+            'provider' => $this->when($this->provider_id, new ProviderResource($this->whenLoaded('provider'))),
         ];
     }
 }
