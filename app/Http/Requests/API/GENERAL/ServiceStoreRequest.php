@@ -32,6 +32,9 @@ class ServiceStoreRequest extends FormRequest
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'available_date' => 'required|date',
+            'available_time' => 'required|array',
+            'available_time.*' => 'string',
         ];
     }
 
@@ -51,6 +54,10 @@ class ServiceStoreRequest extends FormRequest
             'images.*.image' => __('messages.images_image'),
             'images.*.mimes' => __('messages.images_mimes'),
             'images.*.max' => __('messages.images_max'),
+            'available_date.required' => __('messages.available_date_required'),
+            'available_date.date' => __('messages.available_date_date'),
+            'available_time.required' => __('messages.available_time_required'),
+            'available_time.array' => __('messages.available_time_array'),
         ];
     }
 }

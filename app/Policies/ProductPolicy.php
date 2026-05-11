@@ -17,7 +17,7 @@ class ProductPolicy
         return $authUser->can('ViewAny:Product');
     }
 
-    public function view(AuthUser $authUser, Product $model): bool
+    public function view(AuthUser $authUser, Product $product): bool
     {
         return $authUser->can('View:Product');
     }
@@ -27,22 +27,27 @@ class ProductPolicy
         return $authUser->can('Create:Product');
     }
 
-    public function update(AuthUser $authUser, Product $model): bool
+    public function update(AuthUser $authUser, Product $product): bool
     {
         return $authUser->can('Update:Product');
     }
 
-    public function delete(AuthUser $authUser, Product $model): bool
+    public function delete(AuthUser $authUser, Product $product): bool
     {
         return $authUser->can('Delete:Product');
     }
 
-    public function restore(AuthUser $authUser, Product $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Product');
+    }
+
+    public function restore(AuthUser $authUser, Product $product): bool
     {
         return $authUser->can('Restore:Product');
     }
 
-    public function forceDelete(AuthUser $authUser, Product $model): bool
+    public function forceDelete(AuthUser $authUser, Product $product): bool
     {
         return $authUser->can('ForceDelete:Product');
     }
@@ -57,7 +62,7 @@ class ProductPolicy
         return $authUser->can('RestoreAny:Product');
     }
 
-    public function replicate(AuthUser $authUser, Product $model): bool
+    public function replicate(AuthUser $authUser, Product $product): bool
     {
         return $authUser->can('Replicate:Product');
     }

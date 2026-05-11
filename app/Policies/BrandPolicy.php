@@ -17,7 +17,7 @@ class BrandPolicy
         return $authUser->can('ViewAny:Brand');
     }
 
-    public function view(AuthUser $authUser, Brand $model): bool
+    public function view(AuthUser $authUser, Brand $brand): bool
     {
         return $authUser->can('View:Brand');
     }
@@ -27,22 +27,27 @@ class BrandPolicy
         return $authUser->can('Create:Brand');
     }
 
-    public function update(AuthUser $authUser, Brand $model): bool
+    public function update(AuthUser $authUser, Brand $brand): bool
     {
         return $authUser->can('Update:Brand');
     }
 
-    public function delete(AuthUser $authUser, Brand $model): bool
+    public function delete(AuthUser $authUser, Brand $brand): bool
     {
         return $authUser->can('Delete:Brand');
     }
 
-    public function restore(AuthUser $authUser, Brand $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Brand');
+    }
+
+    public function restore(AuthUser $authUser, Brand $brand): bool
     {
         return $authUser->can('Restore:Brand');
     }
 
-    public function forceDelete(AuthUser $authUser, Brand $model): bool
+    public function forceDelete(AuthUser $authUser, Brand $brand): bool
     {
         return $authUser->can('ForceDelete:Brand');
     }
@@ -57,7 +62,7 @@ class BrandPolicy
         return $authUser->can('RestoreAny:Brand');
     }
 
-    public function replicate(AuthUser $authUser, Brand $model): bool
+    public function replicate(AuthUser $authUser, Brand $brand): bool
     {
         return $authUser->can('Replicate:Brand');
     }

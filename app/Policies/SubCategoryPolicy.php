@@ -17,7 +17,7 @@ class SubCategoryPolicy
         return $authUser->can('ViewAny:SubCategory');
     }
 
-    public function view(AuthUser $authUser, SubCategory $model): bool
+    public function view(AuthUser $authUser, SubCategory $subCategory): bool
     {
         return $authUser->can('View:SubCategory');
     }
@@ -27,22 +27,27 @@ class SubCategoryPolicy
         return $authUser->can('Create:SubCategory');
     }
 
-    public function update(AuthUser $authUser, SubCategory $model): bool
+    public function update(AuthUser $authUser, SubCategory $subCategory): bool
     {
         return $authUser->can('Update:SubCategory');
     }
 
-    public function delete(AuthUser $authUser, SubCategory $model): bool
+    public function delete(AuthUser $authUser, SubCategory $subCategory): bool
     {
         return $authUser->can('Delete:SubCategory');
     }
 
-    public function restore(AuthUser $authUser, SubCategory $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:SubCategory');
+    }
+
+    public function restore(AuthUser $authUser, SubCategory $subCategory): bool
     {
         return $authUser->can('Restore:SubCategory');
     }
 
-    public function forceDelete(AuthUser $authUser, SubCategory $model): bool
+    public function forceDelete(AuthUser $authUser, SubCategory $subCategory): bool
     {
         return $authUser->can('ForceDelete:SubCategory');
     }
@@ -57,7 +62,7 @@ class SubCategoryPolicy
         return $authUser->can('RestoreAny:SubCategory');
     }
 
-    public function replicate(AuthUser $authUser, SubCategory $model): bool
+    public function replicate(AuthUser $authUser, SubCategory $subCategory): bool
     {
         return $authUser->can('Replicate:SubCategory');
     }

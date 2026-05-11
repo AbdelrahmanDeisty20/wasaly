@@ -17,7 +17,7 @@ class OrderPolicy
         return $authUser->can('ViewAny:Order');
     }
 
-    public function view(AuthUser $authUser, Order $model): bool
+    public function view(AuthUser $authUser, Order $order): bool
     {
         return $authUser->can('View:Order');
     }
@@ -27,22 +27,27 @@ class OrderPolicy
         return $authUser->can('Create:Order');
     }
 
-    public function update(AuthUser $authUser, Order $model): bool
+    public function update(AuthUser $authUser, Order $order): bool
     {
         return $authUser->can('Update:Order');
     }
 
-    public function delete(AuthUser $authUser, Order $model): bool
+    public function delete(AuthUser $authUser, Order $order): bool
     {
         return $authUser->can('Delete:Order');
     }
 
-    public function restore(AuthUser $authUser, Order $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Order');
+    }
+
+    public function restore(AuthUser $authUser, Order $order): bool
     {
         return $authUser->can('Restore:Order');
     }
 
-    public function forceDelete(AuthUser $authUser, Order $model): bool
+    public function forceDelete(AuthUser $authUser, Order $order): bool
     {
         return $authUser->can('ForceDelete:Order');
     }
@@ -57,7 +62,7 @@ class OrderPolicy
         return $authUser->can('RestoreAny:Order');
     }
 
-    public function replicate(AuthUser $authUser, Order $model): bool
+    public function replicate(AuthUser $authUser, Order $order): bool
     {
         return $authUser->can('Replicate:Order');
     }

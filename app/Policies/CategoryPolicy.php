@@ -17,7 +17,7 @@ class CategoryPolicy
         return $authUser->can('ViewAny:Category');
     }
 
-    public function view(AuthUser $authUser, Category $model): bool
+    public function view(AuthUser $authUser, Category $category): bool
     {
         return $authUser->can('View:Category');
     }
@@ -27,22 +27,27 @@ class CategoryPolicy
         return $authUser->can('Create:Category');
     }
 
-    public function update(AuthUser $authUser, Category $model): bool
+    public function update(AuthUser $authUser, Category $category): bool
     {
         return $authUser->can('Update:Category');
     }
 
-    public function delete(AuthUser $authUser, Category $model): bool
+    public function delete(AuthUser $authUser, Category $category): bool
     {
         return $authUser->can('Delete:Category');
     }
 
-    public function restore(AuthUser $authUser, Category $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Category');
+    }
+
+    public function restore(AuthUser $authUser, Category $category): bool
     {
         return $authUser->can('Restore:Category');
     }
 
-    public function forceDelete(AuthUser $authUser, Category $model): bool
+    public function forceDelete(AuthUser $authUser, Category $category): bool
     {
         return $authUser->can('ForceDelete:Category');
     }
@@ -57,7 +62,7 @@ class CategoryPolicy
         return $authUser->can('RestoreAny:Category');
     }
 
-    public function replicate(AuthUser $authUser, Category $model): bool
+    public function replicate(AuthUser $authUser, Category $category): bool
     {
         return $authUser->can('Replicate:Category');
     }

@@ -1,11 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
 use Illuminate\Foundation\Auth\User as AuthUser;
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
@@ -17,7 +14,7 @@ class UserPolicy
         return $authUser->can('ViewAny:User');
     }
 
-    public function view(AuthUser $authUser, User $model): bool
+    public function view(AuthUser $authUser): bool
     {
         return $authUser->can('View:User');
     }
@@ -27,22 +24,27 @@ class UserPolicy
         return $authUser->can('Create:User');
     }
 
-    public function update(AuthUser $authUser, User $model): bool
+    public function update(AuthUser $authUser): bool
     {
         return $authUser->can('Update:User');
     }
 
-    public function delete(AuthUser $authUser, User $model): bool
+    public function delete(AuthUser $authUser): bool
     {
         return $authUser->can('Delete:User');
     }
 
-    public function restore(AuthUser $authUser, User $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:User');
+    }
+
+    public function restore(AuthUser $authUser): bool
     {
         return $authUser->can('Restore:User');
     }
 
-    public function forceDelete(AuthUser $authUser, User $model): bool
+    public function forceDelete(AuthUser $authUser): bool
     {
         return $authUser->can('ForceDelete:User');
     }
@@ -57,7 +59,7 @@ class UserPolicy
         return $authUser->can('RestoreAny:User');
     }
 
-    public function replicate(AuthUser $authUser, User $model): bool
+    public function replicate(AuthUser $authUser): bool
     {
         return $authUser->can('Replicate:User');
     }
