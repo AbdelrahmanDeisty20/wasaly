@@ -287,25 +287,25 @@ class ProviderService
             }
 
             // Handle availability
-            if (isset($data['available_date'])) {
-                $dates = is_array($data['available_date']) ? $data['available_date'] : [$data['available_date']];
-                
-                foreach ($dates as $date) {
-                    $availableDate = \App\Models\AvailableDate::updateOrCreate(
-                        [
-                            'provider_id' => $provider->id,
-                            'service_id' => $service->id,
-                            'date' => $date,
-                        ],
-                        ['status' => 1]
-                    );
+            if (isset($data['availability']) && is_array($data['availability'])) {
+                foreach ($data['availability'] as $item) {
+                    if (isset($item['date'])) {
+                        $availableDate = \App\Models\AvailableDate::updateOrCreate(
+                            [
+                                'provider_id' => $provider->id,
+                                'service_id' => $service->id,
+                                'date' => $item['date'],
+                            ],
+                            ['status' => 1]
+                        );
 
-                    if (isset($data['available_time']) && is_array($data['available_time'])) {
-                        foreach ($data['available_time'] as $time) {
-                            \App\Models\AvailableTime::updateOrCreate([
-                                'available_date_id' => $availableDate->id,
-                                'time' => $time,
-                            ]);
+                        if (isset($item['times']) && is_array($item['times'])) {
+                            foreach ($item['times'] as $time) {
+                                \App\Models\AvailableTime::updateOrCreate([
+                                    'available_date_id' => $availableDate->id,
+                                    'time' => $time,
+                                ]);
+                            }
                         }
                     }
                 }
@@ -379,28 +379,28 @@ class ProviderService
             }
 
             // Handle availability update
-            if (isset($data['available_date'])) {
-                $dates = is_array($data['available_date']) ? $data['available_date'] : [$data['available_date']];
-                
-                foreach ($dates as $date) {
-                    $availableDate = \App\Models\AvailableDate::updateOrCreate(
-                        [
-                            'provider_id' => $provider->id,
-                            'service_id' => $service->id,
-                            'date' => $date,
-                        ],
-                        ['status' => 1]
-                    );
+            if (isset($data['availability']) && is_array($data['availability'])) {
+                foreach ($data['availability'] as $item) {
+                    if (isset($item['date'])) {
+                        $availableDate = \App\Models\AvailableDate::updateOrCreate(
+                            [
+                                'provider_id' => $provider->id,
+                                'service_id' => $service->id,
+                                'date' => $item['date'],
+                            ],
+                            ['status' => 1]
+                        );
 
-                    if (isset($data['available_time']) && is_array($data['available_time'])) {
-                        // Delete existing times for this specific date record before adding new ones
-                        $availableDate->availableTimes()->delete();
-                        
-                        foreach ($data['available_time'] as $time) {
-                            \App\Models\AvailableTime::create([
-                                'available_date_id' => $availableDate->id,
-                                'time' => $time,
-                            ]);
+                        if (isset($item['times']) && is_array($item['times'])) {
+                            // Sync times for this specific date
+                            $availableDate->availableTimes()->delete();
+                            
+                            foreach ($item['times'] as $time) {
+                                \App\Models\AvailableTime::create([
+                                    'available_date_id' => $availableDate->id,
+                                    'time' => $time,
+                                ]);
+                            }
                         }
                     }
                 }
