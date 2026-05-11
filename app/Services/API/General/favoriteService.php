@@ -144,7 +144,7 @@ class favoriteService
         return [
             'status' => true,
             'message' => __('messages.added_to_favorites'),
-            'data' => new FavouriteResource($newFavorite->load('service.suCategory'))
+            'data' => new FavouriteResource($newFavorite->load('service.subCategory'))
         ];
     }
 }
