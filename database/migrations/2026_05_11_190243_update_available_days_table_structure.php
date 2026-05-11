@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('available_days', function (Blueprint $table) {
             // Remove old columns if they exist
             if (Schema::hasColumn('available_days', 'service_id')) {
+                $table->dropForeign(['service_id']);
                 $table->dropColumn('service_id');
             }
             if (Schema::hasColumn('available_days', 'day')) {
