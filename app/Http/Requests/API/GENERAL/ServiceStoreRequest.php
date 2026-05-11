@@ -32,7 +32,8 @@ class ServiceStoreRequest extends FormRequest
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'available_date' => 'required|date',
+            'available_date' => 'required',
+            'available_date.*' => 'required|date',
             'available_time' => 'required|array',
             'available_time.*' => 'string',
         ];

@@ -24,7 +24,8 @@ class UpdateServiceRequest extends FormRequest
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'available_date' => 'nullable|date',
+            'available_date' => 'nullable',
+            'available_date.*' => 'nullable|date',
             'available_time' => 'nullable|array',
             'available_time.*' => 'nullable|string',
         ];
