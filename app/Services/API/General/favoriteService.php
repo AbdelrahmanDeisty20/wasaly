@@ -69,7 +69,7 @@ class favoriteService
         ];
     }
 
-    public function toggleFavorite($data)
+    public function addFavorite($data)
     {
         $product = Product::find($data['product_id']);
         if (!$product) {
@@ -80,39 +80,51 @@ class favoriteService
             ];
         }
 
+        $favorite = Favorite::updateOrCreate(
+            ['user_id' => auth()->id(), 'product_id' => $data['product_id']],
+            ['is_active' => true]
+        );
+
+        return [
+            'status' => true,
+            'message' => __('messages.added_to_favorites'),
+            'data' => new FavouriteResource($favorite->load('product'))
+        ];
+    }
+
+    public function removeFavorite($data)
+    {
         $favorite = Favorite::where('user_id', auth()->id())
             ->where('product_id', $data['product_id'])
             ->first();
 
         if ($favorite) {
-            $favorite->update([
-                'is_active' => !$favorite->is_active
-            ]);
-
-            $message = $favorite->is_active
-                ? __('messages.added_to_favorites')
-                : __('messages.removed_from_favorites');
-
-            return [
-                'status' => true,
-                'message' => $message,
-                'data' => new FavouriteResource($favorite->load('product'))
-            ];
+            $favorite->update(['is_active' => false]);
         }
 
-        $newFavorite = Favorite::create([
-            'user_id' => auth()->id(),
-            'product_id' => $data['product_id'],
-            'is_active' => true,
-        ]);
+        return [
+            'status' => true,
+            'message' => __('messages.removed_from_favorites'),
+            'data' => $favorite ? new FavouriteResource($favorite->load('product')) : []
+        ];
+    }
+
+    public function addServiceFavorite($data)
+    {
+        $userId = auth()->id();
+        $favorite = Favorite::updateOrCreate(
+            ['user_id' => $userId, 'service_id' => $data['service_id']],
+            ['is_active' => true]
+        );
 
         return [
             'status' => true,
             'message' => __('messages.added_to_favorites'),
-            'data' => new FavouriteResource($newFavorite->load('product'))
+            'data' => new FavouriteResource($favorite->load('service.subCategory'))
         ];
     }
-    public function toggleServiceFavorite($data)
+
+    public function removeServiceFavorite($data)
     {
         $userId = auth()->id();
         $favorite = Favorite::where('user_id', $userId)
@@ -120,31 +132,13 @@ class favoriteService
             ->first();
 
         if ($favorite) {
-            $favorite->update([
-                'is_active' => !$favorite->is_active
-            ]);
-
-            $message = $favorite->is_active
-                ? __('messages.added_to_favorites')
-                : __('messages.removed_from_favorites');
-
-            return [
-                'status' => true,
-                'message' => $message,
-                'data' => new FavouriteResource($favorite->load('service'))
-            ];
+            $favorite->update(['is_active' => false]);
         }
-
-        $newFavorite = Favorite::create([
-            'user_id' => $userId,
-            'service_id' => $data['service_id'],
-            'is_active' => true,
-        ]);
 
         return [
             'status' => true,
-            'message' => __('messages.added_to_favorites'),
-            'data' => new FavouriteResource($newFavorite->load('service.subCategory'))
+            'message' => __('messages.removed_from_favorites'),
+            'data' => $favorite ? new FavouriteResource($favorite->load('service.subCategory')) : []
         ];
     }
 }
