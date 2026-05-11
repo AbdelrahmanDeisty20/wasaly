@@ -99,7 +99,7 @@ class favoriteService
             ];
         }
 
-        Favorite::create([
+        $newFavorite = Favorite::create([
             'user_id' => auth()->id(),
             'product_id' => $data['product_id'],
             'is_active' => true,
@@ -108,9 +108,7 @@ class favoriteService
         return [
             'status' => true,
             'message' => __('messages.added_to_favorites'),
-            'data' => [
-                'is_favorite' => true
-            ]
+            'data' => new FavouriteResource($newFavorite->load('product'))
         ];
     }
     public function toggleServiceFavorite($data)
