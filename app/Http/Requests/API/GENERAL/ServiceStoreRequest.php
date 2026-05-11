@@ -33,7 +33,7 @@ class ServiceStoreRequest extends FormRequest
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'available_day' => 'required|array',
-            'available_day.*' => 'required|string',
+            'available_day.*' => 'required|exists:available_days,id',
             'available_time' => 'required|array',
             'available_time.*' => 'required|string',
         ];
@@ -57,6 +57,7 @@ class ServiceStoreRequest extends FormRequest
             'images.*.max' => __('messages.images_max'),
             'available_day.required' => __('messages.available_day_required'),
             'available_day.array' => __('messages.available_day_array'),
+            'available_day.*.exists' => __('messages.available_day_not_found'),
             'available_time.required' => __('messages.available_time_required'),
             'available_time.array' => __('messages.available_time_array'),
         ];

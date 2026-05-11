@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('available_days', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->string('day'); // 1 for Saturday, 2 for Sunday...
+            $table->string('name_ar');
+            $table->string('name_en');
             $table->timestamps();
         });
     }

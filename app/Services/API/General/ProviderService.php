@@ -288,16 +288,11 @@ class ProviderService
 
             // Handle availability (Days & Times)
             if (isset($data['available_day']) && is_array($data['available_day'])) {
-                foreach ($data['available_day'] as $index => $dayValue) {
-                    $availableDay = \App\Models\AvailableDay::firstOrCreate([
-                        'service_id' => $service->id,
-                        'day' => $dayValue,
-                    ]);
-
+                foreach ($data['available_day'] as $index => $dayId) {
                     if (isset($data['available_time'][$index])) {
                         \App\Models\AvailableTime::create([
                             'service_id' => $service->id,
-                            'available_day_id' => $availableDay->id,
+                            'available_day_id' => $dayId,
                             'time' => $data['available_time'][$index],
                         ]);
                     }
@@ -373,19 +368,14 @@ class ProviderService
 
             // Handle availability update (Days & Times)
             if (isset($data['available_day']) && is_array($data['available_day'])) {
-                // Clear old availability
-                $service->availableDays()->delete();
+                // Clear old availability for this service
+                \App\Models\AvailableTime::where('service_id', $service->id)->delete();
                 
-                foreach ($data['available_day'] as $index => $dayValue) {
-                    $availableDay = \App\Models\AvailableDay::firstOrCreate([
-                        'service_id' => $service->id,
-                        'day' => $dayValue,
-                    ]);
-
+                foreach ($data['available_day'] as $index => $dayId) {
                     if (isset($data['available_time'][$index])) {
                         \App\Models\AvailableTime::create([
                             'service_id' => $service->id,
-                            'available_day_id' => $availableDay->id,
+                            'available_day_id' => $dayId,
                             'time' => $data['available_time'][$index],
                         ]);
                     }
