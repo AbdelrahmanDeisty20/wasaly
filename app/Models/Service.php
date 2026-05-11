@@ -57,7 +57,7 @@ class Service extends Model
 
     public function availableDates()
     {
-        return $this->hasMany(AvailableDate::class, 'provider_id', 'provider_id');
+        return $this->hasMany(AvailableDate::class);
     }
 
     public function serviceImages()
