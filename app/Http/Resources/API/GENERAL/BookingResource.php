@@ -25,7 +25,7 @@ class BookingResource extends JsonResource
             'service' => ServiceResource::make($this->whenLoaded('service')),
             'governorate' => GovernorateServiceResource::make($this->whenLoaded('governorate')),
             'center' => CenterResource::make($this->whenLoaded('center')),
-            'available_date' => AvailableDateResource::make($this->whenLoaded('availableDate')),
+            'available_day' => AvailableDayResource::make($this->whenLoaded('availableDay')),
             'available_time' => AvailableTimeResource::make($this->whenLoaded('availableTime')),
         ];
     }

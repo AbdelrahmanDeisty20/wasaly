@@ -32,10 +32,10 @@ class ServiceStoreRequest extends FormRequest
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'availability' => 'required|array',
-            'availability.*.date' => 'required|date',
-            'availability.*.times' => 'required|array',
-            'availability.*.times.*' => 'required|string',
+            'available_day' => 'nullable|array',
+            'available_day.*' => 'nullable|string',
+            'available_time' => 'required|array',
+            'available_time.*' => 'required|string',
         ];
     }
 
@@ -55,10 +55,9 @@ class ServiceStoreRequest extends FormRequest
             'images.*.image' => __('messages.images_image'),
             'images.*.mimes' => __('messages.images_mimes'),
             'images.*.max' => __('messages.images_max'),
-            'availability.required' => __('messages.availability_required'),
-            'availability.array' => __('messages.availability_array'),
-            'availability.*.date.required' => __('messages.date_required'),
-            'availability.*.times.required' => __('messages.times_required'),
+            'available_day.array' => __('messages.available_day_array'),
+            'available_time.required' => __('messages.available_time_required'),
+            'available_time.array' => __('messages.available_time_array'),
         ];
     }
 }

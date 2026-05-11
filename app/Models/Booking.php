@@ -16,6 +16,7 @@ class Booking extends Model
         'provider_id',
         'service_id',
         'available_date_id',
+        'available_day_id',
         'available_time_id',
         'problem_description',
         'status',
@@ -39,6 +40,11 @@ class Booking extends Model
     public function availableDate()
     {
         return $this->belongsTo(AvailableDate::class, 'available_date_id');
+    }
+
+    public function availableDay()
+    {
+        return $this->belongsTo(AvailableDay::class, 'available_day_id');
     }
 
     public function availableTime()

@@ -11,11 +11,17 @@ class AvailableTime extends Model
 
     protected $fillable = [
         'available_date_id',
+        'available_day_id',
         'time',
     ];
 
     public function availableDate()
     {
         return $this->belongsTo(AvailableDate::class);
+    }
+
+    public function availableDay()
+    {
+        return $this->belongsTo(AvailableDay::class);
     }
 }

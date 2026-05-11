@@ -286,26 +286,24 @@ class ProviderService
                 }
             }
 
-            // Handle availability
-            if (isset($data['availability']) && is_array($data['availability'])) {
-                foreach ($data['availability'] as $item) {
-                    if (isset($item['date'])) {
-                        $availableDate = \App\Models\AvailableDate::updateOrCreate(
-                            [
-                                'provider_id' => $provider->id,
-                                'service_id' => $service->id,
-                                'date' => $item['date'],
-                            ],
-                            ['status' => 1]
-                        );
+            // Handle availability (Days)
+            if (isset($data['available_day']) && is_array($data['available_day'])) {
+                foreach ($data['available_day'] as $day) {
+                    $availableDay = \App\Models\AvailableDay::updateOrCreate(
+                        [
+                            'provider_id' => $provider->id,
+                            'service_id' => $service->id,
+                            'day' => $day,
+                        ],
+                        ['status' => 1]
+                    );
 
-                        if (isset($item['times']) && is_array($item['times'])) {
-                            foreach ($item['times'] as $time) {
-                                \App\Models\AvailableTime::updateOrCreate([
-                                    'available_date_id' => $availableDate->id,
-                                    'time' => $time,
-                                ]);
-                            }
+                    if (isset($data['available_time']) && is_array($data['available_time'])) {
+                        foreach ($data['available_time'] as $time) {
+                            \App\Models\AvailableTime::updateOrCreate([
+                                'available_day_id' => $availableDay->id,
+                                'time' => $time,
+                            ]);
                         }
                     }
                 }
@@ -315,7 +313,7 @@ class ProviderService
             return [
                 'status' => true,
                 'message' => __('messages.service_created_successfully'),
-                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory', 'availableDates.availableTimes'))
+                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory', 'availableDays.availableTimes'))
             ];
         } catch (\Exception $e) {
             DB::rollBack();
@@ -378,29 +376,27 @@ class ProviderService
                 }
             }
 
-            // Handle availability update
-            if (isset($data['availability']) && is_array($data['availability'])) {
-                foreach ($data['availability'] as $item) {
-                    if (isset($item['date'])) {
-                        $availableDate = \App\Models\AvailableDate::updateOrCreate(
-                            [
-                                'provider_id' => $provider->id,
-                                'service_id' => $service->id,
-                                'date' => $item['date'],
-                            ],
-                            ['status' => 1]
-                        );
+            // Handle availability update (Days)
+            if (isset($data['available_day']) && is_array($data['available_day'])) {
+                foreach ($data['available_day'] as $day) {
+                    $availableDay = \App\Models\AvailableDay::updateOrCreate(
+                        [
+                            'provider_id' => $provider->id,
+                            'service_id' => $service->id,
+                            'day' => $day,
+                        ],
+                        ['status' => 1]
+                    );
 
-                        if (isset($item['times']) && is_array($item['times'])) {
-                            // Sync times for this specific date
-                            $availableDate->availableTimes()->delete();
-                            
-                            foreach ($item['times'] as $time) {
-                                \App\Models\AvailableTime::create([
-                                    'available_date_id' => $availableDate->id,
-                                    'time' => $time,
-                                ]);
-                            }
+                    if (isset($data['available_time']) && is_array($data['available_time'])) {
+                        // Sync times for this specific day
+                        $availableDay->availableTimes()->delete();
+                        
+                        foreach ($data['available_time'] as $time) {
+                            \App\Models\AvailableTime::create([
+                                'available_day_id' => $availableDay->id,
+                                'time' => $time,
+                            ]);
                         }
                     }
                 }
@@ -410,7 +406,7 @@ class ProviderService
             return [
                 'status' => true,
                 'message' => __('messages.service_updated_successfully'),
-                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory', 'availableDates.availableTimes'))
+                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory', 'availableDays.availableTimes'))
             ];
         } catch (\Exception $e) {
             DB::rollBack();

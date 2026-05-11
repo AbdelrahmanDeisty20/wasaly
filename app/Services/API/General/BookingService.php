@@ -22,7 +22,7 @@ class BookingService
                 'data' => []
             ];
         }
-        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'])
+        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime'])
             ->where('provider_id', $provider->id)
             ->latest()
             ->paginate(10);
@@ -35,7 +35,7 @@ class BookingService
 
     public function myBookings()
     {
-        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'])
+        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime'])
             ->where('user_id', auth()->id())
             ->latest()
             ->paginate(10);
@@ -80,7 +80,7 @@ class BookingService
                 'center_id' => $data['center_id'] ?? null,
                 'provider_id' => $service->provider_id,
                 'service_id' => $service->id,
-                'available_date_id' => $data['available_date_id'],
+                'available_day_id' => $data['available_day_id'],
                 'available_time_id' => $data['available_time_id'],
                 'problem_description' => $data['problem_description'],
                 'status' => 'pending',
@@ -90,7 +90,7 @@ class BookingService
             return [
                 'status' => true,
                 'message' => __('messages.service_booked_successfully'),
-                'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
+                'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime'))
             ];
         } catch (\Exception $e) {
             DB::rollBack();
@@ -134,7 +134,7 @@ class BookingService
         return [
             'status' => true,
             'message' => __('messages.booking_updated_successfully'),
-            'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
+            'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime'))
         ];
     }
 
@@ -170,7 +170,7 @@ class BookingService
         return [
             'status' => true,
             'message' => __('messages.booking_cancelled_successfully'),
-            'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
+            'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime'))
         ];
     }
 
@@ -239,7 +239,7 @@ class BookingService
         return [
             'status' => true,
             'message' => __('messages.booking_updated_successfully'),
-            'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDate', 'availableTime'))
+            'data' => BookingResource::make($booking->load('user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime'))
         ];
     }
 }

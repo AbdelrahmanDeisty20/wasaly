@@ -19,7 +19,7 @@ class ServiceResource extends JsonResource
             'images' => ServiceImageResource::collection($this->whenLoaded('serviceImages')),
             'price' => (float)$this->price,
             'provider' => ProviderResource::make($this->whenLoaded('provider')),
-            'available_dates' => AvailableDateResource::collection($this->whenLoaded('availableDates')),
+            'available_days' => AvailableDayResource::collection($this->whenLoaded('availableDays')),
             'available_times' => AvailableTimeResource::collection($this->whenLoaded('availableTimes')),
             'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
             'is_favorite' => auth('sanctum')->check() ? $this->favorites()->where('user_id', auth('sanctum')->id())->where('is_active', true)->exists() : false,

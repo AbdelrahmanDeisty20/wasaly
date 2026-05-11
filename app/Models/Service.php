@@ -60,6 +60,11 @@ class Service extends Model
         return $this->hasMany(AvailableDate::class);
     }
 
+    public function availableDays()
+    {
+        return $this->hasMany(AvailableDay::class);
+    }
+
     public function serviceImages()
     {
         return $this->hasMany(ServiceImage::class, 'service_id');

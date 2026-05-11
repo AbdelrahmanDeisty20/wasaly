@@ -24,10 +24,10 @@ class UpdateServiceRequest extends FormRequest
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'availability' => 'nullable|array',
-            'availability.*.date' => 'required_with:availability|date',
-            'availability.*.times' => 'required_with:availability|array',
-            'availability.*.times.*' => 'required_with:availability|string',
+            'available_day' => 'nullable|array',
+            'available_day.*' => 'nullable|string',
+            'available_time' => 'nullable|array',
+            'available_time.*' => 'nullable|string',
         ];
     }
 
@@ -36,7 +36,8 @@ class UpdateServiceRequest extends FormRequest
         return [
             'service_id.required' => __('messages.service_id_required'),
             'service_id.exists' => __('messages.service_id_not_found'),
-            'availability.array' => __('messages.availability_array'),
+            'available_day.array' => __('messages.available_day_array'),
+            'available_time.array' => __('messages.available_time_array'),
         ];
     }
 }
