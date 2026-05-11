@@ -286,6 +286,26 @@ class ProviderService
                 }
             }
 
+            // Handle availability
+            if (isset($data['available_date'])) {
+                $availableDate = \App\Models\AvailableDate::updateOrCreate(
+                    [
+                        'provider_id' => $provider->id,
+                        'date' => $data['available_date'],
+                    ],
+                    ['status' => 1]
+                );
+
+                if (isset($data['available_time']) && is_array($data['available_time'])) {
+                    foreach ($data['available_time'] as $time) {
+                        \App\Models\AvailableTime::updateOrCreate([
+                            'available_date_id' => $availableDate->id,
+                            'time' => $time,
+                        ]);
+                    }
+                }
+            }
+
             DB::commit();
             return [
                 'status' => true,
