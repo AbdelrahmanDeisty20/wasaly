@@ -64,7 +64,7 @@ class Service extends Model
     {
         return $this->hasMany(AvailableDay::class);
     }
-    
+
     public function availableTimes()
     {
         return $this->hasMany(AvailableTime::class);
@@ -79,7 +79,7 @@ class Service extends Model
     {
         return $this->belongsTo(SubCategory::class);
     }
-    
+
     public function favorites()
     {
         return $this->hasMany(Favorite::class);

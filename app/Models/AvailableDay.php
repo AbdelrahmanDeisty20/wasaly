@@ -10,9 +10,15 @@ class AvailableDay extends Model
     use HasFactory;
 
     protected $fillable = [
+        'service_id',
         'name_ar',
         'name_en',
     ];
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
 
     public function availableTimes()
     {
