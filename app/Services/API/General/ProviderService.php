@@ -291,6 +291,7 @@ class ProviderService
                 $availableDate = \App\Models\AvailableDate::updateOrCreate(
                     [
                         'provider_id' => $provider->id,
+                        'service_id' => $service->id,
                         'date' => $data['available_date'],
                     ],
                     ['status' => 1]

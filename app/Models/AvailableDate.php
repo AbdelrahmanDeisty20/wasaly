@@ -11,6 +11,7 @@ class AvailableDate extends Model
 
     protected $fillable = [
         'provider_id',
+        'service_id',
         'date',
         'status',
     ];
