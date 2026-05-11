@@ -22,6 +22,7 @@ class ServiceResource extends JsonResource
             'available_dates' => AvailableDateResource::collection($this->whenLoaded('availableDates')),
             'available_times' => AvailableTimeResource::collection($this->whenLoaded('availableTimes')),
             'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
+            'is_favorite' => auth('sanctum')->check() ? $this->favorites()->where('user_id', auth('sanctum')->id())->where('is_active', true)->exists() : false,
         ];
     }
 }

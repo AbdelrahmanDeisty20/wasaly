@@ -22,6 +22,7 @@ class ServicesResource extends JsonResource
             'image' => $this->image_path,
             'price' => $this->price,
             'sub_category' => SubCategoryResource::make($this->whenLoaded('subCategory')),
+            'is_favorite' => auth('sanctum')->check() ? $this->favorites()->where('user_id', auth('sanctum')->id())->where('is_active', true)->exists() : false,
         ];
     }
 }
