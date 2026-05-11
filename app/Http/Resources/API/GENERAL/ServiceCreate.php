@@ -16,6 +16,7 @@ class ServiceCreate extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id'=>$this->id,
             'service_ar' => $this->service_ar,
             'service_en' => $this->service_en,
             'sub_category' => new SubCategoryResource($this->whenLoaded('subCategory')),
