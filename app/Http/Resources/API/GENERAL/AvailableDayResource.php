@@ -18,6 +18,7 @@ class AvailableDayResource extends JsonResource
             'id' => $this->id,
             'name_ar' => $this->name_ar,
             'name_en' => $this->name_en,
+            'available_times' => AvailableTimeResource::collection($this->whenLoaded('availableTimes')),
         ];
     }
 }
