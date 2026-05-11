@@ -11,22 +11,39 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // 1. Fix available_days table
         Schema::table('available_days', function (Blueprint $table) {
-            // Remove old columns if they exist
+            // Drop foreign key first if it exists
             if (Schema::hasColumn('available_days', 'service_id')) {
-                $table->dropForeign(['service_id']);
+                // Try to drop foreign key safely
+                try {
+                    $table->dropForeign(['service_id']);
+                } catch (\Exception $e) {
+                    // Ignore if doesn't exist
+                }
                 $table->dropColumn('service_id');
             }
+
             if (Schema::hasColumn('available_days', 'day')) {
                 $table->dropColumn('day');
             }
-            
-            // Add new columns
+
+            // Add new bilingual name columns
             if (!Schema::hasColumn('available_days', 'name_ar')) {
                 $table->string('name_ar')->nullable();
             }
             if (!Schema::hasColumn('available_days', 'name_en')) {
                 $table->string('name_en')->nullable();
+            }
+        });
+
+        // 2. Fix available_times table
+        Schema::table('available_times', function (Blueprint $table) {
+            if (!Schema::hasColumn('available_times', 'service_id')) {
+                $table->foreignId('service_id')->nullable()->constrained('services')->onDelete('cascade');
+            }
+            if (!Schema::hasColumn('available_times', 'available_day_id')) {
+                $table->foreignId('available_day_id')->nullable()->constrained('available_days')->onDelete('cascade');
             }
         });
     }
@@ -36,8 +53,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('available_days', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };
