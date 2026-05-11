@@ -12,8 +12,14 @@ class AvailableTime extends Model
     protected $fillable = [
         'available_date_id',
         'available_day_id',
+        'service_id',
         'time',
     ];
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
 
     public function availableDate()
     {

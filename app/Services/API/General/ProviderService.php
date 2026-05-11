@@ -286,25 +286,20 @@ class ProviderService
                 }
             }
 
-            // Handle availability (Days)
+            // Handle availability (Days & Times)
             if (isset($data['available_day']) && is_array($data['available_day'])) {
-                foreach ($data['available_day'] as $day) {
-                    $availableDay = \App\Models\AvailableDay::updateOrCreate(
-                        [
-                            'provider_id' => $provider->id,
-                            'service_id' => $service->id,
-                            'day' => $day,
-                        ],
-                        ['status' => 1]
-                    );
+                foreach ($data['available_day'] as $index => $dayValue) {
+                    $availableDay = \App\Models\AvailableDay::firstOrCreate([
+                        'service_id' => $service->id,
+                        'day' => $dayValue,
+                    ]);
 
-                    if (isset($data['available_time']) && is_array($data['available_time'])) {
-                        foreach ($data['available_time'] as $time) {
-                            \App\Models\AvailableTime::updateOrCreate([
-                                'available_day_id' => $availableDay->id,
-                                'time' => $time,
-                            ]);
-                        }
+                    if (isset($data['available_time'][$index])) {
+                        \App\Models\AvailableTime::create([
+                            'service_id' => $service->id,
+                            'available_day_id' => $availableDay->id,
+                            'time' => $data['available_time'][$index],
+                        ]);
                     }
                 }
             }
@@ -376,28 +371,23 @@ class ProviderService
                 }
             }
 
-            // Handle availability update (Days)
+            // Handle availability update (Days & Times)
             if (isset($data['available_day']) && is_array($data['available_day'])) {
-                foreach ($data['available_day'] as $day) {
-                    $availableDay = \App\Models\AvailableDay::updateOrCreate(
-                        [
-                            'provider_id' => $provider->id,
-                            'service_id' => $service->id,
-                            'day' => $day,
-                        ],
-                        ['status' => 1]
-                    );
+                // Clear old availability
+                $service->availableDays()->delete();
+                
+                foreach ($data['available_day'] as $index => $dayValue) {
+                    $availableDay = \App\Models\AvailableDay::firstOrCreate([
+                        'service_id' => $service->id,
+                        'day' => $dayValue,
+                    ]);
 
-                    if (isset($data['available_time']) && is_array($data['available_time'])) {
-                        // Sync times for this specific day
-                        $availableDay->availableTimes()->delete();
-                        
-                        foreach ($data['available_time'] as $time) {
-                            \App\Models\AvailableTime::create([
-                                'available_day_id' => $availableDay->id,
-                                'time' => $time,
-                            ]);
-                        }
+                    if (isset($data['available_time'][$index])) {
+                        \App\Models\AvailableTime::create([
+                            'service_id' => $service->id,
+                            'available_day_id' => $availableDay->id,
+                            'time' => $data['available_time'][$index],
+                        ]);
                     }
                 }
             }

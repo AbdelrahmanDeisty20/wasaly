@@ -64,6 +64,11 @@ class Service extends Model
     {
         return $this->hasMany(AvailableDay::class);
     }
+    
+    public function availableTimes()
+    {
+        return $this->hasMany(AvailableTime::class);
+    }
 
     public function serviceImages()
     {
