@@ -12,6 +12,8 @@ class Favorite extends Model
     protected $fillable = [
         'user_id',
         'product_id',
+        'service_id',
+        'provider_id',
         'is_active',
     ];
 
@@ -23,5 +25,15 @@ class Favorite extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class);
     }
 }
