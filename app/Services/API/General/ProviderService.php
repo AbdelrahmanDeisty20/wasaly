@@ -374,11 +374,35 @@ class ProviderService
                 }
             }
 
+            // Handle availability update
+            if (isset($data['available_date'])) {
+                $availableDate = \App\Models\AvailableDate::updateOrCreate(
+                    [
+                        'provider_id' => $provider->id,
+                        'service_id' => $service->id,
+                        'date' => $data['available_date'],
+                    ],
+                    ['status' => 1]
+                );
+
+                if (isset($data['available_time']) && is_array($data['available_time'])) {
+                    // Delete existing times for this specific date record before adding new ones
+                    $availableDate->availableTimes()->delete();
+                    
+                    foreach ($data['available_time'] as $time) {
+                        \App\Models\AvailableTime::create([
+                            'available_date_id' => $availableDate->id,
+                            'time' => $time,
+                        ]);
+                    }
+                }
+            }
+
             DB::commit();
             return [
                 'status' => true,
                 'message' => __('messages.service_updated_successfully'),
-                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory'))
+                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory', 'availableDates.availableTimes'))
             ];
         } catch (\Exception $e) {
             DB::rollBack();
