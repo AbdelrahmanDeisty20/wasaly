@@ -17,6 +17,7 @@ class favoriteService
     {
         $favorites = Favorite::with('product.offers', 'product.reviews')
             ->where('user_id', auth()->id())
+            ->whereNotNull('product_id')
             ->where('is_active', true)
             ->latest()
             ->paginate(10);
