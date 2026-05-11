@@ -24,7 +24,7 @@ class UpdateServiceRequest extends FormRequest
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'available_date' => 'nullable',
+            'available_date' => 'nullable|array',
             'available_date.*' => 'nullable|date',
             'available_time' => 'nullable|array',
             'available_time.*' => 'nullable|string',
@@ -36,6 +36,7 @@ class UpdateServiceRequest extends FormRequest
         return [
             'service_id.required' => __('messages.service_id_required'),
             'service_id.exists' => __('messages.service_id_not_found'),
+            'available_date.array' => __('messages.available_date_array'),
             'available_date.date' => __('messages.available_date_date'),
             'available_time.array' => __('messages.available_time_array'),
         ];

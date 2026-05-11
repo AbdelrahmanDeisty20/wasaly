@@ -341,6 +341,7 @@ return [
     'service_id_required' => 'Service ID is required',
     'service_id_exists' => 'The selected service does not exist',
     'available_date_required' => 'Available date is required',
+    'available_date_array' => 'Available date must be an array',
     'available_date_date' => 'Available date must be a valid date format',
     'available_time_required' => 'Available time is required',
     'available_time_array' => 'Available time must be an array',

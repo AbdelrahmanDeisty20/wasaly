@@ -355,6 +355,7 @@ return [
     'user_type_status' => 'نوع المستخدم وحالته',
     'service_provider' => 'مقدم خدمة',
     'available_date_required' => 'تاريخ التوفر مطلوب',
+    'available_date_array' => 'يجب أن يكون تاريخ التوفر عبارة عن مصفوفة',
     'available_date_date' => 'يجب أن يكون تاريخ التوفر بصيغة تاريخ صحيحة',
     'available_time_required' => 'وقت التوفر مطلوب',
     'available_time_array' => 'يجب أن يكون وقت التوفر عبارة عن مصفوفة',
