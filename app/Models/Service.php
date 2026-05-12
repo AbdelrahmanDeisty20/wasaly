@@ -84,4 +84,9 @@ class Service extends Model
     {
         return $this->hasMany(Favorite::class);
     }
+
+    public function getCompletedBookingsCountAttribute()
+    {
+        return $this->hasMany(Booking::class)->where('status', 'completed')->count();
+    }
 }

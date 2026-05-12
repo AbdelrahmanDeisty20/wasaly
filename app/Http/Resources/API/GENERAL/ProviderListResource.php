@@ -30,7 +30,7 @@ class ProviderListResource extends JsonResource
             'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
             'average_rating' => (float) $this->average_rating,
             'reviews_count' => (int) $this->reviews_count,
-            'successful_orders_count' => (int) $this->successful_orders_count,
+            'successful_orders_count' => (int) $this->completed_services_count,
             'services' => ServiceResource::collection($this->whenLoaded('services')),
         ];
     }

@@ -79,7 +79,14 @@ class Provider extends Model
 
     public function getSuccessfulOrdersCountAttribute()
     {
-        return Booking::where('provider_id', $this->id)->where('status', 'accepted')->count();
+        return Booking::where('provider_id', $this->id)->where('status', 'completed')->count();
+    }
+
+    public function getCompletedServicesCountAttribute()
+    {
+        return $this->services()->whereHas('bookings', function($q) {
+            $q->where('status', 'completed');
+        })->count();
     }
 
     public function serviceImages()
