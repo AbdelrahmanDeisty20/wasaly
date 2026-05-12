@@ -24,8 +24,33 @@ class BookingStoreRequest extends FormRequest
     {
         return [
             'service_id' => 'required|exists:services,id',
-            'available_day_id' => 'required|exists:available_days,id',
-            'available_time_id' => 'required|exists:available_times,id',
+            'available_day_id' => [
+                'required',
+                'exists:available_days,id',
+                function ($attribute, $value, $fail) {
+                    $exists = \DB::table('day_service')
+                        ->where('service_id', $this->service_id)
+                        ->where('available_day_id', $value)
+                        ->exists();
+                    if (!$exists) {
+                        $fail(__('messages.day_not_available_for_service'));
+                    }
+                },
+            ],
+            'available_time_id' => [
+                'required',
+                'exists:available_times,id',
+                function ($attribute, $value, $fail) {
+                    $exists = \DB::table('available_times')
+                        ->where('id', $value)
+                        ->where('service_id', $this->service_id)
+                        ->where('available_day_id', $this->available_day_id)
+                        ->exists();
+                    if (!$exists) {
+                        $fail(__('messages.time_not_available_for_service'));
+                    }
+                },
+            ],
             'problem_description' => 'required|string',
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'required|string|regex:/^01[0125][0-9]{8}$/',

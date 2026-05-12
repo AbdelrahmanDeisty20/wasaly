@@ -290,4 +290,6 @@ return [
     'available_day_required' => 'Available day is required',
     'available_day_array' => 'Available day must be an array',
     'available_day_not_found' => 'Selected day not found',
+    'day_not_available_for_service' => 'This day is not available for this service',
+    'time_not_available_for_service' => 'This time is not available for this service on the selected day',
 ];

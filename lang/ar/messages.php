@@ -364,4 +364,6 @@ return [
     'available_day_required' => 'يوم التوفر مطلوب',
     'available_day_array' => 'يجب أن يكون يوم التوفر عبارة عن مصفوفة',
     'available_day_not_found' => 'اليوم المختار غير موجود',
+    'day_not_available_for_service' => 'هذا اليوم غير متاح لهذه الخدمة',
+    'time_not_available_for_service' => 'هذا الوقت غير متاح لهذه الخدمة في اليوم المختار',
 ];
