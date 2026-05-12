@@ -32,10 +32,10 @@ class ServiceStoreRequest extends FormRequest
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'required|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'available_day' => 'required|array',
-            'available_day.*' => 'required|exists:available_days,id',
-            'available_time' => 'required|array',
-            'available_time.*' => 'required|string',
+            'availability' => 'required|array',
+            'availability.*.day_id' => 'required|exists:available_days,id',
+            'availability.*.times' => 'required|array',
+            'availability.*.times.*' => 'required|string',
         ];
     }
 

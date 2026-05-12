@@ -288,16 +288,20 @@ class ProviderService
                 }
             }
 
-            // Handle availability (Days & Times)
-            if (isset($data['available_day']) && is_array($data['available_day'])) {
-                $service->availableDays()->sync($data['available_day']);
-                foreach ($data['available_day'] as $index => $dayId) {
-                    if (isset($data['available_time'][$index])) {
-                        \App\Models\AvailableTime::create([
-                            'service_id' => $service->id,
-                            'available_day_id' => $dayId,
-                            'time' => $data['available_time'][$index],
-                        ]);
+            // Handle availability (Days & Times) - New Nested Structure
+            if (isset($data['availability']) && is_array($data['availability'])) {
+                $dayIds = array_column($data['availability'], 'day_id');
+                $service->availableDays()->sync($dayIds);
+                
+                foreach ($data['availability'] as $item) {
+                    if (isset($item['day_id']) && isset($item['times']) && is_array($item['times'])) {
+                        foreach ($item['times'] as $time) {
+                            \App\Models\AvailableTime::create([
+                                'service_id' => $service->id,
+                                'available_day_id' => $item['day_id'],
+                                'time' => $time,
+                            ]);
+                        }
                     }
                 }
             }
@@ -373,21 +377,23 @@ class ProviderService
                 }
             }
 
-            // Handle availability update (Days & Times)
-            if (isset($data['available_day']) && is_array($data['available_day'])) {
-                // Sync days in pivot table
-                $service->availableDays()->sync($data['available_day']);
+            // Handle availability update (Days & Times) - New Nested Structure
+            if (isset($data['availability']) && is_array($data['availability'])) {
+                $dayIds = array_column($data['availability'], 'day_id');
+                $service->availableDays()->sync($dayIds);
                 
                 // Clear old availability times for this service
                 \App\Models\AvailableTime::where('service_id', $service->id)->delete();
                 
-                foreach ($data['available_day'] as $index => $dayId) {
-                    if (isset($data['available_time'][$index])) {
-                        \App\Models\AvailableTime::create([
-                            'service_id' => $service->id,
-                            'available_day_id' => $dayId,
-                            'time' => $data['available_time'][$index],
-                        ]);
+                foreach ($data['availability'] as $item) {
+                    if (isset($item['day_id']) && isset($item['times']) && is_array($item['times'])) {
+                        foreach ($item['times'] as $time) {
+                            \App\Models\AvailableTime::create([
+                                'service_id' => $service->id,
+                                'available_day_id' => $item['day_id'],
+                                'time' => $time,
+                            ]);
+                        }
                     }
                 }
             }

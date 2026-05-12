@@ -24,10 +24,10 @@ class UpdateServiceRequest extends FormRequest
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'available_day' => 'nullable|array',
-            'available_day.*' => 'nullable|string',
-            'available_time' => 'nullable|array',
-            'available_time.*' => 'nullable|string',
+            'availability' => 'nullable|array',
+            'availability.*.day_id' => 'required_with:availability|exists:available_days,id',
+            'availability.*.times' => 'required_with:availability|array',
+            'availability.*.times.*' => 'required_with:availability|string',
         ];
     }
 
