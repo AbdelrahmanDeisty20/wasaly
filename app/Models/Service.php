@@ -67,7 +67,7 @@ class Service extends Model
 
     public function availableTimes()
     {
-        return $this->hasMany(AvailableTime::class);
+        return $this->hasMany(AvailableTime::class)->where('service_id', $this->id);
     }
 
     public function serviceImages()

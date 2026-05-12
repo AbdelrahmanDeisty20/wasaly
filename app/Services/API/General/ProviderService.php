@@ -199,7 +199,9 @@ class ProviderService
 
     public function getservice(array $data)
     {
-        $service = Service::with('availableDays.availableTimes','serviceImages','subCategory','provider.user','reviews.user')->find($data['service_id']);
+        $service = Service::with(['availableDays.availableTimes' => function($q) use ($data) {
+            $q->where('service_id', $data['service_id']);
+        }, 'serviceImages', 'subCategory', 'provider.user', 'reviews.user'])->find($data['service_id']);
         if (!$service) {
             return [
                 'status' => false,
@@ -301,10 +303,14 @@ class ProviderService
             }
 
             DB::commit();
+            $service->load(['availableDays.availableTimes' => function($q) use ($service) {
+                $q->where('service_id', $service->id);
+            }, 'serviceImages', 'subCategory']);
+
             return [
                 'status' => true,
                 'message' => __('messages.service_created_successfully'),
-                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory', 'availableDays.availableTimes'))
+                'data' => new ServiceCreate($service)
             ];
         } catch (\Exception $e) {
             DB::rollBack();
@@ -387,10 +393,14 @@ class ProviderService
             }
 
             DB::commit();
+            $service->load(['availableDays.availableTimes' => function($q) use ($service) {
+                $q->where('service_id', $service->id);
+            }, 'serviceImages', 'subCategory']);
+
             return [
                 'status' => true,
                 'message' => __('messages.service_updated_successfully'),
-                'data' => new ServiceCreate($service->load('serviceImages', 'subCategory', 'availableDays.availableTimes'))
+                'data' => new ServiceCreate($service)
             ];
         } catch (\Exception $e) {
             DB::rollBack();
