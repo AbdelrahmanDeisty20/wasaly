@@ -17,6 +17,7 @@ class AvailableTimeResource extends JsonResource
         return [
             'id' => $this->id,
             'time' => $this->time,
+            'day'=>AvailableDayResource::collection($this->whenLoaded('availableDay'))
         ];
     }
 }
