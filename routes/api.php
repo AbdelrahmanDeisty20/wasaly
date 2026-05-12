@@ -11,6 +11,7 @@ use App\Http\Controllers\API\GENERAL\CategoryController;
 use App\Http\Controllers\API\GENERAL\CenterController;
 use App\Http\Controllers\API\GENERAL\CheckoutController;
 use App\Http\Controllers\API\GENERAL\CouponController;
+use App\Http\Controllers\API\GENERAL\DayController;
 use App\Http\Controllers\API\GENERAL\FavoriteController;
 use App\Http\Controllers\API\GENERAL\GovernorateController;
 use App\Http\Controllers\API\GENERAL\OfferController;
@@ -79,6 +80,8 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::post('reset-password', [ForgetPasswordController::class, 'resetPassword']);
     Route::post('forget-resend-otp', [ForgetPasswordController::class, 'resendOtp']);
     Route::get('reviews/all/general/get', [ReviewController::class, 'getGeneralReviews']);
+    //days Routes
+    Route::get('days', [DayController::class, 'getDays']);
     // Authenticated Routes
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('logout', [AuthController::class, 'logoutCurrentDevice']);

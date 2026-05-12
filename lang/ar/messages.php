@@ -366,4 +366,6 @@ return [
     'available_day_not_found' => 'اليوم المختار غير موجود',
     'day_not_available_for_service' => 'هذا اليوم غير متاح لهذه الخدمة',
     'time_not_available_for_service' => 'هذا الوقت غير متاح لهذه الخدمة في اليوم المختار',
+    'days_not_found' => 'لا توجد أيام متاحة',
+    'days_fetched_successfully' => 'تم استرجاع الأيام بنجاح',
 ];
