@@ -294,4 +294,6 @@ return [
     'time_not_available_for_service' => 'This time is not available for this service on the selected day',
     'days_not_found' => 'No days found',
     'days_fetched_successfully' => 'Days fetched successfully',
+    'times_not_found' => 'No times found',
+    'times_fetched_successfully' => 'Times fetched successfully',
 ];

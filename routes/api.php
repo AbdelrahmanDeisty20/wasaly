@@ -82,6 +82,7 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::get('reviews/all/general/get', [ReviewController::class, 'getGeneralReviews']);
     //days Routes
     Route::get('days', [DayController::class, 'getDays']);
+    Route::get('times', [DayController::class, 'getTimes']);
     // Authenticated Routes
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('logout', [AuthController::class, 'logoutCurrentDevice']);

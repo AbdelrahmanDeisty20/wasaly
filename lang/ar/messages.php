@@ -368,4 +368,6 @@ return [
     'time_not_available_for_service' => 'هذا الوقت غير متاح لهذه الخدمة في اليوم المختار',
     'days_not_found' => 'لا توجد أيام متاحة',
     'days_fetched_successfully' => 'تم استرجاع الأيام بنجاح',
+    'times_not_found' => 'لا توجد أوقات متاحة',
+    'times_fetched_successfully' => 'تم استرجاع الأوقات بنجاح',
 ];
