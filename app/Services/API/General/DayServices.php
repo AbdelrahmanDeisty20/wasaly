@@ -12,7 +12,7 @@ class DayServices
     use ApiResponse;
     public function getDays()
     {
-        $days = AvailableDay::all();
+        $days = AvailableDay::with('availableTimes')->get();
         if($days->isEmpty()){
             return [
                 'status' => false,
@@ -23,7 +23,7 @@ class DayServices
         return [
             'status' => true,
             'message' => __('messages.days_fetched_successfully'),
-            'data' => AvailableDayResource::collection($days)
+            'data' => AvailableDayResource::collection($days->load('availableTimes'))
         ];
     }
 }
