@@ -16,9 +16,6 @@ class AvailableTimeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'day_id' => $this->available_day_id,
-            'day_ar' => $this->availableDay->name_ar ?? null,
-            'day_en' => $this->availableDay->name_en ?? null,
             'time' => $this->time,
         ];
     }

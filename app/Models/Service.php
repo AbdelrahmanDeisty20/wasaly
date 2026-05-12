@@ -62,7 +62,7 @@ class Service extends Model
 
     public function availableDays()
     {
-        return $this->hasMany(AvailableDay::class);
+        return $this->belongsToMany(AvailableDay::class, 'day_service')->distinct();
     }
 
     public function availableTimes()
