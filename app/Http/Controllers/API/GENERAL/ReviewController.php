@@ -69,7 +69,7 @@ class ReviewController extends Controller
 
     public function updateProductReview(UpdateReviewRequest $request)
     {
-        $result = $this->reviewService->updateProductReview($request->validated());
+        $result = $this->reviewService->updateProductReview($request->review_id, $request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }
