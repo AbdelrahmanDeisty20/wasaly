@@ -80,7 +80,7 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::post('reset-password', [ForgetPasswordController::class, 'resetPassword']);
     Route::post('forget-resend-otp', [ForgetPasswordController::class, 'resendOtp']);
     Route::get('reviews/all/general/get', [ReviewController::class, 'getGeneralReviews']);
-    //days Routes
+    // days Routes
     Route::get('days', [DayController::class, 'getDays']);
     Route::get('times', [DayController::class, 'getTimes']);
     // Authenticated Routes
@@ -106,7 +106,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('reviews/general/create', [ReviewController::class, 'storeGeneralReview']);
         Route::get('reviews/product/get', [ReviewController::class, 'getProductReviews']);
         Route::get('reviews/general/get', [ReviewController::class, 'getMyGeneralReviews']);
-        Route::put('reviews/update/product/{id}', [ReviewController::class, 'updateProductReview']);
+        Route::put('reviews/update/product', [ReviewController::class, 'updateProductReview']);
         Route::put('reviews/update/service', [ReviewController::class, 'updateServiceReview']);
         Route::put('reviews/update/general', [ReviewController::class, 'updateGeneralReview']);
         Route::delete('reviews/{id}', [ReviewController::class, 'deleteReview']);
@@ -125,8 +125,6 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('booking/update', [BookingController::class, 'updateBooking']);
         Route::post('booking/cancel', [BookingController::class, 'cancelBooking']);
         Route::delete('booking/delete', [BookingController::class, 'deleteBooking']);
-       
-        
 
         // Orders Routes
         Route::get('orders', [OrderController::class, 'getMyOrders']);
