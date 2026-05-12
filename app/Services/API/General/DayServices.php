@@ -2,6 +2,7 @@
 
 namespace App\Services\API\General;
 
+use App\Http\Resources\API\GENERAL\AvailableDayResource;
 use App\Models\AvailableDay;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Collection;
@@ -22,7 +23,7 @@ class DayServices
         return [
             'status' => true,
             'message' => __('messages.days_fetched_successfully'),
-            'data' => $days
+            'data' => AvailableDayResource::collection($days)
         ];
     }
 }
