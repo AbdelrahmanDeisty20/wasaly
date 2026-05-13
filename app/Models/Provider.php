@@ -93,4 +93,8 @@ class Provider extends Model
     {
         return $this->hasMany(ServiceImage::class);
     }
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
 }

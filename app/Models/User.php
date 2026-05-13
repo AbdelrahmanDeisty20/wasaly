@@ -103,4 +103,8 @@ class User extends Authenticatable implements FilamentUser, HasName
 
         return asset('storage/users/avatars/' . $value);
     }
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
 }
