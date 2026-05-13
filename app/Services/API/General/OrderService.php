@@ -122,11 +122,27 @@ class OrderService
                     $order->customer_address = $address->address;
                     $order->shipping_cost = $address->governorate->shipping_cost ?? 0;
                 }
-            } elseif (isset($data['governorate_id'])) {
-                $governorate = \App\Models\Governorate::find($data['governorate_id']);
-                $order->governorate_id = $data['governorate_id'];
-                $order->shipping_cost = $governorate ? $governorate->shipping_cost : 0;
-                if (isset($data['center_id'])) $order->center_id = $data['center_id'];
+            } else {
+                $govId = $data['governorate_id'] ?? $order->governorate_id;
+
+                if (isset($data['governorate_id'])) {
+                    $governorate = \App\Models\Governorate::find($data['governorate_id']);
+                    $order->governorate_id = $data['governorate_id'];
+                    $order->shipping_cost = $governorate ? $governorate->shipping_cost : 0;
+                }
+
+                if (isset($data['center_id'])) {
+                    $center = \App\Models\Center::find($data['center_id']);
+                    if ($center && $center->governorate_id != $govId) {
+                        DB::rollBack();
+                        return [
+                            'status' => false,
+                            'message' => __('messages.center_not_found_in_governorate'),
+                            'data' => []
+                        ];
+                    }
+                    $order->center_id = $data['center_id'];
+                }
             }
 
             // Handle Coupon

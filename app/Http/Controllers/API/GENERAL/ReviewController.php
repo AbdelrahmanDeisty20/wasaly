@@ -105,9 +105,9 @@ class ReviewController extends Controller
         return $this->success($result['data'], $result['message']);
     }
 
-    public function updateGeneralReview(UpdateReviewRequest $request, $id)
+    public function updateGeneralReview(UpdateReviewRequest $request)
     {
-        $result = $this->reviewService->updateGeneralReview($id, $request->validated());
+        $result = $this->reviewService->updateGeneralReview($request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }
@@ -117,6 +117,15 @@ class ReviewController extends Controller
     public function updateServiceReview(UpdateReviewRequest $request)
     {
         $result = $this->reviewService->updateServiceReview($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message']);
+    }
+
+    public function updateProviderReview(UpdateReviewRequest $request)
+    {
+        $result = $this->reviewService->updateProviderReview($request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }
