@@ -143,7 +143,7 @@ class ReviewService
         if ($existingReview) {
             return [
                 'status' => false,
-                'message' => __('messages.already_reviewed'),
+                'message' => __('messages.already_reviewed_provider'),
                 'data' => []
             ];
         }

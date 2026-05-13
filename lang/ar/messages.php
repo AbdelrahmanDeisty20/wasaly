@@ -370,4 +370,7 @@ return [
     'days_fetched_successfully' => 'تم استرجاع الأيام بنجاح',
     'times_not_found' => 'لا توجد أوقات متاحة',
     'times_fetched_successfully' => 'تم استرجاع الأوقات بنجاح',
+    'provider_id_required' => 'رقم مقدم الخدمة مطلوب',
+    'reviews_not_found' => 'لا يوجد تقييمات',
+    'already_reviewed_provider' => 'لقد قمت بتقييم مقدم الخدمة بالفعل',
 ];

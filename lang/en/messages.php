@@ -296,4 +296,8 @@ return [
     'days_fetched_successfully' => 'Days fetched successfully',
     'times_not_found' => 'No times found',
     'times_fetched_successfully' => 'Times fetched successfully',
+    'provider_id_required' => 'Provider ID is required',
+    'reviews_not_found' => 'No reviews found',
+    'already_reviewed_provider' => 'You have already reviewed this provider',
+    'must_book_first' => 'You must book a service first before reviewing',
 ];
