@@ -161,7 +161,7 @@ class ReviewService
         return [
             'status' => true,
             'message' => __('messages.review_added_successfully'),
-            'data' => new ReviewResource($review->load('user', 'provider'))
+            'data' => new ReviewResource($review->load('user', 'provider.user'))
         ];
     }
     public function storeGeneralReview(array $data)
