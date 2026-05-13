@@ -10,7 +10,7 @@ class ContactService
 {
     public function myContacts()
     {
-        $contacts = Contact::where('user_id', auth()->id())
+        $contacts = Contact::with('provider.user', 'service')->where('user_id', auth()->id())
         ->paginate(10);
         if($contacts->isEmpty()){
             return [

@@ -25,7 +25,7 @@ class ContactController extends Controller
         if (!$response['status']) {
             return $this->error($response['message']);
         }
-        return $this->success($response['data'], $response['message']);
+        return $this->paginated(ContactResource::class, $response['data'], $response['message']);
     }
 
     public function store(StoreContactRequest $request)
