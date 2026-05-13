@@ -58,6 +58,22 @@ class ReviewService
             'data' => $reviews,
        ];
     }
+    public function getServiceReviewsall()
+    {
+       $reviews = Review::with('user', 'service')->whereNotNull('service_id')->paginate(10);
+       if($reviews->isEmpty()){
+        return [
+            'status' => false,
+            'message' => __('messages.reviews_not_found'),
+            'data' => []
+        ];
+       }
+       return [
+            'status' => true,
+            'message' => __('messages.reviews_fetched_successfully'),
+            'data' => $reviews,
+       ];
+    }
 
     public function getProviderReviews()
     {

@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Controllers\API\GENERAL;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\API\GENERAL\StoreContactRequest;
+use App\Services\API\General\ContactService;
+use App\Traits\ApiResponse;
+
+class ContactController extends Controller
+{
+    use ApiResponse;
+
+    protected $contactService;
+
+    public function __construct(ContactService $contactService)
+    {
+        $this->contactService = $contactService;
+    }
+
+    public function store(StoreContactRequest $request)
+    {
+        $response = $this->contactService->storeContactMessage($request->validated());
+        if (!$response['status']) {
+            return $this->error($response['message']);
+        }
+        return $this->success($response['data'], $response['message']);
+    }
+}

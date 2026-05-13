@@ -70,7 +70,14 @@ class ReviewController extends Controller
         }
         return $this->paginated(ReviewResource::class, $result['data'], $result['message']);
     }
-
+    public function getServiceReviewsall()
+    {
+        $result = $this->reviewService->getServiceReviewsall();
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->paginated(ReviewResource::class, $result['data'], $result['message']);
+    }
     public function getProviderReviews()
     {
         $result = $this->reviewService->getProviderReviews();

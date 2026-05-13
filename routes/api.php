@@ -10,6 +10,7 @@ use App\Http\Controllers\API\GENERAL\CartController;
 use App\Http\Controllers\API\GENERAL\CategoryController;
 use App\Http\Controllers\API\GENERAL\CenterController;
 use App\Http\Controllers\API\GENERAL\CheckoutController;
+use App\Http\Controllers\API\GENERAL\ContactController;
 use App\Http\Controllers\API\GENERAL\CouponController;
 use App\Http\Controllers\API\GENERAL\DayController;
 use App\Http\Controllers\API\GENERAL\FavoriteController;
@@ -107,6 +108,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('reviews/general/create', [ReviewController::class, 'storeGeneralReview']);
         Route::get('reviews/product/get', [ReviewController::class, 'getProductReviews']);
         Route::get('reviews/service/get', [ReviewController::class, 'getServiceReviews']);
+        Route::get('reviews/service/get/all', [ReviewController::class, 'getServiceReviewsall']);
         Route::get('reviews/provider/get', [ReviewController::class, 'getProviderReviews']);
         Route::get('reviews/general/get', [ReviewController::class, 'getMyGeneralReviews']);
         Route::put('reviews/update/product/{id}', [ReviewController::class, 'updateProductReview']);
@@ -155,5 +157,8 @@ Route::group(['middleware' => SetLang::class], function () {
         // Coupons Routes
         Route::get('coupons', [CouponController::class, 'getCoupons']);
         Route::post('coupons/apply', [CouponController::class, 'applyCoupon']);
+
+        // Contacts Route
+        Route::post('contacts/provider', [ContactController::class, 'store']);
     });
 });

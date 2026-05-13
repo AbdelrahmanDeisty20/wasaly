@@ -301,4 +301,6 @@ return [
     'already_reviewed_provider' => 'You have already reviewed this provider',
     'must_book_first' => 'You must book a service first before reviewing',
     'order_updated_successfully' => 'Order updated successfully',
+    'message_required' => 'Message content is required',
+    'message_sent_successfully' => 'Your message has been sent to the service provider successfully and they will contact you soon',
 ];

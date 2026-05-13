@@ -374,4 +374,6 @@ return [
     'reviews_not_found' => 'لا يوجد تقييمات',
     'already_reviewed_provider' => 'لقد قمت بتقييم مقدم الخدمة بالفعل',
     'order_updated_successfully' => 'تم تحديث الطلب بنجاح',
+    'message_required' => 'نص الرسالة مطلوب',
+    'message_sent_successfully' => 'تم إرسال رسالتك إلى مقدم الخدمة بنجاح وسيتم التواصل معك قريباً',
 ];
