@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\StoreContactRequest;
+use App\Http\Resources\API\GENERAL\ContactResource;
 use App\Services\API\General\ContactService;
 use App\Traits\ApiResponse;
 
@@ -24,6 +25,6 @@ class ContactController extends Controller
         if (!$response['status']) {
             return $this->error($response['message']);
         }
-        return $this->success($response['data'], $response['message']);
+        return $this->success(new ContactResource($response['data']), $response['message']);
     }
 }
