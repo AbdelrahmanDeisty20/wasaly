@@ -85,9 +85,9 @@ class ReviewController extends Controller
         return $this->success($result['data'], $result['message']);
     }
 
-    public function updateServiceReview(UpdateReviewRequest $request, $id)
+    public function updateServiceReview(UpdateReviewRequest $request)
     {
-        $result = $this->reviewService->updateServiceReview($id, $request->validated());
+        $result = $this->reviewService->updateServiceReview($request->validated());
         if (!$result['status']) {
             return $this->error($result['message']);
         }
