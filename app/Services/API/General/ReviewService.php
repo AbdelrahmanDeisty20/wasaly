@@ -44,7 +44,24 @@ class ReviewService
 
     public function getServiceReviews()
     {
-       $reviews = Review::with('user', 'service')->whereNotNull('service_id')->where('user_id', auth()->id())->get();
+       $reviews = Review::with('user', 'service')->whereNotNull('service_id')->where('user_id', auth()->id())->paginate(10);
+       if($reviews->isEmpty()){
+        return [
+            'status' => false,
+            'message' => __('messages.reviews_not_found'),
+            'data' => []
+        ];
+       }
+       return [
+            'status' => true,
+            'message' => __('messages.reviews_fetched_successfully'),
+            'data' => $reviews,
+       ];
+    }
+
+    public function getProviderReviews()
+    {
+       $reviews = Review::with('user', 'provider')->whereNotNull('provider_id')->whereNull('service_id')->whereNull('product_id')->where('user_id', auth()->id())->get();
        if($reviews->isEmpty()){
         return [
             'status' => false,
@@ -98,6 +115,53 @@ class ReviewService
             'status' => true,
             'message' => __('messages.review_added_successfully'),
             'data' => new ReviewResource($review->load('user', 'provider', 'product'))
+        ];
+    }
+
+    public function storeProviderReview(array $data)
+    {
+        // 1. Check if user has a booking for this provider
+        $hasBooking = Booking::where('provider_id', $data['provider_id'])
+            ->where('user_id', auth()->id())
+            ->exists();
+
+        if (!$hasBooking) {
+            return [
+                'status' => false,
+                'message' => __('messages.must_book_first'),
+                'data' => []
+            ];
+        }
+
+        // 2. Check if user already has a general review for this provider
+        $existingReview = Review::where('provider_id', $data['provider_id'])
+            ->whereNull('service_id')
+            ->whereNull('product_id')
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($existingReview) {
+            return [
+                'status' => false,
+                'message' => __('messages.already_reviewed'),
+                'data' => []
+            ];
+        }
+
+        // 3. Create the review
+        $review = Review::create([
+            'provider_id' => $data['provider_id'],
+            'service_id' => null,
+            'product_id' => null,
+            'user_id' => auth()->id(),
+            'rating' => $data['rating'],
+            'comment' => $data['comment'] ?? null,
+        ]);
+
+        return [
+            'status' => true,
+            'message' => __('messages.review_added_successfully'),
+            'data' => new ReviewResource($review->load('user', 'provider'))
         ];
     }
     public function storeGeneralReview(array $data)

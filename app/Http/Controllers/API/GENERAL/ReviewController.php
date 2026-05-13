@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\StoreProductReviewRequest;
+use App\Http\Requests\API\GENERAL\StoreProviderReviewRequest;
 use App\Http\Requests\API\GENERAL\StoreGeneralReviewRequest;
 use App\Http\Requests\API\GENERAL\StoreServiceReviewRequest;
 use App\Http\Requests\API\GENERAL\UpdateReviewRequest;
+use App\Http\Resources\API\GENERAL\ReviewResource;
 use App\Services\API\General\ReviewService;
 use App\Traits\ApiResponse;
 
@@ -42,6 +44,15 @@ class ReviewController extends Controller
         if (!$result['status']) {
             return $this->error($result['message']);
         }
+        return $this->paginated(ReviewResource::class,$result['data'], $result['message'], 201);
+    }
+
+    public function storeProviderReview(StoreProviderReviewRequest $request)
+    {
+        $result = $this->reviewService->storeProviderReview($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
         return $this->success($result['data'], $result['message'], 201);
     }
 
@@ -54,6 +65,15 @@ class ReviewController extends Controller
     public function getServiceReviews()
     {
         $result = $this->reviewService->getServiceReviews();
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message']);
+    }
+
+    public function getProviderReviews()
+    {
+        $result = $this->reviewService->getProviderReviews();
         if (!$result['status']) {
             return $this->error($result['message']);
         }
