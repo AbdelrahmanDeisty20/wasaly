@@ -105,6 +105,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('reviews/service/create', [ReviewController::class, 'storeServiceReview']);
         Route::post('reviews/general/create', [ReviewController::class, 'storeGeneralReview']);
         Route::get('reviews/product/get', [ReviewController::class, 'getProductReviews']);
+        Route::get('reviews/service/get', [ReviewController::class, 'getServiceReviews']);
         Route::get('reviews/general/get', [ReviewController::class, 'getMyGeneralReviews']);
         Route::put('reviews/update/product/{id}', [ReviewController::class, 'updateProductReview']);
         Route::put('reviews/update/service', [ReviewController::class, 'updateServiceReview']);

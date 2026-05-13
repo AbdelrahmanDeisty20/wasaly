@@ -16,7 +16,7 @@ class ReviewService
     use ApiResponse;
 
     public function getMyGeneralReviews(){
-        $reviews = Review::with('user')->where('provider_id' , null)->where('product_id', null)->where('user_id',auth()->id())->get();
+        $reviews = Review::with('user')->whereNull('provider_id')->whereNull('product_id')->whereNull('service_id')->where('user_id',auth()->id())->get();
         return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
@@ -24,7 +24,7 @@ class ReviewService
         ];
     }
     public function getGeneralReviews(){
-        $reviews = Review::with('user')->where('provider_id' , null)->where('product_id', null)->get();
+        $reviews = Review::with('user')->whereNull('provider_id')->whereNull('product_id')->whereNull('service_id')->get();
         return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
@@ -35,6 +35,23 @@ class ReviewService
     {
        $reviews = Review::with('user','product')->whereNotNull('product_id')->where('user_id',auth()->id())->get();
        
+       return [
+            'status' => true,
+            'message' => __('messages.reviews_fetched_successfully'),
+            'data' => ReviewResource::collection($reviews),
+       ];
+    }
+
+    public function getServiceReviews()
+    {
+       $reviews = Review::with('user', 'service')->whereNotNull('service_id')->where('user_id', auth()->id())->get();
+       if($reviews->isEmpty()){
+        return [
+            'status' => false,
+            'message' => __('messages.reviews_not_found'),
+            'data' => []
+        ];
+       }
        return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
