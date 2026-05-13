@@ -21,7 +21,7 @@ class ContactService
        return [
         'status' => true,
         'message' => __('messages.message_sent_successfully'),
-        'data' => $contacts
+        'data' => ContactResource::make($contacts->load('provider.user', 'service', 'user'))
        ];
     }
 }
