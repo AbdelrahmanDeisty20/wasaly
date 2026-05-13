@@ -61,7 +61,7 @@ class ReviewService
 
     public function getProviderReviews()
     {
-       $reviews = Review::with('user', 'provider')->whereNotNull('provider_id')->whereNull('service_id')->whereNull('product_id')->where('user_id', auth()->id())->get();
+       $reviews = Review::with('user', 'provider')->whereNotNull('provider_id')->whereNull('service_id')->whereNull('product_id')->where('user_id', auth()->id())->paginate(10);
        if($reviews->isEmpty()){
         return [
             'status' => false,
