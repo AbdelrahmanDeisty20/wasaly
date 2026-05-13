@@ -302,6 +302,8 @@ return [
     'must_book_first' => 'You must book a service first before reviewing',
     'order_updated_successfully' => 'Order updated successfully',
     'message_required' => 'Message content is required',
-    'message_sent_successfully' => 'Your message has been sent to the service provider successfully and they will contact you soon',
+    'message_sent_successfully' => 'Your message has been sent successfully and they will contact you soon',
     'must_book_and_complete_first' => 'You must book and complete the service first before reviewing',
+    'name_required' => 'Name is required',
+    'phone_required' => 'Phone number is required',
 ];
