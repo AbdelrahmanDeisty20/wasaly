@@ -120,18 +120,7 @@ class ReviewService
 
     public function storeProviderReview(array $data)
     {
-        // 1. Check if user has a booking for this provider
-        $hasBooking = Booking::where('provider_id', $data['provider_id'])
-            ->where('user_id', auth()->id())
-            ->exists();
 
-        if (!$hasBooking) {
-            return [
-                'status' => false,
-                'message' => __('messages.must_book_first'),
-                'data' => []
-            ];
-        }
 
         // 2. Check if user already has a general review for this provider
         $existingReview = Review::where('provider_id', $data['provider_id'])
