@@ -62,7 +62,7 @@ class ReviewService
     {
        $reviews = Review::with('user', 'service')
            ->whereNotNull('service_id')
-           ->where('user_id',auth()->id())
+           ->where('user_id',auth()->user()->id())
            ->paginate(10);
        if($reviews->isEmpty()){
         return [
