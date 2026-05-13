@@ -4,10 +4,10 @@ namespace App\Services\API\General;
 
 use App\Http\Resources\API\GENERAL\ReviewResource;
 use App\Http\Resources\API\ProductResource;
+use App\Models\Booking;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\Service;
-use App\Models\Booking;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Carbon;
 
@@ -15,85 +15,90 @@ class ReviewService
 {
     use ApiResponse;
 
-    public function getMyGeneralReviews(){
-        $reviews = Review::with('user')->whereNull('provider_id')->whereNull('product_id')->whereNull('service_id')->where('user_id',auth()->id())->get();
+    public function getMyGeneralReviews()
+    {
+        $reviews = Review::with('user')->whereNull('provider_id')->whereNull('product_id')->whereNull('service_id')->where('user_id', auth()->id())->get();
         return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
             'data' => ReviewResource::collection($reviews)
         ];
     }
-    public function getGeneralReviews(){
+
+    public function getGeneralReviews()
+    {
         $reviews = Review::with('user')->whereNull('provider_id')->whereNull('product_id')->whereNull('service_id')->get();
         return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
             'data' => ReviewResource::collection($reviews)
         ];
-    }      
+    }
+
     public function getProductReviews()
     {
-       $reviews = Review::with('user','product')->whereNotNull('product_id')->where('user_id',auth()->id())->get();
-       
-       return [
+        $reviews = Review::with('user', 'product')->whereNotNull('product_id')->where('user_id', auth()->id())->get();
+
+        return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
             'data' => ReviewResource::collection($reviews),
-       ];
+        ];
     }
 
     public function getServiceReviews()
     {
-       $reviews = Review::with('user', 'service')->whereNotNull('service_id')->where('user_id', auth()->id())->paginate(10);
-       if($reviews->isEmpty()){
+        $reviews = Review::with('user', 'service')->whereNotNull('service_id')->where('user_id', auth()->id())->paginate(10);
+        if ($reviews->isEmpty()) {
+            return [
+                'status' => false,
+                'message' => __('messages.reviews_not_found'),
+                'data' => []
+            ];
+        }
         return [
-            'status' => false,
-            'message' => __('messages.reviews_not_found'),
-            'data' => []
-        ];
-       }
-       return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
             'data' => $reviews,
-       ];
+        ];
     }
+
     public function getServiceReviewsall()
     {
         $user = auth()->user();
-       $reviews = Review::with('user', 'service')
-           ->whereNotNull('service_id')
-           ->where('service_id', $user->services()->first()->id ?? null)
-           ->paginate(10);
-       if($reviews->isEmpty()){
+        $reviews = Review::with('user', 'service')
+            ->whereNotNull('service_id')
+            ->where('provider_id', $user->providers()->first()?->id)
+            ->paginate(10);
+        if ($reviews->isEmpty()) {
+            return [
+                'status' => false,
+                'message' => __('messages.reviews_not_found'),
+                'data' => []
+            ];
+        }
         return [
-            'status' => false,
-            'message' => __('messages.reviews_not_found'),
-            'data' => []
-        ];
-       }
-       return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
             'data' => $reviews,
-       ];
+        ];
     }
 
     public function getProviderReviews()
     {
-       $reviews = Review::with('user', 'provider')->whereNotNull('provider_id')->whereNull('service_id')->whereNull('product_id')->where('user_id', auth()->id())->paginate(10);
-       if($reviews->isEmpty()){
+        $reviews = Review::with('user', 'provider')->whereNotNull('provider_id')->whereNull('service_id')->whereNull('product_id')->where('user_id', auth()->id())->paginate(10);
+        if ($reviews->isEmpty()) {
+            return [
+                'status' => false,
+                'message' => __('messages.reviews_not_found'),
+                'data' => []
+            ];
+        }
         return [
-            'status' => false,
-            'message' => __('messages.reviews_not_found'),
-            'data' => []
-        ];
-       }
-       return [
             'status' => true,
             'message' => __('messages.reviews_fetched_successfully'),
             'data' => ReviewResource::collection($reviews),
-       ];
+        ];
     }
 
     public function storeProductReview(array $data)
@@ -130,7 +135,6 @@ class ReviewService
             'approved' => true,  // Auto-approve for now, or false to require admin approval
         ]);
 
-
         return [
             'status' => true,
             'message' => __('messages.review_added_successfully'),
@@ -140,8 +144,6 @@ class ReviewService
 
     public function storeProviderReview(array $data)
     {
-
-
         // 2. Check if user already has a general review for this provider
         $existingReview = Review::where('provider_id', $data['provider_id'])
             ->whereNull('service_id')
@@ -173,18 +175,19 @@ class ReviewService
             'data' => new ReviewResource($review->load('user', 'provider.user'))
         ];
     }
+
     public function storeGeneralReview(array $data)
     {
         $review = Review::create([
             'comment' => $data['comment'] ?? null,
-            'rating'  => $data['rating'],
+            'rating' => $data['rating'],
             'user_id' => auth()->id(),
         ]);
 
         return [
-            'status'  => true,
+            'status' => true,
             'message' => __('messages.review_added_successfully'),
-            'data'    => new ReviewResource($review->load('user')),
+            'data' => new ReviewResource($review->load('user')),
         ];
     }
 
@@ -403,7 +406,6 @@ class ReviewService
         $review->delete();
 
         // Update Rating
-
 
         return [
             'status' => true,
