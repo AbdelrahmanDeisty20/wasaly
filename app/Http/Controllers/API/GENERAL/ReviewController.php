@@ -68,7 +68,7 @@ class ReviewController extends Controller
         if (!$result['status']) {
             return $this->error($result['message']);
         }
-        return $this->success($result['data'], $result['message']);
+        return $this->paginated(ReviewResource::class, $result['data'], $result['message']);
     }
 
     public function getProviderReviews()
