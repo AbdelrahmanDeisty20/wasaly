@@ -15,7 +15,6 @@ class RescheduleResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'suggested_date' => $this->suggestedDate?->date,
             'suggested_day' => $this->when($this->suggested_day_id, AvailableDayResource::make($this->whenLoaded('suggestedDay'))),
             'suggested_time' => $this->when($this->suggested_time_id, AvailableTimeResource::make($this->whenLoaded('suggestedTime'))),
             'reschedule_note' => $this->reschedule_note,
