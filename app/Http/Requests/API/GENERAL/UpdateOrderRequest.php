@@ -27,6 +27,10 @@ class UpdateOrderRequest extends FormRequest
             'items' => 'nullable|array',
             'items.*.order_item_id' => 'required_with:items|exists:order_items,id',
             'items.*.quantity' => 'required_with:items|integer|min:1',
+            
+            // Simplified keys for easy Postman testing
+            'order_item_id' => 'nullable|exists:order_items,id',
+            'quantity' => 'nullable|integer|min:1',
         ];
     }
 

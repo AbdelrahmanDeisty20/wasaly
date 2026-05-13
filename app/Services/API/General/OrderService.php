@@ -78,8 +78,28 @@ class OrderService
             }
 
             // Update items quantity
-            if (isset($data['items']) && is_array($data['items'])) {
-                foreach ($data['items'] as $itemData) {
+            $itemsToUpdate = [];
+            if (isset($data['quantity'])) {
+                if (!isset($data['order_item_id'])) {
+                    $firstItem = OrderItem::where('order_id', $order->id)->first();
+                    if ($firstItem) {
+                        $itemsToUpdate[] = [
+                            'order_item_id' => $firstItem->id,
+                            'quantity' => $data['quantity']
+                        ];
+                    }
+                } else {
+                    $itemsToUpdate[] = [
+                        'order_item_id' => $data['order_item_id'],
+                        'quantity' => $data['quantity']
+                    ];
+                }
+            } elseif (isset($data['items']) && is_array($data['items'])) {
+                $itemsToUpdate = $data['items'];
+            }
+
+            if (!empty($itemsToUpdate)) {
+                foreach ($itemsToUpdate as $itemData) {
                     $orderItem = OrderItem::where('order_id', $order->id)->find($itemData['order_item_id']);
                     if ($orderItem) {
                         $product = $orderItem->product;
