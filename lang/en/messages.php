@@ -306,4 +306,6 @@ return [
     'must_book_and_complete_first' => 'You must book and complete the service first before reviewing',
     'name_required' => 'Name is required',
     'phone_required' => 'Phone number is required',
+    'contacts_retrieved_successfully' => 'Contacts retrieved successfully',
+    'no_contacts_found' => 'No contacts found',
 ];

@@ -379,4 +379,6 @@ return [
     'must_book_and_complete_first' => 'يجب أن تقوم بحجز الخدمة واكتمالها أولاً قبل التقييم',
     'name_required' => 'الاسم مطلوب',
     'phone_required' => 'رقم الهاتف مطلوب',
+    'contacts_retrieved_successfully' => 'تم استرجاع جهات الاتصال بنجاح',
+    'no_contacts_found' => 'لا توجد جهات اتصال',
 ];

@@ -19,6 +19,15 @@ class ContactController extends Controller
         $this->contactService = $contactService;
     }
 
+    public function myContacts()
+    {
+        $response = $this->contactService->myContacts();
+        if (!$response['status']) {
+            return $this->error($response['message']);
+        }
+        return $this->success($response['data'], $response['message']);
+    }
+
     public function store(StoreContactRequest $request)
     {
         $response = $this->contactService->storeContactMessage($request->validated());

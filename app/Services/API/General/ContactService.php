@@ -8,6 +8,23 @@ use App\Models\User;
 
 class ContactService
 {
+    public function myContacts()
+    {
+        $contacts = Contact::where('user_id', auth()->id())
+        ->paginate(10);
+        if($contacts->isEmpty()){
+            return [
+                'status' => false,
+                'message' => __('messages.no_contacts_found'),
+                'data' => []
+            ];
+        }
+        return [
+            'status' => true,
+            'message' => __('messages.contacts_retrieved_successfully'),
+            'data' => $contacts
+        ];
+    }
     public function storeContactMessage(array $data)
     {
         $contacts = Contact::create([

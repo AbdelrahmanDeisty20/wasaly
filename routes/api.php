@@ -160,5 +160,6 @@ Route::group(['middleware' => SetLang::class], function () {
 
         // Contacts Route
         Route::post('contact-us', [ContactController::class, 'store']);
+        Route::get('contacts/my-contacts', [ContactController::class, 'myContacts']);
     });
 });
