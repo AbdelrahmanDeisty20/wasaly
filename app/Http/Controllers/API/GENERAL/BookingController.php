@@ -7,6 +7,7 @@ use App\Http\Requests\API\GENERAL\BookingStoreRequest;
 use App\Http\Requests\API\GENERAL\UpdateBookingRequest;
 use App\Http\Requests\API\GENERAL\UpdateBookingStatusRequest;
 use App\Http\Requests\API\GENERAL\BookingIdRequest;
+use App\Http\Requests\API\GENERAL\BookingRescheduleRequest;
 use App\Http\Resources\API\GENERAL\BookingResource;
 use App\Services\API\General\BookingService;
 use App\Traits\ApiResponse;
@@ -81,5 +82,23 @@ class BookingController extends Controller
             return $this->error($result['message']);
         }
         return $this->deleted($result['message']);
+    }
+
+    public function suggestReschedule(BookingRescheduleRequest $request)
+    {
+        $result = $this->bookingService->suggestReschedule($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message']);
+    }
+
+    public function acceptReschedule(BookingIdRequest $request)
+    {
+        $result = $this->bookingService->acceptReschedule($request->booking_id);
+        if (!$result['status']) {
+            return $this->error($result['message']);
+        }
+        return $this->success($result['data'], $result['message']);
     }
 }

@@ -18,6 +18,10 @@ class Booking extends Model
         'available_date_id',
         'available_day_id',
         'available_time_id',
+        'suggested_date_id',
+        'suggested_day_id',
+        'suggested_time_id',
+        'reschedule_note',
         'problem_description',
         'status',
     ];
@@ -60,5 +64,20 @@ class Booking extends Model
     public function center()
     {
         return $this->belongsTo(Center::class);
+    }
+
+    public function suggestedDate()
+    {
+        return $this->belongsTo(AvailableDate::class, 'suggested_date_id');
+    }
+
+    public function suggestedDay()
+    {
+        return $this->belongsTo(AvailableDay::class, 'suggested_day_id');
+    }
+
+    public function suggestedTime()
+    {
+        return $this->belongsTo(AvailableTime::class, 'suggested_time_id');
     }
 }

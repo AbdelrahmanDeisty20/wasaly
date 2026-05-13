@@ -381,4 +381,10 @@ return [
     'phone_required' => 'رقم الهاتف مطلوب',
     'contacts_retrieved_successfully' => 'تم استرجاع جهات الاتصال بنجاح',
     'no_contacts_found' => 'لا توجد جهات اتصال',
+    'reschedule_suggested_successfully' => 'تم اقتراح موعد جديد بنجاح',
+    'reschedule_accepted_successfully' => 'تم قبول الموعد الجديد بنجاح',
+    'no_reschedule_to_accept' => 'لا يوجد اقتراح موعد بانتظار قبولك',
+    'no_suggested_time_found' => 'لم يتم العثور على وقت مقترح',
+    'booking_id_required' => 'رقم الحجز مطلوب',
+    'booking_not_found' => 'الحجز غير موجود',
 ];

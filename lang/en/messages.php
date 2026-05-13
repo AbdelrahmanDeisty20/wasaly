@@ -308,4 +308,10 @@ return [
     'phone_required' => 'Phone number is required',
     'contacts_retrieved_successfully' => 'Contacts retrieved successfully',
     'no_contacts_found' => 'No contacts found',
+    'reschedule_suggested_successfully' => 'New time proposed successfully',
+    'reschedule_accepted_successfully' => 'New time accepted successfully',
+    'no_reschedule_to_accept' => 'No proposed time waiting for your approval',
+    'no_suggested_time_found' => 'No proposed time found',
+    'booking_id_required' => 'Booking ID is required',
+    'booking_not_found' => 'Booking not found',
 ];

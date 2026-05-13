@@ -27,6 +27,9 @@ class BookingResource extends JsonResource
             'center' => CenterResource::make($this->whenLoaded('center')),
             'available_day' => AvailableDayResource::make($this->whenLoaded('availableDay')),
             'available_time' => AvailableTimeResource::make($this->whenLoaded('availableTime')),
+            'reschedule_details' => $this->status == 'reschedule_by_provider' || $this->status == 'reschedule_by_customer' 
+                ? RescheduleResource::make($this) 
+                : null,
         ];
     }
 }
