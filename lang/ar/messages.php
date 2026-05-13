@@ -376,4 +376,5 @@ return [
     'order_updated_successfully' => 'تم تحديث الطلب بنجاح',
     'message_required' => 'نص الرسالة مطلوب',
     'message_sent_successfully' => 'تم إرسال رسالتك إلى مقدم الخدمة بنجاح وسيتم التواصل معك قريباً',
+    'must_book_and_complete_first' => 'يجب أن تقوم بحجز الخدمة واكتمالها أولاً قبل التقييم',
 ];

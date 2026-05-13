@@ -198,15 +198,16 @@ class ReviewService
             ];
         }
 
-        // 1. Check if user has a booking for this service
+        // 1. Check if user has a completed booking for this service
         $hasBooking = Booking::where('service_id', $data['service_id'])
             ->where('user_id', auth()->id())
+            ->where('status', 'completed')
             ->exists();
 
         if (!$hasBooking) {
             return [
                 'status' => false,
-                'message' => __('messages.must_book_first'),
+                'message' => __('messages.must_book_and_complete_first'),
                 'data' => []
             ];
         }

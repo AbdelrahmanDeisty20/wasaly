@@ -303,4 +303,5 @@ return [
     'order_updated_successfully' => 'Order updated successfully',
     'message_required' => 'Message content is required',
     'message_sent_successfully' => 'Your message has been sent to the service provider successfully and they will contact you soon',
+    'must_book_and_complete_first' => 'You must book and complete the service first before reviewing',
 ];
