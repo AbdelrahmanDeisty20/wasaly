@@ -133,7 +133,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::delete('booking/delete', [BookingController::class, 'deleteBooking']);
         Route::post('booking/reschedule/suggest', [BookingController::class, 'suggestReschedule']);
         Route::post('booking/reschedule/accept', [BookingController::class, 'acceptReschedule']);
-        Route::get('booking/reschedule/my-suggestions', [BookingController::class, 'myRescheduleSuggestions']);
+        Route::get('booking/reschedule/suggestions', [BookingController::class, 'myRescheduleSuggestions']);
 
         // Orders Routes
         Route::get('orders', [OrderController::class, 'getMyOrders']);
