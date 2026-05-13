@@ -108,7 +108,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('reviews/general/create', [ReviewController::class, 'storeGeneralReview']);
         Route::get('reviews/product/get', [ReviewController::class, 'getProductReviews']);
         Route::get('reviews/service/get', [ReviewController::class, 'getServiceReviews']);
-        Route::get('reviews/service/get/all', [ReviewController::class, 'getServiceReviewsall']);
+        Route::get('reviews/service/get/all', [ReviewController::class, 'getServiceReviewsall'])->middleware(serviceProviderOnly::class);
         Route::get('reviews/provider/get', [ReviewController::class, 'getProviderReviews']);
         Route::get('reviews/general/get', [ReviewController::class, 'getMyGeneralReviews']);
         Route::put('reviews/update/product/{id}', [ReviewController::class, 'updateProductReview']);
@@ -159,6 +159,6 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('coupons/apply', [CouponController::class, 'applyCoupon']);
 
         // Contacts Route
-        Route::post('contacts/provider', [ContactController::class, 'store']);
+        Route::post('contact-us', [ContactController::class, 'store']);
     });
 });

@@ -17,7 +17,7 @@ class StoreContactRequest extends FormRequest
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'message' => 'required|string|max:2000',
-            'provider_id' => 'required|exists:users,id',
+            'provider_id' => 'nullable|exists:users,id',
             'service_id' => 'nullable|exists:services,id',
         ];
     }
