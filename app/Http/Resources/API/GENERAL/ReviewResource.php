@@ -26,7 +26,7 @@ class ReviewResource extends JsonResource
             'product' => $this->when($this->product_id, new ProductResource($this->whenLoaded('product'))),
             'provider' => $this->when($this->provider_id, new ProviderResource($this->whenLoaded('provider'))),
             'service' => $this->when($this->service_id, new ServiceResource($this->whenLoaded('service'))),
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
         ];
     }
 }
