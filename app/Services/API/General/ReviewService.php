@@ -66,10 +66,22 @@ class ReviewService
     public function getServiceReviewsall()
     {
         $user = auth()->user();
+        $provider = $user->providers()->first();
+
+        if (!$provider) {
+            return [
+                'status' => false,
+                'message' => __('messages.provider_not_found'),
+                'data' => []
+            ];
+        }
+
         $reviews = Review::with('user', 'service')
-            ->whereNotNull('service_id')
-            ->where('provider_id', $user->providers()->first()?->id)
+            ->whereHas('service', function ($query) use ($provider) {
+                $query->where('provider_id', $provider->id);
+            })
             ->paginate(10);
+
         if ($reviews->isEmpty()) {
             return [
                 'status' => false,
