@@ -373,4 +373,5 @@ return [
     'provider_id_required' => 'رقم مقدم الخدمة مطلوب',
     'reviews_not_found' => 'لا يوجد تقييمات',
     'already_reviewed_provider' => 'لقد قمت بتقييم مقدم الخدمة بالفعل',
+    'order_updated_successfully' => 'تم تحديث الطلب بنجاح',
 ];

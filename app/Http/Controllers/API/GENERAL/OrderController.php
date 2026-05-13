@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\SearchOrderRequest;
+use App\Http\Requests\API\GENERAL\UpdateOrderRequest;
 use App\Http\Resources\API\GENERAL\OrderListResource;
 use App\Http\Resources\API\OrderResource;
 use App\Services\API\General\OrderService;
@@ -51,6 +52,15 @@ class OrderController extends Controller
     public function cancelOrder($orderId)
     {
         $response = $this->orderService->cancelOrder($orderId);
+        if (!$response['status']) {
+            return $this->error($response['message'], 422);
+        }
+        return $this->success($response['data'], $response['message']);
+    }
+
+    public function updateOrder($orderId, UpdateOrderRequest $request)
+    {
+        $response = $this->orderService->updateOrder($orderId, $request->validated());
         if (!$response['status']) {
             return $this->error($response['message'], 422);
         }

@@ -300,4 +300,5 @@ return [
     'reviews_not_found' => 'No reviews found',
     'already_reviewed_provider' => 'You have already reviewed this provider',
     'must_book_first' => 'You must book a service first before reviewing',
+    'order_updated_successfully' => 'Order updated successfully',
 ];
