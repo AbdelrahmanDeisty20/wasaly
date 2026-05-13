@@ -2,6 +2,7 @@
 
 namespace App\Services\API\General;
 
+use App\Http\Resources\API\GENERAL\ContactResource;
 use App\Models\Contact;
 use App\Models\User;
 
