@@ -343,4 +343,19 @@ class BookingService
             ];
         }
     }
+
+    public function myRescheduleSuggestions()
+    {
+        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime', 'suggestedDay', 'suggestedTime'])
+            ->where('user_id', auth()->id())
+            ->where('status', 'reschedule_by_provider')
+            ->latest()
+            ->paginate(10);
+
+        return [
+            'status' => true,
+            'message' => __('messages.bookings_fetched_successfully'),
+            'data' => $bookings
+        ];
+    }
 }
