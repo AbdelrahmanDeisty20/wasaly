@@ -60,9 +60,10 @@ class ReviewService
     }
     public function getServiceReviewsall()
     {
+        $user = auth()->user();
        $reviews = Review::with('user', 'service')
            ->whereNotNull('service_id')
-           ->where('user_id',auth()->user()->id())
+           ->where('provider_id', $user->providers()->id)
            ->paginate(10);
        if($reviews->isEmpty()){
         return [
