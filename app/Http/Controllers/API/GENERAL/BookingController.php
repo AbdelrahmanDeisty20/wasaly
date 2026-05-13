@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\BookingStoreRequest;
 use App\Http\Requests\API\GENERAL\UpdateBookingRequest;
 use App\Http\Requests\API\GENERAL\UpdateBookingStatusRequest;
+use App\Http\Requests\API\GENERAL\BookingIdRequest;
 use App\Http\Resources\API\GENERAL\BookingResource;
 use App\Services\API\General\BookingService;
 use App\Traits\ApiResponse;
@@ -64,7 +65,7 @@ class BookingController extends Controller
         return $this->success($result['data'], $result['message']);
     }
 
-    public function cancelBooking(UpdateBookingRequest $request)
+    public function cancelBooking(BookingIdRequest $request)
     {
         $result = $this->bookingService->cancelBooking($request->validated());
         if (!$result['status']) {
@@ -73,7 +74,7 @@ class BookingController extends Controller
         return $this->success($result['data'], $result['message']);
     }
 
-    public function deleteBooking(UpdateBookingRequest $request)
+    public function deleteBooking(BookingIdRequest $request)
     {
         $result = $this->bookingService->deleteBooking($request->validated());
         if (!$result['status']) {

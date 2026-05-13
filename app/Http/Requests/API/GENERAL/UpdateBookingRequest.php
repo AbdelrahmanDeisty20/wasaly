@@ -25,7 +25,7 @@ class UpdateBookingRequest extends FormRequest
         return [
             'booking_id' => 'required|exists:bookings,id',
             'service_id' => 'nullable|exists:services,id',
-            'available_day_id' => 'required|exists:available_days,id',
+            'available_day_id' => 'nullable|exists:available_days,id',
             'available_time_id' => 'nullable|exists:available_times,id',
             'problem_description' => 'nullable|string',
             'customer_name' => 'nullable|string|max:255',
