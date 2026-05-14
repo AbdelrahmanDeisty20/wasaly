@@ -20,7 +20,8 @@ class OrderInfolist
                                     ->weight('bold')
                                     ->size('lg')
                                     ->color('primary')
-                                    ->icon('heroicon-m-hashtag'),
+                                    ->icon('heroicon-m-hashtag')
+                                    ->alignCenter(),
                                 
                                 TextEntry::make('status')
                                     ->label(__('messages.status'))
@@ -40,7 +41,7 @@ class OrderInfolist
                                     ->size('lg')
                                     ->money('SAR')
                                     ->color('success')
-                                    ->alignEnd(),
+                                    ->alignCenter(),
                             ]),
                     ])->compact(),
 
@@ -115,7 +116,8 @@ class OrderInfolist
                             ])
                             ->columns(1)
                             ->placeholder('لا توجد منتجات مسجلة لهذا الطلب'),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
 
                 \Filament\Schemas\Components\Section::make('ملخص الطلب والدفع')
                     ->icon('heroicon-o-credit-card')
@@ -140,7 +142,9 @@ class OrderInfolist
                                     ->weight('bold')
                                     ->size('md'),
                             ]),
-                    ])->compact(),
+                    ])
+                    ->columnSpanFull()
+                    ->compact(),
             ]);
     }
 }
