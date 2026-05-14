@@ -31,7 +31,8 @@ class OrderInfolist
                                         'completed', 'delivered' => 'success',
                                         'cancelled' => 'danger',
                                         default => 'gray',
-                                    }),
+                                    })
+                                    ->alignCenter(),
                                 
                                 TextEntry::make('total_price')
                                     ->label(__('messages.total_price'))
@@ -41,38 +42,46 @@ class OrderInfolist
                                     ->color('success')
                                     ->alignEnd(),
                             ]),
-                    ]),
+                    ])->compact(),
 
                 \Filament\Schemas\Components\Grid::make(2)
                     ->schema([
                         \Filament\Schemas\Components\Section::make(__('messages.customer_details'))
                             ->icon('heroicon-o-user')
                             ->schema([
-                                TextEntry::make('customer_name')
-                                    ->label(__('messages.customer_name'))
-                                    ->weight('bold'),
-                                TextEntry::make('customer_phone')
-                                    ->label(__('messages.phone'))
-                                    ->icon('heroicon-m-phone'),
-                                TextEntry::make('user.email')
-                                    ->label('البريد الإلكتروني')
-                                    ->icon('heroicon-m-envelope')
-                                    ->placeholder('-'),
+                                \Filament\Schemas\Components\Grid::make(2)
+                                    ->schema([
+                                        TextEntry::make('customer_name')
+                                            ->label(__('messages.customer_name'))
+                                            ->weight('bold')
+                                            ->columnSpanFull(),
+                                        TextEntry::make('customer_phone')
+                                            ->label(__('messages.phone'))
+                                            ->icon('heroicon-m-phone'),
+                                        TextEntry::make('user.email')
+                                            ->label('البريد الإلكتروني')
+                                            ->icon('heroicon-m-envelope')
+                                            ->placeholder('-'),
+                                    ])
                             ])->columnSpan(1),
 
                         \Filament\Schemas\Components\Section::make('معلومات الشحن والتوصيل')
                             ->icon('heroicon-o-truck')
                             ->schema([
-                                TextEntry::make('governorate.name_ar')
-                                    ->label('المحافظة'),
-                                TextEntry::make('center.name_ar')
-                                    ->label('المركز/المنطقة'),
-                                TextEntry::make('customer_address')
-                                    ->label('العنوان بالتفصيل')
-                                    ->columnSpanFull(),
-                                TextEntry::make('shipping_cost')
-                                    ->label('تكلفة الشحن')
-                                    ->money('SAR'),
+                                \Filament\Schemas\Components\Grid::make(2)
+                                    ->schema([
+                                        TextEntry::make('governorate.name_ar')
+                                            ->label('المحافظة'),
+                                        TextEntry::make('center.name_ar')
+                                            ->label('المركز/المنطقة'),
+                                        TextEntry::make('customer_address')
+                                            ->label('العنوان بالتفصيل')
+                                            ->columnSpanFull(),
+                                        TextEntry::make('shipping_cost')
+                                            ->label('تكلفة الشحن')
+                                            ->money('SAR')
+                                            ->color('gray'),
+                                    ])
                             ])->columnSpan(1),
                     ]),
 
@@ -83,10 +92,12 @@ class OrderInfolist
                             ->schema([
                                 TextEntry::make('payment_method')
                                     ->label('طريقة الدفع')
-                                    ->badge(),
+                                    ->badge()
+                                    ->color('info'),
                                 TextEntry::make('coupon_code')
                                     ->label('كوبون الخصم')
-                                    ->placeholder('لا يوجد'),
+                                    ->placeholder('لا يوجد')
+                                    ->icon('heroicon-m-ticket'),
                                 TextEntry::make('discount_amount')
                                     ->label('قيمة الخصم')
                                     ->money('SAR')
@@ -94,9 +105,10 @@ class OrderInfolist
                                 TextEntry::make('total_price')
                                     ->label('الإجمالي النهائي')
                                     ->money('SAR')
-                                    ->weight('bold'),
+                                    ->weight('bold')
+                                    ->size('md'),
                             ]),
-                    ]),
+                    ])->compact(),
 
                 \Filament\Schemas\Components\Section::make('منتجات الطلب')
                     ->icon('heroicon-o-shopping-bag')
@@ -118,7 +130,8 @@ class OrderInfolist
                                         TextEntry::make('total_price')
                                             ->label('الإجمالي')
                                             ->money('SAR')
-                                            ->weight('bold'),
+                                            ->weight('bold')
+                                            ->color('primary'),
                                     ]),
                             ])
                             ->columns(1)

@@ -380,4 +380,6 @@ return [
     'icon' => 'Icon',
     'add_property' => 'Add New Property',
     'add_image' => 'Add Gallery Image',
+    'customer_details' => 'Customer Details',
+    'phone' => 'Phone Number',
 ];
