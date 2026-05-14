@@ -36,7 +36,7 @@ class AdminPanelProvider extends PanelProvider
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
-            ->brandName('Wasaly Dashboard')
+            ->brandName(__('messages.welcome') . ' - Wasaly')
             ->brandLogo(asset('storage/settings/logo.png')) // Example logo path
             ->favicon(asset('storage/settings/favicon.png'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
