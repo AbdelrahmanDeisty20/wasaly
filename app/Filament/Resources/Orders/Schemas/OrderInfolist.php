@@ -11,48 +11,119 @@ class OrderInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('order_number'),
-                TextEntry::make('user_id')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('address_id')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('governorate_id')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('shipping_cost')
-                    ->money(),
-                TextEntry::make('center_id')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('coupon_code')
-                    ->placeholder('-'),
-                TextEntry::make('unit_price')
-                    ->money(),
-                TextEntry::make('discount_amount')
-                    ->numeric(),
-                TextEntry::make('quantity')
-                    ->numeric(),
-                TextEntry::make('total_price')
-                    ->money(),
-                TextEntry::make('customer_name'),
-                TextEntry::make('customer_phone'),
-                TextEntry::make('customer_address')
-                    ->placeholder('-'),
-                TextEntry::make('region')
-                    ->placeholder('-'),
-                TextEntry::make('payment_method')
-                    ->badge()
-                    ->placeholder('-'),
-                TextEntry::make('status')
-                    ->badge(),
-                TextEntry::make('created_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+                \Filament\Schemas\Components\Section::make()
+                    ->schema([
+                        \Filament\Schemas\Components\Grid::make(3)
+                            ->schema([
+                                TextEntry::make('order_number')
+                                    ->label(__('messages.order_number'))
+                                    ->weight('bold')
+                                    ->size('lg')
+                                    ->color('primary')
+                                    ->icon('heroicon-m-hashtag'),
+                                
+                                TextEntry::make('status')
+                                    ->label(__('messages.status'))
+                                    ->badge()
+                                    ->color(fn (string $state): string => match ($state) {
+                                        'pending' => 'warning',
+                                        'processing' => 'info',
+                                        'completed', 'delivered' => 'success',
+                                        'cancelled' => 'danger',
+                                        default => 'gray',
+                                    }),
+                                
+                                TextEntry::make('total_price')
+                                    ->label(__('messages.total_price'))
+                                    ->weight('bold')
+                                    ->size('lg')
+                                    ->money('SAR')
+                                    ->color('success')
+                                    ->alignEnd(),
+                            ]),
+                    ]),
+
+                \Filament\Schemas\Components\Grid::make(2)
+                    ->schema([
+                        \Filament\Schemas\Components\Section::make(__('messages.customer_details'))
+                            ->icon('heroicon-o-user')
+                            ->schema([
+                                TextEntry::make('customer_name')
+                                    ->label(__('messages.customer_name'))
+                                    ->weight('bold'),
+                                TextEntry::make('customer_phone')
+                                    ->label(__('messages.phone'))
+                                    ->icon('heroicon-m-phone'),
+                                TextEntry::make('user.email')
+                                    ->label('البريد الإلكتروني')
+                                    ->icon('heroicon-m-envelope')
+                                    ->placeholder('-'),
+                            ])->columnSpan(1),
+
+                        \Filament\Schemas\Components\Section::make('معلومات الشحن والتوصيل')
+                            ->icon('heroicon-o-truck')
+                            ->schema([
+                                TextEntry::make('governorate.name_ar')
+                                    ->label('المحافظة'),
+                                TextEntry::make('center.name_ar')
+                                    ->label('المركز/المنطقة'),
+                                TextEntry::make('customer_address')
+                                    ->label('العنوان بالتفصيل')
+                                    ->columnSpanFull(),
+                                TextEntry::make('shipping_cost')
+                                    ->label('تكلفة الشحن')
+                                    ->money('SAR'),
+                            ])->columnSpan(1),
+                    ]),
+
+                \Filament\Schemas\Components\Section::make('ملخص الطلب والدفع')
+                    ->icon('heroicon-o-credit-card')
+                    ->schema([
+                        \Filament\Schemas\Components\Grid::make(4)
+                            ->schema([
+                                TextEntry::make('payment_method')
+                                    ->label('طريقة الدفع')
+                                    ->badge(),
+                                TextEntry::make('coupon_code')
+                                    ->label('كوبون الخصم')
+                                    ->placeholder('لا يوجد'),
+                                TextEntry::make('discount_amount')
+                                    ->label('قيمة الخصم')
+                                    ->money('SAR')
+                                    ->color('danger'),
+                                TextEntry::make('total_price')
+                                    ->label('الإجمالي النهائي')
+                                    ->money('SAR')
+                                    ->weight('bold'),
+                            ]),
+                    ]),
+
+                \Filament\Schemas\Components\Section::make('منتجات الطلب')
+                    ->icon('heroicon-o-shopping-bag')
+                    ->schema([
+                        \Filament\Infolists\Components\RepeatableEntry::make('items')
+                            ->label('')
+                            ->schema([
+                                \Filament\Schemas\Components\Grid::make(4)
+                                    ->schema([
+                                        TextEntry::make('product.name_ar')
+                                            ->label('المنتج')
+                                            ->weight('bold'),
+                                        TextEntry::make('unit_price')
+                                            ->label('سعر الوحدة')
+                                            ->money('SAR'),
+                                        TextEntry::make('quantity')
+                                            ->label('الكمية')
+                                            ->badge(),
+                                        TextEntry::make('total_price')
+                                            ->label('الإجمالي')
+                                            ->money('SAR')
+                                            ->weight('bold'),
+                                    ]),
+                            ])
+                            ->columns(1)
+                            ->placeholder('لا توجد منتجات مسجلة لهذا الطلب'),
+                    ]),
             ]);
     }
 }
