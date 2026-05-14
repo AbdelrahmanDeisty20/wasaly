@@ -18,31 +18,55 @@ class ProductInfolist
                         \Filament\Schemas\Components\Tabs\Tab::make(__('messages.product_details'))
                             ->icon('heroicon-o-information-circle')
                             ->schema([
-                                \Filament\Schemas\Components\Grid::make(3)
+                                \Filament\Schemas\Components\Grid::make(12)
                                     ->schema([
-                                        \Filament\Schemas\Components\Section::make()
-                                            ->schema([
-                                                TextEntry::make('name_ar')
-                                                    ->label(__('messages.service_ar')),
-                                                TextEntry::make('name_en')
-                                                    ->label(__('messages.service_en')),
-                                                TextEntry::make('description_ar')
-                                                    ->label(__('messages.description_ar'))
-                                                    ->columnSpanFull(),
-                                                TextEntry::make('description_en')
-                                                    ->label(__('messages.description_en'))
-                                                    ->columnSpanFull(),
-                                            ])
-                                            ->columnSpan(2),
+                                        \Filament\Schemas\Components\Group::make([
+                                            \Filament\Schemas\Components\Section::make()
+                                                ->schema([
+                                                    TextEntry::make('name_ar')
+                                                        ->label('')
+                                                        ->weight('bold')
+                                                        ->size('lg')
+                                                        ->color('primary'),
+                                                    TextEntry::make('name_en')
+                                                        ->label('')
+                                                        ->size('md')
+                                                        ->color('gray'),
+                                                    
+                                                    \Filament\Schemas\Components\Section::make(__('messages.description_ar'))
+                                                        ->schema([
+                                                            TextEntry::make('description_ar')
+                                                                ->label('')
+                                                                ->markdown()
+                                                                ->prose(),
+                                                        ])
+                                                        ->compact()
+                                                        ->collapsible(),
+
+                                                    \Filament\Schemas\Components\Section::make(__('messages.description_en'))
+                                                        ->schema([
+                                                            TextEntry::make('description_en')
+                                                                ->label('')
+                                                                ->markdown()
+                                                                ->prose(),
+                                                        ])
+                                                        ->compact()
+                                                        ->collapsible(),
+                                                ]),
+                                        ])->columnSpan(8),
 
                                         \Filament\Schemas\Components\Group::make([
                                             \Filament\Schemas\Components\Section::make(__('messages.pricing_inventory'))
                                                 ->schema([
                                                     TextEntry::make('price')
                                                         ->label(__('messages.price'))
-                                                        ->money('SAR'),
+                                                        ->weight('bold')
+                                                        ->size('lg')
+                                                        ->money('SAR')
+                                                        ->color('success'),
                                                     TextEntry::make('stock')
-                                                        ->label(__('messages.stock')),
+                                                        ->label(__('messages.stock'))
+                                                        ->badge(),
                                                     IconEntry::make('is_featured')
                                                         ->label(__('messages.is_featured'))
                                                         ->boolean(),
@@ -59,9 +83,11 @@ class ProductInfolist
                                             \Filament\Schemas\Components\Section::make(__('messages.associations'))
                                                 ->schema([
                                                     TextEntry::make('subCategory.name_ar')
-                                                        ->label(__('messages.sub_category')),
+                                                        ->label(__('messages.sub_category'))
+                                                        ->icon('heroicon-m-tag'),
                                                     TextEntry::make('brand.name_ar')
                                                         ->label(__('messages.brand'))
+                                                        ->icon('heroicon-m-bookmark')
                                                         ->placeholder('-'),
                                                 ]),
                                             
@@ -69,9 +95,11 @@ class ProductInfolist
                                                 ->schema([
                                                     ImageEntry::make('image')
                                                         ->label('')
-                                                        ->circular(),
+                                                        ->width('100%')
+                                                        ->height('auto')
+                                                        ->extraImgAttributes(['class' => 'rounded-xl shadow-lg']),
                                                 ]),
-                                        ])->columnSpan(1),
+                                        ])->columnSpan(4),
                                     ]),
                             ]),
 
@@ -84,7 +112,8 @@ class ProductInfolist
                                         \Filament\Schemas\Components\Grid::make(3)
                                             ->schema([
                                                 TextEntry::make('key_ar')
-                                                    ->label(__('messages.key_ar')),
+                                                    ->label(__('messages.key_ar'))
+                                                    ->weight('bold'),
                                                 TextEntry::make('value_ar')
                                                     ->label(__('messages.value_ar')),
                                                 ImageEntry::make('icon')
@@ -103,8 +132,9 @@ class ProductInfolist
                                     ->schema([
                                         ImageEntry::make('images')
                                             ->label('')
-                                            ->width(200)
-                                            ->height(200),
+                                            ->width('100%')
+                                            ->height('auto')
+                                            ->extraImgAttributes(['class' => 'rounded-lg shadow-sm']),
                                     ])
                                     ->grid(4),
                             ]),
