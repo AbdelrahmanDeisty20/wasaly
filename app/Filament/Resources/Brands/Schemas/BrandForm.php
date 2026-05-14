@@ -13,9 +13,9 @@ class BrandForm
     {
         return $schema
             ->components([
-                \Filament\Forms\Components\Section::make(__('messages.brand_details'))
+                \Filament\Schemas\Components\Section::make(__('messages.brand_details'))
                     ->schema([
-                        \Filament\Forms\Components\Grid::make(2)
+                        \Filament\Schemas\Components\Grid::make(2)
                             ->schema([
                                 TextInput::make('name_ar')
                                     ->label(__('messages.service_ar'))

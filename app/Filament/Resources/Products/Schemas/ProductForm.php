@@ -15,9 +15,9 @@ class ProductForm
     {
         return $schema
             ->components([
-                \Filament\Forms\Components\Grid::make(3)
+                \Filament\Schemas\Components\Grid::make(3)
                     ->schema([
-                        \Filament\Forms\Components\Section::make(__('messages.product_details'))
+                        \Filament\Schemas\Components\Section::make(__('messages.product_details'))
                             ->schema([
                                 TextInput::make('name_ar')
                                     ->label(__('messages.service_ar'))
@@ -36,9 +36,9 @@ class ProductForm
                             ])
                             ->columnSpan(2),
                         
-                        \Filament\Forms\Components\Group::make()
+                        \Filament\Schemas\Components\Group::make()
                             ->schema([
-                                \Filament\Forms\Components\Section::make(__('messages.pricing_inventory'))
+                                \Filament\Schemas\Components\Section::make(__('messages.pricing_inventory'))
                                     ->schema([
                                         TextInput::make('price')
                                             ->label(__('messages.price'))
@@ -63,7 +63,7 @@ class ProductForm
                                             ->required(),
                                     ]),
                                 
-                                \Filament\Forms\Components\Section::make(__('messages.associations'))
+                                \Filament\Schemas\Components\Section::make(__('messages.associations'))
                                     ->schema([
                                         Select::make('sub_category_id')
                                             ->label(__('messages.sub_category'))
@@ -81,7 +81,7 @@ class ProductForm
                             ->columnSpan(1),
                     ]),
                 
-                \Filament\Forms\Components\Section::make(__('messages.media'))
+                \Filament\Schemas\Components\Section::make(__('messages.media'))
                     ->schema([
                         FileUpload::make('image')
                             ->label(__('messages.image'))
