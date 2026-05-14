@@ -30,18 +30,18 @@ class CategoryForm
 
                     \Filament\Schemas\Components\Wizard\Step::make(__('messages.category'))
                         ->description('بيانات القسم الرئيسي')
-                        ->hidden(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'sub_only')
+                        ->hidden(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'sub_only')
                         ->schema([
                             \Filament\Schemas\Components\Grid::make(2)
                                 ->schema([
                                     TextInput::make('name_ar')
                                         ->label(__('messages.service_ar'))
                                         ->placeholder('مثال: مطاعم')
-                                        ->required(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'main'),
+                                        ->required(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'main'),
                                     TextInput::make('name_en')
                                         ->label(__('messages.service_en'))
                                         ->placeholder('e.g. Restaurants')
-                                        ->required(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'main'),
+                                        ->required(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'main'),
                                     Select::make('status')
                                         ->label(__('messages.status'))
                                         ->options([
@@ -54,7 +54,7 @@ class CategoryForm
                                         ->label(__('messages.image'))
                                         ->image()
                                         ->directory('categories')
-                                        ->required(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'main'),
+                                        ->required(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'main'),
                                 ]),
                         ]),
 
@@ -66,11 +66,11 @@ class CategoryForm
                                 ->options(\App\Models\Category::pluck('name_ar', 'id'))
                                 ->searchable()
                                 ->preload()
-                                ->visible(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'sub_only')
-                                ->required(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'sub_only'),
+                                ->visible(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'sub_only')
+                                ->required(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'sub_only'),
 
                             \Filament\Forms\Components\Repeater::make('subCategories')
-                                ->relationship(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'main' ? 'subCategories' : null)
+                                ->relationship(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'main' ? 'subCategories' : null)
                                 ->schema([
                                     \Filament\Schemas\Components\Grid::make(2)
                                         ->schema([
