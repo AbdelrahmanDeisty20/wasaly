@@ -368,4 +368,6 @@ return [
     'status' => 'Status',
     'price' => 'Price',
     'customer_name' => 'Customer Name',
+    'description_ar' => 'Description (AR)',
+    'description_en' => 'Description (EN)',
 ];

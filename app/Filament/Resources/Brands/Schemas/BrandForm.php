@@ -18,25 +18,25 @@ class BrandForm
                         \Filament\Forms\Components\Grid::make(2)
                             ->schema([
                                 TextInput::make('name_ar')
-                                    ->label(__('messages.service_ar_required'))
+                                    ->label(__('messages.service_ar'))
                                     ->required(),
                                 TextInput::make('name_en')
-                                    ->label(__('messages.service_en_required'))
+                                    ->label(__('messages.service_en'))
+                                    ->required(),
+                                Select::make('status')
+                                    ->label(__('messages.status'))
+                                    ->options([
+                                        'active' => __('messages.active'),
+                                        'inactive' => __('messages.inactive')
+                                    ])
+                                    ->default('active')
+                                    ->required(),
+                                FileUpload::make('image')
+                                    ->label(__('messages.image'))
+                                    ->image()
+                                    ->directory('brands')
                                     ->required(),
                             ]),
-                        FileUpload::make('image')
-                            ->label(__('messages.avatar_required'))
-                            ->image()
-                            ->directory('brands')
-                            ->required(),
-                        Select::make('status')
-                            ->label(__('messages.status_required'))
-                            ->options([
-                                'active' => __('messages.active'),
-                                'inactive' => __('messages.inactive')
-                            ])
-                            ->default('active')
-                            ->required(),
                     ])
             ]);
     }

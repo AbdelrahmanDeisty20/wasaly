@@ -398,4 +398,6 @@ return [
     'status' => 'الحالة',
     'price' => 'السعر',
     'customer_name' => 'اسم العميل',
+    'description_ar' => 'الوصف بالعربية',
+    'description_en' => 'الوصف بالإنجليزية',
 ];
