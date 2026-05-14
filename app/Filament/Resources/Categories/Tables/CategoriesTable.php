@@ -25,6 +25,12 @@ class CategoriesTable
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
                     ->circular(),
+                TextColumn::make('sub_categories_count')
+                    ->label(__('messages.sub_categories'))
+                    ->counts('subCategories')
+                    ->badge()
+                    ->color('info')
+                    ->sortable(),
                 TextColumn::make('status')
                     ->label(__('messages.status'))
                     ->badge()

@@ -19,6 +19,8 @@ use Filament\Tables\Table;
 class SubCategoryResource extends Resource
 {
     protected static ?string $model = SubCategory::class;
+    
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHashtag;
 
