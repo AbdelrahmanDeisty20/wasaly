@@ -392,4 +392,10 @@ return [
     'date_required' => 'التاريخ مطلوب',
     'invalid_time_for_selected_day_or_service' => 'الوقت المختار غير متاح لهذا اليوم أو لهذه الخدمة',
     'cannot_reschedule_in_current_status' => 'لا يمكن إعادة جدولة هذا الحجز في حالته الحالية (يجب أن يكون مقبولاً أو ملغياً)',
+    'service_ar' => 'الاسم بالعربية',
+    'service_en' => 'الاسم بالإنجليزية',
+    'image' => 'الصورة',
+    'status' => 'الحالة',
+    'price' => 'السعر',
+    'customer_name' => 'اسم العميل',
 ];

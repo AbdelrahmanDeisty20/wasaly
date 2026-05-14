@@ -362,4 +362,10 @@ return [
     'cancelled' => 'Cancelled',
     'cash' => 'Cash',
     'card' => 'Card',
+    'service_ar' => 'Name (AR)',
+    'service_en' => 'Name (EN)',
+    'image' => 'Image',
+    'status' => 'Status',
+    'price' => 'Price',
+    'customer_name' => 'Customer Name',
 ];

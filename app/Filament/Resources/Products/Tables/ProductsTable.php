@@ -18,13 +18,13 @@ class ProductsTable
         return $table
             ->columns([
                 TextColumn::make('name_ar')
-                    ->label(__('messages.service_ar_required'))
+                    ->label(__('messages.service_ar'))
                     ->searchable(),
                 ImageColumn::make('image')
-                    ->label(__('messages.avatar_required'))
+                    ->label(__('messages.image'))
                     ->circular(),
                 TextColumn::make('price')
-                    ->label(__('messages.price_required'))
+                    ->label(__('messages.price'))
                     ->money('SAR')
                     ->sortable(),
                 TextColumn::make('stock')
@@ -38,7 +38,7 @@ class ProductsTable
                     ->label(__('messages.brand'))
                     ->sortable(),
                 TextColumn::make('status')
-                    ->label(__('messages.status_required'))
+                    ->label(__('messages.status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',

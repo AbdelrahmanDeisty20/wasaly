@@ -20,14 +20,14 @@ class OrdersTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('customer_name')
-                    ->label(__('messages.customer_name_required'))
+                    ->label(__('messages.customer_name'))
                     ->searchable(),
                 TextColumn::make('total_price')
                     ->label(__('messages.total_price'))
                     ->money('SAR')
                     ->sortable(),
                 TextColumn::make('status')
-                    ->label(__('messages.status_required'))
+                    ->label(__('messages.status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'pending' => 'warning',

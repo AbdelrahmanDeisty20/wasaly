@@ -17,19 +17,19 @@ class SubCategoriesTable
         return $table
             ->columns([
                 TextColumn::make('name_ar')
-                    ->label(__('messages.service_ar_required'))
+                    ->label(__('messages.service_ar'))
                     ->searchable(),
                 TextColumn::make('name_en')
-                    ->label(__('messages.service_en_required'))
+                    ->label(__('messages.service_en'))
                     ->searchable(),
                 ImageColumn::make('image')
-                    ->label(__('messages.avatar_required'))
+                    ->label(__('messages.image'))
                     ->circular(),
                 TextColumn::make('category.name_ar')
                     ->label(__('messages.category'))
                     ->sortable(),
                 TextColumn::make('status')
-                    ->label(__('messages.status_required'))
+                    ->label(__('messages.status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
