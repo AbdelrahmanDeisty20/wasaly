@@ -14,19 +14,34 @@ class CategoryForm
         return $schema
             ->components([
                 \Filament\Schemas\Components\Wizard::make([
+                    \Filament\Schemas\Components\Wizard\Step::make('نوع الإضافة')
+                        ->description('ماذا تود أن تضيف اليوم؟')
+                        ->schema([
+                            \Filament\Forms\Components\Radio::make('addition_type')
+                                ->label('')
+                                ->options([
+                                    'main' => 'قسم رئيسي جديد (يمكنك إضافة أقسام فرعية له)',
+                                    'sub_only' => 'أقسام فرعية فقط لقسم رئيسي موجود مسبقاً',
+                                ])
+                                ->default('main')
+                                ->live()
+                                ->required(),
+                        ]),
+
                     \Filament\Schemas\Components\Wizard\Step::make(__('messages.category'))
-                        ->description('البيانات الأساسية للقسم الرئيسي')
+                        ->description('بيانات القسم الرئيسي')
+                        ->hidden(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'sub_only')
                         ->schema([
                             \Filament\Schemas\Components\Grid::make(2)
                                 ->schema([
                                     TextInput::make('name_ar')
                                         ->label(__('messages.service_ar'))
                                         ->placeholder('مثال: مطاعم')
-                                        ->required(),
+                                        ->required(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'main'),
                                     TextInput::make('name_en')
                                         ->label(__('messages.service_en'))
                                         ->placeholder('e.g. Restaurants')
-                                        ->required(),
+                                        ->required(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'main'),
                                     Select::make('status')
                                         ->label(__('messages.status'))
                                         ->options([
@@ -39,14 +54,23 @@ class CategoryForm
                                         ->label(__('messages.image'))
                                         ->image()
                                         ->directory('categories')
-                                        ->required(),
+                                        ->required(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'main'),
                                 ]),
                         ]),
+
                     \Filament\Schemas\Components\Wizard\Step::make(__('messages.sub_categories'))
-                        ->description('إضافة الأقسام الفرعية التابعة (اختياري)')
+                        ->description('إضافة الأقسام الفرعية')
                         ->schema([
+                            Select::make('parent_category_id')
+                                ->label('اختر القسم الرئيسي')
+                                ->options(\App\Models\Category::pluck('name_ar', 'id'))
+                                ->searchable()
+                                ->preload()
+                                ->visible(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'sub_only')
+                                ->required(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'sub_only'),
+
                             \Filament\Forms\Components\Repeater::make('subCategories')
-                                ->relationship()
+                                ->relationship(fn (\Filament\Forms\Get $get) => $get('addition_type') === 'main' ? 'subCategories' : null)
                                 ->schema([
                                     \Filament\Schemas\Components\Grid::make(2)
                                         ->schema([
@@ -74,12 +98,12 @@ class CategoryForm
                                 ->itemLabel(fn (array $state): ?string => $state['name_ar'] ?? null)
                                 ->collapsible()
                                 ->cloneable()
-                                ->addActionLabel('إضافة قسم فرعي جديد')
+                                ->addActionLabel('إضافة قسم فرعي')
                                 ->columns(1),
                         ]),
                 ])
                 ->columnSpanFull()
-                ->skippable() // Allow skipping to subcategories or finishing early
+                ->skippable()
             ]);
     }
 }
