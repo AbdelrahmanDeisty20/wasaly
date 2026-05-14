@@ -277,9 +277,9 @@ class BookingService
             }
 
             $booking->update([
-                'suggested_date_id' => $data['suggested_date_id'],
-                'suggested_day_id' => $data['suggested_day_id'],
-                'suggested_time_id' => $data['suggested_time_id'],
+                'suggested_date_id' => $data['suggested_date_id'] ?? null,
+                'suggested_day_id' => $data['suggested_day_id'] ?? null,
+                'suggested_time_id' => $data['suggested_time_id'] ?? null,
                 'reschedule_note' => $data['reschedule_note'] ?? null,
                 'status' => $isProvider ? 'reschedule_by_provider' : 'reschedule_by_customer',
             ]);
