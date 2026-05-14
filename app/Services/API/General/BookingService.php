@@ -358,7 +358,7 @@ class BookingService
         }
     }
 
-    public function myRescheduleSuggestions()
+    public function customerPendingReschedules()
     {
         $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime', 'suggestedDay', 'suggestedTime'])
             ->where('user_id', auth()->id())
@@ -373,11 +373,43 @@ class BookingService
         ];
     }
 
-    public function myProposedReschedules()
+    public function customerMyProposals()
     {
         $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime', 'suggestedDay', 'suggestedTime'])
             ->where('user_id', auth()->id())
             ->where('status', 'reschedule_by_customer')
+            ->latest()
+            ->paginate(10);
+
+        return [
+            'status' => true,
+            'message' => __('messages.bookings_fetched_successfully'),
+            'data' => $bookings
+        ];
+    }
+
+    public function providerPendingReschedules()
+    {
+        $provider = auth()->user()->providers()->first();
+        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime', 'suggestedDay', 'suggestedTime'])
+            ->where('provider_id', $provider->id)
+            ->where('status', 'reschedule_by_customer')
+            ->latest()
+            ->paginate(10);
+
+        return [
+            'status' => true,
+            'message' => __('messages.bookings_fetched_successfully'),
+            'data' => $bookings
+        ];
+    }
+
+    public function providerMyProposals()
+    {
+        $provider = auth()->user()->providers()->first();
+        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime', 'suggestedDay', 'suggestedTime'])
+            ->where('provider_id', $provider->id)
+            ->where('status', 'reschedule_by_provider')
             ->latest()
             ->paginate(10);
 
