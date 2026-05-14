@@ -60,7 +60,7 @@ class BookingService
                     'data' => []
                 ];
             }
-            
+
             // منع مقدم الخدمة من حجز خدمته الخاصة
             if ($service->provider->user_id == $user->id) {
                 return [
@@ -249,7 +249,7 @@ class BookingService
         try {
             $user = auth()->user();
             $booking = Booking::with('service.provider')->findOrFail($data['booking_id']);
-            
+
             $provider = $user->providers()->first();
             $isProvider = $provider && $provider->id == $booking->provider_id;
             $isCustomer = $user->id == $booking->user_id;
@@ -262,10 +262,24 @@ class BookingService
                 ];
             }
 
+            // التأكد إن الوقت المختار تابع فعلاً لليوم المختار ولنفس الخدمة (زي الربط اللي في createService)
+            $isValidTime = \App\Models\AvailableTime::where('id', $data['suggested_time_id'] ?? null)
+                ->where('available_day_id', $data['suggested_day_id'] ?? null)
+                ->where('service_id', $booking->service_id)
+                ->exists();
+
+            if (!$isValidTime) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.invalid_time_for_selected_day_or_service'),
+                    'data' => []
+                ];
+            }
+
             $booking->update([
-                'suggested_date_id' => $data['suggested_date_id'] ?? null,
-                'suggested_day_id' => $data['suggested_day_id'] ?? null,
-                'suggested_time_id' => $data['suggested_time_id'] ?? null,
+                'suggested_date_id' => $data['suggested_date_id'],
+                'suggested_day_id' => $data['suggested_day_id'],
+                'suggested_time_id' => $data['suggested_time_id'],
                 'reschedule_note' => $data['reschedule_note'] ?? null,
                 'status' => $isProvider ? 'reschedule_by_provider' : 'reschedule_by_customer',
             ]);
@@ -344,7 +358,7 @@ class BookingService
         }
     }
 
-    public function customerPendingReschedules()
+    public function myRescheduleSuggestions()
     {
         $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime', 'suggestedDay', 'suggestedTime'])
             ->where('user_id', auth()->id())
@@ -359,43 +373,11 @@ class BookingService
         ];
     }
 
-    public function customerMyProposals()
+    public function myProposedReschedules()
     {
         $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime', 'suggestedDay', 'suggestedTime'])
             ->where('user_id', auth()->id())
             ->where('status', 'reschedule_by_customer')
-            ->latest()
-            ->paginate(10);
-
-        return [
-            'status' => true,
-            'message' => __('messages.bookings_fetched_successfully'),
-            'data' => $bookings
-        ];
-    }
-
-    public function providerPendingReschedules()
-    {
-        $provider = auth()->user()->providers()->first();
-        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime', 'suggestedDay', 'suggestedTime'])
-            ->where('provider_id', $provider->id)
-            ->where('status', 'reschedule_by_customer')
-            ->latest()
-            ->paginate(10);
-
-        return [
-            'status' => true,
-            'message' => __('messages.bookings_fetched_successfully'),
-            'data' => $bookings
-        ];
-    }
-
-    public function providerMyProposals()
-    {
-        $provider = auth()->user()->providers()->first();
-        $bookings = Booking::with(['user', 'provider', 'service', 'governorate', 'center', 'availableDay', 'availableTime', 'suggestedDay', 'suggestedTime'])
-            ->where('provider_id', $provider->id)
-            ->where('status', 'reschedule_by_provider')
             ->latest()
             ->paginate(10);
 

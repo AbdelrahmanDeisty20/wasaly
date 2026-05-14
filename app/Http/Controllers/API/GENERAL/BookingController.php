@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API\GENERAL;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\GENERAL\BookingIdRequest;
+use App\Http\Requests\API\GENERAL\BookingRescheduleRequest;
 use App\Http\Requests\API\GENERAL\BookingStoreRequest;
 use App\Http\Requests\API\GENERAL\UpdateBookingRequest;
 use App\Http\Requests\API\GENERAL\UpdateBookingStatusRequest;
-use App\Http\Requests\API\GENERAL\BookingIdRequest;
-use App\Http\Requests\API\GENERAL\BookingRescheduleRequest;
 use App\Http\Resources\API\GENERAL\BookingResource;
 use App\Services\API\General\BookingService;
 use App\Traits\ApiResponse;
@@ -15,13 +15,15 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-     use ApiResponse;
+    use ApiResponse;
+
     protected $bookingService;
 
     public function __construct(BookingService $bookingService)
     {
         $this->bookingService = $bookingService;
     }
+
     public function bookService(BookingStoreRequest $request)
     {
         $result = $this->bookingService->bookService($request->validated());
@@ -30,6 +32,7 @@ class BookingController extends Controller
         }
         return $this->success($result['data'], $result['message'], 201);
     }
+
     public function providerBookings()
     {
         $result = $this->bookingService->providerBookings();
@@ -102,36 +105,18 @@ class BookingController extends Controller
         return $this->success($result['data'], $result['message']);
     }
 
-    public function customerPendingReschedules()
+    public function myRescheduleSuggestions()
     {
-        $result = $this->bookingService->customerPendingReschedules();
+        $result = $this->bookingService->myRescheduleSuggestions();
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
         return $this->paginated(BookingResource::class, $result['data'], $result['message']);
     }
 
-    public function customerMyProposals()
+    public function myProposedReschedules()
     {
-        $result = $this->bookingService->customerMyProposals();
-        if (!$result['status']) {
-            return $this->error($result['message'], 404);
-        }
-        return $this->paginated(BookingResource::class, $result['data'], $result['message']);
-    }
-
-    public function providerPendingReschedules()
-    {
-        $result = $this->bookingService->providerPendingReschedules();
-        if (!$result['status']) {
-            return $this->error($result['message'], 404);
-        }
-        return $this->paginated(BookingResource::class, $result['data'], $result['message']);
-    }
-
-    public function providerMyProposals()
-    {
-        $result = $this->bookingService->providerMyProposals();
+        $result = $this->bookingService->myProposedReschedules();
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }

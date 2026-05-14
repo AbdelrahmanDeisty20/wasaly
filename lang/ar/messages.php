@@ -390,4 +390,5 @@ return [
     'day_required' => 'اليوم مطلوب',
     'time_required' => 'الوقت مطلوب',
     'date_required' => 'التاريخ مطلوب',
+    'invalid_time_for_selected_day_or_service' => 'الوقت المختار غير متاح لهذا اليوم أو لهذه الخدمة',
 ];
