@@ -100,6 +100,12 @@ Route::group(['middleware' => SetLang::class], function () {
             Route::delete('services/delete', [ProviderController::class, 'deleteService']);
             Route::get('provider/bookings', [BookingController::class, 'providerBookings']);
             Route::put('provider/bookings/status', [BookingController::class, 'updateStatus']);
+            
+            // Provider Reschedule Routes
+            Route::post('provider/booking/reschedule/propose', [BookingController::class, 'suggestReschedule']);
+            Route::post('provider/booking/reschedule/accept', [BookingController::class, 'acceptReschedule']);
+            Route::get('provider/booking/reschedule/requests', [BookingController::class, 'providerPendingReschedules']);
+            Route::get('provider/booking/reschedule/my-proposals', [BookingController::class, 'providerMyProposals']);
         });
         // Review Routes
         Route::post('reviews/product/create', [ReviewController::class, 'storeProductReview']);
@@ -131,10 +137,12 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('booking/update', [BookingController::class, 'updateBooking']);
         Route::post('booking/cancel', [BookingController::class, 'cancelBooking']);
         Route::delete('booking/delete', [BookingController::class, 'deleteBooking']);
-        Route::post('booking/reschedule/suggest', [BookingController::class, 'suggestReschedule']);
-        Route::post('booking/reschedule/accept', [BookingController::class, 'acceptReschedule']);
-        Route::get('booking/reschedule/suggestions', [BookingController::class, 'myRescheduleSuggestions']);
-        Route::get('booking/reschedule/my-proposals', [BookingController::class, 'myProposedReschedules']);
+
+        // Customer Reschedule Routes
+        Route::post('customer/booking/reschedule/propose', [BookingController::class, 'suggestReschedule']);
+        Route::post('customer/booking/reschedule/accept', [BookingController::class, 'acceptReschedule']);
+        Route::get('customer/booking/reschedule/requests', [BookingController::class, 'customerPendingReschedules']);
+        Route::get('customer/booking/reschedule/my-proposals', [BookingController::class, 'customerMyProposals']);
 
         // Orders Routes
         Route::get('orders', [OrderController::class, 'getMyOrders']);

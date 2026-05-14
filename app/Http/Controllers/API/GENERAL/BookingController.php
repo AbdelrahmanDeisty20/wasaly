@@ -102,18 +102,36 @@ class BookingController extends Controller
         return $this->success($result['data'], $result['message']);
     }
 
-    public function myRescheduleSuggestions()
+    public function customerPendingReschedules()
     {
-        $result = $this->bookingService->myRescheduleSuggestions();
+        $result = $this->bookingService->customerPendingReschedules();
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
         return $this->paginated(BookingResource::class, $result['data'], $result['message']);
     }
 
-    public function myProposedReschedules()
+    public function customerMyProposals()
     {
-        $result = $this->bookingService->myProposedReschedules();
+        $result = $this->bookingService->customerMyProposals();
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
+        }
+        return $this->paginated(BookingResource::class, $result['data'], $result['message']);
+    }
+
+    public function providerPendingReschedules()
+    {
+        $result = $this->bookingService->providerPendingReschedules();
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
+        }
+        return $this->paginated(BookingResource::class, $result['data'], $result['message']);
+    }
+
+    public function providerMyProposals()
+    {
+        $result = $this->bookingService->providerMyProposals();
         if (!$result['status']) {
             return $this->error($result['message'], 404);
         }
