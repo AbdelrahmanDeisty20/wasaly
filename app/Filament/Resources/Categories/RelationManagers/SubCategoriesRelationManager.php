@@ -26,7 +26,7 @@ class SubCategoriesRelationManager extends RelationManager
     {
         return SubCategoriesTable::configure($table)
             ->headerActions([
-                \Filament\Tables\Actions\CreateAction::make(),
+                \Filament\Actions\CreateAction::make(),
             ]);
     }
 }
