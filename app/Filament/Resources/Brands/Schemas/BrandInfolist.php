@@ -12,17 +12,43 @@ class BrandInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name_ar'),
-                TextEntry::make('name_en'),
-                ImageEntry::make('image'),
-                TextEntry::make('status')
-                    ->badge(),
-                TextEntry::make('created_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+                \Filament\Schemas\Components\Section::make()
+                    ->schema([
+                        \Filament\Schemas\Components\Grid::make(12)
+                            ->schema([
+                                ImageEntry::make('image')
+                                    ->label('')
+                                    ->disk('public')
+                                    ->columnSpan(3)
+                                    ->extraImgAttributes(['class' => 'rounded-xl shadow-md']),
+                                
+                                \Filament\Schemas\Components\Group::make([
+                                    TextEntry::make('name_ar')
+                                        ->label('')
+                                        ->weight('bold')
+                                        ->size('lg')
+                                        ->color('primary'),
+                                    TextEntry::make('name_en')
+                                        ->label('')
+                                        ->size('md')
+                                        ->color('gray'),
+                                    
+                                    TextEntry::make('status')
+                                        ->label(__('messages.status'))
+                                        ->badge()
+                                        ->color(fn (string $state): string => match ($state) {
+                                            'active' => 'success',
+                                            'inactive' => 'danger',
+                                            default => 'gray',
+                                        }),
+                                    
+                                    TextEntry::make('created_at')
+                                        ->label('تاريخ الإضافة')
+                                        ->dateTime()
+                                        ->color('gray'),
+                                ])->columnSpan(9),
+                            ]),
+                    ]),
             ]);
     }
 }

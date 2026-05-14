@@ -70,7 +70,7 @@ class CategoryForm
                                 ->required(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'sub_only'),
 
                             \Filament\Forms\Components\Repeater::make('subCategories')
-                                ->relationship(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'main' ? 'subCategories' : null)
+                                ->relationship('subCategories')
                                 ->schema([
                                     \Filament\Schemas\Components\Grid::make(2)
                                         ->schema([
