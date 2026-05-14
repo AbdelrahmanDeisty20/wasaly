@@ -370,4 +370,12 @@ return [
     'customer_name' => 'Customer Name',
     'description_ar' => 'Description (AR)',
     'description_en' => 'Description (EN)',
+    'specifications' => 'Specifications & Features',
+    'gallery' => 'Gallery',
+    'product_properties' => 'Product Properties',
+    'key_ar' => 'Key (AR)',
+    'key_en' => 'Key (EN)',
+    'value_ar' => 'Value (AR)',
+    'value_en' => 'Value (EN)',
+    'icon' => 'Icon',
 ];
