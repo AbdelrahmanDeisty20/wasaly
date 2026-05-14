@@ -63,7 +63,9 @@ class OrderInfolist
                                             ->icon('heroicon-m-envelope')
                                             ->placeholder('-'),
                                     ])
-                            ])->columnSpan(1),
+                            ])
+                            ->columnSpan(1)
+                            ->extraAttributes(['class' => 'h-full']),
 
                         \Filament\Schemas\Components\Section::make('معلومات الشحن والتوصيل')
                             ->icon('heroicon-o-truck')
@@ -82,33 +84,10 @@ class OrderInfolist
                                             ->money('SAR')
                                             ->color('gray'),
                                     ])
-                            ])->columnSpan(1),
-                    ]),
-
-                \Filament\Schemas\Components\Section::make('ملخص الطلب والدفع')
-                    ->icon('heroicon-o-credit-card')
-                    ->schema([
-                        \Filament\Schemas\Components\Grid::make(4)
-                            ->schema([
-                                TextEntry::make('payment_method')
-                                    ->label('طريقة الدفع')
-                                    ->badge()
-                                    ->color('info'),
-                                TextEntry::make('coupon_code')
-                                    ->label('كوبون الخصم')
-                                    ->placeholder('لا يوجد')
-                                    ->icon('heroicon-m-ticket'),
-                                TextEntry::make('discount_amount')
-                                    ->label('قيمة الخصم')
-                                    ->money('SAR')
-                                    ->color('danger'),
-                                TextEntry::make('total_price')
-                                    ->label('الإجمالي النهائي')
-                                    ->money('SAR')
-                                    ->weight('bold')
-                                    ->size('md'),
-                            ]),
-                    ])->compact(),
+                            ])
+                            ->columnSpan(1)
+                            ->extraAttributes(['class' => 'h-full']),
+                    ])->extraAttributes(['class' => 'items-stretch']),
 
                 \Filament\Schemas\Components\Section::make('منتجات الطلب')
                     ->icon('heroicon-o-shopping-bag')
@@ -137,6 +116,31 @@ class OrderInfolist
                             ->columns(1)
                             ->placeholder('لا توجد منتجات مسجلة لهذا الطلب'),
                     ]),
+
+                \Filament\Schemas\Components\Section::make('ملخص الطلب والدفع')
+                    ->icon('heroicon-o-credit-card')
+                    ->schema([
+                        \Filament\Schemas\Components\Grid::make(4)
+                            ->schema([
+                                TextEntry::make('payment_method')
+                                    ->label('طريقة الدفع')
+                                    ->badge()
+                                    ->color('info'),
+                                TextEntry::make('coupon_code')
+                                    ->label('كوبون الخصم')
+                                    ->placeholder('لا يوجد')
+                                    ->icon('heroicon-m-ticket'),
+                                TextEntry::make('discount_amount')
+                                    ->label('قيمة الخصم')
+                                    ->money('SAR')
+                                    ->color('danger'),
+                                TextEntry::make('total_price')
+                                    ->label('الإجمالي النهائي')
+                                    ->money('SAR')
+                                    ->weight('bold')
+                                    ->size('md'),
+                            ]),
+                    ])->compact(),
             ]);
     }
 }
