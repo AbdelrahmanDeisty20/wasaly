@@ -387,4 +387,7 @@ return [
     'no_suggested_time_found' => 'لم يتم العثور على وقت مقترح',
     'booking_id_required' => 'رقم الحجز مطلوب',
     'booking_not_found' => 'الحجز غير موجود',
+    'day_required' => 'اليوم مطلوب',
+    'time_required' => 'الوقت مطلوب',
+    'date_required' => 'التاريخ مطلوب',
 ];

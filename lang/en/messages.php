@@ -314,4 +314,7 @@ return [
     'no_suggested_time_found' => 'No proposed time found',
     'booking_id_required' => 'Booking ID is required',
     'booking_not_found' => 'Booking not found',
+    'day_required' => 'Day is required',
+    'time_required' => 'Time is required',
+    'date_required' => 'Date is required',
 ];
