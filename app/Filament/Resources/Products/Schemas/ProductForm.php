@@ -15,7 +15,7 @@ class ProductForm
     {
         return $schema
             ->components([
-                \Filament\Schemas\Components\Tabs::make('Product Details')
+                \Filament\Schemas\Components\Tabs::make(__('messages.product_details'))
                     ->tabs([
                         \Filament\Schemas\Components\Tabs\Tab::make(__('messages.product_details'))
                             ->icon('heroicon-o-information-circle')
@@ -125,7 +125,7 @@ class ProductForm
                                     ->itemLabel(fn (array $state): ?string => $state['key_ar'] ?? null)
                                     ->collapsible()
                                     ->cloneable()
-                                    ->addActionLabel('إضافة خاصية جديدة')
+                                    ->addActionLabel(__('messages.add_property'))
                                     ->columns(1),
                             ]),
 
@@ -142,7 +142,7 @@ class ProductForm
                                             ->required(),
                                     ])
                                     ->grid(4)
-                                    ->addActionLabel('إضافة صورة للمعرض')
+                                    ->addActionLabel(__('messages.add_image'))
                                     ->collapsible(),
                             ]),
                     ])

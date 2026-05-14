@@ -378,4 +378,6 @@ return [
     'value_ar' => 'Value (AR)',
     'value_en' => 'Value (EN)',
     'icon' => 'Icon',
+    'add_property' => 'Add New Property',
+    'add_image' => 'Add Gallery Image',
 ];
