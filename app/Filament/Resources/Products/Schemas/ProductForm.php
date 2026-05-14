@@ -99,6 +99,7 @@ class ProductForm
                             ->icon('heroicon-o-list-bullet')
                             ->schema([
                                 \Filament\Forms\Components\Repeater::make('specifications')
+                                    ->label(__('messages.specifications'))
                                     ->relationship()
                                     ->schema([
                                         \Filament\Schemas\Components\Grid::make(2)
