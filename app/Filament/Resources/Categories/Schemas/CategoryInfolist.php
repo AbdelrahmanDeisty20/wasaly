@@ -17,35 +17,27 @@ class CategoryInfolist
         return $schema
             ->components([
 
-                // ── Hero Section: صورة القسم + المعلومات الأساسية ──
+                // ── معلومات القسم الرئيسي ──
                 Section::make()
                     ->schema([
                         Grid::make(12)
                             ->schema([
+                                ImageEntry::make('image')
+                                    ->label('')
+                                    ->disk('public')
+                                    ->columnSpan(3)
+                                    ->extraImgAttributes(['class' => 'rounded-xl shadow-md']),
 
-                                // صورة القسم
-                                Group::make([
-                                    ImageEntry::make('image')
-                                        ->label('')
-                                        ->disk('public')
-                                        ->height(180)
-                                        ->extraImgAttributes([
-                                            'class' => 'rounded-2xl shadow-xl object-cover w-full',
-                                            'style' => 'aspect-ratio:1/1;',
-                                        ])
-                                        ->columnSpanFull(),
-                                ])->columnSpan(3),
-
-                                // بيانات القسم
                                 Group::make([
                                     TextEntry::make('name_ar')
-                                        ->label(__('messages.service_ar'))
+                                        ->label('')
                                         ->weight('bold')
                                         ->size('lg')
                                         ->color('primary'),
 
                                     TextEntry::make('name_en')
-                                        ->label(__('messages.service_en'))
+                                        ->label('')
+                                        ->size('md')
                                         ->color('gray'),
 
                                     Grid::make(2)->schema([
@@ -68,8 +60,9 @@ class CategoryInfolist
 
                                     TextEntry::make('created_at')
                                         ->label(__('messages.created_at'))
-                                        ->dateTime('d M Y')
+                                        ->dateTime()
                                         ->color('gray'),
+
                                 ])->columnSpan(9),
                             ]),
                     ]),
@@ -81,51 +74,35 @@ class CategoryInfolist
                         RepeatableEntry::make('subCategories')
                             ->label('')
                             ->schema([
-                                Grid::make(12)
+                                Grid::make(4)
                                     ->schema([
-
-                                        // صورة القسم الفرعي
                                         ImageEntry::make('image')
-                                            ->label('')
+                                            ->label(__('messages.image'))
                                             ->disk('public')
-                                            ->circular()
-                                            ->height(64)
-                                            ->extraImgAttributes([
-                                                'class' => 'ring-2 ring-primary-500 shadow',
-                                            ])
-                                            ->columnSpan(2),
+                                            ->circular(),
 
-                                        // معلومات القسم الفرعي
-                                        Group::make([
-                                            TextEntry::make('name_ar')
-                                                ->label(__('messages.service_ar'))
-                                                ->weight('bold')
-                                                ->color('primary'),
+                                        TextEntry::make('name_ar')
+                                            ->label(__('messages.service_ar'))
+                                            ->weight('bold'),
 
-                                            TextEntry::make('name_en')
-                                                ->label(__('messages.service_en'))
-                                                ->color('gray'),
-                                        ])->columnSpan(8),
+                                        TextEntry::make('name_en')
+                                            ->label(__('messages.service_en')),
 
-                                        // الحالة
-                                        Group::make([
-                                            TextEntry::make('status')
-                                                ->label(__('messages.status'))
-                                                ->badge()
-                                                ->color(fn (string $state): string => match ($state) {
-                                                    'active'   => 'success',
-                                                    'inactive' => 'danger',
-                                                    default    => 'gray',
-                                                })
-                                                ->formatStateUsing(fn (string $state): string => __("messages.{$state}")),
-                                        ])->columnSpan(2),
+                                        TextEntry::make('status')
+                                            ->label(__('messages.status'))
+                                            ->badge()
+                                            ->color(fn (string $state): string => match ($state) {
+                                                'active'   => 'success',
+                                                'inactive' => 'danger',
+                                                default    => 'gray',
+                                            })
+                                            ->formatStateUsing(fn (string $state): string => __("messages.{$state}")),
                                     ]),
                             ])
-                            ->grid(2)
-                            ->placeholder(__('messages.no_sub_categories')),
+                            ->columns(1)
+                            ->placeholder('لا توجد أقسام فرعية حالياً'),
                     ])
-                    ->collapsible()
-                    ->collapsed(false),
+                    ->collapsible(),
             ]);
     }
 }
