@@ -10,17 +10,16 @@ use App\Models\Service;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use BackedEnum;
 
 class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-wrench-screwdriver';
+    protected static $navigationIcon = 'heroicon-o-wrench-screwdriver';
 
     public static function getNavigationLabel(): string
     {
-        return __('messages.services_fetched_successfully');
+        return __('messages.services');
     }
 
     public static function getNavigationGroup(): ?string
@@ -35,7 +34,7 @@ class ServiceResource extends Resource
 
     public static function getPluralLabel(): ?string
     {
-        return __('messages.services_fetched_successfully');
+        return __('messages.services');
     }
 
     public static function form(Schema $schema): Schema

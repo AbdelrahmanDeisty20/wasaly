@@ -413,4 +413,6 @@ return [
     'customer_details' => 'بيانات العميل',
     'phone' => 'رقم الهاتف',
     'no_sub_categories' => 'لا توجد أقسام فرعية حالياً',
+    'services' => 'الخدمات',
+    'bookings' => 'الحجوزات',
 ];

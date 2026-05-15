@@ -10,14 +10,12 @@ use App\Models\Provider;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Filament\Support\Icons\Heroicon;
-use BackedEnum;
 
 class ProviderResource extends Resource
 {
     protected static ?string $model = Provider::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-user-group';
+    protected static $navigationIcon = 'heroicon-o-user-group';
 
     public static function getNavigationLabel(): string
     {

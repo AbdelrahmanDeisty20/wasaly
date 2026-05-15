@@ -10,17 +10,16 @@ use App\Models\Booking;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use BackedEnum;
 
 class BookingResource extends Resource
 {
     protected static ?string $model = Booking::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-calendar-days';
+    protected static $navigationIcon = 'heroicon-o-calendar-days';
 
     public static function getNavigationLabel(): string
     {
-        return __('messages.orders_retrieved_successfully');
+        return __('messages.bookings');
     }
 
     public static function getNavigationGroup(): ?string
@@ -35,7 +34,7 @@ class BookingResource extends Resource
 
     public static function getPluralLabel(): ?string
     {
-        return __('messages.orders_retrieved_successfully');
+        return __('messages.bookings');
     }
 
     public static function form(Schema $schema): Schema

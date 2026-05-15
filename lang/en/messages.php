@@ -383,4 +383,6 @@ return [
     'customer_details' => 'Customer Details',
     'phone' => 'Phone Number',
     'no_sub_categories' => 'No sub categories found',
+    'services' => 'Services',
+    'bookings' => 'Bookings',
 ];
