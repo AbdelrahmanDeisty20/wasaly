@@ -25,8 +25,15 @@ class SubCategoriesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return SubCategoriesTable::configure($table)
+            ->heading(__('messages.sub_categories'))
+            ->description('جميع الأقسام الفرعية التابعة لهذا القسم')
             ->headerActions([
-                \Filament\Actions\CreateAction::make(),
-            ]);
+                \Filament\Actions\CreateAction::make()
+                    ->label('إضافة قسم فرعي')
+                    ->icon('heroicon-o-plus'),
+            ])
+            ->emptyStateHeading('لا توجد أقسام فرعية')
+            ->emptyStateDescription('ابدأ بإضافة أول قسم فرعي لهذا القسم')
+            ->emptyStateIcon('heroicon-o-tag');
     }
 }

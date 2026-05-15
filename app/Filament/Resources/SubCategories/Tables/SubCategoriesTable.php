@@ -16,38 +16,44 @@ class SubCategoriesTable
     {
         return $table
             ->columns([
+
+                // الصورة — دائرية وأكبر
+                ImageColumn::make('image')
+                    ->label('')
+                    ->disk('public')
+                    ->circular()
+                    ->size(52),
+
+                // الاسم العربي كـ header مع الإنجليزي كـ description
                 TextColumn::make('name_ar')
                     ->label(__('messages.service_ar'))
-                    ->searchable(),
-                TextColumn::make('name_en')
-                    ->label(__('messages.service_en'))
-                    ->searchable(),
-                ImageColumn::make('image')
-                    ->label(__('messages.image'))
-                    ->circular(),
-                TextColumn::make('category.name_ar')
-                    ->label(__('messages.category'))
+                    ->description(fn ($record): string => $record->name_en ?? '')
+                    ->weight('bold')
+                    ->searchable()
                     ->sortable(),
+
+                // الحالة badge
                 TextColumn::make('status')
                     ->label(__('messages.status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'active' => 'success',
+                        'active'   => 'success',
                         'inactive' => 'danger',
-                        default => 'gray',
+                        default    => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => __("messages.{$state}")),
+
+                // تاريخ الإضافة
                 TextColumn::make('created_at')
                     ->label(__('messages.created_at'))
-                    ->dateTime()
+                    ->dateTime('d M Y')
                     ->sortable()
+                    ->color('gray')
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->label(__('messages.updated_at'))
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
+            ->defaultSort('created_at', 'desc')
+            ->striped()
             ->filters([
                 //
             ])
