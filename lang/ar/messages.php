@@ -412,4 +412,5 @@ return [
     'add_image' => 'إضافة صورة للمعرض',
     'customer_details' => 'بيانات العميل',
     'phone' => 'رقم الهاتف',
+    'no_sub_categories' => 'لا توجد أقسام فرعية حالياً',
 ];
