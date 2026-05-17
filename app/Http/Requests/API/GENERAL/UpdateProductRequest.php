@@ -40,7 +40,7 @@ class UpdateProductRequest extends FormRequest
             'specifications.*.key_en' => 'required_with:specifications|string|max:255',
             'specifications.*.value_ar' => 'required_with:specifications|string|max:255',
             'specifications.*.value_en' => 'required_with:specifications|string|max:255',
-            'specifications.*.icon' => 'nullable|string|max:255',
+            'specifications.*.icon' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'nullable|in:active,inactive',
             'is_featured' => 'nullable|boolean',
         ];
