@@ -108,6 +108,7 @@ Route::group(['middleware' => SetLang::class], function () {
             // Provider Product Orders Routes
             Route::get('provider/product-orders', [OrderController::class, 'getProviderOrders']);
             Route::put('provider/product-orders/status', [OrderController::class, 'updateOrderStatus']);
+            Route::delete('provider/product-orders/delete', [OrderController::class, 'deleteProviderOrder']);
 
             // Provider Offers Routes
             Route::get('provider/offers', [OfferController::class, 'getProviderOffers']);

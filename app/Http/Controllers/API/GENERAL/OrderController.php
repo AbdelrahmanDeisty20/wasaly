@@ -54,6 +54,19 @@ class OrderController extends Controller
         return $this->success($response['data'], $response['message']);
     }
 
+    public function deleteProviderOrder(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id'
+        ]);
+
+        $response = $this->orderService->deleteProviderOrder($request->order_id);
+        if (!$response['status']) {
+            return $this->error($response['message'], 422);
+        }
+        return $this->success($response['data'], $response['message']);
+    }
+
     public function getOrderDetails($orderId)
     {
         $order = $this->orderService->getOrderDetails($orderId);

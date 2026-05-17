@@ -89,6 +89,41 @@ class OrderService
         ];
     }
 
+    public function deleteProviderOrder($orderId)
+    {
+        $user = auth()->user();
+        $provider = \App\Models\Provider::where('user_id', $user->id)->first();
+        
+        if (!$provider) {
+            return ['status' => false, 'message' => __('messages.provider_not_found'), 'data' => []];
+        }
+
+        $order = Order::whereHas('items.product', function ($query) use ($provider) {
+            $query->where('provider_id', $provider->id);
+        })->find($orderId);
+
+        if (!$order) {
+            return ['status' => false, 'message' => __('messages.order_not_found'), 'data' => []];
+        }
+
+        // Similar to normal customer rules, allow deletion only if delivered or cancelled, or maybe provider can delete anytime? 
+        // Let's enforce the same rule to keep it consistent and prevent deleting pending/processing orders accidentally.
+        if (in_array($order->status, ['delivered', 'cancelled'])) {
+            $order->delete();
+            return [
+                'status' => true,
+                'message' => __('messages.order_deleted_successfully'),
+                'data' => [],
+            ];
+        }
+
+        return [
+            'status' => false,
+            'message' => __('messages.cannot_delete_order_unless_delivered_or_cancelled'),
+            'data' => [],
+        ];
+    }
+
     public function getOrderDetails($orderId){
         $order = Order::with(['items.product.offers', 'governorate', 'center'])->find($orderId);
         if(!$order){
