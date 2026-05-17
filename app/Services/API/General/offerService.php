@@ -60,6 +60,13 @@ class offerService
             return ['status' => false, 'message' => __('messages.product_not_found_or_not_owned'), 'data' => []];
         }
 
+        if (isset($data['start_date'])) {
+            $data['start_date'] = \Carbon\Carbon::parse($data['start_date'])->format('Y-m-d H:i:s');
+        }
+        if (isset($data['end_date'])) {
+            $data['end_date'] = \Carbon\Carbon::parse($data['end_date'])->format('Y-m-d H:i:s');
+        }
+
         $data['is_active'] = $data['is_active'] ?? true;
         $offer = Offer::create($data);
 
@@ -81,6 +88,13 @@ class offerService
 
         if (!$offer) {
             return ['status' => false, 'message' => __('messages.offer_not_found_or_not_owned'), 'data' => []];
+        }
+
+        if (isset($data['start_date'])) {
+            $data['start_date'] = \Carbon\Carbon::parse($data['start_date'])->format('Y-m-d H:i:s');
+        }
+        if (isset($data['end_date'])) {
+            $data['end_date'] = \Carbon\Carbon::parse($data['end_date'])->format('Y-m-d H:i:s');
         }
 
         $offer->update($data);
