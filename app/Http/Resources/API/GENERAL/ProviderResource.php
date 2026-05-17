@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\GENERAL;
 
 use App\Http\Resources\API\AUTH\UserResource;
+use App\Http\Resources\API\ProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,7 @@ class ProviderResource extends JsonResource
             'reviews_count' => (int) $this->reviews_count,
             'successful_orders_count' => (int) $this->successful_orders_count,
             'services' => ServiceResource::collection($this->whenLoaded('services')),
+            'products' => ProductResource::collection($this->whenLoaded('products')),
         ];
     }
 }

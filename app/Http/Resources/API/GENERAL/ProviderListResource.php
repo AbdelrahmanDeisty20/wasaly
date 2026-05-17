@@ -32,6 +32,7 @@ class ProviderListResource extends JsonResource
             'reviews_count' => (int) $this->reviews_count,
             'successful_orders_count' => (int) $this->completed_services_count,
             'services' => ServiceResource::collection($this->whenLoaded('services')),
+            'products' => \App\Http\Resources\API\ProductResource::collection($this->whenLoaded('products')),
         ];
     }
 }

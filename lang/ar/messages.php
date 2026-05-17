@@ -415,4 +415,7 @@ return [
     'no_sub_categories' => 'لا توجد أقسام فرعية حالياً',
     'services' => 'الخدمات',
     'bookings' => 'الحجوزات',
+    'product_created_successfully' => 'تم إضافة المنتج بنجاح',
+    'product_updated_successfully' => 'تم تحديث المنتج بنجاح',
+    'product_deleted_successfully' => 'تم حذف المنتج بنجاح',
 ];

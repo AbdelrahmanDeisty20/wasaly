@@ -28,7 +28,7 @@ class ProductService
     }
     public function getProduct($data)
     {
-        $product = Product::with(['specifications','images','subCategory','brand','offers','reviews.user'])->find($data['product_id']);
+        $product = Product::with(['specifications','images','subCategory','brand','offers','reviews.user','provider.user'])->find($data['product_id']);
         if(!$product){
             return [
                 'status' => false,
@@ -145,5 +145,221 @@ class ProductService
             'message' => __('messages.products_retrieved_successfully'),
             'data' => $products,
         ];
+    }
+
+    public function getProviderProducts()
+    {
+        $user = auth()->user();
+        $provider = \App\Models\Provider::where('user_id', $user->id)->first();
+        if (!$provider) {
+            return [
+                'status' => false,
+                'message' => __('messages.provider_not_found'),
+                'data' => []
+            ];
+        }
+
+        $products = Product::where('provider_id', $provider->id)->with(['offers', 'reviews', 'provider.user'])->paginate(10);
+        
+        return [
+            'status' => true,
+            'message' => __('messages.products_retrieved_successfully'),
+            'data' => $products
+        ];
+    }
+
+    public function createProduct(array $data)
+    {
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            $user = auth()->user();
+
+            if ($user->type != 'service_provider') {
+                return [
+                    'status' => false,
+                    'message' => __('messages.unauthorized_provider'),
+                    'data' => []
+                ];
+            }
+
+            $provider = \App\Models\Provider::where('user_id', $user->id)->first();
+            if (!$provider) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.provider_not_found'),
+                    'data' => []
+                ];
+            }
+
+            // Handle main image
+            $imageName = null;
+            if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+                $imageName = time() . '_' . uniqid() . '.' . $data['image']->getClientOriginalExtension();
+                $data['image']->move(public_path('storage/products'), $imageName);
+            }
+
+            $product = Product::create([
+                'provider_id' => $provider->id,
+                'sub_category_id' => $data['sub_category_id'],
+                'brand_id' => $data['brand_id'] ?? null,
+                'name_ar' => $data['name_ar'],
+                'name_en' => $data['name_en'] ?? null,
+                'description_ar' => $data['description_ar'],
+                'description_en' => $data['description_en'] ?? null,
+                'price' => $data['price'],
+                'stock' => $data['stock'] ?? 1,
+                'image' => $imageName,
+                'status' => $data['status'] ?? 'active',
+                'is_featured' => $data['is_featured'] ?? false,
+            ]);
+
+            // Handle gallery images
+            if (isset($data['images']) && is_array($data['images'])) {
+                foreach ($data['images'] as $img) {
+                    if ($img instanceof \Illuminate\Http\UploadedFile) {
+                        $galleryImageName = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+                        $img->move(public_path('storage/products/images'), $galleryImageName);
+                        
+                        \App\Models\ProductImage::create([
+                            'product_id' => $product->id,
+                            'images' => $galleryImageName,
+                        ]);
+                    }
+                }
+            }
+
+            \Illuminate\Support\Facades\DB::commit();
+            $product->load(['images', 'subCategory', 'brand']);
+
+            return [
+                'status' => true,
+                'message' => __('messages.product_created_successfully'),
+                'data' => new ProductListResource($product)
+            ];
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
+    public function updateProduct(array $data)
+    {
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            $user = auth()->user();
+            $provider = \App\Models\Provider::where('user_id', $user->id)->first();
+            if (!$provider) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.provider_not_found'),
+                    'data' => []
+                ];
+            }
+
+            $product = Product::where('id', $data['product_id'])
+                              ->where('provider_id', $provider->id)
+                              ->first();
+
+            if (!$product) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.product_not_found'),
+                    'data' => []
+                ];
+            }
+
+            // Update main fields
+            $fields = ['sub_category_id', 'brand_id', 'name_ar', 'name_en', 'description_ar', 'description_en', 'price', 'stock', 'status', 'is_featured'];
+            foreach ($fields as $field) {
+                if (isset($data[$field])) {
+                    $product->$field = $data[$field];
+                }
+            }
+
+            // Handle main image update
+            if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+                $imageName = time() . '_' . uniqid() . '.' . $data['image']->getClientOriginalExtension();
+                $data['image']->move(public_path('storage/products'), $imageName);
+                $product->image = $imageName;
+            }
+
+            $product->save();
+
+            // Handle gallery images (Add new ones)
+            if (isset($data['images']) && is_array($data['images'])) {
+                foreach ($data['images'] as $img) {
+                    if ($img instanceof \Illuminate\Http\UploadedFile) {
+                        $galleryImageName = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
+                        $img->move(public_path('storage/products/images'), $galleryImageName);
+                        
+                        \App\Models\ProductImage::create([
+                            'product_id' => $product->id,
+                            'images' => $galleryImageName,
+                        ]);
+                    }
+                }
+            }
+
+            \Illuminate\Support\Facades\DB::commit();
+            $product->load(['images', 'subCategory', 'brand']);
+
+            return [
+                'status' => true,
+                'message' => __('messages.product_updated_successfully'),
+                'data' => new ProductListResource($product)
+            ];
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
+    public function deleteProduct($product_id)
+    {
+        try {
+            $user = auth()->user();
+            $provider = \App\Models\Provider::where('user_id', $user->id)->first();
+            if (!$provider) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.provider_not_found'),
+                    'data' => []
+                ];
+            }
+
+            $product = Product::where('id', $product_id)
+                              ->where('provider_id', $provider->id)
+                              ->first();
+
+            if (!$product) {
+                return [
+                    'status' => false,
+                    'message' => __('messages.product_not_found'),
+                    'data' => []
+                ];
+            }
+
+            $product->delete();
+
+            return [
+                'status' => true,
+                'message' => __('messages.product_deleted_successfully'),
+                'data' => []
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
     }
 }

@@ -96,7 +96,7 @@ class ProviderService
             ];
         }
 
-        $provider = Provider::with('user', 'services', 'reviews.user')->where('user_id', $user->id)->first();
+        $provider = Provider::with('user', 'services', 'reviews.user', 'products')->where('user_id', $user->id)->first();
 
         if (!$provider) {
             return [
@@ -418,7 +418,7 @@ class ProviderService
         }
     }
     public  function getProviderById($id){
-        $provider = Provider::with('user','services','reviews')->find($id);
+        $provider = Provider::with('user','services','reviews','products')->find($id);
         if (!$provider) {
             return [
                 'status' => false,

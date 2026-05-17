@@ -21,6 +21,7 @@ class ProductResource extends JsonResource
             'image' => $this->image_path,
             'price' => $this->price,
             'description' => $this->description,
+            'provider' => \App\Http\Resources\API\GENERAL\ProviderResource::make($this->whenLoaded('provider')),
             'offers' => OfferResource::collection($this->whenLoaded('offers')),
             'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
             'is_favorite' => auth('sanctum')->check() ? $this->favorites()->where('user_id', auth('sanctum')->id())->where('is_active', true)->exists() : false,

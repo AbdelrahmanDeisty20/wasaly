@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\ProductRequest;
 use App\Http\Requests\API\GENERAL\ProductFilterRequest;
 use App\Http\Requests\API\GENERAL\SearchProductRequest;
+use App\Http\Requests\API\GENERAL\StoreProductRequest;
+use App\Http\Requests\API\GENERAL\UpdateProductRequest;
 use App\Http\Resources\API\ProductResource;
 use App\Services\API\General\ProductService;
 use App\Traits\ApiResponse;
@@ -54,5 +56,41 @@ class ProductController extends Controller
             return $this->paginated(ProductResource::class, $result['data'], $result['message']);
         }
         return $this->error($result['message'],200);
+    }
+
+    public function getProviderProducts()
+    {
+        $result = $this->productService->getProviderProducts();
+        if ($result['status']) {
+            return $this->paginated(ProductResource::class, $result['data'], $result['message']);
+        }
+        return $this->error($result['message'], 404);
+    }
+
+    public function createProduct(StoreProductRequest $request)
+    {
+        $result = $this->productService->createProduct($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 201);
+    }
+
+    public function updateProduct(UpdateProductRequest $request)
+    {
+        $result = $this->productService->updateProduct($request->validated());
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
+
+    public function deleteProduct(Request $request)
+    {
+        $result = $this->productService->deleteProduct($request->product_id);
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
     }
 }

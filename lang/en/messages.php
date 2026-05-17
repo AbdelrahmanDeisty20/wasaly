@@ -385,4 +385,7 @@ return [
     'no_sub_categories' => 'No sub categories found',
     'services' => 'Services',
     'bookings' => 'Bookings',
+    'product_created_successfully' => 'Product created successfully',
+    'product_updated_successfully' => 'Product updated successfully',
+    'product_deleted_successfully' => 'Product deleted successfully',
 ];

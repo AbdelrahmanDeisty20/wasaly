@@ -21,7 +21,13 @@ class Product extends Model
         'is_featured',
         'brand_id',
         'sub_category_id',
+        'provider_id',
     ];
+
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class);
+    }
 
     public function brand()
     {
