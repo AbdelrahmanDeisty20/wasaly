@@ -23,6 +23,7 @@ class UpdateOfferRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'offer_id' => 'required|exists:offers,id',
             'discount_percentage' => 'nullable|numeric|min:1|max:100',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',

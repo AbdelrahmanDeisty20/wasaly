@@ -40,13 +40,14 @@ class OrderController extends Controller
         return $this->paginated(OrderListResource::class, $orders['data'], $orders['message']);
     }
 
-    public function updateOrderStatus(Request $request, $orderId)
+    public function updateOrderStatus(Request $request)
     {
         $request->validate([
+            'order_id' => 'required|exists:orders,id',
             'status' => 'required|in:pending,accepted,processing,shipped,delivered,cancelled'
         ]);
 
-        $response = $this->orderService->updateOrderStatus($orderId, $request->status);
+        $response = $this->orderService->updateOrderStatus($request->order_id, $request->status);
         if (!$response['status']) {
             return $this->error($response['message'], 422);
         }

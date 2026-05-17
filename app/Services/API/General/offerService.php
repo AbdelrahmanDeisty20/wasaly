@@ -73,7 +73,7 @@ class offerService
         return ['status' => true, 'message' => __('messages.offer_created_successfully'), 'data' => \App\Http\Resources\API\GENERAL\ProviderOfferResource::make($offer->load('product.offers', 'product.reviews'))];
     }
 
-    public function updateOffer($offerId, array $data)
+    public function updateOffer(array $data)
     {
         $user = auth()->user();
         $provider = \App\Models\Provider::where('user_id', $user->id)->first();
@@ -84,7 +84,7 @@ class offerService
 
         $offer = Offer::whereHas('product', function($q) use ($provider) {
             $q->where('provider_id', $provider->id);
-        })->find($offerId);
+        })->find($data['offer_id']);
 
         if (!$offer) {
             return ['status' => false, 'message' => __('messages.offer_not_found_or_not_owned'), 'data' => []];

@@ -1262,7 +1262,7 @@
         {
           "name": "Provider Update Offer",
           "request": {
-            "method": "PUT",
+            "method": "POST",
             "header": [
               {
                 "key": "Accept",
@@ -1278,7 +1278,7 @@
               }
             ],
             "url": {
-              "raw": "https://wasly.bynona.store/api/provider/offers/1/update",
+              "raw": "https://wasly.bynona.store/api/provider/offers/update",
               "host": [
                 "https://wasly.bynona.store"
               ],
@@ -1286,7 +1286,6 @@
                 "api",
                 "provider",
                 "offers",
-                "1",
                 "update"
               ]
             },
@@ -1302,7 +1301,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"discount_percentage\": 30\n}",
+              "raw": "{\n  \"offer_id\": 1,\n  \"discount_percentage\": 30\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1331,7 +1330,7 @@
               }
             ],
             "url": {
-              "raw": "https://wasly.bynona.store/api/provider/offers/1/delete",
+              "raw": "https://wasly.bynona.store/api/provider/offers/delete",
               "host": [
                 "https://wasly.bynona.store"
               ],
@@ -1339,7 +1338,6 @@
                 "api",
                 "provider",
                 "offers",
-                "1",
                 "delete"
               ]
             },
@@ -1352,6 +1350,15 @@
                   "type": "string"
                 }
               ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"offer_id\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
           },
           "response": []
@@ -2362,7 +2369,7 @@
               }
             ],
             "url": {
-              "raw": "https://wasly.bynona.store/api/provider/product-orders/1/status",
+              "raw": "https://wasly.bynona.store/api/provider/product-orders/status",
               "host": [
                 "https://wasly.bynona.store"
               ],
@@ -2370,7 +2377,6 @@
                 "api",
                 "provider",
                 "product-orders",
-                "1",
                 "status"
               ]
             },
@@ -2386,7 +2392,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"processing\"\n}",
+              "raw": "{\n  \"order_id\": 1,\n  \"status\": \"processing\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

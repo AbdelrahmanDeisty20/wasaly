@@ -54,18 +54,21 @@ class OfferController extends Controller
         return $this->error($result['message'], 400);
     }
 
-    public function updateOffer($offerId, \App\Http\Requests\API\GENERAL\UpdateOfferRequest $request)
+    public function updateOffer(\App\Http\Requests\API\GENERAL\UpdateOfferRequest $request)
     {
-        $result = $this->offerService->updateOffer($offerId, $request->validated());
+        $result = $this->offerService->updateOffer($request->validated());
         if ($result['status']) {
             return $this->success($result['data'], $result['message']);
         }
         return $this->error($result['message'], 400);
     }
 
-    public function deleteOffer($offerId)
+    public function deleteOffer(Request $request)
     {
-        $result = $this->offerService->deleteOffer($offerId);
+        $request->validate([
+            'offer_id' => 'required|exists:offers,id'
+        ]);
+        $result = $this->offerService->deleteOffer($request->offer_id);
         if ($result['status']) {
             return $this->success($result['data'], $result['message']);
         }
