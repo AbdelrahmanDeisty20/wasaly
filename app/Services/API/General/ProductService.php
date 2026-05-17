@@ -230,11 +230,14 @@ class ProductService
 
             // Handle specifications
             if (isset($data['specifications']) && is_array($data['specifications'])) {
-                foreach ($data['specifications'] as $spec) {
+                $specFiles = request()->file('specifications') ?? [];
+                foreach ($data['specifications'] as $index => $spec) {
                     $iconName = null;
-                    if (isset($spec['icon']) && $spec['icon'] instanceof \Illuminate\Http\UploadedFile) {
-                        $iconName = time() . '_' . uniqid() . '.' . $spec['icon']->getClientOriginalExtension();
-                        $spec['icon']->move(public_path('storage/specifications'), $iconName);
+                    $iconFile = $spec['icon']
+                        ?? ($specFiles[$index]['icon'] ?? null);
+                    if ($iconFile instanceof \Illuminate\Http\UploadedFile) {
+                        $iconName = time() . '_' . uniqid() . '.' . $iconFile->getClientOriginalExtension();
+                        $iconFile->move(public_path('storage/specifications'), $iconName);
                     }
                     \App\Models\Specification::create([
                         'product_id' => $product->id,
@@ -326,11 +329,14 @@ class ProductService
             // Handle specifications update (if provided)
             if (isset($data['specifications']) && is_array($data['specifications'])) {
                 \App\Models\Specification::where('product_id', $product->id)->delete();
-                foreach ($data['specifications'] as $spec) {
+                $specFiles = request()->file('specifications') ?? [];
+                foreach ($data['specifications'] as $index => $spec) {
                     $iconName = null;
-                    if (isset($spec['icon']) && $spec['icon'] instanceof \Illuminate\Http\UploadedFile) {
-                        $iconName = time() . '_' . uniqid() . '.' . $spec['icon']->getClientOriginalExtension();
-                        $spec['icon']->move(public_path('storage/specifications'), $iconName);
+                    $iconFile = $spec['icon']
+                        ?? ($specFiles[$index]['icon'] ?? null);
+                    if ($iconFile instanceof \Illuminate\Http\UploadedFile) {
+                        $iconName = time() . '_' . uniqid() . '.' . $iconFile->getClientOriginalExtension();
+                        $iconFile->move(public_path('storage/specifications'), $iconName);
                     }
                     \App\Models\Specification::create([
                         'product_id' => $product->id,
