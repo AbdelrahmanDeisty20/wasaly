@@ -318,7 +318,7 @@ return [
     'time_required' => 'Time is required',
     'date_required' => 'Date is required',
     'invalid_time_for_selected_day_or_service' => 'The selected time is not available for this day or service',
-    'cannot_reschedule_in_current_status' => 'This booking cannot be rescheduled in its current status (must be accepted or cancelled)',
+    'cannot_reschedule_in_current_status' => 'This booking cannot be rescheduled in its current status (must be accepted or pending)',
     'shop' => 'Shop',
     'sales' => 'Sales',
     'user_management' => 'User Management',

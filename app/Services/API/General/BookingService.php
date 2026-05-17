@@ -263,7 +263,7 @@ class BookingService
             }
 
             // التحقق من حالة الحجز الحالية (مسموح فقط للمقبول أو الملغي أو اللي فيه اقتراح أصلاً)
-            if (!in_array($booking->status, ['accepted', 'cancelled', 'reschedule_by_provider', 'reschedule_by_customer'])) {
+            if (!in_array($booking->status, ['accepted', 'pending', 'reschedule_by_provider', 'reschedule_by_customer'])) {
                 return [
                     'status' => false,
                     'message' => __('messages.cannot_reschedule_in_current_status'),
