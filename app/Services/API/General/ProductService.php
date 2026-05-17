@@ -12,7 +12,7 @@ class ProductService
     use ApiResponse;
     public function getProducts()
     {
-        $products = Product::with(['offers','reviews'])->paginate(10);
+        $products = Product::with(['offers','reviews','images','specifications'])->paginate(10);
         if($products->isEmpty()){
             return [
                 'status' => false,
@@ -45,7 +45,7 @@ class ProductService
 
     public function filter(array $filters = [])
     {
-        $query = Product::with(['offers', 'images', 'reviews']);
+        $query = Product::with(['offers', 'images', 'reviews', 'specifications']);
 
         // 1. الفلترة بالتصنيف الفرعي (SubCategory Filter)
         if (!empty($filters['category_id'])) {
@@ -159,7 +159,7 @@ class ProductService
             ];
         }
 
-        $products = Product::where('provider_id', $provider->id)->with(['offers', 'reviews', 'provider.user'])->paginate(10);
+        $products = Product::where('provider_id', $provider->id)->with(['offers', 'reviews', 'images', 'specifications', 'provider.user'])->paginate(10);
         
         return [
             'status' => true,
@@ -228,8 +228,22 @@ class ProductService
                 }
             }
 
+            // Handle specifications
+            if (isset($data['specifications']) && is_array($data['specifications'])) {
+                foreach ($data['specifications'] as $spec) {
+                    \App\Models\Specification::create([
+                        'product_id' => $product->id,
+                        'key_ar' => $spec['key_ar'],
+                        'key_en' => $spec['key_en'],
+                        'value_ar' => $spec['value_ar'],
+                        'value_en' => $spec['value_en'],
+                        'icon' => $spec['icon'] ?? null,
+                    ]);
+                }
+            }
+
             \Illuminate\Support\Facades\DB::commit();
-            $product->load(['images', 'subCategory', 'brand']);
+            $product->load(['images', 'subCategory', 'brand', 'specifications']);
 
             return [
                 'status' => true,
@@ -304,8 +318,23 @@ class ProductService
                 }
             }
 
+            // Handle specifications update (if provided)
+            if (isset($data['specifications']) && is_array($data['specifications'])) {
+                \App\Models\Specification::where('product_id', $product->id)->delete();
+                foreach ($data['specifications'] as $spec) {
+                    \App\Models\Specification::create([
+                        'product_id' => $product->id,
+                        'key_ar' => $spec['key_ar'],
+                        'key_en' => $spec['key_en'],
+                        'value_ar' => $spec['value_ar'],
+                        'value_en' => $spec['value_en'],
+                        'icon' => $spec['icon'] ?? null,
+                    ]);
+                }
+            }
+
             \Illuminate\Support\Facades\DB::commit();
-            $product->load(['images', 'subCategory', 'brand']);
+            $product->load(['images', 'subCategory', 'brand', 'specifications']);
 
             return [
                 'status' => true,

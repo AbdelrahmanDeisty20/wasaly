@@ -35,6 +35,12 @@ class UpdateProductRequest extends FormRequest
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'specifications' => 'nullable|array',
+            'specifications.*.key_ar' => 'required_with:specifications|string|max:255',
+            'specifications.*.key_en' => 'required_with:specifications|string|max:255',
+            'specifications.*.value_ar' => 'required_with:specifications|string|max:255',
+            'specifications.*.value_en' => 'required_with:specifications|string|max:255',
+            'specifications.*.icon' => 'nullable|string|max:255',
             'status' => 'nullable|in:active,inactive',
             'is_featured' => 'nullable|boolean',
         ];

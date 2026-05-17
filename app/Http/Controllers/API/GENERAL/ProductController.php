@@ -9,6 +9,7 @@ use App\Http\Requests\API\GENERAL\SearchProductRequest;
 use App\Http\Requests\API\GENERAL\StoreProductRequest;
 use App\Http\Requests\API\GENERAL\UpdateProductRequest;
 use App\Http\Resources\API\ProductResource;
+use App\Http\Resources\API\ProductListResource;
 use App\Services\API\General\ProductService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -24,11 +25,10 @@ class ProductController extends Controller
     public function getProducts()
     {
         $result = $this->productService->getProducts();
-        if($result)
-        {
-            return $this->paginated(ProductResource::class,$result['data'],$result['message']);
+        if ($result['status']) {
+            return $this->paginated(ProductListResource::class, $result['data'], $result['message']);
         }
-        return $this->error($result['message'],404);
+        return $this->error($result['message'], 404);
     }
     public function getProduct(ProductRequest $request)
     {
@@ -62,7 +62,7 @@ class ProductController extends Controller
     {
         $result = $this->productService->getProviderProducts();
         if ($result['status']) {
-            return $this->paginated(ProductResource::class, $result['data'], $result['message']);
+            return $this->paginated(ProductListResource::class, $result['data'], $result['message']);
         }
         return $this->error($result['message'], 404);
     }
