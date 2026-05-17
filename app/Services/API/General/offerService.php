@@ -70,7 +70,7 @@ class offerService
         $data['is_active'] = $data['is_active'] ?? true;
         $offer = Offer::create($data);
 
-        return ['status' => true, 'message' => __('messages.offer_created_successfully'), 'data' => OfferResource::make($offer->load('product.offers', 'product.reviews'))];
+        return ['status' => true, 'message' => __('messages.offer_created_successfully'), 'data' => \App\Http\Resources\API\GENERAL\ProviderOfferResource::make($offer->load('product.offers', 'product.reviews'))];
     }
 
     public function updateOffer($offerId, array $data)
@@ -99,7 +99,7 @@ class offerService
 
         $offer->update($data);
 
-        return ['status' => true, 'message' => __('messages.offer_updated_successfully'), 'data' => OfferResource::make($offer->load('product.offers', 'product.reviews'))];
+        return ['status' => true, 'message' => __('messages.offer_updated_successfully'), 'data' => \App\Http\Resources\API\GENERAL\ProviderOfferResource::make($offer->load('product.offers', 'product.reviews'))];
     }
 
     public function deleteOffer($offerId)

@@ -40,7 +40,7 @@ class OfferController extends Controller
     {
         $result = $this->offerService->getProviderOffers();
         if ($result['status']) {
-            return $this->paginated(OfferResource::class, $result['data'], $result['message']);
+            return $this->paginated(\App\Http\Resources\API\GENERAL\ProviderOfferResource::class, $result['data'], $result['message']);
         }
         return $this->error($result['message'], 404);
     }
