@@ -388,4 +388,10 @@ return [
     'product_created_successfully' => 'Product created successfully',
     'product_updated_successfully' => 'Product updated successfully',
     'product_deleted_successfully' => 'Product deleted successfully',
+    'product_not_found_or_not_owned' => 'Product not found or not owned by you',
+    'offer_not_found_or_not_owned' => 'Offer not found or not owned by you',
+    'offer_created_successfully' => 'Offer created successfully',
+    'offer_updated_successfully' => 'Offer updated successfully',
+    'offer_deleted_successfully' => 'Offer deleted successfully',
+    'invalid_status' => 'Invalid order status',
 ];

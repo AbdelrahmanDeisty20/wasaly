@@ -418,4 +418,10 @@ return [
     'product_created_successfully' => 'تم إضافة المنتج بنجاح',
     'product_updated_successfully' => 'تم تحديث المنتج بنجاح',
     'product_deleted_successfully' => 'تم حذف المنتج بنجاح',
+    'product_not_found_or_not_owned' => 'المنتج غير موجود أو لا تملكه',
+    'offer_not_found_or_not_owned' => 'العرض غير موجود أو لا تملكه',
+    'offer_created_successfully' => 'تم إضافة العرض بنجاح',
+    'offer_updated_successfully' => 'تم تحديث العرض بنجاح',
+    'offer_deleted_successfully' => 'تم حذف العرض بنجاح',
+    'invalid_status' => 'حالة الطلب غير صحيحة',
 ];
