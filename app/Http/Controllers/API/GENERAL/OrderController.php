@@ -26,7 +26,7 @@ class OrderController extends Controller
     {
         $orders = $this->orderService->getMyOrders();
         if (!$orders['status']) {
-            return $this->error($orders['message'], 404);
+            return $this->error($orders['message'], 200);
         }
         return $this->paginated(OrderResource::class, $orders['data'], $orders['message']);
     }

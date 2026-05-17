@@ -13,7 +13,7 @@ class OrderService
        $orders = Order::with(['items', 'governorate', 'center'])->where('user_id', auth()->id())->paginate(10);
        if($orders->isEmpty()){
         return [
-            'status' => false,
+            'status' => true,
             'message' => __('messages.no_orders_found'),
             'data' => []
         ];
