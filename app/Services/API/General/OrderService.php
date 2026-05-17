@@ -15,7 +15,7 @@ class OrderService
         return [
             'status' => true,
             'message' => __('messages.no_orders_found'),
-            'data' => []
+            'data' => $orders
         ];
        }
        return [
