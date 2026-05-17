@@ -35,4 +35,40 @@ class OfferController extends Controller
             return $this->error($result['message'], 400);
         }
     }
+
+    public function getProviderOffers()
+    {
+        $result = $this->offerService->getProviderOffers();
+        if ($result['status']) {
+            return $this->paginated(OfferResource::class, $result['data'], $result['message']);
+        }
+        return $this->error($result['message'], 404);
+    }
+
+    public function createOffer(\App\Http\Requests\API\GENERAL\StoreOfferRequest $request)
+    {
+        $result = $this->offerService->createOffer($request->validated());
+        if ($result['status']) {
+            return $this->success($result['data'], $result['message'], 201);
+        }
+        return $this->error($result['message'], 400);
+    }
+
+    public function updateOffer($offerId, \App\Http\Requests\API\GENERAL\UpdateOfferRequest $request)
+    {
+        $result = $this->offerService->updateOffer($offerId, $request->validated());
+        if ($result['status']) {
+            return $this->success($result['data'], $result['message']);
+        }
+        return $this->error($result['message'], 400);
+    }
+
+    public function deleteOffer($offerId)
+    {
+        $result = $this->offerService->deleteOffer($offerId);
+        if ($result['status']) {
+            return $this->success($result['data'], $result['message']);
+        }
+        return $this->error($result['message'], 400);
+    }
 }

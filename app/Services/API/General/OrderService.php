@@ -25,6 +25,70 @@ class OrderService
        ];
     }
 
+    public function getProviderOrders()
+    {
+        $user = auth()->user();
+        $provider = \App\Models\Provider::where('user_id', $user->id)->first();
+        
+        if (!$provider) {
+            return [
+                'status' => false,
+                'message' => __('messages.provider_not_found'),
+                'data' => []
+            ];
+        }
+
+        $orders = Order::whereHas('items.product', function ($query) use ($provider) {
+            $query->where('provider_id', $provider->id);
+        })->with(['items.product.offers', 'governorate', 'center', 'user'])->paginate(10);
+
+        if ($orders->isEmpty()) {
+            return [
+                'status' => true,
+                'message' => __('messages.no_orders_found'),
+                'data' => $orders
+            ];
+        }
+
+        return [
+            'status' => true,
+            'message' => __('messages.orders_retrieved_successfully'),
+            'data' => $orders
+        ];
+    }
+
+    public function updateOrderStatus($orderId, $status)
+    {
+        $user = auth()->user();
+        $provider = \App\Models\Provider::where('user_id', $user->id)->first();
+        
+        if (!$provider) {
+            return ['status' => false, 'message' => __('messages.provider_not_found'), 'data' => []];
+        }
+
+        $order = Order::whereHas('items.product', function ($query) use ($provider) {
+            $query->where('provider_id', $provider->id);
+        })->find($orderId);
+
+        if (!$order) {
+            return ['status' => false, 'message' => __('messages.order_not_found'), 'data' => []];
+        }
+
+        $validStatuses = ['pending', 'accepted', 'processing', 'shipped', 'delivered', 'cancelled'];
+        if (!in_array($status, $validStatuses)) {
+            return ['status' => false, 'message' => __('messages.invalid_status'), 'data' => []];
+        }
+
+        $order->status = $status;
+        $order->save();
+
+        return [
+            'status' => true,
+            'message' => __('messages.order_updated_successfully'),
+            'data' => \App\Http\Resources\API\GENERAL\OrderListResource::make($order->load(['items.product.offers', 'governorate', 'center', 'user']))
+        ];
+    }
+
     public function getOrderDetails($orderId){
         $order = Order::with(['items.product.offers', 'governorate', 'center'])->find($orderId);
         if(!$order){

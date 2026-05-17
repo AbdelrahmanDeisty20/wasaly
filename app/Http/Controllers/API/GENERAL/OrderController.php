@@ -31,6 +31,28 @@ class OrderController extends Controller
         return $this->paginated(OrderResource::class, $orders['data'], $orders['message']);
     }
 
+    public function getProviderOrders()
+    {
+        $orders = $this->orderService->getProviderOrders();
+        if (!$orders['status']) {
+            return $this->error($orders['message'], 404);
+        }
+        return $this->paginated(OrderListResource::class, $orders['data'], $orders['message']);
+    }
+
+    public function updateOrderStatus(Request $request, $orderId)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,accepted,processing,shipped,delivered,cancelled'
+        ]);
+
+        $response = $this->orderService->updateOrderStatus($orderId, $request->status);
+        if (!$response['status']) {
+            return $this->error($response['message'], 422);
+        }
+        return $this->success($response['data'], $response['message']);
+    }
+
     public function getOrderDetails($orderId)
     {
         $order = $this->orderService->getOrderDetails($orderId);
