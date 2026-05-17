@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API;
 
+use App\Http\Resources\API\GENERAL\ProviderResource;
 use App\Http\Resources\API\GENERAL\ReviewResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
@@ -25,8 +26,8 @@ class ProductListResource extends JsonResource
             'images' => ProductImageResource::collection($this->whenLoaded('images')),
             'sub_category' => SubCategoryResource::make($this->whenLoaded('subCategory')),
             'brand' => BrandResource::make($this->whenLoaded('brand')),
-            'provider' => \App\Http\Resources\API\GENERAL\ProviderResource::make($this->whenLoaded('provider')),
-            'reviews'=>ReviewResource::collection($this->whenLoaded('reviews')),    
+            'reviews'=>ReviewResource::collection($this->whenLoaded('reviews')),
+            'provider'=>ProviderResource::collection($this->whenLoaded('provider')),    
             'offers'=>OfferResource::collection($this->whenLoaded('offers')),
             'is_favorite' => auth('sanctum')->check() ? $this->favorites()->where('user_id', auth('sanctum')->id())->where('is_active', true)->exists() : false,
         ];
