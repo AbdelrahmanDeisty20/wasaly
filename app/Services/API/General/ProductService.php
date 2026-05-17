@@ -12,7 +12,7 @@ class ProductService
     use ApiResponse;
     public function getProducts()
     {
-        $products = Product::with(['offers','reviews','images','specifications'])->paginate(10);
+        $products = Product::with(['offers','reviews'])->paginate(10);
         if($products->isEmpty()){
             return [
                 'status' => false,
@@ -45,7 +45,7 @@ class ProductService
 
     public function filter(array $filters = [])
     {
-        $query = Product::with(['offers', 'images', 'reviews', 'specifications']);
+        $query = Product::with(['offers', 'images', 'reviews']);
 
         // 1. الفلترة بالتصنيف الفرعي (SubCategory Filter)
         if (!empty($filters['category_id'])) {
@@ -159,7 +159,7 @@ class ProductService
             ];
         }
 
-        $products = Product::where('provider_id', $provider->id)->with(['offers', 'reviews', 'images', 'specifications', 'provider.user'])->paginate(10);
+        $products = Product::where('provider_id', $provider->id)->with(['offers', 'reviews', 'images', 'specifications', 'provider.user',])->paginate(10);
         
         return [
             'status' => true,
@@ -201,7 +201,7 @@ class ProductService
             $product = Product::create([
                 'provider_id' => $provider->id,
                 'sub_category_id' => $data['sub_category_id'],
-                'brand_id' => $data['brand_id'] ?? null,
+                'brand_id' => $data['brand_id'],
                 'name_ar' => $data['name_ar'],
                 'name_en' => $data['name_en'] ?? null,
                 'description_ar' => $data['description_ar'],
