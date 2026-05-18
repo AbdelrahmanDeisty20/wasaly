@@ -4,6 +4,7 @@ namespace App\Services\API\General;
 
 use App\Http\Resources\API\ProductListResource;
 use App\Http\Resources\API\ProductResource;
+use App\Http\Resources\API\ProviderProductResource;
 use App\Models\Product;
 use App\Traits\ApiResponse;
 
@@ -256,7 +257,7 @@ class ProductService
             return [
                 'status' => true,
                 'message' => __('messages.product_created_successfully'),
-                'data' => new ProductListResource($product)
+                'data' => new ProviderProductResource($product)
             ];
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\DB::rollBack();
@@ -359,7 +360,7 @@ class ProductService
             return [
                 'status' => true,
                 'message' => __('messages.product_updated_successfully'),
-                'data' => new ProductListResource($product)
+                'data' => new ProviderProductResource($product)
             ];
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\DB::rollBack();

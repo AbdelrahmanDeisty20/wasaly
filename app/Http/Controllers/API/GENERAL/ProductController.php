@@ -10,6 +10,7 @@ use App\Http\Requests\API\GENERAL\StoreProductRequest;
 use App\Http\Requests\API\GENERAL\UpdateProductRequest;
 use App\Http\Resources\API\ProductResource;
 use App\Http\Resources\API\ProductListResource;
+use App\Http\Resources\API\ProviderProductResource;
 use App\Services\API\General\ProductService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -62,7 +63,7 @@ class ProductController extends Controller
     {
         $result = $this->productService->getProviderProducts();
         if ($result['status']) {
-            return $this->paginated(ProductListResource::class, $result['data'], $result['message']);
+            return $this->paginated(ProviderProductResource::class, $result['data'], $result['message']);
         }
         return $this->error($result['message'], 404);
     }
