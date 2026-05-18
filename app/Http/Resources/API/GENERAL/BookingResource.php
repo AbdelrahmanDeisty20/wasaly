@@ -20,6 +20,7 @@ class BookingResource extends JsonResource
             'customer_name' => $this->customer_name,
             'customer_phone' => $this->customer_phone,
             'customer_email' => $this->customer_email,
+            'problem_description'=>$this->problem_description,
             'provider' => ProviderResource::make($this->whenLoaded('provider')),
             'status' => $this->status,
             'service' => ServiceResource::make($this->whenLoaded('service')),
