@@ -210,7 +210,7 @@ class ProductService
                 'stock' => $data['stock'],
                 'image' => $imageName,
                 'status' => $data['status'] ?? 'active',
-                'is_featured' => $data['is_featured'] ?? false,
+                'is_featured' => filter_var($data['is_featured'] ?? false, FILTER_VALIDATE_BOOLEAN),
             ]);
 
             // Handle gallery images
@@ -298,7 +298,11 @@ class ProductService
             $fields = ['sub_category_id', 'brand_id', 'name_ar', 'name_en', 'description_ar', 'description_en', 'price', 'stock', 'status', 'is_featured'];
             foreach ($fields as $field) {
                 if (isset($data[$field])) {
-                    $product->$field = $data[$field];
+                    if ($field === 'is_featured') {
+                        $product->is_featured = filter_var($data['is_featured'], FILTER_VALIDATE_BOOLEAN);
+                    } else {
+                        $product->$field = $data[$field];
+                    }
                 }
             }
 
