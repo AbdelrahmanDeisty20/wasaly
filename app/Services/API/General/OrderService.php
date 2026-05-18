@@ -40,7 +40,16 @@ class OrderService
 
         $orders = Order::whereHas('items.product', function ($query) use ($provider) {
             $query->where('provider_id', $provider->id);
-        })->with(['items.product.offers', 'governorate', 'center', 'user'])->paginate(10);
+        })->with([
+            'items' => function ($query) use ($provider) {
+                $query->whereHas('product', function ($q) use ($provider) {
+                    $q->where('provider_id', $provider->id);
+                })->with('product.offers');
+            },
+            'governorate',
+            'center',
+            'user'
+        ])->paginate(10);
 
         if ($orders->isEmpty()) {
             return [
@@ -85,7 +94,16 @@ class OrderService
         return [
             'status' => true,
             'message' => __('messages.order_updated_successfully'),
-            'data' => \App\Http\Resources\API\GENERAL\OrderListResource::make($order->load(['items.product.offers', 'governorate', 'center', 'user']))
+            'data' => \App\Http\Resources\API\GENERAL\OrderListResource::make($order->load([
+                'items' => function ($query) use ($provider) {
+                    $query->whereHas('product', function ($q) use ($provider) {
+                        $q->where('provider_id', $provider->id);
+                    })->with('product.offers');
+                },
+                'governorate',
+                'center',
+                'user'
+            ]))
         ];
     }
 
