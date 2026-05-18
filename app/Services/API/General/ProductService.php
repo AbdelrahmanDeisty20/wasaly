@@ -257,7 +257,7 @@ class ProductService
             return [
                 'status' => true,
                 'message' => __('messages.product_created_successfully'),
-                'data' => new ProviderProductResource($product)
+                'data' => new ProviderProductResource($product->load(['offers']))
             ];
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\DB::rollBack();
@@ -360,7 +360,7 @@ class ProductService
             return [
                 'status' => true,
                 'message' => __('messages.product_updated_successfully'),
-                'data' => new ProviderProductResource($product)
+                'data' => new ProductListResource($product)
             ];
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\DB::rollBack();
