@@ -196,7 +196,11 @@ class ProductService
             $imageName = null;
             if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile && $data['image']->isValid()) {
                 $imageName = time() . '_' . uniqid() . '.' . $data['image']->getClientOriginalExtension();
-                $data['image']->storeAs('products', $imageName, 'public');
+                $destPath = public_path('storage/products');
+                if (!file_exists($destPath)) {
+                    mkdir($destPath, 0775, true);
+                }
+                copy($data['image']->getRealPath(), $destPath . '/' . $imageName);
             }
 
             $product = Product::create([
@@ -219,7 +223,11 @@ class ProductService
                 foreach ($data['images'] as $img) {
                     if ($img instanceof \Illuminate\Http\UploadedFile && $img->isValid()) {
                         $galleryImageName = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
-                        $img->storeAs('products/images', $galleryImageName, 'public');
+                        $destPath = public_path('storage/products/images');
+                        if (!file_exists($destPath)) {
+                            mkdir($destPath, 0775, true);
+                        }
+                        copy($img->getRealPath(), $destPath . '/' . $galleryImageName);
                         
                         \App\Models\ProductImage::create([
                             'product_id' => $product->id,
@@ -238,7 +246,11 @@ class ProductService
                         ?? ($specFiles[$index]['icon'] ?? null);
                     if ($iconFile instanceof \Illuminate\Http\UploadedFile && $iconFile->isValid()) {
                         $iconName = time() . '_' . uniqid() . '.' . $iconFile->getClientOriginalExtension();
-                        $iconFile->storeAs('specifications', $iconName, 'public');
+                        $destPath = public_path('storage/specifications');
+                        if (!file_exists($destPath)) {
+                            mkdir($destPath, 0775, true);
+                        }
+                        copy($iconFile->getRealPath(), $destPath . '/' . $iconName);
                     }
                     \App\Models\Specification::create([
                         'product_id' => $product->id,
@@ -310,7 +322,11 @@ class ProductService
             // Handle main image update
             if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile && $data['image']->isValid()) {
                 $imageName = time() . '_' . uniqid() . '.' . $data['image']->getClientOriginalExtension();
-                $data['image']->storeAs('products', $imageName, 'public');
+                $destPath = public_path('storage/products');
+                if (!file_exists($destPath)) {
+                    mkdir($destPath, 0775, true);
+                }
+                copy($data['image']->getRealPath(), $destPath . '/' . $imageName);
                 $product->image = $imageName;
             }
 
@@ -321,7 +337,11 @@ class ProductService
                 foreach ($data['images'] as $img) {
                     if ($img instanceof \Illuminate\Http\UploadedFile && $img->isValid()) {
                         $galleryImageName = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension();
-                        $img->storeAs('products/images', $galleryImageName, 'public');
+                        $destPath = public_path('storage/products/images');
+                        if (!file_exists($destPath)) {
+                            mkdir($destPath, 0775, true);
+                        }
+                        copy($img->getRealPath(), $destPath . '/' . $galleryImageName);
                         
                         \App\Models\ProductImage::create([
                             'product_id' => $product->id,
@@ -341,7 +361,11 @@ class ProductService
                         ?? ($specFiles[$index]['icon'] ?? null);
                     if ($iconFile instanceof \Illuminate\Http\UploadedFile && $iconFile->isValid()) {
                         $iconName = time() . '_' . uniqid() . '.' . $iconFile->getClientOriginalExtension();
-                        $iconFile->storeAs('specifications', $iconName, 'public');
+                        $destPath = public_path('storage/specifications');
+                        if (!file_exists($destPath)) {
+                            mkdir($destPath, 0775, true);
+                        }
+                        copy($iconFile->getRealPath(), $destPath . '/' . $iconName);
                     }
                     \App\Models\Specification::create([
                         'product_id' => $product->id,
