@@ -6,6 +6,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
@@ -26,7 +27,38 @@ class ProviderForm
                                     ->getOptionLabelFromRecordUsing(fn (\App\Models\User $record) => $record->full_name ?? $record->phone ?? $record->email ?? ('مستخدم #' . $record->id))
                                     ->searchable()
                                     ->preload()
-                                    ->required(),
+                                    ->required()
+                                    ->createOptionForm([
+                                        TextInput::make('full_name')
+                                            ->label(app()->getLocale() == 'ar' ? 'الاسم الكامل' : 'Full Name')
+                                            ->required(),
+                                        TextInput::make('email')
+                                            ->label(app()->getLocale() == 'ar' ? 'البريد الإلكتروني' : 'Email')
+                                            ->email()
+                                            ->required()
+                                            ->unique('users', 'email'),
+                                        TextInput::make('phone')
+                                            ->label(app()->getLocale() == 'ar' ? 'رقم الهاتف' : 'Phone Number')
+                                            ->tel()
+                                            ->required()
+                                            ->unique('users', 'phone'),
+                                        TextInput::make('password')
+                                            ->label(app()->getLocale() == 'ar' ? 'كلمة المرور' : 'Password')
+                                            ->password()
+                                            ->required()
+                                            ->default('password'),
+                                        Select::make('type')
+                                            ->label(app()->getLocale() == 'ar' ? 'النوع' : 'Type')
+                                            ->options([
+                                                'service_provider' => app()->getLocale() == 'ar' ? 'مقدم خدمة' : 'Service Provider',
+                                                'user' => app()->getLocale() == 'ar' ? 'عميل' : 'Customer',
+                                            ])
+                                            ->default('service_provider')
+                                            ->required(),
+                                        Toggle::make('is_active')
+                                            ->label(app()->getLocale() == 'ar' ? 'نشط' : 'Active')
+                                            ->default(true),
+                                    ]),
                                 Select::make('sub_category_id')
                                     ->label(__('messages.sub_category'))
                                     ->relationship(
