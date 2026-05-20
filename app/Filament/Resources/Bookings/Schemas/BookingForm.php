@@ -23,6 +23,7 @@ class BookingForm
                                 Select::make('user_id')
                                     ->label(__('messages.user'))
                                     ->relationship('user', 'name')
+                                    ->getOptionLabelFromRecordUsing(fn (\App\Models\User $record) => $record->full_name ?? $record->phone ?? $record->email ?? ('مستخدم #' . $record->id))
                                     ->searchable()
                                     ->preload()
                                     ->required(),
