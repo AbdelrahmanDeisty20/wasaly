@@ -72,7 +72,11 @@ class ProductForm
                                                 ->schema([
                                                     Select::make('sub_category_id')
                                                         ->label(__('messages.sub_category'))
-                                                        ->relationship('subCategory', 'name_ar')
+                                                        ->relationship(
+                                                            'subCategory',
+                                                            'name_ar',
+                                                            fn ($query) => $query->whereHas('category', fn ($q) => $q->where('name_ar', '!=', 'خدمات منزلية')->where('name_en', '!=', 'Home Services'))
+                                                        )
                                                         ->searchable()
                                                         ->preload()
                                                         ->required(),

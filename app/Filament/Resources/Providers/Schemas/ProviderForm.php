@@ -29,7 +29,11 @@ class ProviderForm
                                     ->required(),
                                 Select::make('sub_category_id')
                                     ->label(__('messages.sub_category'))
-                                    ->relationship('subCategory', 'name_ar')
+                                    ->relationship(
+                                        'subCategory',
+                                        'name_ar',
+                                        fn ($query) => $query->whereHas('category', fn ($q) => $q->where('name_ar', 'خدمات منزلية')->orWhere('name_en', 'Home Services'))
+                                    )
                                     ->searchable()
                                     ->preload()
                                     ->required(),
