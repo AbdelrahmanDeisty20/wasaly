@@ -23,11 +23,16 @@ class ProviderForm
                             ->schema([
                                 Select::make('user_id')
                                     ->label(__('messages.user'))
-                                    ->relationship('user', 'name')
+                                    ->relationship('user', 'name', fn ($query) => $query->where('type', 'service_provider'))
                                     ->getOptionLabelFromRecordUsing(fn (\App\Models\User $record) => $record->full_name ?? $record->phone ?? $record->email ?? ('مستخدم #' . $record->id))
                                     ->searchable()
                                     ->preload()
                                     ->required()
+                                    ->helperText(
+                                        app()->getLocale() == 'ar'
+                                            ? 'إذا لم تقم بإضافة مستخدم بشكل مستقل، يمكنك إضافته من علامة أو زر + يلا!'
+                                            : 'If you have not added a user independently, you can add them using the + button! Go ahead.'
+                                    )
                                     ->createOptionForm([
                                         TextInput::make('full_name')
                                             ->label(app()->getLocale() == 'ar' ? 'الاسم الكامل' : 'Full Name')
@@ -75,6 +80,32 @@ class ProviderForm
                                 TextInput::make('title_en')
                                     ->label(__('messages.service_en'))
                                     ->required(),
+                                \Filament\Forms\Components\Placeholder::make('add_services_link')
+                                    ->label('')
+                                    ->content(new \Illuminate\Support\HtmlString(
+                                        app()->getLocale() == 'ar'
+                                            ? '<div class="p-4 bg-primary-50 dark:bg-primary-950/20 rounded-xl border border-primary-100 dark:border-primary-800/30 flex flex-col md:flex-row items-center justify-between gap-4 mt-2">' .
+                                              '<div>' .
+                                              '<h4 class="text-sm font-semibold text-primary-900 dark:text-primary-100">هل تريد إضافة خدمات مقدم الخدمة بالمرة؟</h4>' .
+                                              '<p class="text-xs text-primary-700 dark:text-primary-300 mt-1">بعد الانتهاء من إضافة مقدم الخدمة، يمكنك الانتقال مباشرة لإضافة خدماته المتنوعة.</p>' .
+                                              '</div>' .
+                                              '<a href="' . route('filament.admin.resources.services.create') . '" target="_blank" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-primary-600 rounded-lg hover:bg-primary-500 transition duration-150">' .
+                                              '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>' .
+                                              'إضافة الخدمات الآن' .
+                                              '</a>' .
+                                              '</div>'
+                                            : '<div class="p-4 bg-primary-50 dark:bg-primary-950/20 rounded-xl border border-primary-100 dark:border-primary-800/30 flex flex-col md:flex-row items-center justify-between gap-4 mt-2">' .
+                                              '<div>' .
+                                              '<h4 class="text-sm font-semibold text-primary-900 dark:text-primary-100">Do you want to add their services too?</h4>' .
+                                              '<p class="text-xs text-primary-700 dark:text-primary-300 mt-1">After completing the provider profile, you can proceed directly to adding their various services.</p>' .
+                                              '</div>' .
+                                              '<a href="' . route('filament.admin.resources.services.create') . '" target="_blank" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-primary-600 rounded-lg hover:bg-primary-500 transition duration-150">' .
+                                              '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>' .
+                                              'Add Services Now' .
+                                              '</a>' .
+                                              '</div>'
+                                    ))
+                                    ->columnSpan(2),
                             ]),
                     ]),
 
