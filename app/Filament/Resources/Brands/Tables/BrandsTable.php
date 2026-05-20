@@ -25,7 +25,10 @@ class BrandsTable
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
                     ->disk('public')
-                    ->state(fn ($record) => $record->image ? 'brands/' . $record->image : null)
+                    ->state(function ($record) {
+                        if (!$record->image) return null;
+                        return str_starts_with($record->image, 'brands/') ? $record->image : 'brands/' . $record->image;
+                    })
                     ->circular(),
                 TextColumn::make('status')
                     ->label(__('messages.status'))

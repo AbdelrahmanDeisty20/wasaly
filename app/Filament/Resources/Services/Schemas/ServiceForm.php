@@ -62,7 +62,7 @@ class ServiceForm
                                 TextInput::make('price')
                                     ->label(__('messages.price'))
                                     ->numeric()
-                                    ->prefix('SAR')
+                                    ->prefix('EGP')
                                     ->required(),
                                 FileUpload::make('image')
                                     ->label(__('messages.image'))

@@ -55,7 +55,18 @@ class BookingsTable
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('user_id')
+                    ->label(app()->getLocale() == 'ar' ? 'العميل' : 'Customer')
+                    ->relationship('user', 'name')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name ?? $record->email ?? 'User #' . $record->id)
+                    ->searchable()
+                    ->preload(),
+                \Filament\Tables\Filters\SelectFilter::make('provider_id')
+                    ->label(app()->getLocale() == 'ar' ? 'مقدم الخدمة' : 'Provider')
+                    ->relationship('provider', 'title_ar')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->title_ar ?? $record->title_en ?? 'Provider #' . $record->id)
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
                 ViewAction::make(),

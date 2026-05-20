@@ -25,7 +25,10 @@ class CategoriesTable
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
                     ->disk('public')
-                    ->state(fn ($record) => $record->image ? 'categories/' . $record->image : null)
+                    ->state(function ($record) {
+                        if (!$record->image) return null;
+                        return str_starts_with($record->image, 'categories/') ? $record->image : 'categories/' . $record->image;
+                    })
                     ->circular(),
                 TextColumn::make('sub_categories_count')
                     ->label(__('messages.sub_categories'))

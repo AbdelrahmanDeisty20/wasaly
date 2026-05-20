@@ -14,26 +14,60 @@ class UserForm
     {
         return $schema
             ->components([
-                TextInput::make('name'),
-                TextInput::make('full_name'),
-                TextInput::make('email')
-                    ->label('Email address')
-                    ->email()
-                    ->required(),
-                TextInput::make('phone')
-                    ->tel(),
-                TextInput::make('avatar'),
-                Select::make('type')
-                    ->options(['user' => 'User', 'service_provider' => 'Service provider'])
-                    ->default('user')
-                    ->required(),
-                TextInput::make('provider'),
-                TextInput::make('provider_id'),
-                DateTimePicker::make('email_verified_at'),
-                Toggle::make('is_active')
-                    ->required(),
-                TextInput::make('password')
-                    ->password(),
+                \Filament\Forms\Components\Section::make(app()->getLocale() == 'ar' ? 'معلومات المستخدم' : 'User Information')
+                    ->schema([
+                        \Filament\Forms\Components\Grid::make(2)
+                            ->schema([
+                                \Filament\Forms\Components\FileUpload::make('avatar')
+                                    ->label(app()->getLocale() == 'ar' ? 'الصورة الشخصية' : 'Avatar')
+                                    ->image()
+                                    ->directory('avatars')
+                                    ->columnSpanFull(),
+                                TextInput::make('name')
+                                    ->label(app()->getLocale() == 'ar' ? 'الاسم المختصر' : 'Name')
+                                    ->required(),
+                                TextInput::make('full_name')
+                                    ->label(app()->getLocale() == 'ar' ? 'الاسم الكامل' : 'Full Name'),
+                                TextInput::make('email')
+                                    ->label(app()->getLocale() == 'ar' ? 'البريد الإلكتروني' : 'Email Address')
+                                    ->email()
+                                    ->required(),
+                                TextInput::make('phone')
+                                    ->label(app()->getLocale() == 'ar' ? 'رقم الهاتف' : 'Phone')
+                                    ->tel(),
+                                Select::make('type')
+                                    ->label(app()->getLocale() == 'ar' ? 'نوع الحساب' : 'Account Type')
+                                    ->options([
+                                        'user' => app()->getLocale() == 'ar' ? 'عميل عادي' : 'User',
+                                        'service_provider' => app()->getLocale() == 'ar' ? 'مقدم خدمة' : 'Service Provider'
+                                    ])
+                                    ->default('user')
+                                    ->required()
+                                    ->reactive(),
+                                \Filament\Forms\Components\Select::make('provider_id')
+                                    ->label(app()->getLocale() == 'ar' ? 'مقدم الخدمة المرتبط (إن وجد)' : 'Linked Provider')
+                                    ->relationship('provider', 'title_ar')
+                                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->title_ar ?? $record->title_en ?? 'Provider #' . $record->id)
+                                    ->searchable()
+                                    ->preload()
+                                    ->visible(fn (\Filament\Forms\Get $get) => $get('type') === 'service_provider'),
+                                TextInput::make('provider')
+                                    ->label(app()->getLocale() == 'ar' ? 'مزود التسجيل (جوجل، الخ)' : 'Auth Provider (Google, etc)'),
+                                DateTimePicker::make('email_verified_at')
+                                    ->label(app()->getLocale() == 'ar' ? 'تاريخ التوثيق' : 'Verified At'),
+                                TextInput::make('password')
+                                    ->label(app()->getLocale() == 'ar' ? 'كلمة المرور' : 'Password')
+                                    ->password()
+                                    ->dehydrateStateUsing(fn ($state) => filled($state) ? \Illuminate\Support\Facades\Hash::make($state) : null)
+                                    ->dehydrated(fn ($state) => filled($state))
+                                    ->required(fn (string $operation): bool => $operation === 'create'),
+                                Toggle::make('is_active')
+                                    ->label(app()->getLocale() == 'ar' ? 'حساب نشط' : 'Is Active')
+                                    ->default(true)
+                                    ->required()
+                                    ->columnSpanFull(),
+                            ]),
+                    ]),
             ]);
     }
 }

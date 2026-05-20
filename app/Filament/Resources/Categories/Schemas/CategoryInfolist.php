@@ -24,8 +24,14 @@ class CategoryInfolist
                                 ImageEntry::make('image')
                                     ->label('')
                                     ->disk('public')
+                                    ->state(function ($record) {
+                                        if (!$record->image) return null;
+                                        return str_starts_with($record->image, 'categories/') ? $record->image : 'categories/' . $record->image;
+                                    })
                                     ->columnSpan(3)
-                                    ->extraImgAttributes(['class' => 'rounded-xl shadow-md']),
+                                    ->circular()
+                                    ->size(100)
+                                    ->extraImgAttributes(['class' => 'shadow-md']),
 
                                 Group::make([
                                     TextEntry::make('name_ar')

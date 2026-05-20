@@ -102,7 +102,7 @@ class ProviderForm
                                 TextInput::make('price_from')
                                     ->label(__('messages.price'))
                                     ->numeric()
-                                    ->prefix('SAR'),
+                                    ->prefix('EGP'),
                                 Select::make('status')
                                     ->label(__('messages.status'))
                                     ->options([
@@ -186,7 +186,7 @@ class ProviderForm
                                         TextInput::make('price')
                                             ->label(__('messages.price'))
                                             ->numeric()
-                                            ->prefix('SAR')
+                                            ->prefix('EGP')
                                             ->required(),
                                         FileUpload::make('image')
                                             ->label(app()->getLocale() == 'ar' ? 'الصورة الرئيسية للخدمة' : 'Main Service Image')
@@ -248,7 +248,7 @@ class ProviderForm
                                         TextInput::make('price')
                                             ->label(__('messages.price'))
                                             ->numeric()
-                                            ->prefix('SAR')
+                                            ->prefix('EGP')
                                             ->required(),
                                         TextInput::make('stock')
                                             ->label(__('messages.stock'))

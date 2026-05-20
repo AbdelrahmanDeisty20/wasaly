@@ -15,60 +15,108 @@ class ServiceInfolist
     {
         return $schema
             ->components([
-                Section::make()
-                    ->schema([
-                        Grid::make(12)
+                \Filament\Schemas\Components\Tabs::make('Service View')
+                    ->tabs([
+                        \Filament\Schemas\Components\Tabs\Tab::make(__('messages.service_details') ?? 'Service Details')
+                            ->icon('heroicon-o-information-circle')
                             ->schema([
-                                ImageEntry::make('image')
-                                    ->label('')
-                                    ->disk('public')
-                                    ->columnSpan(3)
-                                    ->extraImgAttributes(['class' => 'rounded-xl shadow-md']),
-                                
-                                Group::make([
-                                    TextEntry::make('service_ar')
-                                        ->label('')
-                                        ->weight('bold')
-                                        ->size('lg')
-                                        ->color('primary'),
-                                    TextEntry::make('service_en')
-                                        ->label('')
-                                        ->size('md')
-                                        ->color('gray'),
-                                    
-                                    Grid::make(2)->schema([
-                                        TextEntry::make('provider.title_ar')
-                                            ->label(__('messages.service_provider'))
-                                            ->icon('heroicon-m-user-group'),
-                                        TextEntry::make('subCategory.name_ar')
-                                            ->label(__('messages.sub_category'))
-                                            ->icon('heroicon-m-tag'),
+                                \Filament\Schemas\Components\Grid::make(12)
+                                    ->schema([
+                                        \Filament\Schemas\Components\Group::make([
+                                            \Filament\Schemas\Components\Section::make()
+                                                ->schema([
+                                                    \Filament\Schemas\Components\Grid::make(12)
+                                                        ->schema([
+                                                            \Filament\Infolists\Components\ImageEntry::make('image')
+                                                                ->label('')
+                                                                ->disk('public')
+                                                                ->state(function ($record) {
+                                                                    if (!$record->image) return null;
+                                                                    return str_starts_with($record->image, 'services/') ? $record->image : 'services/' . $record->image;
+                                                                })
+                                                                ->columnSpan(3)
+                                                                ->circular()
+                                                                ->size(100)
+                                                                ->extraImgAttributes(['class' => 'shadow-md']),
+                                                            
+                                                            \Filament\Schemas\Components\Group::make([
+                                                                TextEntry::make('service_ar')
+                                                                    ->label('')
+                                                                    ->weight('bold')
+                                                                    ->size('lg')
+                                                                    ->color('primary'),
+                                                                TextEntry::make('service_en')
+                                                                    ->label('')
+                                                                    ->size('md')
+                                                                    ->color('gray'),
+                                                                
+                                                                \Filament\Schemas\Components\Grid::make(2)
+                                                                    ->schema([
+                                                                        TextEntry::make('provider.title_ar')
+                                                                            ->label(__('messages.service_provider'))
+                                                                            ->icon('heroicon-m-user-group'),
+                                                                        TextEntry::make('subCategory.name_ar')
+                                                                            ->label(__('messages.sub_category'))
+                                                                            ->icon('heroicon-m-tag'),
+                                                                    ])->extraAttributes(['class' => 'mt-4']),
+                                                            ])->columnSpan(9),
+                                                        ]),
+
+                                                    \Filament\Schemas\Components\Section::make(__('messages.description_ar'))
+                                                        ->schema([
+                                                            TextEntry::make('description_ar')
+                                                                ->label('')
+                                                                ->markdown()
+                                                                ->prose(),
+                                                        ])
+                                                        ->compact()
+                                                        ->collapsible()
+                                                        ->extraAttributes(['class' => 'mt-6']),
+
+                                                    \Filament\Schemas\Components\Section::make(__('messages.description_en'))
+                                                        ->schema([
+                                                            TextEntry::make('description_en')
+                                                                ->label('')
+                                                                ->markdown()
+                                                                ->prose(),
+                                                        ])
+                                                        ->compact()
+                                                        ->collapsible(),
+                                                ]),
+                                        ])->columnSpan(9),
+
+                                        \Filament\Schemas\Components\Group::make([
+                                            \Filament\Schemas\Components\Section::make(__('messages.pricing') ?? 'Pricing')
+                                                ->schema([
+                                                    TextEntry::make('price')
+                                                        ->label(__('messages.price'))
+                                                        ->weight('bold')
+                                                        ->size('lg')
+                                                        ->money('EGP')
+                                                        ->color('success'),
+                                                ]),
+                                        ])->columnSpan(3),
                                     ]),
-
-                                    TextEntry::make('price')
-                                        ->label(__('messages.price'))
-                                        ->weight('bold')
-                                        ->color('success')
-                                        ->money('SAR'),
-                                ])->columnSpan(9),
                             ]),
-                    ]),
 
-                Section::make(__('messages.description_ar'))
-                    ->schema([
-                        TextEntry::make('description_ar')
-                            ->label('')
-                            ->markdown(),
+                        \Filament\Schemas\Components\Tabs\Tab::make(__('messages.gallery'))
+                            ->icon('heroicon-o-photo')
+                            ->schema([
+                                \Filament\Infolists\Components\RepeatableEntry::make('serviceImages')
+                                    ->label(__('messages.gallery'))
+                                    ->schema([
+                                        ImageEntry::make('images')
+                                            ->label('')
+                                            ->disk('public')
+                                            ->state(fn ($record) => $record->images ? 'services/images/' . $record->images : null)
+                                            ->width('100%')
+                                            ->height('auto')
+                                            ->extraImgAttributes(['class' => 'rounded-lg shadow-sm']),
+                                    ])
+                                    ->grid(4),
+                            ]),
                     ])
-                    ->collapsible(),
-
-                Section::make(__('messages.description_en'))
-                    ->schema([
-                        TextEntry::make('description_en')
-                            ->label('')
-                            ->markdown(),
-                    ])
-                    ->collapsible(),
+                    ->columnSpanFull(),
             ]);
     }
 }

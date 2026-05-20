@@ -19,8 +19,14 @@ class BrandInfolist
                                 ImageEntry::make('image')
                                     ->label('')
                                     ->disk('public')
+                                    ->state(function ($record) {
+                                        if (!$record->image) return null;
+                                        return str_starts_with($record->image, 'brands/') ? $record->image : 'brands/' . $record->image;
+                                    })
                                     ->columnSpan(3)
-                                    ->extraImgAttributes(['class' => 'rounded-xl shadow-md']),
+                                    ->circular()
+                                    ->size(100)
+                                    ->extraImgAttributes(['class' => 'shadow-md']),
                                 
                                 \Filament\Schemas\Components\Group::make([
                                     TextEntry::make('name_ar')

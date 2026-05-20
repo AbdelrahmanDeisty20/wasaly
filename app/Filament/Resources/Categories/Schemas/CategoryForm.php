@@ -16,6 +16,7 @@ class CategoryForm
                 \Filament\Schemas\Components\Wizard::make([
                     \Filament\Schemas\Components\Wizard\Step::make('نوع الإضافة')
                         ->description('ماذا تود أن تضيف اليوم؟')
+                        ->visible(fn (string $operation): bool => $operation === 'create')
                         ->schema([
                             \Filament\Forms\Components\Radio::make('addition_type')
                                 ->label('')
@@ -30,18 +31,18 @@ class CategoryForm
 
                     \Filament\Schemas\Components\Wizard\Step::make(__('messages.category'))
                         ->description('بيانات القسم الرئيسي')
-                        ->hidden(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'sub_only')
+                        ->hidden(fn (\Filament\Schemas\Components\Utilities\Get $get, string $operation) => $operation === 'create' && $get('addition_type') === 'sub_only')
                         ->schema([
                             \Filament\Schemas\Components\Grid::make(2)
                                 ->schema([
                                     TextInput::make('name_ar')
                                         ->label(__('messages.service_ar'))
                                         ->placeholder('مثال: مطاعم')
-                                        ->required(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'main'),
+                                        ->required(fn (\Filament\Schemas\Components\Utilities\Get $get, string $operation) => $operation === 'edit' || $get('addition_type') === 'main'),
                                     TextInput::make('name_en')
                                         ->label(__('messages.service_en'))
                                         ->placeholder('e.g. Restaurants')
-                                        ->required(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'main'),
+                                        ->required(fn (\Filament\Schemas\Components\Utilities\Get $get, string $operation) => $operation === 'edit' || $get('addition_type') === 'main'),
                                     Select::make('status')
                                         ->label(__('messages.status'))
                                         ->options([
@@ -53,8 +54,7 @@ class CategoryForm
                                     FileUpload::make('image')
                                         ->label(__('messages.image'))
                                         ->image()
-                                        ->directory('categories')
-                                        ->required(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'main'),
+                                        ->directory('categories'),
                                 ]),
                         ]),
 
@@ -66,8 +66,8 @@ class CategoryForm
                                 ->options(\App\Models\Category::pluck('name_ar', 'id'))
                                 ->searchable()
                                 ->preload()
-                                ->visible(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'sub_only')
-                                ->required(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('addition_type') === 'sub_only'),
+                                ->visible(fn (\Filament\Schemas\Components\Utilities\Get $get, string $operation) => $operation === 'create' && $get('addition_type') === 'sub_only')
+                                ->required(fn (\Filament\Schemas\Components\Utilities\Get $get, string $operation) => $operation === 'create' && $get('addition_type') === 'sub_only'),
 
                             \Filament\Forms\Components\Repeater::make('subCategories')
                                 ->relationship('subCategories')
@@ -91,8 +91,7 @@ class CategoryForm
                                             FileUpload::make('image')
                                                 ->label(__('messages.image'))
                                                 ->image()
-                                                ->directory('subcategories')
-                                                ->required(),
+                                                ->directory('subcategories'),
                                         ]),
                                 ])
                                 ->itemLabel(fn (array $state): ?string => $state['name_ar'] ?? null)

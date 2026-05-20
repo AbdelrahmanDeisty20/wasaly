@@ -24,7 +24,7 @@ class OrdersTable
                     ->searchable(),
                 TextColumn::make('total_price')
                     ->label(__('messages.total_price'))
-                    ->money('SAR')
+                    ->money('EGP')
                     ->sortable(),
                 TextColumn::make('status')
                     ->label(__('messages.status'))
@@ -54,7 +54,12 @@ class OrdersTable
                     ->sortable(),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('user_id')
+                    ->label(app()->getLocale() == 'ar' ? 'العميل' : 'Customer')
+                    ->relationship('user', 'name')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name ?? $record->email ?? 'User #' . $record->id)
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
                 ViewAction::make(),

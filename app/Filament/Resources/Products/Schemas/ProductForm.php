@@ -78,7 +78,7 @@ class ProductForm
                                                     TextInput::make('price')
                                                         ->label(__('messages.price'))
                                                         ->numeric()
-                                                        ->prefix('SAR')
+                                                        ->prefix('EGP')
                                                         ->required(),
                                                     TextInput::make('stock')
                                                         ->label(__('messages.stock'))

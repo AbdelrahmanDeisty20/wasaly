@@ -19,7 +19,10 @@ class ServicesTable
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
                     ->disk('public')
-                    ->state(fn ($record) => $record->image ? 'services/' . $record->image : null)
+                    ->state(function ($record) {
+                        if (!$record->image) return null;
+                        return str_starts_with($record->image, 'services/') ? $record->image : 'services/' . $record->image;
+                    })
                     ->circular(),
                 TextColumn::make('service_ar')
                     ->label(__('messages.service_ar'))
@@ -36,7 +39,7 @@ class ServicesTable
                     ->color('info'),
                 TextColumn::make('price')
                     ->label(__('messages.price'))
-                    ->money('SAR')
+                    ->money('EGP')
                     ->sortable()
                     ->color('success')
                     ->weight('bold'),
@@ -47,7 +50,12 @@ class ServicesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('provider_id')
+                    ->label(app()->getLocale() == 'ar' ? 'مقدم الخدمة' : 'Provider')
+                    ->relationship('provider', 'title_ar')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->title_ar ?? $record->title_en ?? 'Provider #' . $record->id)
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
                 ViewAction::make(),

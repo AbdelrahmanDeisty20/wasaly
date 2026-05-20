@@ -21,7 +21,10 @@ class SubCategoriesTable
                 ImageColumn::make('image')
                     ->label('')
                     ->disk('public')
-                    ->state(fn ($record) => $record->image ? 'subCategories/' . $record->image : null)
+                    ->state(function ($record) {
+                        if (!$record->image) return null;
+                        return str_starts_with($record->image, 'subcategories/') ? $record->image : 'subcategories/' . $record->image;
+                    })
                     ->circular()
                     ->size(52),
 

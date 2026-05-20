@@ -19,7 +19,10 @@ class UsersTable
                 \Filament\Tables\Columns\ImageColumn::make('avatar')
                     ->label(__('messages.avatar_required'))
                     ->disk('public')
-                    ->state(fn ($record) => $record->avatar ? 'avatars/' . $record->avatar : null)
+                    ->state(function ($record) {
+                        if (!$record->avatar) return null;
+                        return str_starts_with($record->avatar, 'avatars/') ? $record->avatar : 'avatars/' . $record->avatar;
+                    })
                     ->circular(),
                 TextColumn::make('name')
                     ->label(__('messages.user'))
@@ -49,7 +52,12 @@ class UsersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('type')
+                    ->label(app()->getLocale() == 'ar' ? 'نوع الحساب' : 'Account Type')
+                    ->options([
+                        'user' => app()->getLocale() == 'ar' ? 'عميل عادي' : 'Customer',
+                        'service_provider' => app()->getLocale() == 'ar' ? 'مقدم خدمة' : 'Service Provider',
+                    ]),
             ])
             ->recordActions([
                 ViewAction::make(),

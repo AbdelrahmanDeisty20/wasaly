@@ -37,7 +37,7 @@ class OrderInfolist
                                     ->label(__('messages.total_price'))
                                     ->weight('bold')
                                     ->size('lg')
-                                    ->money('SAR')
+                                    ->money('EGP')
                                     ->color('success')
                                     ->alignCenter(),
                             ]),
@@ -79,7 +79,7 @@ class OrderInfolist
                                             ->columnSpanFull(),
                                         TextEntry::make('shipping_cost')
                                             ->label('تكلفة الشحن')
-                                            ->money('SAR')
+                                            ->money('EGP')
                                             ->color('gray'),
                                     ])
                             ])
@@ -100,13 +100,13 @@ class OrderInfolist
                                             ->weight('bold'),
                                         TextEntry::make('unit_price')
                                             ->label('سعر الوحدة')
-                                            ->money('SAR'),
+                                            ->money('EGP'),
                                         TextEntry::make('quantity')
                                             ->label('الكمية')
                                             ->badge(),
                                         TextEntry::make('total_price')
                                             ->label('الإجمالي')
-                                            ->money('SAR')
+                                            ->money('EGP')
                                             ->weight('bold')
                                             ->color('primary'),
                                     ]),
@@ -130,11 +130,11 @@ class OrderInfolist
                                     ->icon('heroicon-m-ticket'),
                                 TextEntry::make('discount_amount')
                                     ->label('قيمة الخصم')
-                                    ->money('SAR')
+                                    ->money('EGP')
                                     ->color('danger'),
                                 TextEntry::make('total_price')
                                     ->label('الإجمالي النهائي')
-                                    ->money('SAR')
+                                    ->money('EGP')
                                     ->weight('bold')
                                     ->size('md'),
                             ]),

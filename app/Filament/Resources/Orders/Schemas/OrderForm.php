@@ -66,16 +66,16 @@ class OrderForm
                                 TextInput::make('total_price')
                                     ->label(__('messages.total_price'))
                                     ->numeric()
-                                    ->prefix('SAR')
+                                    ->prefix('EGP')
                                     ->disabled(),
                                 TextInput::make('shipping_cost')
                                     ->label(__('messages.shipping_cost'))
                                     ->numeric()
-                                    ->prefix('SAR'),
+                                    ->prefix('EGP'),
                                 TextInput::make('discount_amount')
                                     ->label(__('messages.discount_amount'))
                                     ->numeric()
-                                    ->prefix('SAR'),
+                                    ->prefix('EGP'),
                                 TextInput::make('coupon_code')
                                     ->label(__('messages.coupon_code'))
                                     ->disabled(),
