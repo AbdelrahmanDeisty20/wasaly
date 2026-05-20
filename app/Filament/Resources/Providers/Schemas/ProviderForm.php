@@ -114,6 +114,7 @@ class ProviderForm
                                 FileUpload::make('cover')
                                     ->label(__('messages.image'))
                                     ->image()
+                                    ->disk('public')
                                     ->directory('providers'),
                             ]),
                     ]),
@@ -190,6 +191,7 @@ class ProviderForm
                                         FileUpload::make('image')
                                             ->label(app()->getLocale() == 'ar' ? 'الصورة الرئيسية للخدمة' : 'Main Service Image')
                                             ->image()
+                                            ->disk('public')
                                             ->directory('services')
                                             ->required(),
                                         Repeater::make('serviceImages')
@@ -198,6 +200,7 @@ class ProviderForm
                                                 FileUpload::make('images')
                                                     ->label(app()->getLocale() == 'ar' ? 'صورة إضافية' : 'Additional Image')
                                                     ->image()
+                                                    ->disk('public')
                                                     ->directory('services')
                                                     ->required(),
                                             ])
