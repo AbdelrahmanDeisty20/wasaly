@@ -30,7 +30,7 @@ class ProviderForm
                                     ->required()
                                     ->helperText(
                                         app()->getLocale() == 'ar'
-                                            ? 'إذا لم تقم بإضافة مستخدم بشكل مستقل، يمكنك إضافته من علامة أو زر + يلا!'
+                                            ? 'إذا لم تقم بإضافة مستخدم بشكل مستقل، يمكنك إضافته من علامة أو زر + !'
                                             : 'If you have not added a user independently, you can add them using the + button! Go ahead.'
                                     )
                                     ->createOptionForm([
