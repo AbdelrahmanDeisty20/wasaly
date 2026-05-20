@@ -19,6 +19,7 @@ class ProvidersTable
                 ImageColumn::make('cover')
                     ->label(__('messages.image'))
                     ->disk('public')
+                    ->state(fn ($record) => $record->cover ? 'providers/' . $record->cover : null)
                     ->circular(),
                 TextColumn::make('title_ar')
                     ->label(__('messages.service_ar'))

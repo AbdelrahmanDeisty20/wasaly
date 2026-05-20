@@ -24,6 +24,8 @@ class CategoriesTable
                     ->searchable(),
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
+                    ->disk('public')
+                    ->state(fn ($record) => $record->image ? 'categories/' . $record->image : null)
                     ->circular(),
                 TextColumn::make('sub_categories_count')
                     ->label(__('messages.sub_categories'))

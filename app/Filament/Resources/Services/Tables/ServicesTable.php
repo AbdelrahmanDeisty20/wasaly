@@ -19,6 +19,7 @@ class ServicesTable
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
                     ->disk('public')
+                    ->state(fn ($record) => $record->image ? 'services/' . $record->image : null)
                     ->circular(),
                 TextColumn::make('service_ar')
                     ->label(__('messages.service_ar'))

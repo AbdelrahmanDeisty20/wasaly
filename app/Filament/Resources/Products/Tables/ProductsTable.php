@@ -22,6 +22,8 @@ class ProductsTable
                     ->searchable(),
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
+                    ->disk('public')
+                    ->state(fn ($record) => $record->image ? 'products/' . $record->image : null)
                     ->circular(),
                 TextColumn::make('price')
                     ->label(__('messages.price'))

@@ -24,6 +24,8 @@ class BrandsTable
                     ->searchable(),
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
+                    ->disk('public')
+                    ->state(fn ($record) => $record->image ? 'brands/' . $record->image : null)
                     ->circular(),
                 TextColumn::make('status')
                     ->label(__('messages.status'))

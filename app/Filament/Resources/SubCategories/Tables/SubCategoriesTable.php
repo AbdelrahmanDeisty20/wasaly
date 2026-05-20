@@ -21,6 +21,7 @@ class SubCategoriesTable
                 ImageColumn::make('image')
                     ->label('')
                     ->disk('public')
+                    ->state(fn ($record) => $record->image ? 'subCategories/' . $record->image : null)
                     ->circular()
                     ->size(52),
 
