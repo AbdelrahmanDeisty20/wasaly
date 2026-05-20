@@ -129,40 +129,7 @@ class ProductForm
                                     ]),
                             ]),
 
-                        \Filament\Schemas\Components\Tabs\Tab::make(__('messages.specifications'))
-                            ->icon('heroicon-o-list-bullet')
-                            ->schema([
-                                \Filament\Forms\Components\Repeater::make('specifications')
-                                    ->label(__('messages.specifications'))
-                                    ->relationship()
-                                    ->schema([
-                                        \Filament\Schemas\Components\Grid::make(2)
-                                            ->schema([
-                                                TextInput::make('key_ar')
-                                                    ->label(__('messages.key_ar'))
-                                                    ->required(),
-                                                TextInput::make('key_en')
-                                                    ->label(__('messages.key_en'))
-                                                    ->required(),
-                                                TextInput::make('value_ar')
-                                                    ->label(__('messages.value_ar'))
-                                                    ->required(),
-                                                TextInput::make('value_en')
-                                                    ->label(__('messages.value_en'))
-                                                    ->required(),
-                                                FileUpload::make('icon')
-                                                    ->label(__('messages.icon'))
-                                                    ->image()
-                                                    ->directory('specifications')
-                                                    ->required(),
-                                            ]),
-                                    ])
-                                    ->itemLabel(fn (array $state): ?string => $state['key_ar'] ?? null)
-                                    ->collapsible()
-                                    ->cloneable()
-                                    ->addActionLabel(__('messages.add_property'))
-                                    ->columns(1),
-                            ]),
+
 
                         \Filament\Schemas\Components\Tabs\Tab::make(__('messages.gallery'))
                             ->icon('heroicon-o-photo')
