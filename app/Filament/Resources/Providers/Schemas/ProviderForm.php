@@ -223,6 +223,129 @@ class ProviderForm
                             ->defaultItems(0)
                             ->addActionLabel(app()->getLocale() == 'ar' ? 'إضافة خدمة جديدة لهذا مقدم الخدمة' : 'Add New Service for this Provider'),
                     ]),
+
+                Section::make(app()->getLocale() == 'ar' ? 'المنتجات' : 'Products')
+                    ->schema([
+                        Repeater::make('products')
+                            ->relationship('products')
+                            ->schema([
+                                \Filament\Schemas\Components\Grid::make(2)
+                                    ->schema([
+                                        TextInput::make('name_ar')
+                                            ->label(app()->getLocale() == 'ar' ? 'اسم المنتج بالعربية' : 'Product Name (AR)')
+                                            ->required(),
+                                        TextInput::make('name_en')
+                                            ->label(app()->getLocale() == 'ar' ? 'اسم المنتج بالإنجليزية' : 'Product Name (EN)')
+                                            ->required(),
+                                        Textarea::make('description_ar')
+                                            ->label(__('messages.description_ar'))
+                                            ->rows(2)
+                                            ->columnSpanFull(),
+                                        Textarea::make('description_en')
+                                            ->label(__('messages.description_en'))
+                                            ->rows(2)
+                                            ->columnSpanFull(),
+                                        TextInput::make('price')
+                                            ->label(__('messages.price'))
+                                            ->numeric()
+                                            ->prefix('SAR')
+                                            ->required(),
+                                        TextInput::make('stock')
+                                            ->label(__('messages.stock'))
+                                            ->numeric()
+                                            ->default(0)
+                                            ->required(),
+                                        Select::make('brand_id')
+                                            ->label(__('messages.brand'))
+                                            ->relationship('brand', 'name_ar')
+                                            ->searchable()
+                                            ->preload()
+                                            ->required(),
+                                        Select::make('sub_category_id')
+                                            ->label(__('messages.sub_category'))
+                                            ->relationship(
+                                                'subCategory',
+                                                'name_ar',
+                                                fn ($query) => $query->whereHas('category', fn ($q) => $q->where('name_ar', '!=', 'خدمات منزلية')->where('name_en', '!=', 'Home Services'))
+                                            )
+                                            ->searchable()
+                                            ->preload()
+                                            ->required(),
+                                        Select::make('status')
+                                            ->label(__('messages.status'))
+                                            ->options([
+                                                'active'   => __('messages.active'),
+                                                'inactive' => __('messages.inactive'),
+                                            ])
+                                            ->default('active')
+                                            ->required(),
+                                        Toggle::make('is_featured')
+                                            ->label(app()->getLocale() == 'ar' ? 'مميز؟' : 'Featured?')
+                                            ->default(false),
+                                        FileUpload::make('image')
+                                            ->label(app()->getLocale() == 'ar' ? 'الصورة الرئيسية' : 'Main Image')
+                                            ->image()
+                                            ->disk('public')
+                                            ->directory('products')
+                                            ->columnSpan(2),
+
+                                        Repeater::make('images')
+                                            ->relationship('images')
+                                            ->label(app()->getLocale() == 'ar' ? 'معرض صور المنتج' : 'Product Image Gallery')
+                                            ->schema([
+                                                FileUpload::make('images')
+                                                    ->label(app()->getLocale() == 'ar' ? 'صورة إضافية' : 'Additional Image')
+                                                    ->image()
+                                                    ->disk('public')
+                                                    ->directory('products/images')
+                                                    ->required(),
+                                            ])
+                                            ->grid(3)
+                                            ->collapsible()
+                                            ->defaultItems(0)
+                                            ->columnSpanFull()
+                                            ->addActionLabel(app()->getLocale() == 'ar' ? 'إضافة صورة للمعرض' : 'Add Gallery Image'),
+
+                                        Repeater::make('specifications')
+                                            ->relationship('specifications')
+                                            ->label(app()->getLocale() == 'ar' ? 'الخصائص والمواصفات' : 'Specifications')
+                                            ->schema([
+                                                \Filament\Schemas\Components\Grid::make(2)
+                                                    ->schema([
+                                                        TextInput::make('key_ar')
+                                                            ->label(app()->getLocale() == 'ar' ? 'الخاصية بالعربية' : 'Key (AR)')
+                                                            ->required(),
+                                                        TextInput::make('key_en')
+                                                            ->label(app()->getLocale() == 'ar' ? 'الخاصية بالإنجليزية' : 'Key (EN)')
+                                                            ->required(),
+                                                        TextInput::make('value_ar')
+                                                            ->label(app()->getLocale() == 'ar' ? 'القيمة بالعربية' : 'Value (AR)')
+                                                            ->required(),
+                                                        TextInput::make('value_en')
+                                                            ->label(app()->getLocale() == 'ar' ? 'القيمة بالإنجليزية' : 'Value (EN)')
+                                                            ->required(),
+                                                        FileUpload::make('icon')
+                                                            ->label(app()->getLocale() == 'ar' ? 'أيقونة (اختياري)' : 'Icon (optional)')
+                                                            ->image()
+                                                            ->disk('public')
+                                                            ->directory('specifications')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                            ])
+                                            ->collapsible()
+                                            ->defaultItems(0)
+                                            ->columnSpanFull()
+                                            ->addActionLabel(app()->getLocale() == 'ar' ? 'إضافة خاصية / مواصفة' : 'Add Specification'),
+                                    ]),
+                            ])
+                            ->itemLabel(fn (array $state): ?string => $state['name_ar'] ?? null)
+                            ->collapsible()
+                            ->cloneable()
+                            ->defaultItems(0)
+                            ->columnSpanFull()
+                            ->addActionLabel(app()->getLocale() == 'ar' ? 'إضافة منتج جديد لهذا مقدم الخدمة' : 'Add New Product for this Provider'),
+                    ]),
+
             ]);
     }
 }
