@@ -4,6 +4,9 @@ namespace App\Filament\Resources\Orders\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class OrderForm
@@ -12,11 +15,11 @@ class OrderForm
     {
         return $schema
             ->components([
-                \Filament\Forms\Components\Grid::make(3)
+                Grid::make(3)
                     ->schema([
-                        \Filament\Forms\Components\Group::make()
+                        Group::make()
                             ->schema([
-                                \Filament\Forms\Components\Section::make(__('messages.order_info'))
+                                Section::make(__('messages.order_info'))
                                     ->schema([
                                         TextInput::make('order_number')
                                             ->label(__('messages.order_number'))
@@ -43,7 +46,7 @@ class OrderForm
                                             ->disabled(),
                                     ]),
                                 
-                                \Filament\Forms\Components\Section::make(__('messages.customer_details'))
+                                Section::make(__('messages.customer_details'))
                                     ->schema([
                                         TextInput::make('customer_name')
                                             ->label(__('messages.customer_name_required'))
@@ -58,7 +61,7 @@ class OrderForm
                             ])
                             ->columnSpan(2),
                         
-                        \Filament\Forms\Components\Section::make(__('messages.financials'))
+                        Section::make(__('messages.financials'))
                             ->schema([
                                 TextInput::make('total_price')
                                     ->label(__('messages.total_price'))
