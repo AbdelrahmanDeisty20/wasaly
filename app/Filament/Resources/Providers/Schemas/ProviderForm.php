@@ -84,23 +84,23 @@ class ProviderForm
                                     ->label('')
                                     ->content(new \Illuminate\Support\HtmlString(
                                         app()->getLocale() == 'ar'
-                                            ? '<div class="p-4 bg-primary-50 dark:bg-primary-950/20 rounded-xl border border-primary-100 dark:border-primary-800/30 flex flex-col md:flex-row items-center justify-between gap-4 mt-2">' .
-                                              '<div>' .
-                                              '<h4 class="text-sm font-semibold text-primary-900 dark:text-primary-100">هل تريد إضافة خدمات مقدم الخدمة بالمرة؟</h4>' .
-                                              '<p class="text-xs text-primary-700 dark:text-primary-300 mt-1">بعد الانتهاء من إضافة مقدم الخدمة، يمكنك الانتقال مباشرة لإضافة خدماته المتنوعة.</p>' .
+                                            ? '<div style="padding: 16px; background-color: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 8px; width: 100%;">' .
+                                              '<div style="text-align: right; flex: 1;">' .
+                                              '<h4 style="font-size: 14px; font-weight: 600; color: #3b82f6; margin: 0;">هل تريد إضافة خدمات مقدم الخدمة بالمرة؟</h4>' .
+                                              '<p style="font-size: 12px; color: #a1a1aa; margin: 4px 0 0 0;">بعد الانتهاء من إضافة مقدم الخدمة، يمكنك الانتقال مباشرة لإضافة خدماته المتنوعة.</p>' .
                                               '</div>' .
-                                              '<a href="' . route('filament.admin.resources.services.create') . '" target="_blank" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-primary-600 rounded-lg hover:bg-primary-500 transition duration-150">' .
-                                              '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>' .
+                                              '<a href="' . route('filament.admin.resources.services.create') . '" target="_blank" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px; font-weight: bold; color: #ffffff; background-color: #3b82f6; border-radius: 8px; text-decoration: none; transition: background-color 0.15s ease-in-out;">' .
+                                              '<svg style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; display: inline-block; vertical-align: middle;" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>' .
                                               'إضافة الخدمات الآن' .
                                               '</a>' .
                                               '</div>'
-                                            : '<div class="p-4 bg-primary-50 dark:bg-primary-950/20 rounded-xl border border-primary-100 dark:border-primary-800/30 flex flex-col md:flex-row items-center justify-between gap-4 mt-2">' .
-                                              '<div>' .
-                                              '<h4 class="text-sm font-semibold text-primary-900 dark:text-primary-100">Do you want to add their services too?</h4>' .
-                                              '<p class="text-xs text-primary-700 dark:text-primary-300 mt-1">After completing the provider profile, you can proceed directly to adding their various services.</p>' .
+                                            : '<div style="padding: 16px; background-color: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 8px; width: 100%;">' .
+                                              '<div style="text-align: left; flex: 1;">' .
+                                              '<h4 style="font-size: 14px; font-weight: 600; color: #3b82f6; margin: 0;">Do you want to add their services too?</h4>' .
+                                              '<p style="font-size: 12px; color: #a1a1aa; margin: 4px 0 0 0;">After completing the provider profile, you can proceed directly to adding their various services.</p>' .
                                               '</div>' .
-                                              '<a href="' . route('filament.admin.resources.services.create') . '" target="_blank" class="shrink-0 inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-primary-600 rounded-lg hover:bg-primary-500 transition duration-150">' .
-                                              '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>' .
+                                              '<a href="' . route('filament.admin.resources.services.create') . '" target="_blank" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px; font-weight: bold; color: #ffffff; background-color: #3b82f6; border-radius: 8px; text-decoration: none; transition: background-color 0.15s ease-in-out;">' .
+                                              '<svg style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; display: inline-block; vertical-align: middle;" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>' .
                                               'Add Services Now' .
                                               '</a>' .
                                               '</div>'
