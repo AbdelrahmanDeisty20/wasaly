@@ -37,8 +37,43 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
             ])
             ->brandName(__('messages.welcome') . ' - Wasaly')
-            ->brandLogo(asset('storage/settings/logo.png')) // Example logo path
+            ->brandLogo(asset('storage/settings/logo.png'))
+            ->brandLogoHeight('4.5rem')
             ->favicon(asset('storage/settings/favicon.png'))
+            ->renderHook('panels::head.end', fn () => new \Illuminate\Support\HtmlString('
+                <style>
+                    /* Make logo container perfectly circular */
+                    .fi-logo {
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                    }
+                    .fi-logo img {
+                        width: 4.5rem !important;
+                        height: 4.5rem !important;
+                        border-radius: 50% !important;
+                        object-fit: cover !important;
+                        clip-path: circle(50%) !important;
+                        box-shadow: 0 0 0 3px rgba(99,102,241,0.3), 0 4px 12px rgba(0,0,0,0.2);
+                        display: block !important;
+                    }
+                    .fi-sidebar-header .fi-logo img {
+                        width: 3.2rem !important;
+                        height: 3.2rem !important;
+                        border-radius: 50% !important;
+                        object-fit: cover !important;
+                        clip-path: circle(50%) !important;
+                    }
+                    /* Login page logo */
+                    .fi-simple-main .fi-logo img {
+                        width: 5rem !important;
+                        height: 5rem !important;
+                        border-radius: 50% !important;
+                        clip-path: circle(50%) !important;
+                        box-shadow: 0 0 0 4px rgba(99,102,241,0.3), 0 4px 20px rgba(0,0,0,0.3);
+                    }
+                </style>
+            '))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -47,7 +82,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
