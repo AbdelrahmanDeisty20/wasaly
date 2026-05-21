@@ -37,9 +37,9 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
             ])
             ->brandName(__('messages.welcome') . ' - Wasaly')
-            ->brandLogo(asset('storage/settings/logo.png'))
+            ->brandLogo(asset('settings/logo.png'))
             ->brandLogoHeight('4.5rem')
-            ->favicon(asset('storage/settings/favicon.png'))
+            ->favicon(asset('settings/favicon.png'))
             ->renderHook('panels::head.end', fn () => new \Illuminate\Support\HtmlString('
                 <style>
                     /* Make logo container perfectly circular */
