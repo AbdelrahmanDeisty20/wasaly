@@ -50,17 +50,101 @@ class OfferObserver
             'discount_percentage' => (string) $discount,
         ];
 
-        // 1. Broadcast push notifications to all tokens (guests and registered users)
+        // 1. Find users who have this product in their Cart
+        $cartUserIds = \App\Models\Cart::whereHas('items', function ($query) use ($product) {
+            $query->where('product_id', $product->id);
+        })
+        ->whereNotNull('user_id')
+        ->pluck('user_id')
+        ->toArray();
+
+        // 2. Find users who have this product in their Favorites
+        $favoriteUserIds = \App\Models\Favorite::where('product_id', $product->id)
+            ->whereNotNull('user_id')
+            ->pluck('user_id')
+            ->toArray();
+
+        // Exclude Cart users from Favorites users
+        $favoriteOnlyUserIds = array_diff($favoriteUserIds, $cartUserIds);
+
+        // Keep track of notified users to exclude them from the generic broadcast
+        $notifiedUserIds = [];
+
+        // --- A. Process Cart Notifications ---
+        if (!empty($cartUserIds)) {
+            $users = \App\Models\User::whereIn('id', $cartUserIds)->get();
+            foreach ($users as $user) {
+                $userLocale = $user->locale ?? 'ar';
+                $cartTitle = $userLocale === 'ar' ? 'خصم على منتج في سلتك! 🛒🔥' : 'Discount on a product in your cart! 🛒🔥';
+                $cartBody = $userLocale === 'ar'
+                    ? "المنتج «{$product->name_ar}» الموجود في سلتك أصبح عليه خصم بقيمة {$discount}%! سارع بطلب السلة الآن قبل انتهاء العرض!"
+                    : "The product «{$product->name_en}» in your cart has a new {$discount}% discount! Complete your order now before the offer ends!";
+
+                try {
+                    // Save to database specifically for this user
+                    AppNotification::create([
+                        'user_id' => $user->id,
+                        'title' => $cartTitle,
+                        'message' => $cartBody,
+                        'type' => 'cart_offer_discount',
+                        'data' => $data,
+                        'is_read' => false,
+                    ]);
+
+                    // Send push notification if enabled
+                    if ($user->is_notify) {
+                        $notificationService->sendToUser($user->id, $cartTitle, $cartBody, $data);
+                    }
+                    $notifiedUserIds[] = $user->id;
+                } catch (\Exception $e) {
+                    // Ignore individual notification failure
+                }
+            }
+        }
+
+        // --- B. Process Favorite Notifications ---
+        if (!empty($favoriteOnlyUserIds)) {
+            $users = \App\Models\User::whereIn('id', $favoriteOnlyUserIds)->get();
+            foreach ($users as $user) {
+                $userLocale = $user->locale ?? 'ar';
+                $favTitle = $userLocale === 'ar' ? 'بشرى سارة لمنتجك المفضل! ❤️🔥' : 'Great news for your favorite product! ❤️🔥';
+                $favBody = $userLocale === 'ar'
+                    ? "بشرى سارة! منتجك المفضل «{$product->name_ar}» أصبح عليه خصم بقيمة {$discount}%! أضفه إلى السلة الآن!"
+                    : "Great news! Your favorite product «{$product->name_en}» has a new {$discount}% discount! Add it to your cart now!";
+
+                try {
+                    // Save to database specifically for this user
+                    AppNotification::create([
+                        'user_id' => $user->id,
+                        'title' => $favTitle,
+                        'message' => $favBody,
+                        'type' => 'favorite_offer_discount',
+                        'data' => $data,
+                        'is_read' => false,
+                    ]);
+
+                    // Send push notification if enabled
+                    if ($user->is_notify) {
+                        $notificationService->sendToUser($user->id, $favTitle, $favBody, $data);
+                    }
+                    $notifiedUserIds[] = $user->id;
+                } catch (\Exception $e) {
+                    // Ignore individual notification failure
+                }
+            }
+        }
+
+        // 3. Broadcast generic push notifications to all other tokens (guests and registered users who didn't get specific ones)
         try {
-            $notificationService->broadcastNotification($title, $body, $data);
+            $notificationService->broadcastNotification($title, $body, $data, $notifiedUserIds);
         } catch (\Exception $e) {
             // Keep moving even if broadcasting throws an exception
         }
 
-        // 2. Save a single broadcast notification to database
+        // 4. Save a single broadcast notification to database for guests/others to see dynamically
         try {
             AppNotification::create([
-                'user_id' => null, // Broadcast for everyone
+                'user_id' => null, // Broadcast for everyone else
                 'title' => $title,
                 'message' => $body,
                 'type' => 'new_offer',

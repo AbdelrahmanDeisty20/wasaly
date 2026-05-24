@@ -146,13 +146,16 @@ class NotificationService
         ];
     }
 
-    public function broadcastNotification($title, $body, $data = [])
+    public function broadcastNotification($title, $body, $data = [], $excludedUserIds = [])
     {
-        // Get guest tokens OR tokens of users who have is_notify enabled
-        $tokens = UserFcmToken::where(function ($query) {
+        // Get guest tokens OR tokens of users who have is_notify enabled AND not excluded
+        $tokens = UserFcmToken::where(function ($query) use ($excludedUserIds) {
             $query->whereNull('user_id')
-                ->orWhereHas('user', function ($q) {
+                ->orWhere(function ($q) use ($excludedUserIds) {
                     $q->where('is_notify', true);
+                    if (!empty($excludedUserIds)) {
+                        $q->whereNotIn('user_id', $excludedUserIds);
+                    }
                 });
         })->pluck('token')->toArray();
 
