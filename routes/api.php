@@ -85,6 +85,14 @@ Route::group(['middleware' => SetLang::class], function () {
 
     //fcm token
     Route::post('fcm-token', [NotificationController::class, 'sendToken']);
+    //notifications
+    Route::get('notifications',[NotificationController::class,'notifications']);
+    Route::get('notifications/read/{id}',[NotificationController::class,'readNotification']);
+    Route::get('notifications/read-all',[NotificationController::class,'readAllNotifications']);
+    Route::get('notifications/delete/{id}',[NotificationController::class,'deleteNotification']);
+    Route::get('notifications/delete-all',[NotificationController::class,'deleteAllNotifications']);
+    Route::post('sendTestNotification',[NotificationController::class,'sendTestNotification']);
+    Route::post('sendTestNotificationToUser',[NotificationController::class,'sendTestNotificationToUsers']);
     // days Routes
     Route::get('days', [DayController::class, 'getDays']);
     Route::get('times', [DayController::class, 'getTimes']);

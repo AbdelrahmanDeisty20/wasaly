@@ -433,6 +433,11 @@ return [
     'fcm_token_string' => 'FCM Token must be a string',
     'device_id_string' => 'Device ID must be a string',
     'user_id_exists' => 'User ID must exist',
-    'fcm_token_stored_successfully' => 'FCM token stored successfully',
-    'fcm_token_updated_successfully' => 'FCM token updated successfully',
+    'fcm_token_stored_successfully' => 'تم تخزين FCM token بنجاح',
+    'fcm_token_updated_successfully' => 'تم تحديث FCM token بنجاح',
+    'notifications_retrieved_successfully' => 'تم استرجاع الإشعارات بنجاح',
+    'notification_read_successfully' => 'تم قراءة الإشعار بنجاح',
+    'notifications_deleted_successfully' => 'تم حذف الإشعارات بنجاح',
+    'notification_not_found' => 'الإشعار غير موجود',
+    'notification_deleted_successfully' => 'تم حذف الإشعار بنجاح',
 ];

@@ -72,4 +72,44 @@ class NotificationController extends Controller
 
         return $this->success($result, $result['message']);
     }
+    public function notifications()
+    {
+        $result = $this->notificationService->notifications();
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
+    public function readNotification(Request $request)
+    {
+        $result = $this->notificationService->readNotification($request->all());
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
+    public function readAllNotifications(Request $request)
+    {
+        $result = $this->notificationService->readAllNotifications($request->all());
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
+    public function deleteNotification(Request $request)
+    {
+        $result = $this->notificationService->deleteNotification($request->all());
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
+    public function deleteAllNotifications(Request $request)
+    {
+        $result = $this->notificationService->deleteAllNotifications($request->all());
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+        return $this->success($result['data'], $result['message'], 200);
+    }
 }
