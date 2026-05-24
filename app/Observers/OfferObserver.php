@@ -3,10 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Offer;
-use App\Models\User;
 use App\Models\AppNotification;
-use App\Models\UserFcmToken;
-use App\Services\API\General\FirebaseNotificationService;
+use App\Services\API\General\NotificationService;
 
 class OfferObserver
 {
@@ -15,7 +13,8 @@ class OfferObserver
      */
     public function created(Offer $offer): void
     {
-        $firebaseService = app(FirebaseNotificationService::class);
+        $notificationService = app(NotificationService::class);
+        
         // Load the product associated with this offer
         $product = $offer->product;
         if (!$product) {
@@ -34,6 +33,9 @@ class OfferObserver
         $bodyAr = "لقد أضاف مقدم الخدمة «{$providerNameAr}» عرضاً رائعاً بخصم {$discount}% على منتجه «{$product->name_ar}»! تسوق الآن واستمتع بالخصم.";
         $bodyEn = "The provider «{$providerNameEn}» has added an amazing deal of {$discount}% off on their product «{$product->name_en}»! Shop now and enjoy the discount.";
 
+        $title = app()->getLocale() == 'ar' ? $titleAr : $titleEn;
+        $body = app()->getLocale() == 'ar' ? $bodyAr : $bodyEn;
+
         $data = [
             'type' => 'new_offer',
             'product_id' => (string) $product->id,
@@ -41,55 +43,25 @@ class OfferObserver
             'discount_percentage' => (string) $discount,
         ];
 
-        // 1. Send push notifications to all guests (tokens without user_id)
-        $guestTokens = UserFcmToken::whereNull('user_id')->pluck('token')->toArray();
-        foreach ($guestTokens as $token) {
-            try {
-                $firebaseService->sendToToken(
-                    $token,
-                    app()->getLocale() == 'ar' ? $titleAr : $titleEn,
-                    app()->getLocale() == 'ar' ? $bodyAr : $bodyEn,
-                    $data
-                );
-            } catch (\Exception $e) {
-                // Keep moving to other tokens even if one fails
-            }
+        // 1. Broadcast push notifications to all tokens (guests and registered users)
+        try {
+            $notificationService->broadcastNotification($title, $body, $data);
+        } catch (\Exception $e) {
+            // Keep moving even if broadcasting throws an exception
         }
 
-        // 2. Send push notifications to all users (tokens with user_id) AND save it to app_notifications
-        $users = User::all();
-        foreach ($users as $user) {
-            $userLocale = $user->locale ?? 'ar';
-            // Save in database
-            try {
-                AppNotification::create([
-                    'user_id' => $user->id,
-                    'title' => $userLocale == 'ar' ? $titleAr : $titleEn,
-                    'message' => $userLocale == 'ar' ? $bodyAr : $bodyEn,
-                    'type' => 'new_offer',
-                    'data' => $data,
-                    'is_read' => false,
-                ]);
-            } catch (\Exception $e) {
-                // Ignore DB insertion errors and continue
-            }
-
-            // Send push to user's tokens if their notification is enabled
-            if ($user->is_notify) {
-                $userTokens = UserFcmToken::where('user_id', $user->id)->pluck('token')->toArray();
-                foreach ($userTokens as $token) {
-                    try {
-                        $firebaseService->sendToToken(
-                            $token,
-                            $userLocale == 'ar' ? $titleAr : $titleEn,
-                            $userLocale == 'ar' ? $bodyAr : $bodyEn,
-                            $data
-                        );
-                    } catch (\Exception $e) {
-                        // Continue sending
-                    }
-                }
-            }
+        // 2. Save a single broadcast notification to database
+        try {
+            AppNotification::create([
+                'user_id' => null, // Broadcast for everyone
+                'title' => $title,
+                'message' => $body,
+                'type' => 'new_offer',
+                'data' => $data,
+                'is_read' => false,
+            ]);
+        } catch (\Exception $e) {
+            // Ignore DB insertion errors
         }
     }
 }

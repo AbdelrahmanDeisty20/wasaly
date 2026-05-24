@@ -141,6 +141,23 @@ class NotificationService
             'details' => $results,
         ];
     }
+
+    public function broadcastNotification($title, $body, $data = [])
+    {
+        $tokens = UserFcmToken::pluck('token')->toArray();
+
+        $results = [];
+        foreach ($tokens as $token) {
+            $results[] = $this->firebaseService->sendToToken($token, $title, $body, $data);
+        }
+
+        return [
+            'status' => true,
+            'message' => 'Broadcast notification sent to all tokens',
+            'count' => count($tokens),
+            'details' => $results,
+        ];
+    }
     public function notifications()
     {
         $user = auth()->user();
@@ -152,7 +169,10 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notifications = AppNotification::where('user_id', $user->id)
+        $notifications = AppNotification::where(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->orWhereNull('user_id');
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
