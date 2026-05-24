@@ -82,6 +82,9 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::post('reset-password', [ForgetPasswordController::class, 'resetPassword']);
     Route::post('forget-resend-otp', [ForgetPasswordController::class, 'resendOtp']);
     Route::get('reviews/all/general/get', [ReviewController::class, 'getGeneralReviews']);
+
+    //fcm token
+    Route::post('fcm-token', [NotificationController::class, 'sendToken']);
     // days Routes
     Route::get('days', [DayController::class, 'getDays']);
     Route::get('times', [DayController::class, 'getTimes']);
@@ -198,6 +201,6 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('notification/turn-on', [NotificationController::class, 'TurnOnNotification']);
         Route::post('notification/turn-off', [NotificationController::class, 'TurnOffNotification']);
         // FCM Token Route
-        Route::post('fcm-token', [NotificationController::class, 'sendToken']);
+        Route::post('fcm-token-user', [NotificationController::class, 'sendToken']);
     });
 });
