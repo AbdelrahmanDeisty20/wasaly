@@ -29,7 +29,7 @@ class NotificationService
         return[
             'status'=>true,
             'message'=>__('messages.notification_status'),
-            'data'=>NotifyStatus::collection($user)
+            'data'=>new NotifyStatus($user)
         ];
     }
     public function TurnOnNotification(array $data){
@@ -48,7 +48,7 @@ class NotificationService
         return[
             'status'=>true,
             'message'=>__('messages.notification_turned_on'),
-            'data'=>NotifyStatus::collection($user)
+            'data'=>new NotifyStatus($user)
         ];
     }
 
@@ -68,7 +68,7 @@ class NotificationService
         return[
             'status'=>true,
             'message'=>__('messages.notification_turned_off'),
-            'data'=>NotifyStatus::collection($user)
+            'data'=>new NotifyStatus($user)
         ];
         
     }
