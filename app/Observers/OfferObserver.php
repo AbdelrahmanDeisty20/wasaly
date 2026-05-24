@@ -21,17 +21,24 @@ class OfferObserver
             return;
         }
 
-        // Fetch provider name
+        // Fetch provider
         $provider = $product->provider;
-        $providerNameAr = $provider ? ($provider->title_ar ?? $provider->user?->name) : 'أحد مقدمي الخدمة';
-        $providerNameEn = $provider ? ($provider->title_en ?? $provider->user?->name) : 'one of our providers';
 
         // Prepare the notification details
         $discount = $offer->discount_percentage;
         $titleAr = "فرصة ذهبية! عرض جديد 🔥";
         $titleEn = "Golden Deal! New Offer 🔥";
-        $bodyAr = "لقد أضاف مقدم الخدمة «{$providerNameAr}» عرضاً رائعاً بخصم {$discount}% على منتجه «{$product->name_ar}»! تسوق الآن واستمتع بالخصم.";
-        $bodyEn = "The provider «{$providerNameEn}» has added an amazing deal of {$discount}% off on their product «{$product->name_en}»! Shop now and enjoy the discount.";
+
+        if ($provider) {
+            $providerNameAr = $provider->title_ar ?? $provider->user?->name ?? 'مقدم الخدمة';
+            $providerNameEn = $provider->title_en ?? $provider->user?->name ?? 'the provider';
+
+            $bodyAr = "لقد أضاف مقدم الخدمة «{$providerNameAr}» عرضاً رائعاً بخصم {$discount}% على منتجه «{$product->name_ar}»! تسوق الآن واستمتع بالخصم.";
+            $bodyEn = "The provider «{$providerNameEn}» has added an amazing deal of {$discount}% off on their product «{$product->name_en}»! Shop now and enjoy the discount.";
+        } else {
+            $bodyAr = "تمت إضافة عرض جديد رائع بخصم {$discount}% على منتج «{$product->name_ar}»! تسوق الآن واستمتع بالخصم المميز.";
+            $bodyEn = "A great new offer of {$discount}% off has been added on «{$product->name_en}»! Shop now and enjoy the discount.";
+        }
 
         $title = app()->getLocale() == 'ar' ? $titleAr : $titleEn;
         $body = app()->getLocale() == 'ar' ? $bodyAr : $bodyEn;
