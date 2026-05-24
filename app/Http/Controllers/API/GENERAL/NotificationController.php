@@ -43,7 +43,7 @@ class NotificationController extends Controller
     }
     public function sendToken(storeTokenRequest $request)
     {
-        $result = $this->notificationService->sendToken($request->all());
+        $result = $this->notificationService->sendToken($request->validated());
 
         if (!$result['status']) {
             return $this->error($result['message'], 400);
