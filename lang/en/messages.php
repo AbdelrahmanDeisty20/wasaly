@@ -399,4 +399,10 @@ return [
     'is_notify_required' => 'Notifications status is required',
     'is_notify_boolean' => 'Notifications status must be a boolean',
     'notification_status' => 'Notifications status',
+    'fcm_token_required' => 'FCM Token is required',
+    'fcm_token_string' => 'FCM Token must be a string',
+    'device_id_string' => 'Device ID must be a string',
+    'user_id_exists' => 'User ID must exist',
+    'fcm_token_stored_successfully' => 'FCM token stored successfully',
+    'fcm_token_updated_successfully' => 'FCM token updated successfully',
 ];

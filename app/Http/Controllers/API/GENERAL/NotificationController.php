@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\GENERAL;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\NotifyTurnOffRequest;
 use App\Http\Requests\API\GENERAL\NotifyTurnOnRequest;
+use App\Http\Requests\API\GENERAL\storeTokenRequest;
 use App\Services\API\General\NotificationService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -39,6 +40,16 @@ class NotificationController extends Controller
             return $this->error($result['message'], 400);
         }
         return $this->success($result['data'], $result['message'], 200);
+    }
+    public function sendToken(storeTokenRequest $request)
+    {
+        $result = $this->notificationService->sendToken($request->all());
+
+        if (!$result['status']) {
+            return $this->error($result['message'], 400);
+        }
+
+        return $this->success([], $result['message']);
     }
     public function sendTestNotification(Request $request)
     {

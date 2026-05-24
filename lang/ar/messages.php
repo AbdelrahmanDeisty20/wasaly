@@ -429,4 +429,10 @@ return [
     'is_notify_required' => 'إشعارات الحالة مطلوبة',
     'is_notify_boolean' => 'إشعارات الحالة يجب أن تكون قيمة منطقية',
     'notification_status' => 'حالة الإشعارات',
+    'fcm_token_required' => 'FCM Token is required',
+    'fcm_token_string' => 'FCM Token must be a string',
+    'device_id_string' => 'Device ID must be a string',
+    'user_id_exists' => 'User ID must exist',
+    'fcm_token_stored_successfully' => 'FCM token stored successfully',
+    'fcm_token_updated_successfully' => 'FCM token updated successfully',
 ];
