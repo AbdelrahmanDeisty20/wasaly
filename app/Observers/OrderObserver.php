@@ -72,4 +72,63 @@ class OrderObserver
             }
         }
     }
+
+    /**
+     * Handle the Order "created" event.
+     */
+    public function created(Order $order): void
+    {
+        try {
+            // Load the items, products, providers and their user accounts
+            $order->load('items.product.provider.user');
+
+            // Collect unique providers associated with the order items
+            $providers = [];
+            foreach ($order->items as $item) {
+                $product = $item->product;
+                if ($product && $product->provider) {
+                    $providers[$product->provider->id] = $product->provider;
+                }
+            }
+
+            // Send notification to each unique provider
+            foreach ($providers as $provider) {
+                $providerUser = $provider->user;
+                if ($providerUser) {
+                    $providerLocale = $providerUser->locale ?? 'ar';
+
+                    // Personalized localized notification details
+                    $title = $providerLocale === 'ar' ? 'طلب جديد وارد! 📥' : 'New Order Received! 📥';
+                    $body = $providerLocale === 'ar'
+                        ? "لقد تلقيت طلباً جديداً رقم #{$order->order_number} بقيمة {$order->total_price} ج.م. تفقد تفاصيل الطلب الآن."
+                        : "You have received a new order #{$order->order_number} with a total of {$order->total_price} EGP. Check the order details now.";
+
+                    // 1. Save database notification for the provider user
+                    AppNotification::create([
+                        'user_id' => $providerUser->id,
+                        'title' => $title,
+                        'message' => $body,
+                        'type' => 'new_order_received',
+                        'data' => [
+                            'order_id' => (string) $order->id,
+                            'order_number' => (string) $order->order_number,
+                        ],
+                        'is_read' => false,
+                    ]);
+
+                    // 2. Send push notification if provider user has enabled notifications
+                    if ($providerUser->is_notify) {
+                        $notificationService = app(NotificationService::class);
+                        $notificationService->sendToUser($providerUser->id, $title, $body, [
+                            'type' => 'new_order_received',
+                            'order_id' => (string) $order->id,
+                            'order_number' => (string) $order->order_number,
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            // Fail silently to prevent interrupting application flow
+        }
+    }
 }
