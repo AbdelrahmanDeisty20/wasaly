@@ -9,6 +9,13 @@ use App\Services\API\General\NotificationService;
 class OrderObserver
 {
     /**
+     * Determine if the observer events should be run after the database transaction is committed.
+     *
+     * @var bool
+     */
+    public $afterCommit = true;
+
+    /**
      * Handle the Order "updated" event.
      */
     public function updated(Order $order): void
