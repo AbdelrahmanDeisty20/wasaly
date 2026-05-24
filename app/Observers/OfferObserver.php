@@ -10,18 +10,12 @@ use App\Services\API\General\FirebaseNotificationService;
 
 class OfferObserver
 {
-    protected $firebaseService;
-
-    public function __construct(FirebaseNotificationService $firebaseService)
-    {
-        $this->firebaseService = $firebaseService;
-    }
-
     /**
      * Handle the Offer "created" event.
      */
     public function created(Offer $offer): void
     {
+        $firebaseService = app(FirebaseNotificationService::class);
         // Load the product associated with this offer
         $product = $offer->product;
         if (!$product) {
@@ -51,7 +45,7 @@ class OfferObserver
         $guestTokens = UserFcmToken::whereNull('user_id')->pluck('token')->toArray();
         foreach ($guestTokens as $token) {
             try {
-                $this->firebaseService->sendToToken(
+                $firebaseService->sendToToken(
                     $token,
                     app()->getLocale() == 'ar' ? $titleAr : $titleEn,
                     app()->getLocale() == 'ar' ? $bodyAr : $bodyEn,
@@ -85,7 +79,7 @@ class OfferObserver
                 $userTokens = UserFcmToken::where('user_id', $user->id)->pluck('token')->toArray();
                 foreach ($userTokens as $token) {
                     try {
-                        $this->firebaseService->sendToToken(
+                        $firebaseService->sendToToken(
                             $token,
                             $userLocale == 'ar' ? $titleAr : $titleEn,
                             $userLocale == 'ar' ? $bodyAr : $bodyEn,
