@@ -424,4 +424,8 @@ return [
     'offer_updated_successfully' => 'تم تحديث العرض بنجاح',
     'offer_deleted_successfully' => 'تم حذف العرض بنجاح',
     'invalid_status' => 'حالة الطلب غير صحيحة',
+    'notification_turned_on' => 'تم تفعيل الإشعارات بنجاح',
+    'notification_turned_off' => 'تم إلغاء تفعيل الإشعارات بنجاح',
+    'is_notify_required' => 'إشعارات الحالة مطلوبة',
+    'is_notify_boolean' => 'إشعارات الحالة يجب أن تكون قيمة منطقية',
 ];

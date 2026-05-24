@@ -394,4 +394,8 @@ return [
     'offer_updated_successfully' => 'Offer updated successfully',
     'offer_deleted_successfully' => 'Offer deleted successfully',
     'invalid_status' => 'Invalid order status',
+    'notification_turned_on' => 'Notifications turned on successfully',
+    'notification_turned_off' => 'Notifications turned off successfully',
+    'is_notify_required' => 'Notifications status is required',
+    'is_notify_boolean' => 'Notifications status must be a boolean',
 ];
