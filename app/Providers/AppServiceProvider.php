@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Offer;
+use App\Observers\OfferObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,5 +29,8 @@ class AppServiceProvider extends ServiceProvider
             $switch
                 ->locales(['ar', 'en']);
         });
+
+        // Register OfferObserver
+        Offer::observe(OfferObserver::class);
     }
 }
