@@ -82,7 +82,7 @@ class NotificationService
                 'user_id' => $userId,
             ],
             [
-                'fcm_token' => $data['fcm_token'],
+                'token' => $data['token'],
             ]
         );
 
