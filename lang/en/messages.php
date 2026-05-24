@@ -407,6 +407,7 @@ return [
     'fcm_token_updated_successfully' => 'FCM token updated successfully',
     'notifications_retrieved_successfully' => 'Notifications retrieved successfully',
     'notification_read_successfully' => 'Notification read successfully',
+    'notifications_read_successfully' => 'All notifications read successfully',
     'notifications_deleted_successfully' => 'Notifications deleted successfully',
     'notification_deleted_successfully' => 'Notification deleted successfully',
     'notification_not_found' => 'Notification not found',

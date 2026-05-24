@@ -437,6 +437,7 @@ return [
     'fcm_token_updated_successfully' => 'تم تحديث FCM token بنجاح',
     'notifications_retrieved_successfully' => 'تم استرجاع الإشعارات بنجاح',
     'notification_read_successfully' => 'تم قراءة الإشعار بنجاح',
+    'notifications_read_successfully' => 'تم قراءة جميع الإشعارات بنجاح',
     'notifications_deleted_successfully' => 'تم حذف الإشعارات بنجاح',
     'notification_not_found' => 'الإشعار غير موجود',
     'notification_deleted_successfully' => 'تم حذف الإشعار بنجاح',
