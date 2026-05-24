@@ -15,6 +15,7 @@ use App\Http\Controllers\API\GENERAL\CouponController;
 use App\Http\Controllers\API\GENERAL\DayController;
 use App\Http\Controllers\API\GENERAL\FavoriteController;
 use App\Http\Controllers\API\GENERAL\GovernorateController;
+use App\Http\Controllers\API\GENERAL\NotificationController;
 use App\Http\Controllers\API\GENERAL\OfferController;
 use App\Http\Controllers\API\GENERAL\OrderController;
 use App\Http\Controllers\API\GENERAL\PageController;
@@ -191,5 +192,9 @@ Route::group(['middleware' => SetLang::class], function () {
         // Contacts Route
         Route::post('contact-us', [ContactController::class, 'store']);
         Route::get('contacts/my-contacts', [ContactController::class, 'myContacts']);
+
+        // Notification Routes
+        Route::post('notification/turn-on', [NotificationController::class, 'TurnOnNotification']);
+        Route::post('notification/turn-off', [NotificationController::class, 'TurnOffNotification']);
     });
 });
