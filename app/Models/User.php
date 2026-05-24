@@ -48,6 +48,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_notify' => 'boolean',
         ];
     }
 
@@ -103,6 +104,7 @@ class User extends Authenticatable implements FilamentUser, HasName
 
         return asset('storage/users/avatars/' . $value);
     }
+
     public function contacts()
     {
         return $this->hasMany(Contact::class);

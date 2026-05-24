@@ -23,13 +23,14 @@ class NotifyTurnOnRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'is_notify' => 'required',
+            'is_notify' => 'required|boolean',
         ];
     }
     public function messages(): array
     {
         return [
             'is_notify.required' => __('messages.is_notify_required'),
+            'is_notify.boolean' => __('messages.is_notify_boolean'),
         ];
     }
 }
