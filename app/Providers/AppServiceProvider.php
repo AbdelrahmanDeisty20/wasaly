@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Offer;
+use App\Models\Order;
 use App\Observers\OfferObserver;
+use App\Observers\OrderObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,5 +34,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Register OfferObserver
         Offer::observe(OfferObserver::class);
+
+        // Register OrderObserver
+        Order::observe(OrderObserver::class);
     }
 }

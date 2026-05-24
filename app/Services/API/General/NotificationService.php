@@ -158,6 +158,27 @@ class NotificationService
             'details' => $results,
         ];
     }
+
+    public function sendToUser($userId, $title, $body, $data = [])
+    {
+        $tokens = UserFcmToken::where('user_id', $userId)->pluck('token')->toArray();
+
+        $results = [];
+        foreach ($tokens as $token) {
+            try {
+                $results[] = $this->firebaseService->sendToToken($token, $title, $body, $data);
+            } catch (\Exception $e) {
+                // Ignore single token send errors
+            }
+        }
+
+        return [
+            'status' => true,
+            'message' => 'Notification sent to specific user',
+            'count' => count($tokens),
+            'details' => $results,
+        ];
+    }
     public function notifications()
     {
         $user = auth()->user();
