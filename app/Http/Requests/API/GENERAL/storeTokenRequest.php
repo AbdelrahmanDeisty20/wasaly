@@ -23,7 +23,7 @@ class storeTokenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fcm_token' => 'required|string',
+            'token' => 'required|string',
             'device_id' => 'nullable|string',
             'user_id' => 'nullable|exists:users,id',
         ];
@@ -32,8 +32,8 @@ class storeTokenRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'fcm_token.required' => __('messages.fcm_token_required'),
-            'fcm_token.string' => __('messages.fcm_token_string'),
+            'token.required' => __('messages.token_required'),
+            'token.string' => __('messages.token_string'),
             'device_id.string' => __('messages.device_id_string'),
             'user_id.exists' => __('messages.user_id_exists'),
         ];
