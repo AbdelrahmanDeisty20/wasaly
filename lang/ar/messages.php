@@ -428,4 +428,5 @@ return [
     'notification_turned_off' => 'تم إلغاء تفعيل الإشعارات بنجاح',
     'is_notify_required' => 'إشعارات الحالة مطلوبة',
     'is_notify_boolean' => 'إشعارات الحالة يجب أن تكون قيمة منطقية',
+    'notification_status' => 'حالة الإشعارات',
 ];

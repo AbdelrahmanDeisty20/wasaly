@@ -194,7 +194,10 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::get('contacts/my-contacts', [ContactController::class, 'myContacts']);
 
         // Notification Routes
+        Route::get('notification/status', [NotificationController::class, 'NotificationStatus']);
         Route::post('notification/turn-on', [NotificationController::class, 'TurnOnNotification']);
         Route::post('notification/turn-off', [NotificationController::class, 'TurnOffNotification']);
+        // FCM Token Route
+        Route::post('fcm-token', [NotificationController::class, 'sendToken']);
     });
 });
