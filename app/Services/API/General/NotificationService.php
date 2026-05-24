@@ -127,7 +127,11 @@ class NotificationService
 
     public function sendNotificationToUsers($title, $body, $data = [])
     {
-        $tokens = UserFcmToken::whereNotNull('user_id')->pluck('token')->toArray();
+        $tokens = UserFcmToken::whereNotNull('user_id')
+            ->whereHas('user', function ($q) {
+                $q->where('is_notify', true);
+            })
+            ->pluck('token')->toArray();
 
         $results = [];
         foreach ($tokens as $token) {
@@ -144,11 +148,21 @@ class NotificationService
 
     public function broadcastNotification($title, $body, $data = [])
     {
-        $tokens = UserFcmToken::pluck('token')->toArray();
+        // Get guest tokens OR tokens of users who have is_notify enabled
+        $tokens = UserFcmToken::where(function ($query) {
+            $query->whereNull('user_id')
+                ->orWhereHas('user', function ($q) {
+                    $q->where('is_notify', true);
+                });
+        })->pluck('token')->toArray();
 
         $results = [];
         foreach ($tokens as $token) {
-            $results[] = $this->firebaseService->sendToToken($token, $title, $body, $data);
+            try {
+                $results[] = $this->firebaseService->sendToToken($token, $title, $body, $data);
+            } catch (\Exception $e) {
+                // Ignore single token errors
+            }
         }
 
         return [
@@ -161,6 +175,17 @@ class NotificationService
 
     public function sendToUser($userId, $title, $body, $data = [])
     {
+        // Double check is_notify preference for safety
+        $user = \App\Models\User::find($userId);
+        if ($user && !$user->is_notify) {
+            return [
+                'status' => false,
+                'message' => 'User has disabled notifications',
+                'count' => 0,
+                'details' => [],
+            ];
+        }
+
         $tokens = UserFcmToken::where('user_id', $userId)->pluck('token')->toArray();
 
         $results = [];
