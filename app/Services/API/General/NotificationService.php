@@ -6,7 +6,7 @@ use App\Http\Resources\API\GENERAL\NotificationResource;
 use App\Http\Resources\API\GENERAL\NotifyStatus;
 use App\Models\UserFcmToken;
 use App\Traits\ApiResponse;
-use Notification;
+use App\Models\AppNotification;
 
 class NotificationService
 {
@@ -138,7 +138,7 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notifications = Notification::where('user_id', $user->id)
+        $notifications = AppNotification::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
@@ -159,7 +159,7 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notification = Notification::where('user_id', $user->id)
+        $notification = AppNotification::where('user_id', $user->id)
             ->where('id', $data['id'])
             ->first();
         if(!$notification)
@@ -171,8 +171,7 @@ class NotificationService
             ];
         }
         $notification->update([
-            'is_read'=>true,
-            'read_at'=>now()
+            'is_read'=>true
         ]);
         return[
             'status'=>true,
@@ -191,10 +190,9 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notifications = Notification::where('user_id', $user->id)
+        $notifications = AppNotification::where('user_id', $user->id)
             ->update([
-                'is_read'=>true,
-                'read_at'=>now()
+                'is_read'=>true
             ]);
         return[
             'status'=>true,
@@ -213,7 +211,7 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notification = Notification::where('user_id', $user->id)
+        $notification = AppNotification::where('user_id', $user->id)
             ->where('id', $data['id'])
             ->first();
         if(!$notification)
@@ -242,7 +240,7 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notifications = Notification::where('user_id', $user->id)
+        $notifications = AppNotification::where('user_id', $user->id)
             ->delete();
         return[
             'status'=>true,

@@ -85,12 +85,7 @@ Route::group(['middleware' => SetLang::class], function () {
 
     //fcm token
     Route::post('fcm-token', [NotificationController::class, 'sendToken']);
-    //notifications
-    Route::get('notifications',[NotificationController::class,'notifications']);
-    Route::get('notifications/read/{id}',[NotificationController::class,'readNotification']);
-    Route::get('notifications/read-all',[NotificationController::class,'readAllNotifications']);
-    Route::get('notifications/delete/{id}',[NotificationController::class,'deleteNotification']);
-    Route::get('notifications/delete-all',[NotificationController::class,'deleteAllNotifications']);
+    // test notifications
     Route::post('sendTestNotification',[NotificationController::class,'sendTestNotification']);
     Route::post('sendTestNotificationToUser',[NotificationController::class,'sendTestNotificationToUsers']);
     // days Routes
@@ -208,6 +203,13 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::get('notification/status', [NotificationController::class, 'NotificationStatus']);
         Route::post('notification/turn-on', [NotificationController::class, 'TurnOnNotification']);
         Route::post('notification/turn-off', [NotificationController::class, 'TurnOffNotification']);
+        
+        Route::get('notifications', [NotificationController::class, 'notifications']);
+        Route::get('notifications/read/{id}', [NotificationController::class, 'readNotification']);
+        Route::get('notifications/read-all', [NotificationController::class, 'readAllNotifications']);
+        Route::get('notifications/delete/{id}', [NotificationController::class, 'deleteNotification']);
+        Route::get('notifications/delete-all', [NotificationController::class, 'deleteAllNotifications']);
+
         // FCM Token Route
         Route::post('fcm-token-user', [NotificationController::class, 'sendToken']);
     });
