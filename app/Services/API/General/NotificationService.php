@@ -78,15 +78,29 @@ class NotificationService
     {
         $userId = $data['user_id'] ?? auth()->id();
 
-        $token = UserFcmToken::updateOrCreate(
-            [
-                'device_id' => $data['device_id'] ?? null,
-                'user_id' => $userId,
-            ],
-            [
-                'token' => $data['token'],
-            ]
-        );
+        // لو الـ device_id مبعوث، بنبحث بيه الأول عشان نمنع تكرار نفس الجهاز
+        if (!empty($data['device_id'])) {
+            $token = UserFcmToken::updateOrCreate(
+                [
+                    'device_id' => $data['device_id'],
+                ],
+                [
+                    'user_id' => $userId,
+                    'token' => $data['token'],
+                ]
+            );
+        } else {
+            // لو مش مبعوث بنبحث بالـ token الفريد للفايربيز
+            $token = UserFcmToken::updateOrCreate(
+                [
+                    'token' => $data['token'],
+                ],
+                [
+                    'device_id' => null,
+                    'user_id' => $userId,
+                ]
+            );
+        }
 
         return [
             'status' => true,
