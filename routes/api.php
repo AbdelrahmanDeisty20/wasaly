@@ -205,7 +205,7 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::post('notification/turn-off', [NotificationController::class, 'TurnOffNotification']);
         
         Route::get('notifications', [NotificationController::class, 'notifications']);
-        Route::get('notifications/read/{id}', [NotificationController::class, 'readNotification']);
+        Route::get('notifications/{id}/read', [NotificationController::class, 'readNotification']);
         Route::get('notifications/read-all', [NotificationController::class, 'readAllNotifications']);
         Route::get('notifications/delete/{id}', [NotificationController::class, 'deleteNotification']);
         Route::get('notifications/delete-all', [NotificationController::class, 'deleteAllNotifications']);
