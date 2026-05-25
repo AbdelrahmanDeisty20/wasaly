@@ -271,24 +271,17 @@ class BookingService
                 ];
             }
 
-            // التأكد إن الوقت المختار تابع فعلاً لليوم المختار ولنفس الخدمة (زي الربط اللي في createService)
-            $isValidTime = \App\Models\AvailableTime::where('id', $data['suggested_time_id'] ?? null)
-                ->where('available_day_id', $data['suggested_day_id'] ?? null)
-                ->where('service_id', $booking->service_id)
-                ->exists();
-
-            if (!$isValidTime) {
-                return [
-                    'status' => false,
-                    'message' => __('messages.invalid_time_for_selected_day_or_service'),
-                    'data' => []
-                ];
-            }
+            // إيجاد أو إنشاء الوقت المدخل يدوياً لليوم والخدمة المحددة
+            $suggestedTimeModel = \App\Models\AvailableTime::firstOrCreate([
+                'available_day_id' => $data['suggested_day_id'],
+                'service_id' => $booking->service_id,
+                'time' => $data['suggested_time'],
+            ]);
 
             $booking->update([
                 'suggested_date_id' => $data['suggested_date_id'] ?? null,
                 'suggested_day_id' => $data['suggested_day_id'] ?? null,
-                'suggested_time_id' => $data['suggested_time_id'] ?? null,
+                'suggested_time_id' => $suggestedTimeModel->id,
                 'reschedule_note' => $data['reschedule_note'] ?? null,
                 'status' => $isProvider ? 'reschedule_by_provider' : 'reschedule_by_customer',
             ]);

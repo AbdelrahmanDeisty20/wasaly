@@ -17,7 +17,7 @@ class BookingRescheduleRequest extends FormRequest
             'booking_id' => 'required|exists:bookings,id',
             'suggested_date_id' => 'nullable|exists:available_dates,id',
             'suggested_day_id' => 'required|exists:available_days,id',
-            'suggested_time_id' => 'required|exists:available_times,id',
+            'suggested_time' => 'required|string',
             'reschedule_note' => 'nullable|string|max:500',
         ];
     }
@@ -29,7 +29,7 @@ class BookingRescheduleRequest extends FormRequest
             'booking_id.exists' => __('messages.booking_not_found'),
             'suggested_date_id.required' => __('messages.date_required'),
             'suggested_day_id.required' => __('messages.day_required'),
-            'suggested_time_id.required' => __('messages.time_required'),
+            'suggested_time.required' => __('messages.time_required'),
         ];
     }
 }
