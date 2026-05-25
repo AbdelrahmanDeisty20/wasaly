@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\GENERAL\NotifyTurnOffRequest;
 use App\Http\Requests\API\GENERAL\NotifyTurnOnRequest;
 use App\Http\Requests\API\GENERAL\storeTokenRequest;
+use App\Http\Resources\API\GENERAL\NotificationResource;
 use App\Services\API\General\NotificationService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -78,7 +79,7 @@ class NotificationController extends Controller
         if (!$result['status']) {
             return $this->error($result['message'], 400);
         }
-        return $this->success($result['data'], $result['message'], 200);
+        return $this->paginated(NotificationResource::class,$result['data'], $result['message'], 200);
     }
     public function readNotification($id)
     {

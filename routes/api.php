@@ -207,8 +207,8 @@ Route::group(['middleware' => SetLang::class], function () {
         Route::get('notifications', [NotificationController::class, 'notifications']);
         Route::get('notifications/{id}/read', [NotificationController::class, 'readNotification']);
         Route::get('notifications/read-all', [NotificationController::class, 'readAllNotifications']);
-        Route::delete('notifications/{id}', [NotificationController::class, 'deleteNotification']);
         Route::delete('notifications/delete-all', [NotificationController::class, 'deleteAllNotifications']);
+        Route::delete('notifications/{id}', [NotificationController::class, 'deleteNotification']);
 
         // FCM Token Route
         Route::post('fcm-token-user', [NotificationController::class, 'sendToken']);

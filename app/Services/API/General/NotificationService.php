@@ -233,7 +233,7 @@ class NotificationService
         return [
             'status' => true,
             'message' => __('messages.notifications_retrieved_successfully'),
-            'data' => NotificationResource::collection($notifications),
+            'data' => $notifications,
         ];
     }
     public function readNotification(array $data)
