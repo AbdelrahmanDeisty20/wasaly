@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Offer;
 use App\Models\Order;
+use App\Models\Booking;
 use App\Observers\OfferObserver;
 use App\Observers\OrderObserver;
+use App\Observers\BookingObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -37,5 +39,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Register OrderObserver
         Order::observe(OrderObserver::class);
+
+        // Register BookingObserver
+        Booking::observe(BookingObserver::class);
     }
 }
