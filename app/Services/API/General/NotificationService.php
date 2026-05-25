@@ -7,6 +7,7 @@ use App\Http\Resources\API\GENERAL\NotifyStatus;
 use App\Models\UserFcmToken;
 use App\Traits\ApiResponse;
 use App\Models\AppNotification;
+use App\Models\UserNotificationState;
 
 class NotificationService
 {
@@ -222,6 +223,10 @@ class NotificationService
                 $query->where('user_id', $user->id)
                     ->orWhereNull('user_id');
             })
+            ->whereDoesntHave('userStates', function ($query) use ($user) {
+                $query->where('user_id', $user->id)->where('is_deleted', true);
+            })
+            ->with(['currentUserState'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
@@ -242,7 +247,10 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notification = AppNotification::where('user_id', $user->id)
+        $notification = AppNotification::where(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->orWhereNull('user_id');
+            })
             ->where('id', $data['id'])
             ->first();
         if(!$notification)
@@ -253,9 +261,20 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notification->update([
-            'is_read'=>true
-        ]);
+        
+        if ($notification->user_id) {
+            $notification->update([
+                'is_read'=>true
+            ]);
+        } else {
+            UserNotificationState::updateOrCreate(
+                ['user_id' => $user->id, 'notification_id' => $notification->id],
+                ['is_read' => true]
+            );
+        }
+
+        $notification->load('currentUserState');
+
         return[
             'status'=>true,
             'message'=>__('messages.notification_read_successfully'),
@@ -273,10 +292,28 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notifications = AppNotification::where('user_id', $user->id)
+        
+        // 1. Personal notifications: update directly
+        AppNotification::where('user_id', $user->id)
+            ->where('is_read', false)
             ->update([
                 'is_read'=>true
             ]);
+
+        // 2. Public notifications: create/update status to read
+        $unreadPublicNotifications = AppNotification::whereNull('user_id')
+            ->whereDoesntHave('userStates', function ($query) use ($user) {
+                $query->where('user_id', $user->id)->where('is_read', true);
+            })
+            ->get();
+
+        foreach ($unreadPublicNotifications as $notif) {
+            UserNotificationState::updateOrCreate(
+                ['user_id' => $user->id, 'notification_id' => $notif->id],
+                ['is_read' => true]
+            );
+        }
+
         return[
             'status'=>true,
             'message'=>__('messages.notifications_read_successfully'),
@@ -294,7 +331,10 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notification = AppNotification::where('user_id', $user->id)
+        $notification = AppNotification::where(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->orWhereNull('user_id');
+            })
             ->where('id', $data['id'])
             ->first();
         if(!$notification)
@@ -305,7 +345,16 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notification->delete();
+
+        if ($notification->user_id) {
+            $notification->delete();
+        } else {
+            UserNotificationState::updateOrCreate(
+                ['user_id' => $user->id, 'notification_id' => $notification->id],
+                ['is_deleted' => true]
+            );
+        }
+
         return[
             'status'=>true,
             'message'=>__('messages.notification_deleted_successfully'),
@@ -323,8 +372,25 @@ class NotificationService
                 'data'=>[]
             ];
         }
-        $notifications = AppNotification::where('user_id', $user->id)
+        
+        // 1. Personal notifications: delete completely
+        AppNotification::where('user_id', $user->id)
             ->delete();
+
+        // 2. Public notifications: mark as deleted for this user
+        $publicNotifications = AppNotification::whereNull('user_id')
+            ->whereDoesntHave('userStates', function ($query) use ($user) {
+                $query->where('user_id', $user->id)->where('is_deleted', true);
+            })
+            ->get();
+
+        foreach ($publicNotifications as $notif) {
+            UserNotificationState::updateOrCreate(
+                ['user_id' => $user->id, 'notification_id' => $notif->id],
+                ['is_deleted' => true]
+            );
+        }
+
         return[
             'status'=>true,
             'message'=>__('messages.notifications_deleted_successfully'),

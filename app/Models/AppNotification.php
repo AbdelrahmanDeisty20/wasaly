@@ -26,4 +26,15 @@ class AppNotification extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function userStates()
+    {
+        return $this->hasMany(UserNotificationState::class, 'notification_id');
+    }
+
+    public function currentUserState()
+    {
+        return $this->hasOne(UserNotificationState::class, 'notification_id')
+            ->where('user_id', auth()->id());
+    }
 }

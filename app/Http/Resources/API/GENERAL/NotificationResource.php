@@ -15,13 +15,17 @@ class NotificationResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $isRead = $this->user_id 
+            ? (bool) $this->is_read 
+            : ($this->currentUserState ? (bool) $this->currentUserState->is_read : false);
+
         return [
             "id" => $this->id,
             "title" => $this->title,
             "body" => $this->message,
             "type" => $this->type,
             "data" => $this->data,
-            "is_read" => (bool) $this->is_read,
+            "is_read" => $isRead,
             'user' => new UserResource($this->whenLoaded('user')),
             "created_at" => $this->created_at,
         ];
