@@ -77,9 +77,9 @@ class NotificationController extends Controller
     {
         $result = $this->notificationService->notifications();
         if (!$result['status']) {
-            return $this->error($result['message'], 400);
+            return $this->error($result['message']);
         }
-        return $this->paginated(NotificationResource::class,$result['data'], $result['message'], 200);
+        return $this->paginated(NotificationResource::class,$result['data'], $result['message']);
     }
     public function readNotification($id)
     {
