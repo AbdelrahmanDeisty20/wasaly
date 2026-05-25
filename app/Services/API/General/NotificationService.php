@@ -228,7 +228,7 @@ class NotificationService
             })
             ->with(['currentUserState'])
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(10);
 
         return [
             'status' => true,
