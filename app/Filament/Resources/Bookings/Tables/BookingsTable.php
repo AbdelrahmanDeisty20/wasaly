@@ -30,10 +30,13 @@ class BookingsTable
                     ->label(__('messages.service_provider'))
                     ->badge()
                     ->color('gray'),
-                TextColumn::make('date')
-                    ->label(__('messages.date_required'))
-                    ->date('d M Y')
-                    ->sortable(),
+                TextColumn::make('availableDay.name_ar')
+                    ->label(app()->getLocale() == 'ar' ? 'اليوم' : 'Day')
+                    ->getStateUsing(fn ($record) => 
+                        app()->getLocale() === 'ar' 
+                            ? ($record->availableDay?->name_ar ?? '-')
+                            : ($record->availableDay?->name_en ?? '-')
+                    ),
                 TextColumn::make('status')
                     ->label(__('messages.status'))
                     ->badge()

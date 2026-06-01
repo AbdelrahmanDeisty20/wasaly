@@ -54,15 +54,22 @@ class BookingForm
                             ]),
                     ]),
 
-                Section::make(__('messages.available_date'))
+                Section::make(app()->getLocale() == 'ar' ? 'تحديد الموعد (اليوم والوقت)' : 'Appointment Schedule (Day & Time)')
                     ->schema([
                         Grid::make(2)
                             ->schema([
-                                DatePicker::make('date')
-                                    ->label(__('messages.date_required'))
+                                Select::make('available_day_id')
+                                    ->label(app()->getLocale() == 'ar' ? 'اليوم المتاح' : 'Available Day')
+                                    ->relationship('availableDay', 'name_ar')
+                                    ->getOptionLabelFromRecordUsing(fn ($record) => app()->getLocale() == 'ar' ? $record->name_ar : $record->name_en)
+                                    ->searchable()
+                                    ->preload()
                                     ->required(),
-                                TextInput::make('time')
-                                    ->label(__('messages.time_required'))
+                                Select::make('available_time_id')
+                                    ->label(app()->getLocale() == 'ar' ? 'الوقت المتاح' : 'Available Time')
+                                    ->relationship('availableTime', 'time')
+                                    ->searchable()
+                                    ->preload()
                                     ->required(),
                             ]),
                     ]),
