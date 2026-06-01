@@ -77,7 +77,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasMany(UserFcmToken::class);
     }
 
-    public function notifications()
+    public function appNotifications()
     {
         return $this->hasMany(AppNotification::class);
     }
