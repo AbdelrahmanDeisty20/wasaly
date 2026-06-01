@@ -38,23 +38,31 @@ class OrderObserver
                         $providerNameAr = $provider ? ($provider->title_ar ?? $provider->user?->name) : 'مقدم الخدمة';
                         $providerNameEn = $provider ? ($provider->title_en ?? $provider->user?->name) : 'the provider';
 
+                        // Generate bilingual notifications
                         if ($status === 'accepted') {
-                            $title = $customerLocale === 'ar' ? 'تم قبول طلبك! 🎉' : 'Order Accepted! 🎉';
-                            $body = $customerLocale === 'ar' 
-                                ? "يسعدنا إبلاغك بأن مقدم الخدمة «{$providerNameAr}» قد قبل طلبك رقم #{$order->order_number} وهو قيد التجهيز الآن."
-                                : "We are happy to inform you that the provider «{$providerNameEn}» has accepted your order #{$order->order_number} and it is now in progress.";
+                            $titleAr = 'تم قبول طلبك! 🎉';
+                            $bodyAr = "يسعدنا إبلاغك بأن مقدم الخدمة «{$providerNameAr}» قد قبل طلبك رقم #{$order->order_number} وهو قيد التجهيز الآن.";
+                            
+                            $titleEn = 'Order Accepted! 🎉';
+                            $bodyEn = "We are happy to inform you that the provider «{$providerNameEn}» has accepted your order #{$order->order_number} and it is now in progress.";
                         } else {
-                            $title = $customerLocale === 'ar' ? 'تم إلغاء الطلب 😔' : 'Order Cancelled 😔';
-                            $body = $customerLocale === 'ar'
-                                ? "نعتذر منك، لقد تم إلغاء طلبك رقم #{$order->order_number} من قبل مقدم الخدمة «{$providerNameAr}»."
-                                : "We are sorry, your order #{$order->order_number} has been cancelled by the provider «{$providerNameEn}».";
+                            $titleAr = 'تم إلغاء الطلب 😔';
+                            $bodyAr = "نعتذر منك، لقد تم إلغاء طلبك رقم #{$order->order_number} من قبل مقدم الخدمة «{$providerNameAr}».";
+                            
+                            $titleEn = 'Order Cancelled 😔';
+                            $bodyEn = "We are sorry, your order #{$order->order_number} has been cancelled by the provider «{$providerNameEn}».";
                         }
 
-                        // 1. Save in database
+                        $pushTitle = $customerLocale === 'ar' ? $titleAr : $titleEn;
+                        $pushBody = $customerLocale === 'ar' ? $bodyAr : $bodyEn;
+
+                        // 1. Save in database (with bilingual translation support)
                         AppNotification::create([
                             'user_id' => $order->user_id,
-                            'title' => $title,
-                            'message' => $body,
+                            'title_ar' => $titleAr,
+                            'title_en' => $titleEn,
+                            'message_ar' => $bodyAr,
+                            'message_en' => $bodyEn,
                             'type' => 'order_status_updated',
                             'data' => [
                                 'order_id' => (string) $order->id,
@@ -66,7 +74,7 @@ class OrderObserver
                         // 2. Send push notification if enabled
                         if ($customer->is_notify) {
                             $notificationService = app(NotificationService::class);
-                            $notificationService->sendToUser($order->user_id, $title, $body, [
+                            $notificationService->sendToUser($order->user_id, $pushTitle, $pushBody, [
                                 'type' => 'order_status_updated',
                                 'order_id' => (string) $order->id,
                                 'status' => $status,
@@ -105,16 +113,22 @@ class OrderObserver
                     $providerLocale = $providerUser->locale ?? 'ar';
 
                     // Personalized localized notification details
-                    $title = $providerLocale === 'ar' ? 'طلب جديد وارد! 📥' : 'New Order Received! 📥';
-                    $body = $providerLocale === 'ar'
-                        ? "لقد تلقيت طلباً جديداً رقم #{$order->order_number} بقيمة {$order->total_price} ج.م. تفقد تفاصيل الطلب الآن."
-                        : "You have received a new order #{$order->order_number} with a total of {$order->total_price} EGP. Check the order details now.";
+                    $titleAr = 'طلب جديد وارد! 📥';
+                    $titleEn = 'New Order Received! 📥';
+                    
+                    $bodyAr = "لقد تلقيت طلباً جديداً رقم #{$order->order_number} بقيمة {$order->total_price} ج.م. تفقد تفاصيل الطلب الآن.";
+                    $bodyEn = "You have received a new order #{$order->order_number} with a total of {$order->total_price} EGP. Check the order details now.";
 
-                    // 1. Save database notification for the provider user
+                    $pushTitle = $providerLocale === 'ar' ? $titleAr : $titleEn;
+                    $pushBody = $providerLocale === 'ar' ? $bodyAr : $bodyEn;
+
+                    // 1. Save database notification for the provider user (with bilingual translation support)
                     AppNotification::create([
                         'user_id' => $providerUser->id,
-                        'title' => $title,
-                        'message' => $body,
+                        'title_ar' => $titleAr,
+                        'title_en' => $titleEn,
+                        'message_ar' => $bodyAr,
+                        'message_en' => $bodyEn,
                         'type' => 'new_order_received',
                         'data' => [
                             'order_id' => (string) $order->id,
@@ -126,7 +140,7 @@ class OrderObserver
                     // 2. Send push notification if provider user has enabled notifications
                     if ($providerUser->is_notify) {
                         $notificationService = app(NotificationService::class);
-                        $notificationService->sendToUser($providerUser->id, $title, $body, [
+                        $notificationService->sendToUser($providerUser->id, $pushTitle, $pushBody, [
                             'type' => 'new_order_received',
                             'order_id' => (string) $order->id,
                             'order_number' => (string) $order->order_number,

@@ -10,8 +10,10 @@ class AppNotification extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
-        'title',
-        'message',
+        'title_ar',
+        'title_en',
+        'message_ar',
+        'message_en',
         'type',
         'data',
         'is_read',
@@ -21,6 +23,22 @@ class AppNotification extends Model
         'data' => 'array',
         'is_read' => 'boolean',
     ];
+
+    public function getTitleAttribute()
+    {
+        if (app()->getLocale() === 'ar') {
+            return $this->title_ar ?? $this->title_en;
+        }
+        return $this->title_en ?? $this->title_ar;
+    }
+
+    public function getMessageAttribute()
+    {
+        if (app()->getLocale() === 'ar') {
+            return $this->message_ar ?? $this->message_en;
+        }
+        return $this->message_en ?? $this->message_ar;
+    }
 
     public function user()
     {

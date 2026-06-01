@@ -30,20 +30,28 @@ class BookingObserver
 
             if ($providerUser && $service) {
                 $providerLocale = $providerUser->locale ?? 'ar';
-                $serviceName = $providerLocale === 'ar' ? ($service->service ?? $service->service_ar) : ($service->service_en ?? $service->service);
-                $customerName = $booking->customer_name ?? ($booking->user ? $booking->user->name : 'عميل');
+                
+                $serviceNameAr = $service->service ?? $service->service_ar;
+                $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
+                $customerName = $booking->customer_name ?? ($booking->user ? $booking->user->full_name : 'عميل');
 
-                // Localized notification details
-                $title = $providerLocale === 'ar' ? 'حجز جديد وارد! 📅' : 'New Booking Received! 📅';
-                $body = $providerLocale === 'ar'
-                    ? "لقد تلقيت حجزاً جديداً لخدمتك «{$serviceName}» من قبل العميل «{$customerName}». تفقد تفاصيل الحجز الآن."
-                    : "You have received a new booking for your service «{$serviceName}» by customer «{$customerName}». Check booking details now.";
+                // Localized notification details for both languages
+                $titleAr = 'حجز جديد وارد! 📅';
+                $titleEn = 'New Booking Received! 📅';
+                
+                $bodyAr = "لقد تلقيت حجزاً جديداً لخدمتك «{$serviceNameAr}» من قبل العميل «{$customerName}». تفقد تفاصيل الحجز الآن.";
+                $bodyEn = "You have received a new booking for your service «{$serviceNameEn}» by customer «{$customerName}». Check booking details now.";
 
-                // 1. Save database notification for the provider
+                $pushTitle = $providerLocale === 'ar' ? $titleAr : $titleEn;
+                $pushBody = $providerLocale === 'ar' ? $bodyAr : $bodyEn;
+
+                // 1. Save database notification for the provider (with bilingual translation support)
                 AppNotification::create([
                     'user_id' => $providerUser->id,
-                    'title' => $title,
-                    'message' => $body,
+                    'title_ar' => $titleAr,
+                    'title_en' => $titleEn,
+                    'message_ar' => $bodyAr,
+                    'message_en' => $bodyEn,
                     'type' => 'new_booking_received',
                     'data' => [
                         'booking_id' => (string) $booking->id,
@@ -54,7 +62,7 @@ class BookingObserver
                 // 2. Send push notification if provider user has enabled notifications
                 if ($providerUser->is_notify) {
                     $notificationService = app(NotificationService::class);
-                    $notificationService->sendToUser($providerUser->id, $title, $body, [
+                    $notificationService->sendToUser($providerUser->id, $pushTitle, $pushBody, [
                         'type' => 'new_booking_received',
                         'booking_id' => (string) $booking->id,
                     ]);
@@ -87,74 +95,83 @@ class BookingObserver
 
                 // 1. If Booking is accepted
                 if ($status === 'accepted' && $customer) {
-                    $customerLocale = $customer->locale ?? 'ar';
-                    $serviceName = $customerLocale === 'ar' ? ($service->service ?? $service->service_ar) : ($service->service_en ?? $service->service);
-                    $providerName = $customerLocale === 'ar' ? ($provider->title_ar ?? $providerUser?->name) : ($provider->title_en ?? $providerUser?->name);
+                    $serviceNameAr = $service->service ?? $service->service_ar;
+                    $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
+                    
+                    $providerNameAr = $provider->title_ar ?? $providerUser?->name;
+                    $providerNameEn = $provider->title_en ?? $providerUser?->name ?? $providerNameAr;
 
-                    $title = $customerLocale === 'ar' ? 'تم قبول حجزك! 🎉' : 'Booking Accepted! 🎉';
-                    $body = $customerLocale === 'ar'
-                        ? "يسعدنا إبلاغك بأن مقدم الخدمة «{$providerName}» قد قبل حجزك للخدمة «{$serviceName}»."
-                        : "We are happy to inform you that the provider «{$providerName}» has accepted your booking for «{$serviceName}».";
+                    $titleAr = 'تم قبول حجزك! 🎉';
+                    $titleEn = 'Booking Accepted! 🎉';
+                    
+                    $bodyAr = "يسعدنا إبلاغك بأن مقدم الخدمة «{$providerNameAr}» قد قبل حجزك للخدمة «{$serviceNameAr}».";
+                    $bodyEn = "We are happy to inform you that the provider «{$providerNameEn}» has accepted your booking for «{$serviceNameEn}».";
 
-                    $this->sendNotification($customer->id, $title, $body, 'booking_accepted', $booking->id);
+                    $this->sendNotification($customer->id, $titleAr, $titleEn, $bodyAr, $bodyEn, 'booking_accepted', $booking->id);
                 }
 
                 // 2. If Booking is cancelled
                 if ($status === 'cancelled') {
                     // Notify customer
                     if ($customer) {
-                        $customerLocale = $customer->locale ?? 'ar';
-                        $serviceName = $customerLocale === 'ar' ? ($service->service ?? $service->service_ar) : ($service->service_en ?? $service->service);
+                        $serviceNameAr = $service->service ?? $service->service_ar;
+                        $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
 
-                        $title = $customerLocale === 'ar' ? 'تم إلغاء الحجز 😔' : 'Booking Cancelled 😔';
-                        $body = $customerLocale === 'ar'
-                            ? "نعتذر منك، لقد تم إلغاء حجزك للخدمة «{$serviceName}»."
-                            : "We are sorry, your booking for «{$serviceName}» has been cancelled.";
+                        $titleAr = 'تم إلغاء الحجز 😔';
+                        $titleEn = 'Booking Cancelled 😔';
+                        
+                        $bodyAr = "نعتذر منك، لقد تم إلغاء حجزك للخدمة «{$serviceNameAr}».";
+                        $bodyEn = "We are sorry, your booking for «{$serviceNameEn}» has been cancelled.";
 
-                        $this->sendNotification($customer->id, $title, $body, 'booking_cancelled', $booking->id);
+                        $this->sendNotification($customer->id, $titleAr, $titleEn, $bodyAr, $bodyEn, 'booking_cancelled', $booking->id);
                     }
 
                     // Notify provider
                     if ($providerUser) {
-                        $providerLocale = $providerUser->locale ?? 'ar';
-                        $serviceName = $providerLocale === 'ar' ? ($service->service ?? $service->service_ar) : ($service->service_en ?? $service->service);
-                        $customerName = $booking->customer_name ?? ($customer ? $customer->name : 'عميل');
+                        $serviceNameAr = $service->service ?? $service->service_ar;
+                        $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
+                        $customerName = $booking->customer_name ?? ($customer ? $customer->full_name : 'عميل');
 
-                        $title = $providerLocale === 'ar' ? 'تم إلغاء الحجز 😔' : 'Booking Cancelled 😔';
-                        $body = $providerLocale === 'ar'
-                            ? "نود إعلامك بأنه قد تم إلغاء حجز الخدمة «{$serviceName}» من قبل العميل «{$customerName}»."
-                            : "We want to inform you that the booking for «{$serviceName}» has been cancelled by customer «{$customerName}».";
+                        $titleAr = 'تم إلغاء الحجز 😔';
+                        $titleEn = 'Booking Cancelled 😔';
+                        
+                        $bodyAr = "نود إعلامك بأنه قد تم إلغاء حجز الخدمة «{$serviceNameAr}» من قبل العميل «{$customerName}».";
+                        $bodyEn = "We want to inform you that the booking for «{$serviceNameEn}» has been cancelled by customer «{$customerName}».";
 
-                        $this->sendNotification($providerUser->id, $title, $body, 'booking_cancelled', $booking->id);
+                        $this->sendNotification($providerUser->id, $titleAr, $titleEn, $bodyAr, $bodyEn, 'booking_cancelled', $booking->id);
                     }
                 }
 
                 // 3. If rescheduled by provider -> notify customer
                 if ($status === 'reschedule_by_provider' && $customer) {
-                    $customerLocale = $customer->locale ?? 'ar';
-                    $serviceName = $customerLocale === 'ar' ? ($service->service ?? $service->service_ar) : ($service->service_en ?? $service->service);
-                    $providerName = $customerLocale === 'ar' ? ($provider->title_ar ?? $providerUser?->name) : ($provider->title_en ?? $providerUser?->name);
+                    $serviceNameAr = $service->service ?? $service->service_ar;
+                    $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
+                    
+                    $providerNameAr = $provider->title_ar ?? $providerUser?->name;
+                    $providerNameEn = $provider->title_en ?? $providerUser?->name ?? $providerNameAr;
 
-                    $title = $customerLocale === 'ar' ? 'اقتراح موعد جديد للحجز ⏰' : 'New Booking Reschedule Proposal ⏰';
-                    $body = $customerLocale === 'ar'
-                        ? "اقترح مقدم الخدمة «{$providerName}» موعداً جديداً لحجزك للخدمة «{$serviceName}»."
-                        : "The provider «{$providerName}» has suggested a new time for your booking of «{$serviceName}».";
+                    $titleAr = 'اقتراح موعد جديد للحجز ⏰';
+                    $titleEn = 'New Booking Reschedule Proposal ⏰';
+                    
+                    $bodyAr = "اقترح مقدم الخدمة «{$providerNameAr}» موعداً جديداً لحجزك للخدمة «{$serviceNameAr}».";
+                    $bodyEn = "The provider «{$providerNameEn}» has suggested a new time for your booking of «{$serviceNameEn}».";
 
-                    $this->sendNotification($customer->id, $title, $body, 'booking_reschedule_proposed', $booking->id);
+                    $this->sendNotification($customer->id, $titleAr, $titleEn, $bodyAr, $bodyEn, 'booking_reschedule_proposed', $booking->id);
                 }
 
                 // 4. If rescheduled by customer -> notify provider
                 if ($status === 'reschedule_by_customer' && $providerUser) {
-                    $providerLocale = $providerUser->locale ?? 'ar';
-                    $serviceName = $providerLocale === 'ar' ? ($service->service ?? $service->service_ar) : ($service->service_en ?? $service->service);
-                    $customerName = $booking->customer_name ?? ($customer ? $customer->name : 'عميل');
+                    $serviceNameAr = $service->service ?? $service->service_ar;
+                    $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
+                    $customerName = $booking->customer_name ?? ($customer ? $customer->full_name : 'عميل');
 
-                    $title = $providerLocale === 'ar' ? 'طلب إعادة جدولة الحجز ⏰' : 'Reschedule Request Received ⏰';
-                    $body = $providerLocale === 'ar'
-                        ? "طلب العميل «{$customerName}» موعداً جديداً لحجزه للخدمة «{$serviceName}»."
-                        : "The customer «{$customerName}» has requested a new time for their booking of «{$serviceName}».";
+                    $titleAr = 'طلب إعادة جدولة الحجز ⏰';
+                    $titleEn = 'Reschedule Request Received ⏰';
+                    
+                    $bodyAr = "طلب العميل «{$customerName}» موعداً جديداً لحجزه للخدمة «{$serviceNameAr}».";
+                    $bodyEn = "The customer «{$customerName}» has requested a new time for their booking of «{$serviceNameEn}».";
 
-                    $this->sendNotification($providerUser->id, $title, $body, 'booking_reschedule_proposed', $booking->id);
+                    $this->sendNotification($providerUser->id, $titleAr, $titleEn, $bodyAr, $bodyEn, 'booking_reschedule_proposed', $booking->id);
                 }
             }
         } catch (\Exception $e) {
@@ -165,14 +182,25 @@ class BookingObserver
     /**
      * Helper to send notification to database and via FCM
      */
-    private function sendNotification(int $userId, string $title, string $body, string $type, int $bookingId): void
+    private function sendNotification(int $userId, string $titleAr, string $titleEn, string $bodyAr, string $bodyEn, string $type, int $bookingId): void
     {
         try {
-            // 1. Save database notification
+            $user = \App\Models\User::find($userId);
+            if (!$user) {
+                return;
+            }
+
+            $userLocale = $user->locale ?? 'ar';
+            $pushTitle = $userLocale === 'ar' ? $titleAr : $titleEn;
+            $pushBody = $userLocale === 'ar' ? $bodyAr : $bodyEn;
+
+            // 1. Save database notification (with bilingual translation support)
             AppNotification::create([
                 'user_id' => $userId,
-                'title' => $title,
-                'message' => $body,
+                'title_ar' => $titleAr,
+                'title_en' => $titleEn,
+                'message_ar' => $bodyAr,
+                'message_en' => $bodyEn,
                 'type' => $type,
                 'data' => [
                     'booking_id' => (string) $bookingId,
@@ -181,10 +209,9 @@ class BookingObserver
             ]);
 
             // 2. Send push notification if enabled
-            $user = \App\Models\User::find($userId);
-            if ($user && $user->is_notify) {
+            if ($user->is_notify) {
                 $notificationService = app(NotificationService::class);
-                $notificationService->sendToUser($userId, $title, $body, [
+                $notificationService->sendToUser($userId, $pushTitle, $pushBody, [
                     'type' => $type,
                     'booking_id' => (string) $bookingId,
                 ]);

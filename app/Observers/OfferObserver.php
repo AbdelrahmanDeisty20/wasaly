@@ -75,17 +75,23 @@ class OfferObserver
             $users = \App\Models\User::whereIn('id', $cartUserIds)->get();
             foreach ($users as $user) {
                 $userLocale = $user->locale ?? 'ar';
-                $cartTitle = $userLocale === 'ar' ? 'خصم على منتج في سلتك! 🛒🔥' : 'Discount on a product in your cart! 🛒🔥';
-                $cartBody = $userLocale === 'ar'
-                    ? "المنتج «{$product->name_ar}» الموجود في سلتك أصبح عليه خصم بقيمة {$discount}%! سارع بطلب السلة الآن قبل انتهاء العرض!"
-                    : "The product «{$product->name_en}» in your cart has a new {$discount}% discount! Complete your order now before the offer ends!";
+                $cartTitleAr = 'خصم على منتج في سلتك! 🛒🔥';
+                $cartTitleEn = 'Discount on a product in your cart! 🛒🔥';
+                
+                $cartBodyAr = "المنتج «{$product->name_ar}» الموجود في سلتك أصبح عليه خصم بقيمة {$discount}%! سارع بطلب السلة الآن قبل انتهاء العرض!";
+                $cartBodyEn = "The product «{$product->name_en}» in your cart has a new {$discount}% discount! Complete your order now before the offer ends!";
+
+                $cartTitle = $userLocale === 'ar' ? $cartTitleAr : $cartTitleEn;
+                $cartBody = $userLocale === 'ar' ? $cartBodyAr : $cartBodyEn;
 
                 try {
-                    // Save to database specifically for this user
+                    // Save to database specifically for this user (with bilingual translation support)
                     AppNotification::create([
                         'user_id' => $user->id,
-                        'title' => $cartTitle,
-                        'message' => $cartBody,
+                        'title_ar' => $cartTitleAr,
+                        'title_en' => $cartTitleEn,
+                        'message_ar' => $cartBodyAr,
+                        'message_en' => $cartBodyEn,
                         'type' => 'cart_offer_discount',
                         'data' => $data,
                         'is_read' => false,
@@ -107,17 +113,23 @@ class OfferObserver
             $users = \App\Models\User::whereIn('id', $favoriteOnlyUserIds)->get();
             foreach ($users as $user) {
                 $userLocale = $user->locale ?? 'ar';
-                $favTitle = $userLocale === 'ar' ? 'بشرى سارة لمنتجك المفضل! ❤️🔥' : 'Great news for your favorite product! ❤️🔥';
-                $favBody = $userLocale === 'ar'
-                    ? "بشرى سارة! منتجك المفضل «{$product->name_ar}» أصبح عليه خصم بقيمة {$discount}%! أضفه إلى السلة الآن!"
-                    : "Great news! Your favorite product «{$product->name_en}» has a new {$discount}% discount! Add it to your cart now!";
+                $favTitleAr = 'بشرى سارة لمنتجك المفضل! ❤️🔥';
+                $favTitleEn = 'Great news for your favorite product! ❤️🔥';
+                
+                $favBodyAr = "بشرى سارة! منتجك المفضل «{$product->name_ar}» أصبح عليه خصم بقيمة {$discount}%! أضفه إلى السلة الآن!";
+                $favBodyEn = "Great news! Your favorite product «{$product->name_en}» has a new {$discount}% discount! Add it to your cart now!";
+
+                $favTitle = $userLocale === 'ar' ? $favTitleAr : $favTitleEn;
+                $favBody = $userLocale === 'ar' ? $favBodyAr : $favBodyEn;
 
                 try {
-                    // Save to database specifically for this user
+                    // Save to database specifically for this user (with bilingual translation support)
                     AppNotification::create([
                         'user_id' => $user->id,
-                        'title' => $favTitle,
-                        'message' => $favBody,
+                        'title_ar' => $favTitleAr,
+                        'title_en' => $favTitleEn,
+                        'message_ar' => $favBodyAr,
+                        'message_en' => $favBodyEn,
                         'type' => 'favorite_offer_discount',
                         'data' => $data,
                         'is_read' => false,
@@ -145,8 +157,10 @@ class OfferObserver
         try {
             AppNotification::create([
                 'user_id' => null, // Broadcast for everyone else
-                'title' => $title,
-                'message' => $body,
+                'title_ar' => $titleAr,
+                'title_en' => $titleEn,
+                'message_ar' => $bodyAr,
+                'message_en' => $bodyEn,
                 'type' => 'new_offer',
                 'data' => $data,
                 'is_read' => false,

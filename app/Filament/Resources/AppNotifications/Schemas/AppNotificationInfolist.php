@@ -21,8 +21,11 @@ class AppNotificationInfolist
                                     ->label(__('messages.user'))
                                     ->icon('heroicon-m-user')
                                     ->placeholder(app()->getLocale() == 'ar' ? 'جميع المستخدمين (إرسال للكل)' : 'All Users'),
-                                TextEntry::make('title')
-                                    ->label(__('messages.title'))
+                                TextEntry::make('title_ar')
+                                    ->label(__('messages.title_ar'))
+                                    ->weight('bold'),
+                                TextEntry::make('title_en')
+                                    ->label(__('messages.title_en'))
                                     ->weight('bold'),
                                 TextEntry::make('type')
                                     ->label(__('messages.type'))
@@ -33,8 +36,12 @@ class AppNotificationInfolist
                                     ->badge()
                                     ->color(fn ($state) => $state ? 'success' : 'warning')
                                     ->formatStateUsing(fn ($state) => $state ? __('messages.read') : __('messages.unread')),
-                                TextEntry::make('message')
-                                    ->label(__('messages.message'))
+                                TextEntry::make('message_ar')
+                                    ->label(__('messages.message_ar'))
+                                    ->columnSpanFull()
+                                    ->extraAttributes(['class' => 'p-4 bg-gray-50 dark:bg-gray-800 rounded-lg']),
+                                TextEntry::make('message_en')
+                                    ->label(__('messages.message_en'))
                                     ->columnSpanFull()
                                     ->extraAttributes(['class' => 'p-4 bg-gray-50 dark:bg-gray-800 rounded-lg']),
                                 TextEntry::make('created_at')

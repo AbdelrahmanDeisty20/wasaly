@@ -24,8 +24,9 @@ class AppNotificationsTable
                     ->placeholder(app()->getLocale() == 'ar' ? 'جميع المستخدمين' : 'All Users'),
                 TextColumn::make('title')
                     ->label(__('messages.title'))
-                    ->searchable()
-                    ->sortable(),
+                    ->getStateUsing(fn ($record) => $record->title)
+                    ->searchable(['title_ar', 'title_en'])
+                    ->sortable(['title_ar']),
                 TextColumn::make('type')
                     ->label(__('messages.type'))
                     ->badge()

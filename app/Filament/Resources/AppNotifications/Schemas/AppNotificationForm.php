@@ -22,8 +22,12 @@ class AppNotificationForm
                     ->preload()
                     ->nullable()
                     ->placeholder(app()->getLocale() == 'ar' ? 'جميع المستخدمين (إرسال للكل)' : 'All Users (Send to all)'),
-                TextInput::make('title')
-                    ->label(__('messages.title'))
+                TextInput::make('title_ar')
+                    ->label(__('messages.title_ar'))
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('title_en')
+                    ->label(__('messages.title_en'))
                     ->required()
                     ->maxLength(255),
                 TextInput::make('type')
@@ -31,8 +35,12 @@ class AppNotificationForm
                     ->default('general')
                     ->required()
                     ->maxLength(255),
-                Textarea::make('message')
-                    ->label(__('messages.message'))
+                Textarea::make('message_ar')
+                    ->label(__('messages.message_ar'))
+                    ->required()
+                    ->columnSpanFull(),
+                Textarea::make('message_en')
+                    ->label(__('messages.message_en'))
                     ->required()
                     ->columnSpanFull(),
                 Toggle::make('is_read')
