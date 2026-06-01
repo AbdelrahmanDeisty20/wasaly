@@ -5,9 +5,13 @@ namespace App\Providers;
 use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Booking;
+use App\Models\Service;
+use App\Models\Product;
 use App\Observers\OfferObserver;
 use App\Observers\OrderObserver;
 use App\Observers\BookingObserver;
+use App\Observers\ServiceObserver;
+use App\Observers\ProductObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,5 +46,11 @@ class AppServiceProvider extends ServiceProvider
 
         // Register BookingObserver
         Booking::observe(BookingObserver::class);
+
+        // Register ServiceObserver
+        Service::observe(ServiceObserver::class);
+
+        // Register ProductObserver
+        Product::observe(ProductObserver::class);
     }
 }

@@ -168,5 +168,67 @@ class OfferObserver
         } catch (\Exception $e) {
             // Ignore DB insertion errors
         }
+
+        // 5. Notify Admins
+        try {
+            if ($provider) {
+                $providerNameAr = $provider->title_ar ?? $provider->user?->name ?? 'مقدم خدمة';
+                $providerNameEn = $provider->title_en ?? $provider->user?->name ?? 'Service Provider';
+
+                $adminTitleAr = 'إضافة عرض جديد في النظام! 🔥';
+                $adminTitleEn = 'New Offer Added to the System! 🔥';
+                
+                $adminBodyAr = "قام مقدم الخدمة «{$providerNameAr}» بإضافة عرض جديد بخصم {$discount}% على منتجه «{$product->name_ar}».";
+                $adminBodyEn = "The service provider «{$providerNameEn}» has added a new offer of {$discount}% on product «{$product->name_en}».";
+
+                $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, 'system_new_offer', [
+                    'offer_id' => (string) $offer->id,
+                    'product_id' => (string) $product->id,
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Fail silently
+        }
+    }
+
+    private function notifyAdmins(string $titleAr, string $titleEn, string $bodyAr, string $bodyEn, string $type, array $extraData = []): void
+    {
+        try {
+            $admins = \App\Models\User::role(['admin', 'sub_admin', 'super_admin'])->get();
+
+            foreach ($admins as $admin) {
+                $userLocale = $admin->locale ?? 'ar';
+                $pushTitle = $userLocale === 'ar' ? $titleAr : $titleEn;
+                $pushBody = $userLocale === 'ar' ? $bodyAr : $bodyEn;
+
+                // 1. Save database notification
+                AppNotification::create([
+                    'user_id' => $admin->id,
+                    'title_ar' => $titleAr,
+                    'title_en' => $titleEn,
+                    'message_ar' => $bodyAr,
+                    'message_en' => $bodyEn,
+                    'type' => $type,
+                    'is_read' => false,
+                ]);
+
+                // 2. Dispatch FCM push notification
+                if ($admin->is_notify) {
+                    $tokens = \App\Models\UserFcmToken::where('user_id', $admin->id)->pluck('token')->toArray();
+                    $firebaseService = app(\App\Services\API\General\FirebaseNotificationService::class);
+                    foreach ($tokens as $token) {
+                        try {
+                            $firebaseService->sendToToken($token, $pushTitle, $pushBody, array_merge([
+                                'type' => $type,
+                            ], $extraData));
+                        } catch (\Exception $e) {
+                            // Fail silently
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            // Fail silently
+        }
     }
 }

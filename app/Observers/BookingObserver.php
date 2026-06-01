@@ -18,55 +18,75 @@ class BookingObserver
     /**
      * Handle the Booking "created" event.
      */
+    /**
+     * Handle the Booking "created" event.
+     */
     public function created(Booking $booking): void
     {
         try {
             // Load relations
-            $booking->load(['provider.user', 'service']);
+            $booking->load(['provider.user', 'service', 'user']);
 
             $provider = $booking->provider;
             $providerUser = $provider ? $provider->user : null;
             $service = $booking->service;
 
-            if ($providerUser && $service) {
-                $providerLocale = $providerUser->locale ?? 'ar';
-                
+            if ($service) {
                 $serviceNameAr = $service->service ?? $service->service_ar;
                 $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
                 $customerName = $booking->customer_name ?? ($booking->user ? $booking->user->full_name : 'عميل');
 
-                // Localized notification details for both languages
-                $titleAr = 'حجز جديد وارد! 📅';
-                $titleEn = 'New Booking Received! 📅';
-                
-                $bodyAr = "لقد تلقيت حجزاً جديداً لخدمتك «{$serviceNameAr}» من قبل العميل «{$customerName}». تفقد تفاصيل الحجز الآن.";
-                $bodyEn = "You have received a new booking for your service «{$serviceNameEn}» by customer «{$customerName}». Check booking details now.";
+                // 1. Notify Provider if available
+                if ($providerUser) {
+                    $providerLocale = $providerUser->locale ?? 'ar';
+                    
+                    // Localized notification details for both languages
+                    $titleAr = 'حجز جديد وارد! 📅';
+                    $titleEn = 'New Booking Received! 📅';
+                    
+                    $bodyAr = "لقد تلقيت حجزاً جديداً لخدمتك «{$serviceNameAr}» من قبل العميل «{$customerName}». تفقد تفاصيل الحجز الآن.";
+                    $bodyEn = "You have received a new booking for your service «{$serviceNameEn}» by customer «{$customerName}». Check booking details now.";
 
-                $pushTitle = $providerLocale === 'ar' ? $titleAr : $titleEn;
-                $pushBody = $providerLocale === 'ar' ? $bodyAr : $bodyEn;
+                    $pushTitle = $providerLocale === 'ar' ? $titleAr : $titleEn;
+                    $pushBody = $providerLocale === 'ar' ? $bodyAr : $bodyEn;
 
-                // 1. Save database notification for the provider (with bilingual translation support)
-                AppNotification::create([
-                    'user_id' => $providerUser->id,
-                    'title_ar' => $titleAr,
-                    'title_en' => $titleEn,
-                    'message_ar' => $bodyAr,
-                    'message_en' => $bodyEn,
-                    'type' => 'new_booking_received',
-                    'data' => [
-                        'booking_id' => (string) $booking->id,
-                    ],
-                    'is_read' => false,
-                ]);
-
-                // 2. Send push notification if provider user has enabled notifications
-                if ($providerUser->is_notify) {
-                    $notificationService = app(NotificationService::class);
-                    $notificationService->sendToUser($providerUser->id, $pushTitle, $pushBody, [
+                    // Save database notification for the provider
+                    AppNotification::create([
+                        'user_id' => $providerUser->id,
+                        'title_ar' => $titleAr,
+                        'title_en' => $titleEn,
+                        'message_ar' => $bodyAr,
+                        'message_en' => $bodyEn,
                         'type' => 'new_booking_received',
-                        'booking_id' => (string) $booking->id,
+                        'data' => [
+                            'booking_id' => (string) $booking->id,
+                        ],
+                        'is_read' => false,
                     ]);
+
+                    // Send push notification if provider user has enabled notifications
+                    if ($providerUser->is_notify) {
+                        $notificationService = app(NotificationService::class);
+                        $notificationService->sendToUser($providerUser->id, $pushTitle, $pushBody, [
+                            'type' => 'new_booking_received',
+                            'booking_id' => (string) $booking->id,
+                        ]);
+                    }
                 }
+
+                // 2. Notify Admins
+                $providerNameAr = $provider ? ($provider->title_ar ?? $providerUser?->name ?? 'مقدم الخدمة') : 'مقدم خدمة';
+                $providerNameEn = $provider ? ($provider->title_en ?? $providerUser?->name ?? 'Service Provider') : 'Service Provider';
+
+                $adminTitleAr = 'حجز جديد في النظام! 📅';
+                $adminTitleEn = 'New Booking in the System! 📅';
+                
+                $adminBodyAr = "تم حجز الخدمة «{$serviceNameAr}» المقدمة من «{$providerNameAr}» بواسطة العميل «{$customerName}».";
+                $adminBodyEn = "The service «{$serviceNameEn}» provided by «{$providerNameEn}» has been booked by customer «{$customerName}».";
+
+                $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, 'system_new_booking', [
+                    'booking_id' => (string) $booking->id,
+                ]);
             }
         } catch (\Exception $e) {
             // Fail silently
@@ -230,6 +250,47 @@ class BookingObserver
                     'type' => $type,
                     'booking_id' => (string) $bookingId,
                 ]);
+            }
+        } catch (\Exception $e) {
+            // Fail silently
+        }
+    }
+
+    private function notifyAdmins(string $titleAr, string $titleEn, string $bodyAr, string $bodyEn, string $type, array $extraData = []): void
+    {
+        try {
+            $admins = \App\Models\User::role(['admin', 'sub_admin', 'super_admin'])->get();
+
+            foreach ($admins as $admin) {
+                $userLocale = $admin->locale ?? 'ar';
+                $pushTitle = $userLocale === 'ar' ? $titleAr : $titleEn;
+                $pushBody = $userLocale === 'ar' ? $bodyAr : $bodyEn;
+
+                // 1. Save database notification
+                AppNotification::create([
+                    'user_id' => $admin->id,
+                    'title_ar' => $titleAr,
+                    'title_en' => $titleEn,
+                    'message_ar' => $bodyAr,
+                    'message_en' => $bodyEn,
+                    'type' => $type,
+                    'is_read' => false,
+                ]);
+
+                // 2. Dispatch FCM push notification
+                if ($admin->is_notify) {
+                    $tokens = \App\Models\UserFcmToken::where('user_id', $admin->id)->pluck('token')->toArray();
+                    $firebaseService = app(\App\Services\API\General\FirebaseNotificationService::class);
+                    foreach ($tokens as $token) {
+                        try {
+                            $firebaseService->sendToToken($token, $pushTitle, $pushBody, array_merge([
+                                'type' => $type,
+                            ], $extraData));
+                        } catch (\Exception $e) {
+                            // Fail silently
+                        }
+                    }
+                }
             }
         } catch (\Exception $e) {
             // Fail silently

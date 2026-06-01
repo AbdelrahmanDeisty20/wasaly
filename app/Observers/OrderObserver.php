@@ -157,8 +157,61 @@ class OrderObserver
                     }
                 }
             }
+
+            // 3. Notify Admins
+            $adminTitleAr = 'طلب جديد في النظام! 📦';
+            $adminTitleEn = 'New Order in the System! 📦';
+            
+            $adminBodyAr = "تمت إضافة طلب جديد رقم #{$order->order_number} بقيمة {$order->total_price} ج.م.";
+            $adminBodyEn = "A new order #{$order->order_number} has been placed with a total of {$order->total_price} EGP.";
+
+            $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, 'system_new_order', [
+                'order_id' => (string) $order->id,
+                'order_number' => (string) $order->order_number,
+            ]);
         } catch (\Exception $e) {
             // Fail silently to prevent interrupting application flow
+        }
+    }
+
+    private function notifyAdmins(string $titleAr, string $titleEn, string $bodyAr, string $bodyEn, string $type, array $extraData = []): void
+    {
+        try {
+            $admins = \App\Models\User::role(['admin', 'sub_admin', 'super_admin'])->get();
+
+            foreach ($admins as $admin) {
+                $userLocale = $admin->locale ?? 'ar';
+                $pushTitle = $userLocale === 'ar' ? $titleAr : $titleEn;
+                $pushBody = $userLocale === 'ar' ? $bodyAr : $bodyEn;
+
+                // 1. Save database notification
+                AppNotification::create([
+                    'user_id' => $admin->id,
+                    'title_ar' => $titleAr,
+                    'title_en' => $titleEn,
+                    'message_ar' => $bodyAr,
+                    'message_en' => $bodyEn,
+                    'type' => $type,
+                    'is_read' => false,
+                ]);
+
+                // 2. Dispatch FCM push notification
+                if ($admin->is_notify) {
+                    $tokens = \App\Models\UserFcmToken::where('user_id', $admin->id)->pluck('token')->toArray();
+                    $firebaseService = app(\App\Services\API\General\FirebaseNotificationService::class);
+                    foreach ($tokens as $token) {
+                        try {
+                            $firebaseService->sendToToken($token, $pushTitle, $pushBody, array_merge([
+                                'type' => $type,
+                            ], $extraData));
+                        } catch (\Exception $e) {
+                            // Fail silently
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            // Fail silently
         }
     }
 }
