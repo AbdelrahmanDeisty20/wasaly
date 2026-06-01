@@ -42,7 +42,7 @@ class CouponResource extends Resource
         $isAr = app()->getLocale() == 'ar';
         return $schema
             ->components([
-                \Filament\Forms\Components\Section::make($isAr ? 'بيانات الكوبون الأساسية' : 'Basic Coupon Data')
+                \Filament\Schemas\Components\Section::make($isAr ? 'بيانات الكوبون الأساسية' : 'Basic Coupon Data')
                     ->schema([
                         \Filament\Forms\Components\TextInput::make('code')
                             ->label($isAr ? 'كود الكوبون (تلقائي رقمي)' : 'Coupon Code (Auto Numeric)')
@@ -68,7 +68,7 @@ class CouponResource extends Resource
                             ->required(),
                     ])->columns(2),
 
-                \Filament\Forms\Components\Section::make($isAr ? 'تفاصيل الكوبون والترجمة' : 'Coupon Details & Translation')
+                \Filament\Schemas\Components\Section::make($isAr ? 'تفاصيل الكوبون والترجمة' : 'Coupon Details & Translation')
                     ->schema([
                         \Filament\Forms\Components\TextInput::make('title_ar')
                             ->label($isAr ? 'عنوان الكوبون (بالعربية)' : 'Title (Arabic)')
@@ -84,7 +84,7 @@ class CouponResource extends Resource
                             ->rows(3),
                     ])->columns(2),
 
-                \Filament\Forms\Components\Section::make($isAr ? 'شروط وحدود الاستخدام' : 'Usage Terms & Limits')
+                \Filament\Schemas\Components\Section::make($isAr ? 'شروط وحدود الاستخدام' : 'Usage Terms & Limits')
                     ->schema([
                         \Filament\Forms\Components\Select::make('user_id')
                             ->label($isAr ? 'مخصص لمستخدم معين (اختياري)' : 'Specific User (Optional)')
