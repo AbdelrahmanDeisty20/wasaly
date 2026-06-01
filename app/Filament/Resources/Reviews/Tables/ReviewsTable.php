@@ -15,30 +15,30 @@ class ReviewsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
-                    ->label(app()->getLocale() == 'ar' ? 'المستخدم' : 'User')
+                TextColumn::make('user.full_name')
+                    ->label(__('messages.user'))
                     ->searchable()
                     ->sortable()
                     ->badge(),
                 TextColumn::make('rating')
-                    ->label(app()->getLocale() == 'ar' ? 'التقييم' : 'Rating')
+                    ->label(__('messages.rating'))
                     ->numeric()
                     ->sortable()
                     ->badge()
                     ->color(fn ($state) => $state >= 4 ? 'success' : ($state >= 3 ? 'warning' : 'danger'))
                     ->formatStateUsing(fn ($state) => $state . ' ⭐'),
                 TextColumn::make('type')
-                    ->label(app()->getLocale() == 'ar' ? 'النوع' : 'Type')
+                    ->label(__('messages.type'))
                     ->getStateUsing(function ($record) {
-                        if ($record->product_id) return app()->getLocale() == 'ar' ? 'منتج: ' . $record->product->name_ar : 'Product: ' . $record->product->name_en;
-                        if ($record->service_id) return app()->getLocale() == 'ar' ? 'خدمة: ' . $record->service->service_ar : 'Service: ' . $record->service->service_en;
-                        if ($record->provider_id) return app()->getLocale() == 'ar' ? 'مقدم خدمة: ' . $record->provider->title_ar : 'Provider: ' . $record->provider->title_en;
-                        return app()->getLocale() == 'ar' ? 'التطبيق' : 'App';
+                        if ($record->product_id) return (app()->getLocale() == 'ar' ? 'منتج: ' : 'Product: ') . ($record->product->name_ar ?? $record->product->name_en);
+                        if ($record->service_id) return (app()->getLocale() == 'ar' ? 'خدمة: ' : 'Service: ') . ($record->service->service_ar ?? $record->service->service_en);
+                        if ($record->provider_id) return (app()->getLocale() == 'ar' ? 'مقدم خدمة: ' : 'Provider: ') . ($record->provider->title_ar ?? $record->provider->title_en);
+                        return __('messages.general_app_review');
                     })
                     ->badge()
                     ->color('info'),
                 TextColumn::make('comment')
-                    ->label(app()->getLocale() == 'ar' ? 'التعليق' : 'Comment')
+                    ->label(__('messages.comment'))
                     ->limit(30)
                     ->searchable(),
                 TextColumn::make('created_at')
@@ -48,12 +48,12 @@ class ReviewsTable
             ])
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('review_type')
-                    ->label(app()->getLocale() == 'ar' ? 'نوع التقييم' : 'Review Type')
+                    ->label(__('messages.review_type'))
                     ->options([
-                        'app' => app()->getLocale() == 'ar' ? 'تقييمات التطبيق' : 'App Reviews',
-                        'product' => app()->getLocale() == 'ar' ? 'تقييمات المنتجات' : 'Product Reviews',
-                        'service' => app()->getLocale() == 'ar' ? 'تقييمات الخدمات' : 'Service Reviews',
-                        'provider' => app()->getLocale() == 'ar' ? 'تقييمات مقدمي الخدمة' : 'Provider Reviews',
+                        'app' => __('messages.app_reviews'),
+                        'product' => __('messages.product_reviews'),
+                        'service' => __('messages.service_reviews'),
+                        'provider' => __('messages.provider_reviews'),
                     ])
                     ->query(function ($query, array $data) {
                         return match ($data['value'] ?? null) {
@@ -65,25 +65,25 @@ class ReviewsTable
                         };
                     }),
                 \Filament\Tables\Filters\SelectFilter::make('user_id')
-                    ->label(app()->getLocale() == 'ar' ? 'المستخدم' : 'User')
-                    ->relationship('user', 'name')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name ?? $record->email ?? 'User #' . $record->id)
+                    ->label(__('messages.user'))
+                    ->relationship('user', 'full_name')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name ?? $record->email ?? 'User #' . $record->id)
                     ->searchable()
                     ->preload(),
                 \Filament\Tables\Filters\SelectFilter::make('provider_id')
-                    ->label(app()->getLocale() == 'ar' ? 'مقدم الخدمة' : 'Provider')
+                    ->label(__('messages.optional_provider'))
                     ->relationship('provider', 'title_ar')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->title_ar ?? $record->title_en ?? 'Provider #' . $record->id)
                     ->searchable()
                     ->preload(),
                 \Filament\Tables\Filters\SelectFilter::make('service_id')
-                    ->label(app()->getLocale() == 'ar' ? 'الخدمة' : 'Service')
+                    ->label(__('messages.services'))
                     ->relationship('service', 'service_ar')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->service_ar ?? $record->service_en ?? 'Service #' . $record->id)
                     ->searchable()
                     ->preload(),
                 \Filament\Tables\Filters\SelectFilter::make('product_id')
-                    ->label(app()->getLocale() == 'ar' ? 'المنتج' : 'Product')
+                    ->label(__('messages.product'))
                     ->relationship('product', 'name_ar')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name_ar ?? $record->name_en ?? 'Product #' . $record->id)
                     ->searchable()
