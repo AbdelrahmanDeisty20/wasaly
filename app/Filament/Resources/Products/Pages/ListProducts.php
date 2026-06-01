@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Products\Pages;
 use App\Filament\Resources\Products\ProductResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Resources\Components\Tab;
+use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListProducts extends ListRecords
@@ -15,13 +15,10 @@ class ListProducts extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make()
-                ->label(__('messages.all_products')),
-            'admin' => Tab::make()
-                ->label(__('messages.admin_products'))
+            'all' => Tab::make(__('messages.all_products')),
+            'admin' => Tab::make(__('messages.admin_products'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereNull('provider_id')),
-            'providers' => Tab::make()
-                ->label(__('messages.providers_products'))
+            'providers' => Tab::make(__('messages.providers_products'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereNotNull('provider_id')),
         ];
     }
