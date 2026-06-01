@@ -138,8 +138,7 @@ class StatsOverview extends BaseWidget
             )
                 ->description($isAr ? 'كوبونات خصم متاحة للاستخدام' : 'Discount coupons available for use')
                 ->descriptionIcon('heroicon-m-ticket')
-                ->color('success')
-                ->url(\App\Filament\Resources\Coupons\CouponResource::getUrl('index')),
+                ->color('success'),
 
             // Reviews Stat
             Stat::make(
