@@ -8,6 +8,9 @@ use App\Models\Product;
 use App\Models\Provider;
 use App\Models\Service;
 use App\Models\User;
+use App\Models\Contact;
+use App\Models\Offer;
+use App\Models\Coupon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -21,6 +24,7 @@ class StatsOverview extends BaseWidget
 
         // 1. Sales & Revenue
         $totalSales = Order::where('status', 'delivered')->sum('total_price') ?? 0;
+        $todaySales = Order::where('status', 'delivered')->whereDate('created_at', today())->sum('total_price') ?? 0;
         $totalOrders = Order::count();
         $pendingOrders = Order::where('status', 'pending')->count();
 
@@ -32,13 +36,16 @@ class StatsOverview extends BaseWidget
         $customersCount = User::where('type', 'user')->count();
         $providersCount = User::where('type', 'service_provider')->count();
 
-        // 4. Content
+        // 4. Content & Marketing
         $productsCount = Product::count();
         $servicesCount = Service::count();
+        $activeOffers = Offer::count();
+        $activeCoupons = Coupon::where('is_active', true)->count();
 
-        // 5. Reviews
+        // 5. Reviews & Support
         $totalReviews = \App\Models\Review::count();
         $averageRating = number_format(\App\Models\Review::avg('rating') ?? 0, 1);
+        $pendingContacts = Contact::where('is_read', false)->count();
 
         return [
             // Sales Stat
@@ -49,6 +56,16 @@ class StatsOverview extends BaseWidget
                 ->description($isAr ? 'الأرباح من الطلبات التي تم تسليمها' : 'Revenue from delivered orders')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->chart([$totalSales * 0.2, $totalSales * 0.5, $totalSales * 0.8, $totalSales])
+                ->color('success')
+                ->url(\App\Filament\Resources\Orders\OrderResource::getUrl('index')),
+
+            // Today's Sales Stat
+            Stat::make(
+                $isAr ? 'مبيعات اليوم' : 'Today\'s Sales',
+                number_format($todaySales, 2) . ' EGP'
+            )
+                ->description($isAr ? 'الأرباح المحققة اليوم' : 'Revenue generated today')
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')
                 ->url(\App\Filament\Resources\Orders\OrderResource::getUrl('index')),
 
@@ -104,6 +121,26 @@ class StatsOverview extends BaseWidget
                 ->color('gray')
                 ->url(\App\Filament\Resources\Products\ProductResource::getUrl('index')),
 
+            // Active Offers Stat
+            Stat::make(
+                $isAr ? 'العروض النشطة' : 'Active Offers',
+                $activeOffers
+            )
+                ->description($isAr ? 'العروض الترويجية الحالية' : 'Current promotional offers')
+                ->descriptionIcon('heroicon-m-fire')
+                ->color('danger')
+                ->url(\App\Filament\Resources\Offers\OfferResource::getUrl('index')),
+
+            // Active Coupons Stat
+            Stat::make(
+                $isAr ? 'الكوبونات الفعالة' : 'Active Coupons',
+                $activeCoupons
+            )
+                ->description($isAr ? 'كوبونات خصم متاحة للاستخدام' : 'Discount coupons available for use')
+                ->descriptionIcon('heroicon-m-ticket')
+                ->color('success')
+                ->url(\App\Filament\Resources\Coupons\CouponResource::getUrl('index')),
+
             // Reviews Stat
             Stat::make(
                 $isAr ? 'متوسط التقييمات' : 'Average Rating',
@@ -113,6 +150,16 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-star')
                 ->color('warning')
                 ->url(\App\Filament\Resources\Reviews\ReviewResource::getUrl('index')),
+
+            // Unread Support Messages Stat
+            Stat::make(
+                $isAr ? 'رسائل الدعم المعلقة' : 'Pending Support Messages',
+                $pendingContacts
+            )
+                ->description($isAr ? 'رسائل جديدة تطلب الرد والمتابعة' : 'New support messages requiring follow-up')
+                ->descriptionIcon('heroicon-m-envelope')
+                ->color($pendingContacts > 0 ? 'danger' : 'success')
+                ->url(\App\Filament\Resources\Contacts\ContactResource::getUrl('index')),
         ];
     }
 }
