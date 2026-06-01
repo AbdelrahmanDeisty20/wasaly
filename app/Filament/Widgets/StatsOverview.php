@@ -36,6 +36,10 @@ class StatsOverview extends BaseWidget
         $productsCount = Product::count();
         $servicesCount = Service::count();
 
+        // 5. Reviews
+        $totalReviews = \App\Models\Review::count();
+        $averageRating = number_format(\App\Models\Review::avg('rating') ?? 0, 1);
+
         return [
             // Sales Stat
             Stat::make(
@@ -99,6 +103,16 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-squares-2x2')
                 ->color('gray')
                 ->url(\App\Filament\Resources\Products\ProductResource::getUrl('index')),
+
+            // Reviews Stat
+            Stat::make(
+                $isAr ? 'متوسط التقييمات' : 'Average Rating',
+                "{$averageRating} / 5.0"
+            )
+                ->description($isAr ? "إجمالي {$totalReviews} تقييم من العملاء" : "Total of {$totalReviews} customer reviews")
+                ->descriptionIcon('heroicon-m-star')
+                ->color('warning')
+                ->url(\App\Filament\Resources\Reviews\ReviewResource::getUrl('index')),
         ];
     }
 }
