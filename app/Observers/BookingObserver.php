@@ -79,9 +79,14 @@ class BookingObserver
     public function updated(Booking $booking): void
     {
         try {
-            // Only run if the status was changed
-            if ($booking->wasChanged('status')) {
-                $status = $booking->status;
+            $status = $booking->status;
+            $oldStatus = $booking->getOriginal('status');
+            
+            $statusChanged = $oldStatus !== $status;
+            $rescheduleTimeChanged = ($booking->getOriginal('suggested_time_id') !== $booking->suggested_time_id) && $booking->suggested_time_id;
+
+            // Trigger notifications if status changed or if a new suggested time is set
+            if ($statusChanged || $rescheduleTimeChanged) {
                 $booking->load(['user', 'provider.user', 'service']);
 
                 $customer = $booking->user;
@@ -94,7 +99,7 @@ class BookingObserver
                 }
 
                 // 1. If Booking is accepted
-                if ($status === 'accepted' && $customer) {
+                if ($status === 'accepted' && $statusChanged && $customer) {
                     $serviceNameAr = $service->service ?? $service->service_ar;
                     $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
                     
@@ -111,7 +116,7 @@ class BookingObserver
                 }
 
                 // 2. If Booking is cancelled
-                if ($status === 'cancelled') {
+                if ($status === 'cancelled' && $statusChanged) {
                     // Notify customer
                     if ($customer) {
                         $serviceNameAr = $service->service ?? $service->service_ar;
@@ -142,7 +147,7 @@ class BookingObserver
                     }
                 }
 
-                // 3. If rescheduled by provider -> notify customer
+                // 3. If rescheduled by provider -> notify customer (whether they are provider or regular user)
                 if ($status === 'reschedule_by_provider' && $customer) {
                     $serviceNameAr = $service->service ?? $service->service_ar;
                     $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
