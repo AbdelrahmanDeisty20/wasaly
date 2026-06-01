@@ -42,6 +42,14 @@ class ProductsTable
                 TextColumn::make('brand.name_ar')
                     ->label(__('messages.brand'))
                     ->sortable(),
+                TextColumn::make('provider_owner')
+                    ->label(__('messages.product_owner'))
+                    ->state(fn ($record) => $record->provider_id
+                        ? ($record->provider->title_ar ?? $record->provider->title_en ?? ('مقدم #' . $record->provider_id))
+                        : __('messages.admin_wasaly')
+                    )
+                    ->badge()
+                    ->color(fn ($record): string => !$record->provider_id ? 'warning' : 'info'),
                 TextColumn::make('status')
                     ->label(__('messages.status'))
                     ->badge()

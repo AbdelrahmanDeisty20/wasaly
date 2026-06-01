@@ -16,22 +16,22 @@ class OfferForm
     {
         return $schema
             ->components([
-                Section::make(app()->getLocale() == 'ar' ? 'بيانات العرض' : 'Offer Details')
+                Section::make(__('messages.offer_details'))
                     ->schema([
                         Grid::make(2)
                             ->schema([
                                 Select::make('product_id')
-                                    ->label(app()->getLocale() == 'ar' ? 'المنتج' : 'Product')
+                                    ->label(__('messages.product'))
                                     ->relationship('product', 'name_ar')
                                     ->getOptionLabelFromRecordUsing(fn (\App\Models\Product $record) =>
-                                        ($record->name_ar ?? $record->name_en ?? 'منتج #' . $record->id)
+                                        ($record->name_ar ?? $record->name_en ?? ('منتج #' . $record->id))
                                     )
                                     ->searchable()
                                     ->preload()
                                     ->required(),
 
                                 TextInput::make('discount_percentage')
-                                    ->label(app()->getLocale() == 'ar' ? 'نسبة الخصم (%)' : 'Discount (%)')
+                                    ->label(__('messages.discount_percentage'))
                                     ->numeric()
                                     ->minValue(1)
                                     ->maxValue(100)
@@ -39,16 +39,16 @@ class OfferForm
                                     ->required(),
 
                                 DateTimePicker::make('start_date')
-                                    ->label(app()->getLocale() == 'ar' ? 'تاريخ البداية' : 'Start Date')
+                                    ->label(__('messages.start_date'))
                                     ->required(),
 
                                 DateTimePicker::make('end_date')
-                                    ->label(app()->getLocale() == 'ar' ? 'تاريخ الانتهاء' : 'End Date')
+                                    ->label(__('messages.end_date'))
                                     ->required()
                                     ->after('start_date'),
 
                                 Toggle::make('is_active')
-                                    ->label(app()->getLocale() == 'ar' ? 'نشط؟' : 'Active?')
+                                    ->label(__('messages.active_question'))
                                     ->default(true)
                                     ->onColor('success')
                                     ->columnSpanFull(),

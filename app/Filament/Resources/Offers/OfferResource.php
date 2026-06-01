@@ -47,6 +47,11 @@ class OfferResource extends Resource
         return OfferForm::configure($schema);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return \App\Filament\Resources\Offers\Schemas\OfferInfolist::configure($schema);
+    }
+
     public static function table(Table $table): Table
     {
         return OffersTable::configure($table);

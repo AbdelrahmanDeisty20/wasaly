@@ -19,45 +19,45 @@ class OffersTable
         return $table
             ->columns([
                 TextColumn::make('product.name_ar')
-                    ->label(app()->getLocale() == 'ar' ? 'المنتج' : 'Product')
+                    ->label(__('messages.product'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('discount_percentage')
-                    ->label(app()->getLocale() == 'ar' ? 'نسبة الخصم' : 'Discount')
+                    ->label(__('messages.discount_percentage'))
                     ->badge()
                     ->color('success')
                     ->suffix('%')
                     ->sortable(),
 
                 TextColumn::make('start_date')
-                    ->label(app()->getLocale() == 'ar' ? 'تاريخ البداية' : 'Start Date')
+                    ->label(__('messages.start_date'))
                     ->dateTime('Y-m-d H:i')
                     ->sortable(),
 
                 TextColumn::make('end_date')
-                    ->label(app()->getLocale() == 'ar' ? 'تاريخ الانتهاء' : 'End Date')
+                    ->label(__('messages.end_date'))
                     ->dateTime('Y-m-d H:i')
                     ->sortable(),
 
                 IconColumn::make('is_active')
-                    ->label(app()->getLocale() == 'ar' ? 'نشط' : 'Active')
+                    ->label(__('messages.active'))
                     ->boolean()
                     ->trueColor('success')
                     ->falseColor('danger'),
 
                 TextColumn::make('created_at')
-                    ->label(app()->getLocale() == 'ar' ? 'تاريخ الإضافة' : 'Created At')
+                    ->label(__('messages.created_at'))
                     ->dateTime('Y-m-d')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('is_active')
-                    ->label(app()->getLocale() == 'ar' ? 'الحالة' : 'Status')
+                    ->label(__('messages.status'))
                     ->options([
-                        '1' => app()->getLocale() == 'ar' ? 'نشط' : 'Active',
-                        '0' => app()->getLocale() == 'ar' ? 'غير نشط' : 'Inactive',
+                        '1' => __('messages.active'),
+                        '0' => __('messages.inactive'),
                     ]),
             ])
             ->defaultSort('created_at', 'desc')

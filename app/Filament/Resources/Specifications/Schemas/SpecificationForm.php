@@ -15,13 +15,13 @@ class SpecificationForm
     {
         return $schema
             ->components([
-                Section::make(app()->getLocale() == 'ar' ? 'بيانات الخاصية' : 'Specification Details')
+                Section::make(__('messages.specification_details'))
                     ->schema([
                         Select::make('product_id')
-                            ->label(app()->getLocale() == 'ar' ? 'المنتج' : 'Product')
+                            ->label(__('messages.product'))
                             ->relationship('product', 'name_ar')
                             ->getOptionLabelFromRecordUsing(fn (\App\Models\Product $record) =>
-                                ($record->name_ar ?? $record->name_en ?? 'منتج #' . $record->id)
+                                ($record->name_ar ?? $record->name_en ?? ('منتج #' . $record->id))
                             )
                             ->searchable()
                             ->preload()

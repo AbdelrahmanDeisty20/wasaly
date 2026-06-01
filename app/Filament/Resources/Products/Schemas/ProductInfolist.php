@@ -48,7 +48,7 @@ class ProductInfolist
                                                                     ->size('md')
                                                                     ->color('gray'),
                                                                 
-                                                                \Filament\Schemas\Components\Grid::make(2)
+                                                                \Filament\Schemas\Components\Grid::make(3)
                                                                     ->schema([
                                                                         TextEntry::make('subCategory.name_ar')
                                                                             ->label(__('messages.sub_category'))
@@ -57,6 +57,15 @@ class ProductInfolist
                                                                             ->label(__('messages.brand'))
                                                                             ->icon('heroicon-m-bookmark')
                                                                             ->placeholder('-'),
+                                                                        TextEntry::make('provider_owner')
+                                                                            ->label(__('messages.product_owner'))
+                                                                            ->icon('heroicon-m-user-circle')
+                                                                            ->state(fn ($record) => $record->provider_id
+                                                                                ? ($record->provider->title_ar ?? $record->provider->title_en ?? ('مقدم #' . $record->provider_id))
+                                                                                : __('messages.admin_wasaly')
+                                                                            )
+                                                                            ->badge()
+                                                                            ->color(fn ($record) => $record->provider_id ? 'info' : 'warning'),
                                                                     ])->extraAttributes(['class' => 'mt-4']),
                                                             ])->columnSpan(9),
                                                         ]),

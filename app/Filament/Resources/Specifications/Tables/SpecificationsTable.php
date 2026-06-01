@@ -29,7 +29,7 @@ class SpecificationsTable
                     ->circular(),
 
                 TextColumn::make('product.name_ar')
-                    ->label(app()->getLocale() == 'ar' ? 'المنتج' : 'Product')
+                    ->label(__('messages.product'))
                     ->searchable()
                     ->sortable(),
 
@@ -57,7 +57,7 @@ class SpecificationsTable
             ])
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('product_id')
-                    ->label(app()->getLocale() == 'ar' ? 'المنتج' : 'Product')
+                    ->label(__('messages.product'))
                     ->relationship('product', 'name_ar')
                     ->searchable()
                     ->preload(),

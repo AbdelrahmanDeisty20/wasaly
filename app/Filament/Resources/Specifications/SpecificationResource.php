@@ -47,6 +47,11 @@ class SpecificationResource extends Resource
         return SpecificationForm::configure($schema);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return \App\Filament\Resources\Specifications\Schemas\SpecificationInfolist::configure($schema);
+    }
+
     public static function table(Table $table): Table
     {
         return SpecificationsTable::configure($table);

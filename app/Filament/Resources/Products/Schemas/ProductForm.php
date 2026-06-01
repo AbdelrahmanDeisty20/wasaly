@@ -20,27 +20,21 @@ class ProductForm
                         \Filament\Forms\Components\Placeholder::make('provider_hint_text')
                             ->label('')
                             ->content(new \Illuminate\Support\HtmlString(
-                                app()->getLocale() == 'ar'
-                                    ? '<div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">' .
-                                      '<svg style="width:18px;height:18px;flex-shrink:0;" fill="none" stroke="#6366f1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' .
-                                      '<p style="font-size:13px;font-weight:600;color:#6366f1;margin:0;">هل هذا المنتج تابع لمقدم خدمة؟</p>' .
-                                      '</div>' .
-                                      '<p style="font-size:11px;color:#a1a1aa;margin:0 0 0 26px;">اختر مقدم الخدمة من القائمة أدناه لربط المنتج به تلقائياً — اتركه فارغاً إن لم يكن تابعاً لأحد</p>'
-                                    : '<div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">' .
-                                      '<svg style="width:18px;height:18px;flex-shrink:0;" fill="none" stroke="#6366f1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' .
-                                      '<p style="font-size:13px;font-weight:600;color:#6366f1;margin:0;">Is this product for a Service Provider?</p>' .
-                                      '</div>' .
-                                      '<p style="font-size:11px;color:#a1a1aa;margin:0 0 0 26px;">Select a provider below to link this product automatically — leave empty if not applicable</p>'
+                                '<div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">' .
+                                '<svg style="width:18px;height:18px;flex-shrink:0;" fill="none" stroke="#6366f1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' .
+                                '<p style="font-size:13px;font-weight:600;color:#6366f1;margin:0;">' . __('messages.is_provider_product') . '</p>' .
+                                '</div>' .
+                                '<p style="font-size:11px;color:#a1a1aa;margin:0 0 0 26px;">' . __('messages.provider_hint') . '</p>'
                             ))
                             ->columnSpanFull(),
 
                         Select::make('provider_id')
-                            ->label(app()->getLocale() == 'ar' ? 'مقدم الخدمة (اختياري)' : 'Service Provider (optional)')
+                            ->label(__('messages.optional_provider'))
                             ->relationship('provider', 'title_ar')
-                            ->getOptionLabelFromRecordUsing(fn (\App\Models\Provider $record) => ($record->title_ar ?? $record->title_en ?? 'مقدم #' . $record->id) . ' — ' . ($record->user?->full_name ?? ''))
+                            ->getOptionLabelFromRecordUsing(fn (\App\Models\Provider $record) => ($record->title_ar ?? $record->title_en ?? ('مقدم #' . $record->id)) . ' — ' . ($record->user?->full_name ?? ''))
                             ->searchable()
                             ->preload()
-                            ->placeholder(app()->getLocale() == 'ar' ? 'بدون ربط بمقدم خدمة' : 'No provider link')
+                            ->placeholder(__('messages.without_provider'))
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
