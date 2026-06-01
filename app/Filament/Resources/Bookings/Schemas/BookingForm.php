@@ -16,13 +16,13 @@ class BookingForm
     {
         return $schema
             ->components([
-                Section::make(__('messages.order_info'))
+                Section::make(__('messages.booking_info'))
                     ->schema([
                         Grid::make(2)
                             ->schema([
                                 Select::make('user_id')
                                     ->label(__('messages.user'))
-                                    ->relationship('user', 'name')
+                                    ->relationship('user', 'full_name')
                                     ->getOptionLabelFromRecordUsing(fn (\App\Models\User $record) => $record->full_name ?? $record->phone ?? $record->email ?? ('مستخدم #' . $record->id))
                                     ->searchable()
                                     ->preload()

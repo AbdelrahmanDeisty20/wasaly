@@ -14,19 +14,19 @@ class BookingInfolist
     {
         return $schema
             ->components([
-                Section::make(__('messages.order_info'))
+                Section::make(__('messages.booking_info'))
                     ->schema([
                         Grid::make(12)
                             ->schema([
                                 Group::make([
                                     TextEntry::make('id')
-                                        ->label(__('messages.order_number'))
+                                        ->label(__('messages.booking_number'))
                                         ->weight('bold')
                                         ->color('primary')
                                         ->prefix('#'),
                                     
                                     Grid::make(2)->schema([
-                                        TextEntry::make('user.name')
+                                        TextEntry::make('user.full_name')
                                             ->label(__('messages.user'))
                                             ->icon('heroicon-m-user'),
                                         TextEntry::make('status')
@@ -47,7 +47,7 @@ class BookingInfolist
                             ]),
                     ]),
 
-                Section::make(__('messages.service_ar'))
+                Section::make(__('messages.service_details'))
                     ->schema([
                         Grid::make(2)
                             ->schema([

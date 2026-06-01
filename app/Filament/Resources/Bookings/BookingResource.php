@@ -30,7 +30,7 @@ class BookingResource extends Resource
 
     public static function getLabel(): ?string
     {
-        return __('messages.order');
+        return __('messages.booking');
     }
 
     public static function getPluralLabel(): ?string
