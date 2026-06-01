@@ -52,5 +52,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Register ProductObserver
         Product::observe(ProductObserver::class);
+
+        // Register ReviewObserver
+        \App\Models\Review::observe(\App\Observers\ReviewObserver::class);
     }
 }
