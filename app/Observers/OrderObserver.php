@@ -165,7 +165,9 @@ class OrderObserver
             $adminBodyAr = "تمت إضافة طلب جديد رقم #{$order->order_number} بقيمة {$order->total_price} ج.م.";
             $adminBodyEn = "A new order #{$order->order_number} has been placed with a total of {$order->total_price} EGP.";
 
-            $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, 'system_new_order', [
+            $actionUrl = \App\Filament\Resources\Orders\OrderResource::getUrl('view', ['record' => $order->id]);
+
+            $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, $actionUrl, 'system_new_order', [
                 'order_id' => (string) $order->id,
                 'order_number' => (string) $order->order_number,
             ]);
@@ -174,7 +176,7 @@ class OrderObserver
         }
     }
 
-    private function notifyAdmins(string $titleAr, string $titleEn, string $bodyAr, string $bodyEn, string $type, array $extraData = []): void
+    private function notifyAdmins(string $titleAr, string $titleEn, string $bodyAr, string $bodyEn, string $actionUrl, string $type, array $extraData = []): void
     {
         try {
             $admins = \App\Models\User::role(['admin', 'sub_admin', 'super_admin'])->get();
@@ -184,12 +186,18 @@ class OrderObserver
                 $pushTitle = $userLocale === 'ar' ? $titleAr : $titleEn;
                 $pushBody = $userLocale === 'ar' ? $bodyAr : $bodyEn;
 
-                // 1. Save standard Laravel database notification via Filament
+                // 1. Save standard Laravel database notification via Filament with a View Details action button
                 \Filament\Notifications\Notification::make()
                     ->title($pushTitle)
                     ->body($pushBody)
                     ->icon('heroicon-o-bell')
                     ->iconColor('success')
+                    ->actions([
+                        \Filament\Notifications\Actions\Action::make('view')
+                            ->label($userLocale === 'ar' ? 'عرض التفاصيل' : 'View Details')
+                            ->url($actionUrl)
+                            ->markAsRead(),
+                    ])
                     ->sendToDatabase($admin);
 
                 // 2. Dispatch FCM push notification

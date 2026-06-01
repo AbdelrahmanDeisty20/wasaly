@@ -45,7 +45,8 @@ class StatsOverview extends BaseWidget
                 ->description($isAr ? 'الأرباح من الطلبات التي تم تسليمها' : 'Revenue from delivered orders')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->chart([$totalSales * 0.2, $totalSales * 0.5, $totalSales * 0.8, $totalSales])
-                ->color('success'),
+                ->color('success')
+                ->url(\App\Filament\Resources\Orders\OrderResource::getUrl('index')),
 
             // Orders Stat
             Stat::make(
@@ -55,7 +56,8 @@ class StatsOverview extends BaseWidget
                 ->description($isAr ? "{$pendingOrders} طلبات قيد الانتظار" : "{$pendingOrders} pending orders")
                 ->descriptionIcon('heroicon-m-shopping-bag')
                 ->chart([5, 10, 8, 15, $totalOrders])
-                ->color('info'),
+                ->color('info')
+                ->url(\App\Filament\Resources\Orders\OrderResource::getUrl('index')),
 
             // Bookings Stat
             Stat::make(
@@ -65,7 +67,8 @@ class StatsOverview extends BaseWidget
                 ->description($isAr ? "{$pendingBookings} حجوزات معلقة" : "{$pendingBookings} pending bookings")
                 ->descriptionIcon('heroicon-m-calendar-days')
                 ->chart([3, 7, 5, 12, $totalBookings])
-                ->color('warning'),
+                ->color('warning')
+                ->url(\App\Filament\Resources\Bookings\BookingResource::getUrl('index')),
 
             // Customers Stat
             Stat::make(
@@ -74,7 +77,8 @@ class StatsOverview extends BaseWidget
             )
                 ->description($isAr ? 'المستخدمين النشطين بالتطبيق' : 'Active users on the app')
                 ->descriptionIcon('heroicon-m-users')
-                ->color('primary'),
+                ->color('primary')
+                ->url(\App\Filament\Resources\Users\UserResource::getUrl('index')),
 
             // Service Providers Stat
             Stat::make(
@@ -83,7 +87,8 @@ class StatsOverview extends BaseWidget
             )
                 ->description($isAr ? 'حسابات مقدمي الخدمات المسجلة' : 'Registered service provider accounts')
                 ->descriptionIcon('heroicon-m-identification')
-                ->color('success'),
+                ->color('success')
+                ->url(\App\Filament\Resources\Providers\ProviderResource::getUrl('index')),
 
             // Products & Services Stat
             Stat::make(
@@ -92,7 +97,8 @@ class StatsOverview extends BaseWidget
             )
                 ->description($isAr ? "{$productsCount} منتج | {$servicesCount} خدمة" : "{$productsCount} Products | {$servicesCount} Services")
                 ->descriptionIcon('heroicon-m-squares-2x2')
-                ->color('gray'),
+                ->color('gray')
+                ->url(\App\Filament\Resources\Products\ProductResource::getUrl('index')),
         ];
     }
 }

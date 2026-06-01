@@ -38,7 +38,9 @@ class ProductObserver
             $bodyAr = "قام مقدم الخدمة «{$providerNameAr}» بإضافة منتج جديد باسم «{$productNameAr}».";
             $bodyEn = "The service provider «{$providerNameEn}» has added a new product named «{$productNameEn}».";
 
-            $this->notifyAdmins($titleAr, $titleEn, $bodyAr, $bodyEn, 'product_created', [
+            $actionUrl = \App\Filament\Resources\Products\ProductResource::getUrl('view', ['record' => $product->id]);
+
+            $this->notifyAdmins($titleAr, $titleEn, $bodyAr, $bodyEn, $actionUrl, 'product_created', [
                 'product_id' => (string) $product->id
             ]);
         } catch (\Exception $e) {
@@ -46,7 +48,7 @@ class ProductObserver
         }
     }
 
-    private function notifyAdmins(string $titleAr, string $titleEn, string $bodyAr, string $bodyEn, string $type, array $extraData = []): void
+    private function notifyAdmins(string $titleAr, string $titleEn, string $bodyAr, string $bodyEn, string $actionUrl, string $type, array $extraData = []): void
     {
         try {
             $admins = User::role(['admin', 'sub_admin', 'super_admin'])->get();
@@ -56,12 +58,18 @@ class ProductObserver
                 $pushTitle = $userLocale === 'ar' ? $titleAr : $titleEn;
                 $pushBody = $userLocale === 'ar' ? $bodyAr : $bodyEn;
 
-                // 1. Save standard Laravel database notification via Filament
+                // 1. Save standard Laravel database notification via Filament with a View Details action button
                 \Filament\Notifications\Notification::make()
                     ->title($pushTitle)
                     ->body($pushBody)
                     ->icon('heroicon-o-bell')
                     ->iconColor('success')
+                    ->actions([
+                        \Filament\Notifications\Actions\Action::make('view')
+                            ->label($userLocale === 'ar' ? 'عرض التفاصيل' : 'View Details')
+                            ->url($actionUrl)
+                            ->markAsRead(),
+                    ])
                     ->sendToDatabase($admin);
 
                 // 2. Dispatch FCM push notification
