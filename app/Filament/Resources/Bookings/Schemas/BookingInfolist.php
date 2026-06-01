@@ -77,6 +77,29 @@ class BookingInfolist
                             ]),
                     ]),
 
+                Section::make(__('messages.customer_details'))
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextEntry::make('customer_name')
+                                    ->label(__('messages.customer_name'))
+                                    ->weight('bold')
+                                    ->icon('heroicon-m-user'),
+                                TextEntry::make('customer_phone')
+                                    ->label(__('messages.phone'))
+                                    ->icon('heroicon-m-phone'),
+                                TextEntry::make('customer_email')
+                                    ->label(__('messages.email'))
+                                    ->icon('heroicon-m-envelope'),
+                                TextEntry::make('governorate.name')
+                                    ->label(__('messages.governorate'))
+                                    ->icon('heroicon-m-map'),
+                                TextEntry::make('center.name')
+                                    ->label(__('messages.center'))
+                                    ->icon('heroicon-m-map-pin'),
+                            ]),
+                    ]),
+
                 Section::make(__('messages.problem_description'))
                     ->schema([
                         TextEntry::make('problem_description')
