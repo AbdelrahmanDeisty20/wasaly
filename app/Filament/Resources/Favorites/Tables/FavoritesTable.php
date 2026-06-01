@@ -24,9 +24,21 @@ class FavoritesTable
                 TextColumn::make('type')
                     ->label(app()->getLocale() == 'ar' ? 'النوع' : 'Type')
                     ->getStateUsing(function ($record) {
-                        if ($record->product_id) return app()->getLocale() == 'ar' ? 'منتج: ' . $record->product->name_ar : 'Product: ' . $record->product->name_en;
-                        if ($record->service_id) return app()->getLocale() == 'ar' ? 'خدمة: ' . $record->service->service_ar : 'Service: ' . $record->service->service_en;
-                        if ($record->provider_id) return app()->getLocale() == 'ar' ? 'مقدم خدمة: ' . $record->provider->title_ar : 'Provider: ' . $record->provider->title_en;
+                        if ($record->product_id) {
+                            return app()->getLocale() == 'ar'
+                                ? 'منتج: ' . ($record->product?->name_ar ?? 'منتج محذوف')
+                                : 'Product: ' . ($record->product?->name_en ?? 'Deleted Product');
+                        }
+                        if ($record->service_id) {
+                            return app()->getLocale() == 'ar'
+                                ? 'خدمة: ' . ($record->service?->service_ar ?? 'خدمة محذوفة')
+                                : 'Service: ' . ($record->service?->service_en ?? 'Deleted Service');
+                        }
+                        if ($record->provider_id) {
+                            return app()->getLocale() == 'ar'
+                                ? 'مقدم خدمة: ' . ($record->provider?->title_ar ?? 'مقدم خدمة محذوف')
+                                : 'Provider: ' . ($record->provider?->title_en ?? 'Deleted Provider');
+                        }
                         return app()->getLocale() == 'ar' ? 'غير معروف' : 'Unknown';
                     })
                     ->badge()

@@ -11,6 +11,21 @@ class EditFavorite extends EditRecord
 {
     protected static string $resource = FavoriteResource::class;
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (($data['favorite_target'] ?? null) === 'product') {
+            $data['service_id'] = null;
+            $data['provider_id'] = null;
+        } elseif (($data['favorite_target'] ?? null) === 'service') {
+            $data['product_id'] = null;
+            $data['provider_id'] = null;
+        } elseif (($data['favorite_target'] ?? null) === 'provider') {
+            $data['product_id'] = null;
+            $data['service_id'] = null;
+        }
+        return $data;
+    }
+
     protected function getHeaderActions(): array
     {
         return [
