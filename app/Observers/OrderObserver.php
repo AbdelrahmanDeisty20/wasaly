@@ -16,12 +16,21 @@ class OrderObserver
     public $afterCommit = true;
 
     /**
+     * Handle the Order "updating" event.
+     */
+    public function updating(\App\Models\Order $order): void
+    {
+        $order->tempOriginalStatus = $order->getOriginal('status');
+    }
+
+    /**
      * Handle the Order "updated" event.
      */
     public function updated(Order $order): void
     {
+        $oldStatus = $order->tempOriginalStatus ?? $order->getOriginal('status');
         // Only run if the status was changed
-        if ($order->wasChanged('status')) {
+        if ($oldStatus !== $order->status) {
             $status = $order->status;
 
             if (in_array($status, ['accepted', 'cancelled'])) {

@@ -74,16 +74,26 @@ class BookingObserver
     }
 
     /**
+     * Handle the Booking "updating" event.
+     */
+    public function updating(Booking $booking): void
+    {
+        $booking->tempOriginalStatus = $booking->getOriginal('status');
+        $booking->tempOriginalSuggestedTimeId = $booking->getOriginal('suggested_time_id');
+    }
+
+    /**
      * Handle the Booking "updated" event.
      */
     public function updated(Booking $booking): void
     {
         try {
             $status = $booking->status;
-            $oldStatus = $booking->getOriginal('status');
+            $oldStatus = $booking->tempOriginalStatus ?? $booking->getOriginal('status');
+            $oldSuggestedTimeId = $booking->tempOriginalSuggestedTimeId ?? $booking->getOriginal('suggested_time_id');
             
             $statusChanged = $oldStatus !== $status;
-            $rescheduleTimeChanged = ($booking->getOriginal('suggested_time_id') !== $booking->suggested_time_id) && $booking->suggested_time_id;
+            $rescheduleTimeChanged = ($oldSuggestedTimeId !== $booking->suggested_time_id) && $booking->suggested_time_id;
 
             // Trigger notifications if status changed or if a new suggested time is set
             if ($statusChanged || $rescheduleTimeChanged) {
