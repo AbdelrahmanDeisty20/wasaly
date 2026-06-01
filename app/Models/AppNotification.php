@@ -24,6 +24,10 @@ class AppNotification extends Model
         'is_read' => 'boolean',
     ];
 
+    protected $attributes = [
+        'data' => '[]',
+    ];
+
     public function getTitleAttribute()
     {
         if (app()->getLocale() === 'ar') {
