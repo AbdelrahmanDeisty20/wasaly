@@ -65,7 +65,7 @@ class ServiceObserver
                     ->icon('heroicon-o-bell')
                     ->iconColor('success')
                     ->actions([
-                        \Filament\Notifications\Actions\Action::make('view')
+                        \Filament\Actions\Action::make('view')
                             ->label($userLocale === 'ar' ? 'عرض التفاصيل' : 'View Details')
                             ->url($actionUrl)
                             ->markAsRead(),
