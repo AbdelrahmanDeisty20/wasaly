@@ -16,4 +16,18 @@ class ListFavorites extends ListRecords
             CreateAction::make(),
         ];
     }
+
+    public function getTabs(): array
+    {
+        $isAr = app()->getLocale() == 'ar';
+        return [
+            'all' => \Filament\Resources\Components\Tab::make($isAr ? 'الكل' : 'All'),
+            'products' => \Filament\Resources\Components\Tab::make($isAr ? 'مفضلات المنتجات' : 'Product Favorites')
+                ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereNotNull('product_id')),
+            'services' => \Filament\Resources\Components\Tab::make($isAr ? 'مفضلات الخدمات' : 'Service Favorites')
+                ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereNotNull('service_id')),
+            'providers' => \Filament\Resources\Components\Tab::make($isAr ? 'مفضلات مقدمي الخدمات' : 'Provider Favorites')
+                ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereNotNull('provider_id')),
+        ];
+    }
 }
