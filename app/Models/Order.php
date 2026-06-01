@@ -9,6 +9,8 @@ class Order extends Model
 {
     use HasFactory;
 
+    public $tempOriginalStatus;
+
     protected $fillable = [
         'order_number',
         'user_id',

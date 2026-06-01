@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+    public $tempOriginalStatus;
+    public $tempOriginalSuggestedTimeId;
+
     protected $fillable = [
         'user_id',
         'customer_name',
