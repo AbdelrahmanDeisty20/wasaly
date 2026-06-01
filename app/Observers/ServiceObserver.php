@@ -56,16 +56,13 @@ class ServiceObserver
                 $pushTitle = $userLocale === 'ar' ? $titleAr : $titleEn;
                 $pushBody = $userLocale === 'ar' ? $bodyAr : $bodyEn;
 
-                // 1. Save database notification
-                AppNotification::create([
-                    'user_id' => $admin->id,
-                    'title_ar' => $titleAr,
-                    'title_en' => $titleEn,
-                    'message_ar' => $bodyAr,
-                    'message_en' => $bodyEn,
-                    'type' => $type,
-                    'is_read' => false,
-                ]);
+                // 1. Save standard Laravel database notification via Filament
+                \Filament\Notifications\Notification::make()
+                    ->title($pushTitle)
+                    ->body($pushBody)
+                    ->icon('heroicon-o-bell')
+                    ->iconColor('success')
+                    ->sendToDatabase($admin);
 
                 // 2. Dispatch FCM push notification
                 if ($admin->is_notify) {
