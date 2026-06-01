@@ -35,9 +35,11 @@ class BookingInfolist
                                             ->color(fn (string $state): string => match ($state) {
                                                 'pending' => 'gray',
                                                 'accepted' => 'info',
+                                                'confirmed' => 'info',
                                                 'processing' => 'warning',
                                                 'shipped' => 'primary',
                                                 'delivered' => 'success',
+                                                'completed' => 'success',
                                                 'cancelled' => 'danger',
                                                 default => 'gray',
                                             })
@@ -56,12 +58,21 @@ class BookingInfolist
                                     ->weight('bold'),
                                 TextEntry::make('provider.title_ar')
                                     ->label(__('messages.service_provider')),
-                                TextEntry::make('date')
-                                    ->label(__('messages.date_required'))
-                                    ->date('d M Y')
+                                TextEntry::make('day')
+                                    ->label(__('messages.day'))
+                                    ->state(fn ($record) => 
+                                        app()->getLocale() === 'ar' 
+                                            ? ($record->availableDay?->name_ar ?? '-')
+                                            : ($record->availableDay?->name_en ?? '-')
+                                    )
                                     ->icon('heroicon-m-calendar'),
                                 TextEntry::make('time')
-                                    ->label(__('messages.time_required'))
+                                    ->label(__('messages.time'))
+                                    ->state(fn ($record) => 
+                                        $record->custom_time 
+                                        ?? $record->availableTime?->time 
+                                        ?? '-'
+                                    )
                                     ->icon('heroicon-m-clock'),
                             ]),
                     ]),
