@@ -21,12 +21,12 @@ class ListFavorites extends ListRecords
     {
         $isAr = app()->getLocale() == 'ar';
         return [
-            'all' => \Filament\Resources\Components\Tab::make($isAr ? 'الكل' : 'All'),
-            'products' => \Filament\Resources\Components\Tab::make($isAr ? 'مفضلات المنتجات' : 'Product Favorites')
+            'all' => \Filament\Schemas\Components\Tabs\Tab::make($isAr ? 'الكل' : 'All'),
+            'products' => \Filament\Schemas\Components\Tabs\Tab::make($isAr ? 'مفضلات المنتجات' : 'Product Favorites')
                 ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereNotNull('product_id')),
-            'services' => \Filament\Resources\Components\Tab::make($isAr ? 'مفضلات الخدمات' : 'Service Favorites')
+            'services' => \Filament\Schemas\Components\Tabs\Tab::make($isAr ? 'مفضلات الخدمات' : 'Service Favorites')
                 ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereNotNull('service_id')),
-            'providers' => \Filament\Resources\Components\Tab::make($isAr ? 'مفضلات مقدمي الخدمات' : 'Provider Favorites')
+            'providers' => \Filament\Schemas\Components\Tabs\Tab::make($isAr ? 'مفضلات مقدمي الخدمات' : 'Provider Favorites')
                 ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereNotNull('provider_id')),
         ];
     }
