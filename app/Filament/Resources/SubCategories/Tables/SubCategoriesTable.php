@@ -14,6 +14,8 @@ class SubCategoriesTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() === 'ar';
+
         return $table
             ->columns([
 
@@ -28,12 +30,16 @@ class SubCategoriesTable
                     ->circular()
                     ->size(52),
 
-                // الاسم العربي كـ header مع الإنجليزي كـ description
-                TextColumn::make('name_ar')
+                // الاسم العربي كـ header مع الإنجليزي كـ description والعكس
+                TextColumn::make('name_display')
                     ->label(__('messages.service_ar'))
-                    ->description(fn ($record): string => $record->name_en ?? '')
+                    ->state(fn ($record) => $isAr ? ($record->name_ar ?: $record->name_en) : ($record->name_en ?: $record->name_ar))
+                    ->description(fn ($record): string => $isAr ? ($record->name_en ?? '') : ($record->name_ar ?? ''))
                     ->weight('bold')
-                    ->searchable()
+                    ->searchable(query: function ($query, $search) {
+                        $query->where('name_ar', 'like', "%{$search}%")
+                              ->orWhere('name_en', 'like', "%{$search}%");
+                    })
                     ->sortable(),
 
                 // الحالة badge

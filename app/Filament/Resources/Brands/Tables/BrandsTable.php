@@ -14,14 +14,18 @@ class BrandsTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() === 'ar';
+
         return $table
             ->columns([
-                TextColumn::make('name_ar')
-                    ->label(__('messages.service_ar'))
-                    ->searchable(),
-                TextColumn::make('name_en')
-                    ->label(__('messages.service_en'))
-                    ->searchable(),
+                TextColumn::make('name_display')
+                    ->label(__('messages.brand'))
+                    ->state(fn ($record) => $isAr ? ($record->name_ar ?: $record->name_en) : ($record->name_en ?: $record->name_ar))
+                    ->searchable(query: function ($query, $search) {
+                        $query->where('name_ar', 'like', "%{$search}%")
+                              ->orWhere('name_en', 'like', "%{$search}%");
+                    })
+                    ->sortable(),
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
                     ->disk('public')
@@ -41,11 +45,6 @@ class BrandsTable
                     ->formatStateUsing(fn (string $state): string => __("messages.{$state}")),
                 TextColumn::make('created_at')
                     ->label(__('messages.created_at'))
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->label(__('messages.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

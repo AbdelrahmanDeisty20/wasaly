@@ -13,6 +13,8 @@ class ReviewsTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() == 'ar';
+
         return $table
             ->columns([
                 TextColumn::make('user.full_name')
@@ -29,10 +31,25 @@ class ReviewsTable
                     ->formatStateUsing(fn ($state) => $state . ' ⭐'),
                 TextColumn::make('type')
                     ->label(__('messages.type'))
-                    ->getStateUsing(function ($record) {
-                        if ($record->product_id) return (app()->getLocale() == 'ar' ? 'منتج: ' : 'Product: ') . ($record->product->name_ar ?? $record->product->name_en);
-                        if ($record->service_id) return (app()->getLocale() == 'ar' ? 'خدمة: ' : 'Service: ') . ($record->service->service_ar ?? $record->service->service_en);
-                        if ($record->provider_id) return (app()->getLocale() == 'ar' ? 'مقدم خدمة: ' : 'Provider: ') . ($record->provider->title_ar ?? $record->provider->title_en);
+                    ->getStateUsing(function ($record) use ($isAr) {
+                        if ($record->product_id) {
+                            $prodName = $isAr
+                                ? ($record->product->name_ar ?: $record->product->name_en)
+                                : ($record->product->name_en ?: $record->product->name_ar);
+                            return ($isAr ? 'منتج: ' : 'Product: ') . $prodName;
+                        }
+                        if ($record->service_id) {
+                            $servName = $isAr
+                                ? ($record->service->service_ar ?: $record->service->service_en)
+                                : ($record->service->service_en ?: $record->service->service_ar);
+                            return ($isAr ? 'خدمة: ' : 'Service: ') . $servName;
+                        }
+                        if ($record->provider_id) {
+                            $provTitle = $isAr
+                                ? ($record->provider->title_ar ?: $record->provider->title_en)
+                                : ($record->provider->title_en ?: $record->provider->title_ar);
+                            return ($isAr ? 'مقدم خدمة: ' : 'Provider: ') . $provTitle;
+                        }
                         return __('messages.general_app_review');
                     })
                     ->badge()

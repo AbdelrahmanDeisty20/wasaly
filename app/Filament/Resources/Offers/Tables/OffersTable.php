@@ -16,11 +16,22 @@ class OffersTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() === 'ar';
+
         return $table
             ->columns([
-                TextColumn::make('product.name_ar')
+                TextColumn::make('product_display')
                     ->label(__('messages.product'))
-                    ->searchable()
+                    ->state(fn ($record) => $isAr 
+                        ? ($record->product?->name_ar ?: $record->product?->name_en) 
+                        : ($record->product?->name_en ?: $record->product?->name_ar)
+                    )
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('product', function ($q) use ($search) {
+                            $q->where('name_ar', 'like', "%{$search}%")
+                              ->orWhere('name_en', 'like', "%{$search}%");
+                        });
+                    })
                     ->sortable(),
 
                 TextColumn::make('discount_percentage')
