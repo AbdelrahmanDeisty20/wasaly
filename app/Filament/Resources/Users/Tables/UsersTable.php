@@ -63,6 +63,31 @@ class UsersTable
                 ViewAction::make(),
                 EditAction::make(),
             ])
+            ->headerActions([
+                \App\Helpers\FilamentExportHelper::makeImportHeaderAction(
+                    'users',
+                    function (array $row) {
+                        $type = $row['type'] ?? $row['نوع_الحساب'] ?? 'user';
+                        // Map type names
+                        if ($type === 'عميل عادي' || $type === 'عميل') {
+                            $type = 'user';
+                        } elseif ($type === 'مقدم خدمة' || $type === 'مقدم_خدمة') {
+                            $type = 'service_provider';
+                        }
+
+                        \App\Models\User::create([
+                            'full_name' => $row['full_name'] ?? $row['الاسم_الكامل'] ?? '',
+                            'name' => $row['name'] ?? $row['الاسم_المختصر'] ?? $row['full_name'] ?? '',
+                            'email' => $row['email'] ?? $row['البريد_الإلكتروني'] ?? '',
+                            'phone' => $row['phone'] ?? $row['الهاتف'] ?? '',
+                            'type' => $type,
+                            'password' => \Illuminate\Support\Facades\Hash::make($row['password'] ?? 'password'),
+                            'is_active' => filter_var($row['is_active'] ?? $row['نشط'] ?? true, FILTER_VALIDATE_BOOLEAN),
+                            'avatar' => null,
+                        ]);
+                    }
+                )
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

@@ -80,6 +80,70 @@ class ProductsTable
                 ViewAction::make(),
                 EditAction::make(),
             ])
+            ->headerActions([
+                \App\Helpers\FilamentExportHelper::makeImportHeaderAction(
+                    'products',
+                    function (array $row) {
+                        // Find or create subcategory
+                        $subCategoryName = $row['subcategory_ar'] ?? $row['subcategory'] ?? $row['القسم_الفرعي'] ?? '';
+                        $subCategoryId = null;
+                        if ($subCategoryName) {
+                            $subCat = \App\Models\SubCategory::where('name_ar', $subCategoryName)->orWhere('name_en', $subCategoryName)->first();
+                            if (!$subCat) {
+                                $subCat = \App\Models\SubCategory::create([
+                                    'name_ar' => $subCategoryName,
+                                    'name_en' => $row['subcategory_en'] ?? $subCategoryName,
+                                    'category_id' => \App\Models\Category::first()->id ?? 1,
+                                    'status' => 'active',
+                                    'image' => 'default.png',
+                                ]);
+                            }
+                            $subCategoryId = $subCat->id;
+                        }
+
+                        // Find or create brand (optional)
+                        $brandName = $row['brand_ar'] ?? $row['brand'] ?? $row['العلامة_التجارية'] ?? '';
+                        $brandId = null;
+                        if ($brandName) {
+                            $brand = \App\Models\Brand::where('name_ar', $brandName)->orWhere('name_en', $brandName)->first();
+                            if (!$brand) {
+                                $brand = \App\Models\Brand::create([
+                                    'name_ar' => $brandName,
+                                    'name_en' => $row['brand_en'] ?? $brandName,
+                                    'image' => 'default.png',
+                                    'status' => 'active',
+                                ]);
+                            }
+                            $brandId = $brand->id;
+                        }
+
+                        // Find provider (optional)
+                        $providerName = $row['provider_ar'] ?? $row['provider'] ?? $row['مقدم_الخدمة'] ?? '';
+                        $providerId = null;
+                        if ($providerName) {
+                            $provider = \App\Models\Provider::where('title_ar', $providerName)->orWhere('title_en', $providerName)->first();
+                            if ($provider) {
+                                $providerId = $provider->id;
+                            }
+                        }
+
+                        \App\Models\Product::create([
+                            'name_ar' => $row['name_ar'] ?? $row['الاسم_عربي'] ?? '',
+                            'name_en' => $row['name_en'] ?? $row['الاسم_إنجليزي'] ?? '',
+                            'price' => floatval($row['price'] ?? $row['السعر'] ?? 0),
+                            'stock' => intval($row['stock'] ?? $row['المخزون'] ?? 1),
+                            'description_ar' => $row['description_ar'] ?? $row['الوصف_عربي'] ?? '',
+                            'description_en' => $row['description_en'] ?? $row['الوصف_إنجليزي'] ?? '',
+                            'sub_category_id' => $subCategoryId ?? 1,
+                            'brand_id' => $brandId,
+                            'provider_id' => $providerId,
+                            'status' => $row['status'] ?? $row['الحالة'] ?? 'active',
+                            'is_featured' => filter_var($row['is_featured'] ?? $row['مميز'] ?? false, FILTER_VALIDATE_BOOLEAN),
+                            'image' => 'default.png',
+                        ]);
+                    }
+                )
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

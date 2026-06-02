@@ -63,6 +63,19 @@ class CategoriesTable
                 ViewAction::make(),
                 EditAction::make(),
             ])
+            ->headerActions([
+                \App\Helpers\FilamentExportHelper::makeImportHeaderAction(
+                    'categories',
+                    function (array $row) {
+                        \App\Models\Category::create([
+                            'name_ar' => $row['name_ar'] ?? $row['الاسم_بالعربية'] ?? '',
+                            'name_en' => $row['name_en'] ?? $row['الاسم_بالإنجليزية'] ?? '',
+                            'status' => $row['status'] ?? $row['الحالة'] ?? 'active',
+                            'image' => 'default.png',
+                        ]);
+                    }
+                )
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

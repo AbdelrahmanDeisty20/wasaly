@@ -57,6 +57,63 @@ class ProvidersTable
                 ViewAction::make(),
                 EditAction::make(),
             ])
+            ->headerActions([
+                \App\Helpers\FilamentExportHelper::makeImportHeaderAction(
+                    'providers',
+                    function (array $row) {
+                        // Find or create User
+                        $userEmail = $row['user_email'] ?? $row['البريد_الإلكتروني'] ?? '';
+                        $user = null;
+                        if ($userEmail) {
+                            $user = \App\Models\User::where('email', $userEmail)->first();
+                        }
+                        if (!$user) {
+                            $user = \App\Models\User::create([
+                                'full_name' => $row['user_name'] ?? $row['اسم_المستخدم'] ?? 'مقدم جديد',
+                                'name' => $row['user_name'] ?? $row['اسم_المستخدم'] ?? 'مقدم جديد',
+                                'email' => $userEmail ?: 'provider_' . uniqid() . '@wasaly.com',
+                                'phone' => $row['user_phone'] ?? $row['هاتف_المستخدم'] ?? '',
+                                'type' => 'service_provider',
+                                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                                'is_active' => true,
+                            ]);
+                        }
+
+                        // Find or create subcategory
+                        $subCategoryName = $row['subcategory_ar'] ?? $row['subcategory'] ?? $row['القسم_الفرعي'] ?? '';
+                        $subCategoryId = null;
+                        if ($subCategoryName) {
+                            $subCat = \App\Models\SubCategory::where('name_ar', $subCategoryName)->orWhere('name_en', $subCategoryName)->first();
+                            if (!$subCat) {
+                                $subCat = \App\Models\SubCategory::create([
+                                    'name_ar' => $subCategoryName,
+                                    'name_en' => $row['subcategory_en'] ?? $subCategoryName,
+                                    'category_id' => \App\Models\Category::first()->id ?? 1,
+                                    'status' => 'active',
+                                    'image' => 'default.png',
+                                ]);
+                            }
+                            $subCategoryId = $subCat->id;
+                        }
+
+                        \App\Models\Provider::create([
+                            'user_id' => $user->id,
+                            'sub_category_id' => $subCategoryId ?? 1,
+                            'title_ar' => $row['title_ar'] ?? $row['الاسم_عربي'] ?? '',
+                            'title_en' => $row['title_en'] ?? $row['الاسم_إنجليزي'] ?? '',
+                            'service_description_ar' => $row['service_description_ar'] ?? $row['الوصف_عربي'] ?? '',
+                            'service_description_en' => $row['service_description_en'] ?? $row['الوصف_إنجليزي'] ?? '',
+                            'price_from' => floatval($row['price_from'] ?? $row['السعر_يبدأ_من'] ?? 0),
+                            'from_day' => $row['from_day'] ?? 'Saturday',
+                            'to_day' => $row['to_day'] ?? 'Thursday',
+                            'start_time' => $row['start_time'] ?? '09:00:00',
+                            'end_time' => $row['end_time'] ?? '21:00:00',
+                            'status' => $row['status'] ?? $row['الحالة'] ?? 'active',
+                            'cover' => 'default.png',
+                        ]);
+                    }
+                )
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
