@@ -155,7 +155,7 @@ class OfferObserver
 
         // 4. Save a single broadcast notification to database for guests/others to see dynamically
         try {
-            AppNotification::create([
+            $publicNotification = AppNotification::create([
                 'user_id' => null, // Broadcast for everyone else
                 'title_ar' => $titleAr,
                 'title_en' => $titleEn,
@@ -165,6 +165,23 @@ class OfferObserver
                 'data' => $data,
                 'is_read' => false,
             ]);
+
+            // Exclude already notified users from seeing this general notification in their feed
+            if ($publicNotification && !empty($notifiedUserIds)) {
+                $states = [];
+                $now = now();
+                foreach ($notifiedUserIds as $userId) {
+                    $states[] = [
+                        'user_id' => $userId,
+                        'notification_id' => $publicNotification->id,
+                        'is_read' => false,
+                        'is_deleted' => true,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                }
+                \App\Models\UserNotificationState::insert($states);
+            }
         } catch (\Exception $e) {
             // Ignore DB insertion errors
         }
