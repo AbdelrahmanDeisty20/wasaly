@@ -99,11 +99,74 @@ class FilamentExportHelper
         $labelEn = 'Import from Excel';
         $label = app()->getLocale() == 'ar' ? $labelAr : $labelEn;
 
+        $instructionsHtml = '';
+        if (app()->getLocale() == 'ar') {
+            $instructionsHtml .= '<div style="background-color: #1e1e2e; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981; margin-bottom: 12px; font-family: sans-serif;">';
+            $instructionsHtml .= '<h4 style="font-weight: bold; color: #10b981; margin: 0 0 8px 0; font-size: 14px; display: flex; align-items: center; gap: 6px;">';
+            $instructionsHtml .= '<svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+            $instructionsHtml .= 'تعليمات شيت الإكسيل للاستيراد:</h4>';
+            $instructionsHtml .= '<p style="font-size: 12px; color: #d1d1d6; margin: 0 0 10px 0; line-height: 1.5;">يرجى رفع ملف بصيغة <strong>CSV</strong> أو <strong>Excel</strong> يحتوي على أسماء الأعمدة التالية تماماً (في الصف الأول):</p>';
+            
+            if ($resourceName === 'products') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #34d399; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56; direction: ltr; text-align: left;">name_ar, name_en, price, stock, description_ar, description_en, subcategory_ar, brand_ar, provider_ar</code>';
+                $instructionsHtml .= '<ul style="list-style-type: disc; margin: 10px 18px 0 0; padding: 0; font-size: 11px; color: #a1a1aa; line-height: 1.6;">';
+                $instructionsHtml .= '<li><strong>subcategory_ar:</strong> اسم القسم الفرعي (إذا لم يكن موجوداً، سيتم إنشاؤه تلقائياً).</li>';
+                $instructionsHtml .= '<li><strong>brand_ar:</strong> العلامة التجارية (اختياري، وسيتم إنشاؤها تلقائياً إن لم تكن موجودة).</li>';
+                $instructionsHtml .= '<li><strong>provider_ar:</strong> اسم مقدم الخدمة لربط المنتج به.</li>';
+                $instructionsHtml .= '</ul>';
+            } elseif ($resourceName === 'categories') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #34d399; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56; direction: ltr; text-align: left;">name_ar, name_en, status</code>';
+                $instructionsHtml .= '<p style="font-size: 11px; color: #a1a1aa; margin: 6px 0 0 0;">* حقل <strong>status</strong> يقبل القيمة <code>active</code> (نشط) أو <code>inactive</code> (غير نشط).</p>';
+            } elseif ($resourceName === 'users') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #34d399; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56; direction: ltr; text-align: left;">full_name, email, phone, type, password</code>';
+                $instructionsHtml .= '<ul style="list-style-type: disc; margin: 10px 18px 0 0; padding: 0; font-size: 11px; color: #a1a1aa; line-height: 1.6;">';
+                $instructionsHtml .= '<li><strong>type:</strong> نوع الحساب، يقبل <code>user</code> (عميل) أو <code>service_provider</code> (مقدم خدمة).</li>';
+                $instructionsHtml .= '<li><strong>password:</strong> سيتم تشفير كلمة المرور وحمايتها تلقائياً.</li>';
+                $instructionsHtml .= '</ul>';
+            } elseif ($resourceName === 'providers') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #34d399; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56; direction: ltr; text-align: left;">title_ar, title_en, user_email, subcategory_ar, price_from, service_description_ar</code>';
+                $instructionsHtml .= '<ul style="list-style-type: disc; margin: 10px 18px 0 0; padding: 0; font-size: 11px; color: #a1a1aa; line-height: 1.6;">';
+                $instructionsHtml .= '<li><strong>user_email:</strong> البريد الإلكتروني للمستخدم. إذا لم يكن موجوداً، سيتم إنشاء حساب مستخدم له تلقائياً!</li>';
+                $instructionsHtml .= '<li><strong>subcategory_ar:</strong> القسم الفرعي لربط مقدم الخدمة به.</li>';
+                $instructionsHtml .= '</ul>';
+            } elseif ($resourceName === 'services') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #34d399; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56; direction: ltr; text-align: left;">service_ar, service_en, price, provider_ar, subcategory_ar</code>';
+                $instructionsHtml .= '<ul style="list-style-type: disc; margin: 10px 18px 0 0; padding: 0; font-size: 11px; color: #a1a1aa; line-height: 1.6;">';
+                $instructionsHtml .= '<li><strong>provider_ar:</strong> اسم مقدم الخدمة المسجل لربط الخدمة به.</li>';
+                $instructionsHtml .= '<li><strong>subcategory_ar:</strong> القسم الفرعي لربط الخدمة به.</li>';
+                $instructionsHtml .= '</ul>';
+            }
+            $instructionsHtml .= '</div>';
+        } else {
+            $instructionsHtml .= '<div style="background-color: #1e1e2e; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 12px; font-family: sans-serif;">';
+            $instructionsHtml .= '<h4 style="font-weight: bold; color: #3b82f6; margin: 0 0 8px 0; font-size: 14px; display: flex; align-items: center; gap: 6px;">';
+            $instructionsHtml .= '<svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+            $instructionsHtml .= 'Excel / CSV Import Instructions:</h4>';
+            $instructionsHtml .= '<p style="font-size: 12px; color: #d1d1d6; margin: 0 0 10px 0; line-height: 1.5;">Please upload a <strong>CSV</strong> or <strong>Excel</strong> file with exactly these header names in the first row:</p>';
+            
+            if ($resourceName === 'products') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #60a5fa; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56;">name_ar, name_en, price, stock, description_ar, description_en, subcategory_ar, brand_ar, provider_ar</code>';
+            } elseif ($resourceName === 'categories') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #60a5fa; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56;">name_ar, name_en, status</code>';
+            } elseif ($resourceName === 'users') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #60a5fa; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56;">full_name, email, phone, type, password</code>';
+            } elseif ($resourceName === 'providers') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #60a5fa; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56;">title_ar, title_en, user_email, subcategory_ar, price_from, service_description_ar</code>';
+            } elseif ($resourceName === 'services') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #60a5fa; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56;">service_ar, service_en, price, provider_ar, subcategory_ar</code>';
+            }
+            $instructionsHtml .= '</div>';
+        }
+
         return Action::make('import_excel')
             ->label($label)
             ->icon('heroicon-o-document-arrow-up')
             ->color('info')
             ->form([
+                \Filament\Forms\Components\Placeholder::make('import_instructions')
+                    ->label('')
+                    ->content(new \Illuminate\Support\HtmlString($instructionsHtml)),
+
                 FileUpload::make('file')
                     ->label(app()->getLocale() == 'ar' ? 'ملف CSV / Excel (ترميز عربي UTF-8)' : 'CSV / Excel File')
                     ->required()
