@@ -13,6 +13,8 @@ class BookingsTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() == 'ar';
+
         return $table
             ->columns([
                 TextColumn::make('id')
@@ -23,17 +25,36 @@ class BookingsTable
                 TextColumn::make('user.name')
                     ->label(__('messages.user'))
                     ->searchable(),
-                TextColumn::make('service.service_ar')
+                TextColumn::make('service_display')
                     ->label(__('messages.service_ar'))
-                    ->searchable(),
-                TextColumn::make('provider.title_ar')
+                    ->state(fn ($record) => $isAr 
+                        ? ($record->service?->service_ar ?: $record->service?->service_en) 
+                        : ($record->service?->service_en ?: $record->service?->service_ar)
+                    )
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('service', function ($q) use ($search) {
+                            $q->where('service_ar', 'like', "%{$search}%")
+                              ->orWhere('service_en', 'like', "%{$search}%");
+                        });
+                    }),
+                TextColumn::make('provider_display')
                     ->label(__('messages.service_provider'))
+                    ->state(fn ($record) => $isAr 
+                        ? ($record->provider?->title_ar ?: $record->provider?->title_en) 
+                        : ($record->provider?->title_en ?: $record->provider?->title_ar)
+                    )
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('provider', function ($q) use ($search) {
+                            $q->where('title_ar', 'like', "%{$search}%")
+                              ->orWhere('title_en', 'like', "%{$search}%");
+                        });
+                    })
                     ->badge()
                     ->color('gray'),
                 TextColumn::make('availableDay.name_ar')
-                    ->label(app()->getLocale() == 'ar' ? 'اليوم' : 'Day')
+                    ->label($isAr ? 'اليوم' : 'Day')
                     ->getStateUsing(fn ($record) => 
-                        app()->getLocale() === 'ar' 
+                        $isAr 
                             ? ($record->availableDay?->name_ar ?? '-')
                             : ($record->availableDay?->name_en ?? '-')
                     ),
@@ -59,13 +80,13 @@ class BookingsTable
             ->defaultSort('created_at', 'desc')
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('user_id')
-                    ->label(app()->getLocale() == 'ar' ? 'العميل' : 'Customer')
+                    ->label($isAr ? 'العميل' : 'Customer')
                     ->relationship('user', 'name')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name ?? $record->email ?? 'User #' . $record->id)
                     ->searchable()
                     ->preload(),
                 \Filament\Tables\Filters\SelectFilter::make('provider_id')
-                    ->label(app()->getLocale() == 'ar' ? 'مقدم الخدمة' : 'Provider')
+                    ->label($isAr ? 'مقدم الخدمة' : 'Provider')
                     ->relationship('provider', 'title_ar')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->title_ar ?? $record->title_en ?? 'Provider #' . $record->id)
                     ->searchable()
