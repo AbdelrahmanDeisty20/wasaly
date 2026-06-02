@@ -66,6 +66,27 @@ class UsersTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    \App\Helpers\FilamentExportHelper::makeExportBulkAction(
+                        'users',
+                        [
+                            'ID',
+                            'الاسم الكامل',
+                            'البريد الإلكتروني',
+                            'الهاتف',
+                            'نوع الحساب',
+                            'هل الحساب نشط؟',
+                            'تاريخ الإنشاء',
+                        ],
+                        fn ($record) => [
+                            $record->id,
+                            $record->full_name,
+                            $record->email,
+                            $record->phone,
+                            $record->type === 'user' ? 'عميل عادي' : ($record->type === 'service_provider' ? 'مقدم خدمة' : $record->type),
+                            $record->is_active ? 'نعم' : 'لا',
+                            $record->created_at?->toDateTimeString() ?? '',
+                        ]
+                    ),
                 ]),
             ]);
     }

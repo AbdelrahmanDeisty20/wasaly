@@ -19,6 +19,46 @@ class ProviderForm
     {
         return $schema
             ->components([
+                Section::make()
+                    ->schema([
+                        \Filament\Forms\Components\Placeholder::make('provider_offering_hint')
+                            ->label('')
+                            ->content(new \Illuminate\Support\HtmlString(
+                                '<div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">' .
+                                '<svg style="width:18px;height:18px;flex-shrink:0;" fill="none" stroke="#10b981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' .
+                                '<p style="font-size:13px;font-weight:600;color:#10b981;margin:0;">تخصيص نوع تقديم الخدمة للمقدم</p>' .
+                                '</div>' .
+                                '<p style="font-size:11px;color:#a1a1aa;margin:0 0 0 26px;">يمكنك تحديد ما إذا كان مقدم الخدمة هذا يقدم خدمات فقط، أو يبيع منتجات فقط، أو يقدم كليهما معاً. بناءً على اختيارك، سيتم إظهار أو إخفاء أقسام الخدمات والمنتجات بالأسفل تسهيلاً للإدخال.</p>'
+                            ))
+                            ->columnSpanFull(),
+
+                        Select::make('offering_type')
+                            ->label(app()->getLocale() == 'ar' ? 'نوع الخدمات والمنتجات المقدمة' : 'Provider Offering Type')
+                            ->options([
+                                'both' => app()->getLocale() == 'ar' ? 'الخدمات والمنتجات معاً' : 'Both Services & Products',
+                                'services' => app()->getLocale() == 'ar' ? 'الخدمات فقط' : 'Services Only',
+                                'products' => app()->getLocale() == 'ar' ? 'المنتجات فقط' : 'Products Only',
+                            ])
+                            ->default('both')
+                            ->live()
+                            ->dehydrated(false)
+                            ->afterStateHydrated(function ($state, $set, $record) {
+                                if ($record) {
+                                    $hasServices = $record->services()->exists();
+                                    $hasProducts = $record->products()->exists();
+                                    if ($hasServices && $hasProducts) {
+                                        $set('offering_type', 'both');
+                                    } elseif ($hasServices) {
+                                        $set('offering_type', 'services');
+                                    } elseif ($hasProducts) {
+                                        $set('offering_type', 'products');
+                                    }
+                                }
+                            })
+                            ->columnSpanFull(),
+                    ])
+                    ->columnSpanFull(),
+
                 Section::make(__('messages.profile_info'))
                     ->schema([
                         Grid::make(2)
@@ -161,6 +201,7 @@ class ProviderForm
                     ]),
 
                 Section::make(__('messages.services') ?? 'الخدمات')
+                    ->visible(fn ($get) => in_array($get('offering_type'), ['both', 'services']))
                     ->schema([
                         Repeater::make('services')
                             ->relationship('services')
@@ -225,6 +266,7 @@ class ProviderForm
                     ]),
 
                 Section::make(app()->getLocale() == 'ar' ? 'المنتجات' : 'Products')
+                    ->visible(fn ($get) => in_array($get('offering_type'), ['both', 'products']))
                     ->schema([
                         Repeater::make('products')
                             ->relationship('products')

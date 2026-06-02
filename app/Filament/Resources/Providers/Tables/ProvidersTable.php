@@ -60,6 +60,37 @@ class ProvidersTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    \App\Helpers\FilamentExportHelper::makeExportBulkAction(
+                        'providers',
+                        [
+                            'ID',
+                            'الاسم (عربي)',
+                            'الاسم (إنجليزي)',
+                            'المستخدم المرتبط',
+                            'القسم الفرعي',
+                            'الوصف (عربي)',
+                            'الوصف (إنجليزي)',
+                            'السعر يبدأ من',
+                            'أيام العمل',
+                            'وقت العمل',
+                            'الحالة',
+                            'تاريخ الإنشاء',
+                        ],
+                        fn ($record) => [
+                            $record->id,
+                            $record->title_ar,
+                            $record->title_en,
+                            $record->user?->full_name ?? '',
+                            $record->subCategory?->name_ar ?? '',
+                            $record->service_description_ar,
+                            $record->service_description_en,
+                            $record->price_from,
+                            ($record->from_day . ' - ' . $record->to_day),
+                            ($record->start_time . ' - ' . $record->end_time),
+                            $record->status,
+                            $record->created_at?->toDateTimeString() ?? '',
+                        ]
+                    ),
                 ]),
             ]);
     }

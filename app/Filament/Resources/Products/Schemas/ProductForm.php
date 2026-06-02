@@ -141,6 +141,48 @@ class ProductForm
                                     ->addActionLabel(__('messages.add_image'))
                                     ->collapsible(),
                             ]),
+
+                        \Filament\Schemas\Components\Tabs\Tab::make(app()->getLocale() == 'ar' ? 'الخصائص (المواصفات)' : 'Specifications')
+                            ->icon('heroicon-o-adjustments-horizontal')
+                            ->schema([
+                                \Filament\Forms\Components\Placeholder::make('specifications_hint')
+                                    ->label('')
+                                    ->content(new \Illuminate\Support\HtmlString(
+                                        '<div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">' .
+                                        '<svg style="width:18px;height:18px;flex-shrink:0;" fill="none" stroke="#6366f1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' .
+                                        '<p style="font-size:13px;font-weight:600;color:#6366f1;margin:0;">إضافة خصائص للمنتج (اختياري)</p>' .
+                                        '</div>' .
+                                        '<p style="font-size:11px;color:#a1a1aa;margin:0 0 0 26px;">يمكنك إضافة هذا المنتج بمفرده بدون خصائص، أو يمكنك إضافة خصائص ومواصفات له مثل المقاس أو اللون أو غيرها مباشرة من هنا.</p>'
+                                    ))
+                                    ->columnSpanFull(),
+
+                                \Filament\Forms\Components\Repeater::make('specifications')
+                                    ->relationship('specifications')
+                                    ->schema([
+                                        TextInput::make('key_ar')
+                                            ->label(__('messages.key_ar') ?? 'الاسم (عربي)')
+                                            ->required(),
+                                        TextInput::make('key_en')
+                                            ->label(__('messages.key_en') ?? 'الاسم (إنجليزي)')
+                                            ->required(),
+                                        TextInput::make('value_ar')
+                                            ->label(__('messages.value_ar') ?? 'القيمة (عربي)')
+                                            ->required(),
+                                        TextInput::make('value_en')
+                                            ->label(__('messages.value_en') ?? 'القيمة (إنجليزي)')
+                                            ->required(),
+                                        FileUpload::make('icon')
+                                            ->label(__('messages.icon') ?? 'الأيقونة')
+                                            ->image()
+                                            ->directory('specifications')
+                                            ->columnSpanFull()
+                                            ->required(),
+                                    ])
+                                    ->grid(2)
+                                    ->collapsible()
+                                    ->defaultItems(0)
+                                    ->addActionLabel(app()->getLocale() == 'ar' ? 'إضافة خاصية / مواصفة جديدة' : 'Add Specification'),
+                            ]),
                     ])
                     ->columnSpanFull()
                     ->persistTabInQueryString(),
