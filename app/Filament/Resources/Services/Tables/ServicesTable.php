@@ -14,6 +14,53 @@ class ServicesTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() === 'ar';
+
+        // Dynamic headers & row callback for Excel Export based on active locale
+        $exportHeaders = $isAr ? [
+            'ID',
+            'الخدمة (عربي)',
+            'الخدمة (إنجليزي)',
+            'الوصف (عربي)',
+            'الوصف (إنجليزي)',
+            'مقدم الخدمة',
+            'القسم الفرعي',
+            'السعر',
+            'تاريخ الإنشاء',
+        ] : [
+            'ID',
+            'Service (Arabic)',
+            'Service (English)',
+            'Description (Arabic)',
+            'Description (English)',
+            'Provider',
+            'Sub Category',
+            'Price',
+            'Created At',
+        ];
+
+        $exportRowCallback = fn ($record) => $isAr ? [
+            $record->id,
+            $record->service_ar,
+            $record->service_en,
+            $record->description_ar,
+            $record->description_en,
+            $record->provider?->title_ar ?? '',
+            $record->subCategory?->name_ar ?? '',
+            $record->price,
+            $record->created_at?->toDateTimeString() ?? '',
+        ] : [
+            $record->id,
+            $record->service_ar,
+            $record->service_en,
+            $record->description_ar,
+            $record->description_en,
+            $record->provider?->title_en ?: $record->provider?->title_ar ?: '',
+            $record->subCategory?->name_en ?: $record->subCategory?->name_ar ?: '',
+            $record->price,
+            $record->created_at?->toDateTimeString() ?? '',
+        ];
+
         return $table
             ->columns([
                 ImageColumn::make('image')
@@ -24,17 +71,34 @@ class ServicesTable
                         return str_starts_with($record->image, 'services/') ? $record->image : 'services/' . $record->image;
                     })
                     ->circular(),
-                TextColumn::make('service_ar')
+                TextColumn::make('service_display')
                     ->label(__('messages.service_ar'))
-                    ->searchable()
+                    ->state(fn ($record) => $isAr ? ($record->service_ar ?: $record->service_en) : ($record->service_en ?: $record->service_ar))
+                    ->searchable(query: function ($query, $search) {
+                        $query->where('service_ar', 'like', "%{$search}%")
+                              ->orWhere('service_en', 'like', "%{$search}%");
+                    })
                     ->sortable(),
-                TextColumn::make('provider.title_ar')
+                TextColumn::make('provider_display')
                     ->label(__('messages.service_provider'))
-                    ->searchable()
+                    ->state(fn ($record) => $isAr 
+                        ? ($record->provider?->title_ar ?: $record->provider?->title_en) 
+                        : ($record->provider?->title_en ?: $record->provider?->title_ar)
+                    )
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('provider', function ($q) use ($search) {
+                            $q->where('title_ar', 'like', "%{$search}%")
+                              ->orWhere('title_en', 'like', "%{$search}%");
+                        });
+                    })
                     ->badge()
                     ->color('gray'),
-                TextColumn::make('subCategory.name_ar')
+                TextColumn::make('sub_category_display')
                     ->label(__('messages.sub_category'))
+                    ->state(fn ($record) => $isAr 
+                        ? ($record->subCategory?->name_ar ?: $record->subCategory?->name_en) 
+                        : ($record->subCategory?->name_en ?: $record->subCategory?->name_ar)
+                    )
                     ->badge()
                     ->color('info'),
                 TextColumn::make('price')
@@ -51,7 +115,7 @@ class ServicesTable
             ])
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('provider_id')
-                    ->label(app()->getLocale() == 'ar' ? 'مقدم الخدمة' : 'Provider')
+                    ->label($isAr ? 'مقدم الخدمة' : 'Provider')
                     ->relationship('provider', 'title_ar')
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->title_ar ?? $record->title_en ?? 'Provider #' . $record->id)
                     ->searchable()
@@ -104,28 +168,8 @@ class ServicesTable
                 ),
                 \App\Helpers\FilamentExportHelper::makeExportHeaderAction(
                     'services',
-                    [
-                        'ID',
-                        'الخدمة (عربي)',
-                        'الخدمة (إنجليزي)',
-                        'الوصف (عربي)',
-                        'الوصف (إنجليزي)',
-                        'مقدم الخدمة',
-                        'القسم الفرعي',
-                        'السعر',
-                        'تاريخ الإنشاء',
-                    ],
-                    fn ($record) => [
-                        $record->id,
-                        $record->service_ar,
-                        $record->service_en,
-                        $record->description_ar,
-                        $record->description_en,
-                        $record->provider?->title_ar ?? '',
-                        $record->subCategory?->name_ar ?? '',
-                        $record->price,
-                        $record->created_at?->toDateTimeString() ?? '',
-                    ],
+                    $exportHeaders,
+                    $exportRowCallback,
                     \App\Models\Service::class
                 )
             ])
@@ -134,28 +178,8 @@ class ServicesTable
                     DeleteBulkAction::make(),
                     \App\Helpers\FilamentExportHelper::makeExportBulkAction(
                         'services',
-                        [
-                            'ID',
-                            'الخدمة (عربي)',
-                            'الخدمة (إنجليزي)',
-                            'الوصف (عربي)',
-                            'الوصف (إنجليزي)',
-                            'مقدم الخدمة',
-                            'القسم الفرعي',
-                            'السعر',
-                            'تاريخ الإنشاء',
-                        ],
-                        fn ($record) => [
-                            $record->id,
-                            $record->service_ar,
-                            $record->service_en,
-                            $record->description_ar,
-                            $record->description_en,
-                            $record->provider?->title_ar ?? '',
-                            $record->subCategory?->name_ar ?? '',
-                            $record->price,
-                            $record->created_at?->toDateTimeString() ?? '',
-                        ]
+                        $exportHeaders,
+                        $exportRowCallback
                     ),
                 ]),
             ]);

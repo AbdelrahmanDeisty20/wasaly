@@ -14,6 +14,45 @@ class UsersTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() === 'ar';
+
+        // Dynamic headers & row callback for Excel Export based on active locale
+        $exportHeaders = $isAr ? [
+            'ID',
+            'الاسم الكامل',
+            'البريد الإلكتروني',
+            'الهاتف',
+            'نوع الحساب',
+            'هل الحساب نشط؟',
+            'تاريخ الإنشاء',
+        ] : [
+            'ID',
+            'Full Name',
+            'Email',
+            'Phone',
+            'Account Type',
+            'Is Active?',
+            'Created At',
+        ];
+
+        $exportRowCallback = fn ($record) => $isAr ? [
+            $record->id,
+            $record->full_name,
+            $record->email,
+            $record->phone,
+            $record->type === 'user' ? 'عميل عادي' : ($record->type === 'service_provider' ? 'مقدم خدمة' : $record->type),
+            $record->is_active ? 'نعم' : 'لا',
+            $record->created_at?->toDateTimeString() ?? '',
+        ] : [
+            $record->id,
+            $record->full_name,
+            $record->email,
+            $record->phone,
+            $record->type === 'user' ? 'Customer' : ($record->type === 'service_provider' ? 'Service Provider' : $record->type),
+            $record->is_active ? 'Yes' : 'No',
+            $record->created_at?->toDateTimeString() ?? '',
+        ];
+
         return $table
             ->columns([
                 \Filament\Tables\Columns\ImageColumn::make('avatar')
@@ -89,24 +128,8 @@ class UsersTable
                 ),
                 \App\Helpers\FilamentExportHelper::makeExportHeaderAction(
                     'users',
-                    [
-                        'ID',
-                        'الاسم الكامل',
-                        'البريد الإلكتروني',
-                        'الهاتف',
-                        'نوع الحساب',
-                        'هل الحساب نشط؟',
-                        'تاريخ الإنشاء',
-                    ],
-                    fn ($record) => [
-                        $record->id,
-                        $record->full_name,
-                        $record->email,
-                        $record->phone,
-                        $record->type === 'user' ? 'عميل عادي' : ($record->type === 'service_provider' ? 'مقدم خدمة' : $record->type),
-                        $record->is_active ? 'نعم' : 'لا',
-                        $record->created_at?->toDateTimeString() ?? '',
-                    ],
+                    $exportHeaders,
+                    $exportRowCallback,
                     \App\Models\User::class
                 )
             ])
@@ -115,24 +138,8 @@ class UsersTable
                     DeleteBulkAction::make(),
                     \App\Helpers\FilamentExportHelper::makeExportBulkAction(
                         'users',
-                        [
-                            'ID',
-                            'الاسم الكامل',
-                            'البريد الإلكتروني',
-                            'الهاتف',
-                            'نوع الحساب',
-                            'هل الحساب نشط؟',
-                            'تاريخ الإنشاء',
-                        ],
-                        fn ($record) => [
-                            $record->id,
-                            $record->full_name,
-                            $record->email,
-                            $record->phone,
-                            $record->type === 'user' ? 'عميل عادي' : ($record->type === 'service_provider' ? 'مقدم خدمة' : $record->type),
-                            $record->is_active ? 'نعم' : 'لا',
-                            $record->created_at?->toDateTimeString() ?? '',
-                        ]
+                        $exportHeaders,
+                        $exportRowCallback
                     ),
                 ]),
             ]);

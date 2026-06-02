@@ -14,6 +14,65 @@ class ProvidersTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() === 'ar';
+
+        // Dynamic headers & row callback for Excel Export based on active locale
+        $exportHeaders = $isAr ? [
+            'ID',
+            'الاسم (عربي)',
+            'الاسم (إنجليزي)',
+            'المستخدم المرتبط',
+            'القسم الفرعي',
+            'الوصف (عربي)',
+            'الوصف (إنجليزي)',
+            'السعر يبدأ من',
+            'أيام العمل',
+            'وقت العمل',
+            'الحالة',
+            'تاريخ الإنشاء',
+        ] : [
+            'ID',
+            'Provider Title (Arabic)',
+            'Provider Title (English)',
+            'Linked User',
+            'Sub Category',
+            'Description (Arabic)',
+            'Description (English)',
+            'Price Starts From',
+            'Working Days',
+            'Working Hours',
+            'Status',
+            'Created At',
+        ];
+
+        $exportRowCallback = fn ($record) => $isAr ? [
+            $record->id,
+            $record->title_ar,
+            $record->title_en,
+            $record->user?->full_name ?? '',
+            $record->subCategory?->name_ar ?? '',
+            $record->service_description_ar,
+            $record->service_description_en,
+            $record->price_from,
+            "من {$record->from_day} إلى {$record->to_day}",
+            "من {$record->start_time} إلى {$record->end_time}",
+            $record->status,
+            $record->created_at?->toDateTimeString() ?? '',
+        ] : [
+            $record->id,
+            $record->title_ar,
+            $record->title_en,
+            $record->user?->full_name ?? '',
+            $record->subCategory?->name_en ?: $record->subCategory?->name_ar ?: '',
+            $record->service_description_ar,
+            $record->service_description_en,
+            $record->price_from,
+            "From {$record->from_day} to {$record->to_day}",
+            "From {$record->start_time} to {$record->end_time}",
+            $record->status,
+            $record->created_at?->toDateTimeString() ?? '',
+        ];
+
         return $table
             ->columns([
                 ImageColumn::make('cover')
@@ -24,15 +83,23 @@ class ProvidersTable
                         return str_starts_with($record->cover, 'providers/') ? $record->cover : 'providers/' . $record->cover;
                     })
                     ->circular(),
-                TextColumn::make('title_ar')
+                TextColumn::make('title_display')
                     ->label(__('messages.service_ar'))
-                    ->searchable()
+                    ->state(fn ($record) => $isAr ? ($record->title_ar ?: $record->title_en) : ($record->title_en ?: $record->title_ar))
+                    ->searchable(query: function ($query, $search) {
+                        $query->where('title_ar', 'like', "%{$search}%")
+                              ->orWhere('title_en', 'like', "%{$search}%");
+                    })
                     ->sortable(),
                 TextColumn::make('user.name')
                     ->label(__('messages.user'))
                     ->searchable(),
-                TextColumn::make('subCategory.name_ar')
+                TextColumn::make('sub_category_display')
                     ->label(__('messages.sub_category'))
+                    ->state(fn ($record) => $isAr 
+                        ? ($record->subCategory?->name_ar ?: $record->subCategory?->name_en) 
+                        : ($record->subCategory?->name_en ?: $record->subCategory?->name_ar)
+                    )
                     ->badge()
                     ->color('info'),
                 TextColumn::make('status')
@@ -115,30 +182,8 @@ class ProvidersTable
                 ),
                 \App\Helpers\FilamentExportHelper::makeExportHeaderAction(
                     'providers',
-                    [
-                        'ID',
-                        'الاسم (عربي)',
-                        'الاسم (إنجليزي)',
-                        'المستخدم المرتبط',
-                        'القسم الفرعي',
-                        'الوصف (عربي)',
-                        'الوصف (إنجليزي)',
-                        'السعر يبدأ من',
-                        'الأيام',
-                        'تاريخ الإنشاء',
-                    ],
-                    fn ($record) => [
-                        $record->id,
-                        $record->title_ar,
-                        $record->title_en,
-                        $record->user?->full_name ?? '',
-                        $record->subCategory?->name_ar ?? '',
-                        $record->service_description_ar,
-                        $record->service_description_en,
-                        $record->price_from,
-                        "من {$record->from_day} إلى {$record->to_day}",
-                        $record->created_at?->toDateTimeString() ?? '',
-                    ],
+                    $exportHeaders,
+                    $exportRowCallback,
                     \App\Models\Provider::class
                 )
             ])
@@ -147,34 +192,8 @@ class ProvidersTable
                     DeleteBulkAction::make(),
                     \App\Helpers\FilamentExportHelper::makeExportBulkAction(
                         'providers',
-                        [
-                            'ID',
-                            'الاسم (عربي)',
-                            'الاسم (إنجليزي)',
-                            'المستخدم المرتبط',
-                            'القسم الفرعي',
-                            'الوصف (عربي)',
-                            'الوصف (إنجليزي)',
-                            'السعر يبدأ من',
-                            'أيام العمل',
-                            'وقت العمل',
-                            'الحالة',
-                            'تاريخ الإنشاء',
-                        ],
-                        fn ($record) => [
-                            $record->id,
-                            $record->title_ar,
-                            $record->title_en,
-                            $record->user?->full_name ?? '',
-                            $record->subCategory?->name_ar ?? '',
-                            $record->service_description_ar,
-                            $record->service_description_en,
-                            $record->price_from,
-                            ($record->from_day . ' - ' . $record->to_day),
-                            ($record->start_time . ' - ' . $record->end_time),
-                            $record->status,
-                            $record->created_at?->toDateTimeString() ?? '',
-                        ]
+                        $exportHeaders,
+                        $exportRowCallback
                     ),
                 ]),
             ]);

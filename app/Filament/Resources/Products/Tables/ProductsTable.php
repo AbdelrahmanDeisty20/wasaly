@@ -15,11 +15,74 @@ class ProductsTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() === 'ar';
+
+        // Dynamic headers & row callback for Excel Export based on active locale
+        $exportHeaders = $isAr ? [
+            'ID',
+            'اسم المنتج (عربي)',
+            'اسم المنتج (إنجليزي)',
+            'السعر',
+            'المخزون',
+            'القسم الفرعي',
+            'العلامة التجارية',
+            'صاحب المنتج',
+            'الحالة',
+            'مميز؟',
+            'تاريخ الإنشاء',
+        ] : [
+            'ID',
+            'Product Name (Arabic)',
+            'Product Name (English)',
+            'Price',
+            'Stock',
+            'Sub Category',
+            'Brand',
+            'Owner / Provider',
+            'Status',
+            'Featured?',
+            'Created At',
+        ];
+
+        $exportRowCallback = fn ($record) => $isAr ? [
+            $record->id,
+            $record->name_ar,
+            $record->name_en,
+            $record->price,
+            $record->stock,
+            $record->subCategory?->name_ar ?? '',
+            $record->brand?->name_ar ?? '',
+            $record->provider_id
+                ? ($record->provider->title_ar ?? $record->provider->title_en ?? ('مقدم #' . $record->provider_id))
+                : 'أدمن واصلي',
+            $record->status,
+            $record->is_featured ? 'نعم' : 'لا',
+            $record->created_at?->toDateTimeString() ?? '',
+        ] : [
+            $record->id,
+            $record->name_ar,
+            $record->name_en,
+            $record->price,
+            $record->stock,
+            $record->subCategory?->name_en ?: $record->subCategory?->name_ar ?: '',
+            $record->brand?->name_en ?: $record->brand?->name_ar ?: '',
+            $record->provider_id
+                ? ($record->provider->title_en ?: $record->provider->title_ar ?: ('Provider #' . $record->provider_id))
+                : 'Wasaly Admin',
+            $record->status,
+            $record->is_featured ? 'Yes' : 'No',
+            $record->created_at?->toDateTimeString() ?? '',
+        ];
+
         return $table
             ->columns([
-                TextColumn::make('name_ar')
+                TextColumn::make('name_display')
                     ->label(__('messages.service_ar'))
-                    ->searchable(),
+                    ->state(fn ($record) => $isAr ? ($record->name_ar ?: $record->name_en) : ($record->name_en ?: $record->name_ar))
+                    ->searchable(query: function ($query, $search) {
+                        $query->where('name_ar', 'like', "%{$search}%")
+                              ->orWhere('name_en', 'like', "%{$search}%");
+                    }),
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
                     ->disk('public')
@@ -36,16 +99,26 @@ class ProductsTable
                     ->label(__('messages.stock'))
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('subCategory.name_ar')
+                TextColumn::make('sub_category_display')
                     ->label(__('messages.sub_category'))
+                    ->state(fn ($record) => $isAr 
+                        ? ($record->subCategory?->name_ar ?: $record->subCategory?->name_en) 
+                        : ($record->subCategory?->name_en ?: $record->subCategory?->name_ar)
+                    )
                     ->sortable(),
-                TextColumn::make('brand.name_ar')
+                TextColumn::make('brand_display')
                     ->label(__('messages.brand'))
+                    ->state(fn ($record) => $isAr 
+                        ? ($record->brand?->name_ar ?: $record->brand?->name_en) 
+                        : ($record->brand?->name_en ?: $record->brand?->name_ar)
+                    )
                     ->sortable(),
                 TextColumn::make('provider_owner')
                     ->label(__('messages.product_owner'))
                     ->state(fn ($record) => $record->provider_id
-                        ? ($record->provider->title_ar ?? $record->provider->title_en ?? ('مقدم #' . $record->provider_id))
+                        ? ($isAr
+                            ? ($record->provider->title_ar ?? $record->provider->title_en ?? ('مقدم #' . $record->provider_id))
+                            : ($record->provider->title_en ?? $record->provider->title_ar ?? ('Provider #' . $record->provider_id)))
                         : __('messages.admin_wasaly')
                     )
                     ->badge()
@@ -145,34 +218,8 @@ class ProductsTable
                 ),
                 \App\Helpers\FilamentExportHelper::makeExportHeaderAction(
                     'products',
-                    [
-                        'ID',
-                        'اسم المنتج (عربي)',
-                        'اسم المنتج (إنجليزي)',
-                        'السعر',
-                        'المخزون',
-                        'القسم الفرعي',
-                        'العلامة التجارية',
-                        'صاحب المنتج',
-                        'الحالة',
-                        'مميز؟',
-                        'تاريخ الإنشاء',
-                    ],
-                    fn ($record) => [
-                        $record->id,
-                        $record->name_ar,
-                        $record->name_en,
-                        $record->price,
-                        $record->stock,
-                        $record->subCategory?->name_ar ?? '',
-                        $record->brand?->name_ar ?? '',
-                        $record->provider_id
-                            ? ($record->provider->title_ar ?? $record->provider->title_en ?? ('مقدم #' . $record->provider_id))
-                            : 'أدمن واصلي',
-                        $record->status,
-                        $record->is_featured ? 'نعم' : 'لا',
-                        $record->created_at?->toDateTimeString() ?? '',
-                    ],
+                    $exportHeaders,
+                    $exportRowCallback,
                     \App\Models\Product::class
                 )
             ])
@@ -181,34 +228,8 @@ class ProductsTable
                     DeleteBulkAction::make(),
                     \App\Helpers\FilamentExportHelper::makeExportBulkAction(
                         'products',
-                        [
-                            'ID',
-                            'اسم المنتج (عربي)',
-                            'اسم المنتج (إنجليزي)',
-                            'السعر',
-                            'المخزون',
-                            'القسم الفرعي',
-                            'العلامة التجارية',
-                            'صاحب المنتج',
-                            'الحالة',
-                            'مميز؟',
-                            'تاريخ الإنشاء',
-                        ],
-                        fn ($record) => [
-                            $record->id,
-                            $record->name_ar,
-                            $record->name_en,
-                            $record->price,
-                            $record->stock,
-                            $record->subCategory?->name_ar ?? '',
-                            $record->brand?->name_ar ?? '',
-                            $record->provider_id
-                                ? ($record->provider->title_ar ?? $record->provider->title_en ?? ('مقدم #' . $record->provider_id))
-                                : 'أدمن واصلي',
-                            $record->status,
-                            $record->is_featured ? 'نعم' : 'لا',
-                            $record->created_at?->toDateTimeString() ?? '',
-                        ]
+                        $exportHeaders,
+                        $exportRowCallback
                     ),
                 ]),
             ]);
