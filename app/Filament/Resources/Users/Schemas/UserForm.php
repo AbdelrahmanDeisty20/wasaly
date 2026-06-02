@@ -14,9 +14,9 @@ class UserForm
     {
         return $schema
             ->components([
-                \Filament\Forms\Components\Section::make(app()->getLocale() == 'ar' ? 'معلومات المستخدم' : 'User Information')
+                \Filament\Schemas\Components\Section::make(app()->getLocale() == 'ar' ? 'معلومات المستخدم' : 'User Information')
                     ->schema([
-                        \Filament\Forms\Components\Grid::make(2)
+                        \Filament\Schemas\Components\Grid::make(2)
                             ->schema([
                                 \Filament\Forms\Components\FileUpload::make('avatar')
                                     ->label(app()->getLocale() == 'ar' ? 'الصورة الشخصية' : 'Avatar')
@@ -50,7 +50,7 @@ class UserForm
                                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->title_ar ?? $record->title_en ?? 'Provider #' . $record->id)
                                     ->searchable()
                                     ->preload()
-                                    ->visible(fn (\Filament\Forms\Get $get) => $get('type') === 'service_provider'),
+                                    ->visible(fn ($get) => $get('type') === 'service_provider'),
                                 TextInput::make('provider')
                                     ->label(app()->getLocale() == 'ar' ? 'مزود التسجيل (جوجل، الخ)' : 'Auth Provider (Google, etc)'),
                                 DateTimePicker::make('email_verified_at')
