@@ -478,4 +478,11 @@ return [
     'read' => 'Read',
     'unread' => 'Unread',
     'notification_not_found' => 'Notification not found',
+    'Saturday' => 'Saturday',
+    'Sunday' => 'Sunday',
+    'Monday' => 'Monday',
+    'Tuesday' => 'Tuesday',
+    'Wednesday' => 'Wednesday',
+    'Thursday' => 'Thursday',
+    'Friday' => 'Friday',
 ];
