@@ -142,6 +142,38 @@ class ProductsTable
                             'image' => 'default.png',
                         ]);
                     }
+                ),
+                \App\Helpers\FilamentExportHelper::makeExportHeaderAction(
+                    'products',
+                    [
+                        'ID',
+                        'اسم المنتج (عربي)',
+                        'اسم المنتج (إنجليزي)',
+                        'السعر',
+                        'المخزون',
+                        'القسم الفرعي',
+                        'العلامة التجارية',
+                        'صاحب المنتج',
+                        'الحالة',
+                        'مميز؟',
+                        'تاريخ الإنشاء',
+                    ],
+                    fn ($record) => [
+                        $record->id,
+                        $record->name_ar,
+                        $record->name_en,
+                        $record->price,
+                        $record->stock,
+                        $record->subCategory?->name_ar ?? '',
+                        $record->brand?->name_ar ?? '',
+                        $record->provider_id
+                            ? ($record->provider->title_ar ?? $record->provider->title_en ?? ('مقدم #' . $record->provider_id))
+                            : 'أدمن واصلي',
+                        $record->status,
+                        $record->is_featured ? 'نعم' : 'لا',
+                        $record->created_at?->toDateTimeString() ?? '',
+                    ],
+                    \App\Models\Product::class
                 )
             ])
             ->toolbarActions([

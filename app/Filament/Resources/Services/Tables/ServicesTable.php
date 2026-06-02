@@ -101,6 +101,32 @@ class ServicesTable
                             'image' => 'default.png',
                         ]);
                     }
+                ),
+                \App\Helpers\FilamentExportHelper::makeExportHeaderAction(
+                    'services',
+                    [
+                        'ID',
+                        'الخدمة (عربي)',
+                        'الخدمة (إنجليزي)',
+                        'الوصف (عربي)',
+                        'الوصف (إنجليزي)',
+                        'مقدم الخدمة',
+                        'القسم الفرعي',
+                        'السعر',
+                        'تاريخ الإنشاء',
+                    ],
+                    fn ($record) => [
+                        $record->id,
+                        $record->service_ar,
+                        $record->service_en,
+                        $record->description_ar,
+                        $record->description_en,
+                        $record->provider?->title_ar ?? '',
+                        $record->subCategory?->name_ar ?? '',
+                        $record->price,
+                        $record->created_at?->toDateTimeString() ?? '',
+                    ],
+                    \App\Models\Service::class
                 )
             ])
             ->toolbarActions([

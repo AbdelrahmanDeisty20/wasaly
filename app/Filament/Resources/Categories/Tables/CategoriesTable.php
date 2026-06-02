@@ -74,6 +74,26 @@ class CategoriesTable
                             'image' => 'default.png',
                         ]);
                     }
+                ),
+                \App\Helpers\FilamentExportHelper::makeExportHeaderAction(
+                    'categories',
+                    [
+                        'ID',
+                        'الاسم بالعربية',
+                        'الاسم بالإنجليزية',
+                        'عدد الأقسام الفرعية',
+                        'الحالة',
+                        'تاريخ الإنشاء',
+                    ],
+                    fn ($record) => [
+                        $record->id,
+                        $record->name_ar,
+                        $record->name_en,
+                        $record->subCategories()->count(),
+                        $record->status,
+                        $record->created_at?->toDateTimeString() ?? '',
+                    ],
+                    \App\Models\Category::class
                 )
             ])
             ->toolbarActions([

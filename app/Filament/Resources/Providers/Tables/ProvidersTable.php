@@ -112,6 +112,34 @@ class ProvidersTable
                             'cover' => 'default.png',
                         ]);
                     }
+                ),
+                \App\Helpers\FilamentExportHelper::makeExportHeaderAction(
+                    'providers',
+                    [
+                        'ID',
+                        'الاسم (عربي)',
+                        'الاسم (إنجليزي)',
+                        'المستخدم المرتبط',
+                        'القسم الفرعي',
+                        'الوصف (عربي)',
+                        'الوصف (إنجليزي)',
+                        'السعر يبدأ من',
+                        'الأيام',
+                        'تاريخ الإنشاء',
+                    ],
+                    fn ($record) => [
+                        $record->id,
+                        $record->title_ar,
+                        $record->title_en,
+                        $record->user?->full_name ?? '',
+                        $record->subCategory?->name_ar ?? '',
+                        $record->service_description_ar,
+                        $record->service_description_en,
+                        $record->price_from,
+                        "من {$record->from_day} إلى {$record->to_day}",
+                        $record->created_at?->toDateTimeString() ?? '',
+                    ],
+                    \App\Models\Provider::class
                 )
             ])
             ->toolbarActions([

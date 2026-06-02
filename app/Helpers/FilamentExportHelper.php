@@ -50,6 +50,47 @@ class FilamentExportHelper
     }
 
     /**
+     * Generate a reusable header action to export ALL table records directly to Excel/CSV.
+     */
+    public static function makeExportHeaderAction(string $fileName, array $headers, callable $rowCallback, string $modelClass): Action
+    {
+        $labelAr = 'تصدير إلى إكسيل';
+        $labelEn = 'Export to Excel';
+        $label = app()->getLocale() == 'ar' ? $labelAr : $labelEn;
+
+        return Action::make('export_excel_all')
+            ->label($label)
+            ->icon('heroicon-o-document-arrow-down')
+            ->color('success')
+            ->action(function () use ($fileName, $headers, $rowCallback, $modelClass): StreamedResponse {
+                $records = $modelClass::all();
+
+                $response = new StreamedResponse(function () use ($records, $headers, $rowCallback) {
+                    $handle = fopen('php://output', 'w');
+                    
+                    // Prepend BOM to force Excel to read Arabic text (UTF-8) correctly
+                    fwrite($handle, "\xEF\xBB\xBF");
+                    
+                    // Add CSV Headers
+                    fputcsv($handle, $headers);
+                    
+                    // Add CSV Rows
+                    foreach ($records as $record) {
+                        $row = $rowCallback($record);
+                        fputcsv($handle, $row);
+                    }
+                    
+                    fclose($handle);
+                });
+
+                $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+                $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '_all_' . date('Y-m-d_H-i-s') . '.csv"');
+                
+                return $response;
+            });
+    }
+
+    /**
      * Generate a reusable header action to import records from a CSV/Excel file.
      */
     public static function makeImportHeaderAction(string $resourceName, callable $importCallback): Action
