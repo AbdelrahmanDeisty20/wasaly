@@ -44,6 +44,11 @@ class AppNotificationResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title_ar', 'title_en'];
+    }
+
     public static function form(Schema $schema): Schema
     {
         return AppNotificationForm::configure($schema);
