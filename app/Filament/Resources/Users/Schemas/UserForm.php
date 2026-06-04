@@ -44,13 +44,28 @@ class UserForm
                                     ->default('user')
                                     ->required()
                                     ->reactive(),
-                                \Filament\Forms\Components\Select::make('provider_id')
+                                \Filament\Forms\Components\Select::make('linked_provider_id')
                                     ->label(app()->getLocale() == 'ar' ? 'مقدم الخدمة المرتبط (إن وجد)' : 'Linked Provider')
-                                    ->relationship('provider', 'title_ar')
-                                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->title_ar ?? $record->title_en ?? 'Provider #' . $record->id)
+                                    ->options(fn () => \App\Models\Provider::pluck(app()->getLocale() == 'ar' ? 'title_ar' : 'title_en', 'id'))
                                     ->searchable()
                                     ->preload()
-                                    ->visible(fn ($get) => $get('type') === 'service_provider'),
+                                    ->visible(fn ($get) => $get('type') === 'service_provider')
+                                    ->afterStateHydrated(function ($state, $set, $record) {
+                                        if ($record) {
+                                            $provider = \App\Models\Provider::where('user_id', $record->id)->first();
+                                            $set('linked_provider_id', $provider?->id);
+                                        }
+                                    })
+                                    ->saveRelationshipsUsing(function ($state, $record) {
+                                        // 1. Remove this user from any other provider
+                                        \App\Models\Provider::where('user_id', $record->id)->update(['user_id' => null]);
+                                        
+                                        // 2. Associate this user with the selected provider
+                                        if ($state) {
+                                            \App\Models\Provider::where('id', $state)->update(['user_id' => $record->id]);
+                                        }
+                                    })
+                                    ->dehydrated(false),
                                 TextInput::make('provider')
                                     ->label(app()->getLocale() == 'ar' ? 'مزود التسجيل (جوجل، الخ)' : 'Auth Provider (Google, etc)'),
                                 DateTimePicker::make('email_verified_at')
