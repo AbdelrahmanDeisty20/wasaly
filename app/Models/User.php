@@ -102,7 +102,11 @@ class User extends Authenticatable implements FilamentUser, HasName
             return $value;
         }
 
-        return asset('storage/users/avatars/' . $value);
+        $path = $value;
+        if (!str_starts_with(strtolower($path), 'users/avatars/')) {
+            $path = 'users/avatars/' . $path;
+        }
+        return asset('storage/' . $path);
     }
 
     public function contacts()

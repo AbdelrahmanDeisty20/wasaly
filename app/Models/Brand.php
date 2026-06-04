@@ -28,6 +28,18 @@ class Brand extends Model
 
     public function getImagePathAttribute()
     {
-        return asset('storage/brands/' . $this->image);
+        if (!$this->image) {
+            return null;
+        }
+
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+
+        $path = $this->image;
+        if (!str_starts_with(strtolower($path), 'brands/')) {
+            $path = 'brands/' . $path;
+        }
+        return asset('storage/' . $path);
     }
 }

@@ -21,6 +21,18 @@ class ProductImage extends Model
 
     public function getImagePathAttribute()
     {
-        return asset('storage/products/images/' . $this->images);
+        if (!$this->images) {
+            return null;
+        }
+
+        if (filter_var($this->images, FILTER_VALIDATE_URL)) {
+            return $this->images;
+        }
+
+        $path = $this->images;
+        if (!str_starts_with(strtolower($path), 'products/images/')) {
+            $path = 'products/images/' . $path;
+        }
+        return asset('storage/' . $path);
     }
 }

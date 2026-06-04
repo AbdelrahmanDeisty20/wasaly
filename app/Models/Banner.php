@@ -29,6 +29,18 @@ class Banner extends Model
 
     public function getImagePathAttribute()
     {
-        return asset('storage/banners/' . $this->image);
+        if (!$this->image) {
+            return null;
+        }
+
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+
+        $path = $this->image;
+        if (!str_starts_with(strtolower($path), 'banners/')) {
+            $path = 'banners/' . $path;
+        }
+        return asset('storage/' . $path);
     }
 }

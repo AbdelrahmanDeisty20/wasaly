@@ -69,7 +69,19 @@ class Provider extends Model
 
     public function getImagePathAttribute()
     {
-        return $this->cover ? asset('storage/providers/' . $this->cover) : null;
+        if (!$this->cover) {
+            return null;
+        }
+
+        if (filter_var($this->cover, FILTER_VALIDATE_URL)) {
+            return $this->cover;
+        }
+
+        $path = $this->cover;
+        if (!str_starts_with(strtolower($path), 'providers/')) {
+            $path = 'providers/' . $path;
+        }
+        return asset('storage/' . $path);
     }
 
     public function getAverageRatingAttribute()

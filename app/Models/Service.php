@@ -47,7 +47,19 @@ class Service extends Model
 
     public function getImagePathAttribute()
     {
-        return $this->image ? asset('storage/services/' . $this->image) : null;
+        if (!$this->image) {
+            return null;
+        }
+
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+
+        $path = $this->image;
+        if (!str_starts_with(strtolower($path), 'services/')) {
+            $path = 'services/' . $path;
+        }
+        return asset('storage/' . $path);
     }
 
     public function reviews()
