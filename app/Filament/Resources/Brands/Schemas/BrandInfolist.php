@@ -18,11 +18,7 @@ class BrandInfolist
                             ->schema([
                                 ImageEntry::make('image')
                                     ->label('')
-                                    ->disk('public')
-                                    ->state(function ($record) {
-                                        if (!$record->image) return null;
-                                        return str_starts_with($record->image, 'brands/') ? $record->image : 'brands/' . $record->image;
-                                    })
+                                    ->state(fn ($record) => $record->image_path)
                                     ->columnSpan(3)
                                     ->circular()
                                     ->size(100)

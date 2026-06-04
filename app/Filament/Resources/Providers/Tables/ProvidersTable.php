@@ -77,11 +77,7 @@ class ProvidersTable
             ->columns([
                 ImageColumn::make('cover')
                     ->label(__('messages.image'))
-                    ->disk('public')
-                    ->state(function ($record) {
-                        if (!$record->cover) return null;
-                        return str_starts_with($record->cover, 'providers/') ? $record->cover : 'providers/' . $record->cover;
-                    })
+                    ->state(fn ($record) => $record->image_path)
                     ->circular(),
                 TextColumn::make('title_display')
                     ->label(__('messages.service_ar'))

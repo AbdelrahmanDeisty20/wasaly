@@ -29,11 +29,7 @@ class ProviderInfolist
                                                         ->schema([
                                                             \Filament\Infolists\Components\ImageEntry::make('cover')
                                                                 ->label('')
-                                                                ->disk('public')
-                                                                ->state(function ($record) {
-                                                                    if (!$record->cover) return null;
-                                                                    return str_starts_with($record->cover, 'providers/') ? $record->cover : 'providers/' . $record->cover;
-                                                                })
+                                                                ->state(fn ($record) => $record->image_path)
                                                                 ->columnSpan(3)
                                                                 ->circular()
                                                                 ->size(100)

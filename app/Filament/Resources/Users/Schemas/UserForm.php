@@ -21,7 +21,7 @@ class UserForm
                                 \Filament\Forms\Components\FileUpload::make('avatar')
                                     ->label(app()->getLocale() == 'ar' ? 'الصورة الشخصية' : 'Avatar')
                                     ->image()
-                                    ->directory('avatars')
+                                    ->directory('users/avatars')
                                     ->columnSpanFull(),
                                 TextInput::make('name')
                                     ->label(app()->getLocale() == 'ar' ? 'الاسم المختصر' : 'Name')

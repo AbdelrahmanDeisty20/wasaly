@@ -27,11 +27,7 @@ class ProductInfolist
                                                         ->schema([
                                                             \Filament\Infolists\Components\ImageEntry::make('image')
                                                                 ->label('')
-                                                                ->disk('public')
-                                                                ->state(function ($record) {
-                                                                    if (!$record->image) return null;
-                                                                    return str_starts_with($record->image, 'products/') ? $record->image : 'products/' . $record->image;
-                                                                })
+                                                                ->state(fn ($record) => $record->image_path)
                                                                 ->columnSpan(3)
                                                                 ->circular()
                                                                 ->size(100)
@@ -136,8 +132,7 @@ class ProductInfolist
                                                     ->label(__('messages.value_ar')),
                                                 ImageEntry::make('icon')
                                                     ->label(__('messages.icon'))
-                                                    ->disk('public')
-                                                    ->state(fn ($record) => $record->icon ? 'specifications/' . $record->icon : null)
+                                                    ->state(fn ($record) => $record->icon_path)
                                                     ->circular(),
                                             ]),
                                     ])
@@ -152,8 +147,7 @@ class ProductInfolist
                                     ->schema([
                                         ImageEntry::make('images')
                                             ->label('')
-                                            ->disk('public')
-                                            ->state(fn ($record) => $record->images ? 'products/images/' . $record->images : null)
+                                            ->state(fn ($record) => $record->images_path)
                                             ->width('100%')
                                             ->height('auto')
                                             ->extraImgAttributes(['class' => 'rounded-lg shadow-sm']),

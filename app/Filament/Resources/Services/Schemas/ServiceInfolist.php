@@ -29,11 +29,7 @@ class ServiceInfolist
                                                         ->schema([
                                                             \Filament\Infolists\Components\ImageEntry::make('image')
                                                                 ->label('')
-                                                                ->disk('public')
-                                                                ->state(function ($record) {
-                                                                    if (!$record->image) return null;
-                                                                    return str_starts_with($record->image, 'services/') ? $record->image : 'services/' . $record->image;
-                                                                })
+                                                                ->state(fn ($record) => $record->image_path)
                                                                 ->columnSpan(3)
                                                                 ->circular()
                                                                 ->size(100)
@@ -107,8 +103,7 @@ class ServiceInfolist
                                     ->schema([
                                         ImageEntry::make('images')
                                             ->label('')
-                                            ->disk('public')
-                                            ->state(fn ($record) => $record->images ? 'services/images/' . $record->images : null)
+                                            ->state(fn ($record) => $record->images_path)
                                             ->width('100%')
                                             ->height('auto')
                                             ->extraImgAttributes(['class' => 'rounded-lg shadow-sm']),

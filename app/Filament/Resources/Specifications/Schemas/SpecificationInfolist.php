@@ -21,11 +21,7 @@ class SpecificationInfolist
                             ->schema([
                                 ImageEntry::make('icon')
                                     ->label('')
-                                    ->disk('public')
-                                    ->state(function ($record) {
-                                        if (!$record->icon) return null;
-                                        return str_starts_with($record->icon, 'specifications/') ? $record->icon : 'specifications/' . $record->icon;
-                                    })
+                                    ->state(fn ($record) => $record->icon_path)
                                     ->columnSpan(3)
                                     ->circular()
                                     ->size(100)

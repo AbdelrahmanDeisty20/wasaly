@@ -22,11 +22,7 @@ class SubCategoriesTable
                 // الصورة — دائرية وأكبر
                 ImageColumn::make('image')
                     ->label('')
-                    ->disk('public')
-                    ->state(function ($record) {
-                        if (!$record->image) return null;
-                        return str_starts_with($record->image, 'subcategories/') ? $record->image : 'subcategories/' . $record->image;
-                    })
+                    ->state(fn ($record) => $record->image_path)
                     ->circular()
                     ->size(52),
 

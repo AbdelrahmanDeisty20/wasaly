@@ -57,11 +57,6 @@ class UsersTable
             ->columns([
                 \Filament\Tables\Columns\ImageColumn::make('avatar')
                     ->label(__('messages.avatar_required'))
-                    ->disk('public')
-                    ->state(function ($record) {
-                        if (!$record->avatar) return null;
-                        return str_starts_with($record->avatar, 'avatars/') ? $record->avatar : 'avatars/' . $record->avatar;
-                    })
                     ->circular(),
                 TextColumn::make('name')
                     ->label(__('messages.user'))

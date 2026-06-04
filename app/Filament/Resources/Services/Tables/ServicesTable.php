@@ -65,11 +65,7 @@ class ServicesTable
             ->columns([
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
-                    ->disk('public')
-                    ->state(function ($record) {
-                        if (!$record->image) return null;
-                        return str_starts_with($record->image, 'services/') ? $record->image : 'services/' . $record->image;
-                    })
+                    ->state(fn ($record) => $record->image_path)
                     ->circular(),
                 TextColumn::make('service_display')
                     ->label(__('messages.service_ar'))

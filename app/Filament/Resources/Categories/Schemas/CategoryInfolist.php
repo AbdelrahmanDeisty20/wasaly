@@ -23,11 +23,7 @@ class CategoryInfolist
                             ->schema([
                                 ImageEntry::make('image')
                                     ->label('')
-                                    ->disk('public')
-                                    ->state(function ($record) {
-                                        if (!$record->image) return null;
-                                        return str_starts_with($record->image, 'categories/') ? $record->image : 'categories/' . $record->image;
-                                    })
+                                    ->state(fn ($record) => $record->image_path)
                                     ->columnSpan(3)
                                     ->circular()
                                     ->size(100)

@@ -85,11 +85,7 @@ class ProductsTable
                     }),
                 ImageColumn::make('image')
                     ->label(__('messages.image'))
-                    ->disk('public')
-                    ->state(function ($record) {
-                        if (!$record->image) return null;
-                        return str_starts_with($record->image, 'products/') ? $record->image : 'products/' . $record->image;
-                    })
+                    ->state(fn ($record) => $record->image_path)
                     ->circular(),
                 TextColumn::make('price')
                     ->label(__('messages.price'))

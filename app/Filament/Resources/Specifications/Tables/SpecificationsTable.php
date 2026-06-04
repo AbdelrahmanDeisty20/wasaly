@@ -19,13 +19,7 @@ class SpecificationsTable
             ->columns([
                 ImageColumn::make('icon')
                     ->label(__('messages.icon'))
-                    ->disk('public')
-                    ->state(function ($record) {
-                        if (!$record->icon) return null;
-                        return str_starts_with($record->icon, 'specifications/')
-                            ? $record->icon
-                            : 'specifications/' . $record->icon;
-                    })
+                    ->state(fn ($record) => $record->icon_path)
                     ->circular(),
 
                 TextColumn::make('product.name_ar')
