@@ -31,6 +31,18 @@ class Specification extends Model
 
     public function getIconPathAttribute($value)
     {
-        return asset('storage/specifications/' . $this->icon);
+        if (!$this->icon) {
+            return null;
+        }
+
+        if (filter_var($this->icon, FILTER_VALIDATE_URL)) {
+            return $this->icon;
+        }
+
+        $path = $this->icon;
+        if (!str_starts_with(strtolower($path), 'specifications/')) {
+            $path = 'specifications/' . $path;
+        }
+        return asset('storage/' . $path);
     }
 }

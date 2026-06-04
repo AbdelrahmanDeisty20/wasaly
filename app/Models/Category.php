@@ -17,7 +17,19 @@ class Category extends Model
     ];
     public function getImagePathAttribute()
     {
-        return asset('storage/categories/' . $this->image);
+        if (!$this->image) {
+            return null;
+        }
+
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+
+        $path = $this->image;
+        if (!str_starts_with(strtolower($path), 'categories/')) {
+            $path = 'categories/' . $path;
+        }
+        return asset('storage/' . $path);
     }
     public function getNameAttribute($value)
     {

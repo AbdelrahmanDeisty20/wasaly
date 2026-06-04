@@ -46,7 +46,19 @@ class Product extends Model
 
     public function getImagePathAttribute()
     {
-        return asset('storage/products/' . $this->image);
+        if (!$this->image) {
+            return null;
+        }
+
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+
+        $path = $this->image;
+        if (!str_starts_with(strtolower($path), 'products/')) {
+            $path = 'products/' . $path;
+        }
+        return asset('storage/' . $path);
     }
 
     public function favorites()

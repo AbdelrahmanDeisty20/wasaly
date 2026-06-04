@@ -44,6 +44,18 @@ class SubCategory extends Model
 
     public function getImagePathAttribute()
     {
-        return asset('storage/subCategories/' . $this->image);
+        if (!$this->image) {
+            return null;
+        }
+
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+
+        $path = $this->image;
+        if (!str_starts_with(strtolower($path), 'subcategories/')) {
+            $path = 'subCategories/' . $path;
+        }
+        return asset('storage/' . $path);
     }
 }
