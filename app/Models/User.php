@@ -57,7 +57,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasMany(Favorite::class);
     }
 
-    public function provider()
+    public function providers()
     {
         return $this->hasMany(Provider::class);
     }
