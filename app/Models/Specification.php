@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Specification extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'key_ar',
         'key_en',
@@ -16,14 +17,17 @@ class Specification extends Model
         'icon',
         'product_id',
     ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
+
     public function getKeyAttribute()
     {
         return app()->getLocale() === 'ar' ? $this->key_ar : $this->key_en;
     }
+
     public function getValueAttribute()
     {
         return app()->getLocale() === 'ar' ? $this->value_ar : $this->value_en;
@@ -31,18 +35,6 @@ class Specification extends Model
 
     public function getIconPathAttribute($value)
     {
-        if (!$this->icon) {
-            return null;
-        }
-
-        if (filter_var($this->icon, FILTER_VALIDATE_URL)) {
-            return $this->icon;
-        }
-
-        $path = $this->icon;
-        if (!str_starts_with(strtolower($path), 'specifications/')) {
-            $path = 'specifications/' . $path;
-        }
-        return asset('storage/' . $path);
+        return asset('storage/specifications/' . $this->icon);
     }
 }

@@ -46,19 +46,7 @@ class Product extends Model
 
     public function getImagePathAttribute()
     {
-        if (!$this->image) {
-            return null;
-        }
-
-        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
-            return $this->image;
-        }
-
-        $path = $this->image;
-        if (!str_starts_with(strtolower($path), 'products/')) {
-            $path = 'products/' . $path;
-        }
-        return asset('storage/' . $path);
+        return asset('storage/products/' . $this->image);
     }
 
     public function favorites()
@@ -93,14 +81,17 @@ class Product extends Model
 
     public function getDiscountedPriceAttribute()
     {
-        $activeOffer = $this->offers()
+        $activeOffer = $this
+            ->offers()
             ->where('is_active', true)
             ->where(function ($query) {
-                $query->whereNull('start_date')
+                $query
+                    ->whereNull('start_date')
                     ->orWhere('start_date', '<=', now());
             })
             ->where(function ($query) {
-                $query->whereNull('end_date')
+                $query
+                    ->whereNull('end_date')
                     ->orWhere('end_date', '>=', now());
             })
             ->first();

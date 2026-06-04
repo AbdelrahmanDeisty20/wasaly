@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Brand extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name_ar',
         'name_en',
@@ -19,24 +20,14 @@ class Brand extends Model
     {
         return $this->hasMany(Product::class);
     }
+
     public function getNameAttribute()
     {
         return app()->getLocale() == 'ar' ? $this->name_ar : $this->name_en;
     }
+
     public function getImagePathAttribute()
     {
-        if (!$this->image) {
-            return null;
-        }
-
-        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
-            return $this->image;
-        }
-
-        $path = $this->image;
-        if (!str_starts_with(strtolower($path), 'brands/')) {
-            $path = 'brands/' . $path;
-        }
-        return asset('storage/' . $path);
+        return asset('storage/brands/' . $this->image);
     }
 }

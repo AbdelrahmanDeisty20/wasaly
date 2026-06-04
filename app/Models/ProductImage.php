@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductImage extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'product_id',
         'images',
@@ -18,21 +19,8 @@ class ProductImage extends Model
         return $this->belongsTo(Product::class);
     }
 
-    
     public function getImagePathAttribute()
     {
-        if (!$this->images) {
-            return null;
-        }
-
-        if (filter_var($this->images, FILTER_VALIDATE_URL)) {
-            return $this->images;
-        }
-
-        $path = $this->images;
-        if (!str_starts_with(strtolower($path), 'products/images/')) {
-            $path = 'products/images/' . $path;
-        }
-        return asset('storage/' . $path);
+        return asset('storage/products/images/' . $this->images);
     }
 }

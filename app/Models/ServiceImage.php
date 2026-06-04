@@ -18,18 +18,6 @@ class ServiceImage extends Model
 
     public function getImagesPathAttribute()
     {
-        if (!$this->images) {
-            return null;
-        }
-
-        if (filter_var($this->images, FILTER_VALIDATE_URL)) {
-            return $this->images;
-        }
-
-        $path = $this->images;
-        if (!str_starts_with(strtolower($path), 'services/')) {
-            $path = 'services/' . $path;
-        }
-        return asset('storage/' . $path);
+        return asset('storage/services/' . $this->images);
     }
 }

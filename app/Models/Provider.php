@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Order;
 use App\Models\Booking;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -69,19 +69,7 @@ class Provider extends Model
 
     public function getImagePathAttribute()
     {
-        if (!$this->cover) {
-            return null;
-        }
-
-        if (filter_var($this->cover, FILTER_VALIDATE_URL)) {
-            return $this->cover;
-        }
-
-        $path = $this->cover;
-        if (!str_starts_with(strtolower($path), 'providers/')) {
-            $path = 'providers/' . $path;
-        }
-        return asset('storage/' . $path);
+        return $this->cover ? asset('storage/providers/' . $this->cover) : null;
     }
 
     public function getAverageRatingAttribute()
@@ -101,7 +89,7 @@ class Provider extends Model
 
     public function getCompletedServicesCountAttribute()
     {
-        return $this->services()->whereHas('bookings', function($q) {
+        return $this->services()->whereHas('bookings', function ($q) {
             $q->where('status', 'completed');
         })->count();
     }
@@ -110,6 +98,7 @@ class Provider extends Model
     {
         return $this->hasMany(ServiceImage::class);
     }
+
     public function contacts()
     {
         return $this->hasMany(Contact::class);
