@@ -17,7 +17,7 @@ class AppNotificationPolicy
         return $authUser->can('ViewAny:AppNotification');
     }
 
-    public function view(AuthUser $authUser, AppNotification $model): bool
+    public function view(AuthUser $authUser, AppNotification $appNotification): bool
     {
         return $authUser->can('View:AppNotification');
     }
@@ -27,22 +27,27 @@ class AppNotificationPolicy
         return $authUser->can('Create:AppNotification');
     }
 
-    public function update(AuthUser $authUser, AppNotification $model): bool
+    public function update(AuthUser $authUser, AppNotification $appNotification): bool
     {
         return $authUser->can('Update:AppNotification');
     }
 
-    public function delete(AuthUser $authUser, AppNotification $model): bool
+    public function delete(AuthUser $authUser, AppNotification $appNotification): bool
     {
         return $authUser->can('Delete:AppNotification');
     }
 
-    public function restore(AuthUser $authUser, AppNotification $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:AppNotification');
+    }
+
+    public function restore(AuthUser $authUser, AppNotification $appNotification): bool
     {
         return $authUser->can('Restore:AppNotification');
     }
 
-    public function forceDelete(AuthUser $authUser, AppNotification $model): bool
+    public function forceDelete(AuthUser $authUser, AppNotification $appNotification): bool
     {
         return $authUser->can('ForceDelete:AppNotification');
     }
@@ -57,7 +62,7 @@ class AppNotificationPolicy
         return $authUser->can('RestoreAny:AppNotification');
     }
 
-    public function replicate(AuthUser $authUser, AppNotification $model): bool
+    public function replicate(AuthUser $authUser, AppNotification $appNotification): bool
     {
         return $authUser->can('Replicate:AppNotification');
     }

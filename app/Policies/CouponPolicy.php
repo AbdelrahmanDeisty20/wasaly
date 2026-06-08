@@ -17,7 +17,7 @@ class CouponPolicy
         return $authUser->can('ViewAny:Coupon');
     }
 
-    public function view(AuthUser $authUser, Coupon $model): bool
+    public function view(AuthUser $authUser, Coupon $coupon): bool
     {
         return $authUser->can('View:Coupon');
     }
@@ -27,22 +27,27 @@ class CouponPolicy
         return $authUser->can('Create:Coupon');
     }
 
-    public function update(AuthUser $authUser, Coupon $model): bool
+    public function update(AuthUser $authUser, Coupon $coupon): bool
     {
         return $authUser->can('Update:Coupon');
     }
 
-    public function delete(AuthUser $authUser, Coupon $model): bool
+    public function delete(AuthUser $authUser, Coupon $coupon): bool
     {
         return $authUser->can('Delete:Coupon');
     }
 
-    public function restore(AuthUser $authUser, Coupon $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Coupon');
+    }
+
+    public function restore(AuthUser $authUser, Coupon $coupon): bool
     {
         return $authUser->can('Restore:Coupon');
     }
 
-    public function forceDelete(AuthUser $authUser, Coupon $model): bool
+    public function forceDelete(AuthUser $authUser, Coupon $coupon): bool
     {
         return $authUser->can('ForceDelete:Coupon');
     }
@@ -57,7 +62,7 @@ class CouponPolicy
         return $authUser->can('RestoreAny:Coupon');
     }
 
-    public function replicate(AuthUser $authUser, Coupon $model): bool
+    public function replicate(AuthUser $authUser, Coupon $coupon): bool
     {
         return $authUser->can('Replicate:Coupon');
     }

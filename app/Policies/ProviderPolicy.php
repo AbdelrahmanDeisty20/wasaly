@@ -17,7 +17,7 @@ class ProviderPolicy
         return $authUser->can('ViewAny:Provider');
     }
 
-    public function view(AuthUser $authUser, Provider $model): bool
+    public function view(AuthUser $authUser, Provider $provider): bool
     {
         return $authUser->can('View:Provider');
     }
@@ -27,22 +27,27 @@ class ProviderPolicy
         return $authUser->can('Create:Provider');
     }
 
-    public function update(AuthUser $authUser, Provider $model): bool
+    public function update(AuthUser $authUser, Provider $provider): bool
     {
         return $authUser->can('Update:Provider');
     }
 
-    public function delete(AuthUser $authUser, Provider $model): bool
+    public function delete(AuthUser $authUser, Provider $provider): bool
     {
         return $authUser->can('Delete:Provider');
     }
 
-    public function restore(AuthUser $authUser, Provider $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Provider');
+    }
+
+    public function restore(AuthUser $authUser, Provider $provider): bool
     {
         return $authUser->can('Restore:Provider');
     }
 
-    public function forceDelete(AuthUser $authUser, Provider $model): bool
+    public function forceDelete(AuthUser $authUser, Provider $provider): bool
     {
         return $authUser->can('ForceDelete:Provider');
     }
@@ -57,7 +62,7 @@ class ProviderPolicy
         return $authUser->can('RestoreAny:Provider');
     }
 
-    public function replicate(AuthUser $authUser, Provider $model): bool
+    public function replicate(AuthUser $authUser, Provider $provider): bool
     {
         return $authUser->can('Replicate:Provider');
     }

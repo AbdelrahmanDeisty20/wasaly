@@ -15,7 +15,7 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $models = ["Address", "AppNotification", "Banner", "Brand", "Category", "Center", "Coupon", "Favorite", "Governorate", "Offer", "Page", "Review", "Service", "Setting", "Specification", "SubCategory", "OrderItem", "Cart", "CartItem", "ProductImage", "UserFcmToken", "User", "Product", "Order", "Provider"];
+        $models = ["Address", "AppNotification", "Banner", "Brand", "Category", "Center", "Coupon", "Favorite", "Governorate", "Offer", "Page", "Review", "Service", "Setting", "Specification", "SubCategory", "OrderItem", "Cart", "CartItem", "ProductImage", "UserFcmToken", "User", "Product", "Order", "Provider", "ActivityLog"];
 
         $actions = ["ViewAny", "View", "Create", "Update", "Delete", "Restore", "ForceDelete", "ForceDeleteAny", "RestoreAny", "Replicate", "Reorder"];
 

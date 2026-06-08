@@ -17,7 +17,7 @@ class OfferPolicy
         return $authUser->can('ViewAny:Offer');
     }
 
-    public function view(AuthUser $authUser, Offer $model): bool
+    public function view(AuthUser $authUser, Offer $offer): bool
     {
         return $authUser->can('View:Offer');
     }
@@ -27,22 +27,27 @@ class OfferPolicy
         return $authUser->can('Create:Offer');
     }
 
-    public function update(AuthUser $authUser, Offer $model): bool
+    public function update(AuthUser $authUser, Offer $offer): bool
     {
         return $authUser->can('Update:Offer');
     }
 
-    public function delete(AuthUser $authUser, Offer $model): bool
+    public function delete(AuthUser $authUser, Offer $offer): bool
     {
         return $authUser->can('Delete:Offer');
     }
 
-    public function restore(AuthUser $authUser, Offer $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Offer');
+    }
+
+    public function restore(AuthUser $authUser, Offer $offer): bool
     {
         return $authUser->can('Restore:Offer');
     }
 
-    public function forceDelete(AuthUser $authUser, Offer $model): bool
+    public function forceDelete(AuthUser $authUser, Offer $offer): bool
     {
         return $authUser->can('ForceDelete:Offer');
     }
@@ -57,7 +62,7 @@ class OfferPolicy
         return $authUser->can('RestoreAny:Offer');
     }
 
-    public function replicate(AuthUser $authUser, Offer $model): bool
+    public function replicate(AuthUser $authUser, Offer $offer): bool
     {
         return $authUser->can('Replicate:Offer');
     }

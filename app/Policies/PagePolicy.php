@@ -17,7 +17,7 @@ class PagePolicy
         return $authUser->can('ViewAny:Page');
     }
 
-    public function view(AuthUser $authUser, Page $model): bool
+    public function view(AuthUser $authUser, Page $page): bool
     {
         return $authUser->can('View:Page');
     }
@@ -27,22 +27,27 @@ class PagePolicy
         return $authUser->can('Create:Page');
     }
 
-    public function update(AuthUser $authUser, Page $model): bool
+    public function update(AuthUser $authUser, Page $page): bool
     {
         return $authUser->can('Update:Page');
     }
 
-    public function delete(AuthUser $authUser, Page $model): bool
+    public function delete(AuthUser $authUser, Page $page): bool
     {
         return $authUser->can('Delete:Page');
     }
 
-    public function restore(AuthUser $authUser, Page $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Page');
+    }
+
+    public function restore(AuthUser $authUser, Page $page): bool
     {
         return $authUser->can('Restore:Page');
     }
 
-    public function forceDelete(AuthUser $authUser, Page $model): bool
+    public function forceDelete(AuthUser $authUser, Page $page): bool
     {
         return $authUser->can('ForceDelete:Page');
     }
@@ -57,7 +62,7 @@ class PagePolicy
         return $authUser->can('RestoreAny:Page');
     }
 
-    public function replicate(AuthUser $authUser, Page $model): bool
+    public function replicate(AuthUser $authUser, Page $page): bool
     {
         return $authUser->can('Replicate:Page');
     }

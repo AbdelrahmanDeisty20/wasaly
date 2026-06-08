@@ -17,7 +17,7 @@ class FavoritePolicy
         return $authUser->can('ViewAny:Favorite');
     }
 
-    public function view(AuthUser $authUser, Favorite $model): bool
+    public function view(AuthUser $authUser, Favorite $favorite): bool
     {
         return $authUser->can('View:Favorite');
     }
@@ -27,22 +27,27 @@ class FavoritePolicy
         return $authUser->can('Create:Favorite');
     }
 
-    public function update(AuthUser $authUser, Favorite $model): bool
+    public function update(AuthUser $authUser, Favorite $favorite): bool
     {
         return $authUser->can('Update:Favorite');
     }
 
-    public function delete(AuthUser $authUser, Favorite $model): bool
+    public function delete(AuthUser $authUser, Favorite $favorite): bool
     {
         return $authUser->can('Delete:Favorite');
     }
 
-    public function restore(AuthUser $authUser, Favorite $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Favorite');
+    }
+
+    public function restore(AuthUser $authUser, Favorite $favorite): bool
     {
         return $authUser->can('Restore:Favorite');
     }
 
-    public function forceDelete(AuthUser $authUser, Favorite $model): bool
+    public function forceDelete(AuthUser $authUser, Favorite $favorite): bool
     {
         return $authUser->can('ForceDelete:Favorite');
     }
@@ -57,7 +62,7 @@ class FavoritePolicy
         return $authUser->can('RestoreAny:Favorite');
     }
 
-    public function replicate(AuthUser $authUser, Favorite $model): bool
+    public function replicate(AuthUser $authUser, Favorite $favorite): bool
     {
         return $authUser->can('Replicate:Favorite');
     }

@@ -17,7 +17,7 @@ class SettingPolicy
         return $authUser->can('ViewAny:Setting');
     }
 
-    public function view(AuthUser $authUser, Setting $model): bool
+    public function view(AuthUser $authUser, Setting $setting): bool
     {
         return $authUser->can('View:Setting');
     }
@@ -27,22 +27,27 @@ class SettingPolicy
         return $authUser->can('Create:Setting');
     }
 
-    public function update(AuthUser $authUser, Setting $model): bool
+    public function update(AuthUser $authUser, Setting $setting): bool
     {
         return $authUser->can('Update:Setting');
     }
 
-    public function delete(AuthUser $authUser, Setting $model): bool
+    public function delete(AuthUser $authUser, Setting $setting): bool
     {
         return $authUser->can('Delete:Setting');
     }
 
-    public function restore(AuthUser $authUser, Setting $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Setting');
+    }
+
+    public function restore(AuthUser $authUser, Setting $setting): bool
     {
         return $authUser->can('Restore:Setting');
     }
 
-    public function forceDelete(AuthUser $authUser, Setting $model): bool
+    public function forceDelete(AuthUser $authUser, Setting $setting): bool
     {
         return $authUser->can('ForceDelete:Setting');
     }
@@ -57,7 +62,7 @@ class SettingPolicy
         return $authUser->can('RestoreAny:Setting');
     }
 
-    public function replicate(AuthUser $authUser, Setting $model): bool
+    public function replicate(AuthUser $authUser, Setting $setting): bool
     {
         return $authUser->can('Replicate:Setting');
     }

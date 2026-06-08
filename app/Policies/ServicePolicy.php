@@ -17,7 +17,7 @@ class ServicePolicy
         return $authUser->can('ViewAny:Service');
     }
 
-    public function view(AuthUser $authUser, Service $model): bool
+    public function view(AuthUser $authUser, Service $service): bool
     {
         return $authUser->can('View:Service');
     }
@@ -27,22 +27,27 @@ class ServicePolicy
         return $authUser->can('Create:Service');
     }
 
-    public function update(AuthUser $authUser, Service $model): bool
+    public function update(AuthUser $authUser, Service $service): bool
     {
         return $authUser->can('Update:Service');
     }
 
-    public function delete(AuthUser $authUser, Service $model): bool
+    public function delete(AuthUser $authUser, Service $service): bool
     {
         return $authUser->can('Delete:Service');
     }
 
-    public function restore(AuthUser $authUser, Service $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Service');
+    }
+
+    public function restore(AuthUser $authUser, Service $service): bool
     {
         return $authUser->can('Restore:Service');
     }
 
-    public function forceDelete(AuthUser $authUser, Service $model): bool
+    public function forceDelete(AuthUser $authUser, Service $service): bool
     {
         return $authUser->can('ForceDelete:Service');
     }
@@ -57,7 +62,7 @@ class ServicePolicy
         return $authUser->can('RestoreAny:Service');
     }
 
-    public function replicate(AuthUser $authUser, Service $model): bool
+    public function replicate(AuthUser $authUser, Service $service): bool
     {
         return $authUser->can('Replicate:Service');
     }

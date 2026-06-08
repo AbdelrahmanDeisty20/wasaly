@@ -17,7 +17,7 @@ class ReviewPolicy
         return $authUser->can('ViewAny:Review');
     }
 
-    public function view(AuthUser $authUser, Review $model): bool
+    public function view(AuthUser $authUser, Review $review): bool
     {
         return $authUser->can('View:Review');
     }
@@ -27,22 +27,27 @@ class ReviewPolicy
         return $authUser->can('Create:Review');
     }
 
-    public function update(AuthUser $authUser, Review $model): bool
+    public function update(AuthUser $authUser, Review $review): bool
     {
         return $authUser->can('Update:Review');
     }
 
-    public function delete(AuthUser $authUser, Review $model): bool
+    public function delete(AuthUser $authUser, Review $review): bool
     {
         return $authUser->can('Delete:Review');
     }
 
-    public function restore(AuthUser $authUser, Review $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Review');
+    }
+
+    public function restore(AuthUser $authUser, Review $review): bool
     {
         return $authUser->can('Restore:Review');
     }
 
-    public function forceDelete(AuthUser $authUser, Review $model): bool
+    public function forceDelete(AuthUser $authUser, Review $review): bool
     {
         return $authUser->can('ForceDelete:Review');
     }
@@ -57,7 +62,7 @@ class ReviewPolicy
         return $authUser->can('RestoreAny:Review');
     }
 
-    public function replicate(AuthUser $authUser, Review $model): bool
+    public function replicate(AuthUser $authUser, Review $review): bool
     {
         return $authUser->can('Replicate:Review');
     }

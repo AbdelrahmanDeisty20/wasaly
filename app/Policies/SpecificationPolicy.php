@@ -17,7 +17,7 @@ class SpecificationPolicy
         return $authUser->can('ViewAny:Specification');
     }
 
-    public function view(AuthUser $authUser, Specification $model): bool
+    public function view(AuthUser $authUser, Specification $specification): bool
     {
         return $authUser->can('View:Specification');
     }
@@ -27,22 +27,27 @@ class SpecificationPolicy
         return $authUser->can('Create:Specification');
     }
 
-    public function update(AuthUser $authUser, Specification $model): bool
+    public function update(AuthUser $authUser, Specification $specification): bool
     {
         return $authUser->can('Update:Specification');
     }
 
-    public function delete(AuthUser $authUser, Specification $model): bool
+    public function delete(AuthUser $authUser, Specification $specification): bool
     {
         return $authUser->can('Delete:Specification');
     }
 
-    public function restore(AuthUser $authUser, Specification $model): bool
+    public function deleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('DeleteAny:Specification');
+    }
+
+    public function restore(AuthUser $authUser, Specification $specification): bool
     {
         return $authUser->can('Restore:Specification');
     }
 
-    public function forceDelete(AuthUser $authUser, Specification $model): bool
+    public function forceDelete(AuthUser $authUser, Specification $specification): bool
     {
         return $authUser->can('ForceDelete:Specification');
     }
@@ -57,7 +62,7 @@ class SpecificationPolicy
         return $authUser->can('RestoreAny:Specification');
     }
 
-    public function replicate(AuthUser $authUser, Specification $model): bool
+    public function replicate(AuthUser $authUser, Specification $specification): bool
     {
         return $authUser->can('Replicate:Specification');
     }
