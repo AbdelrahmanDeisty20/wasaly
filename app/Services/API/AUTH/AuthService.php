@@ -394,6 +394,13 @@ class AuthService
     public function deleteAccount()
     {
         $user = auth()->user();
+        if($user->type == 'service_provider'){
+            return [
+                'status' => false,
+                'message' => __('messages.service_provider_cannot_delete_account'),
+                'data' => [],
+            ];
+        }
         $user->delete();
         return [
             'status' => true,

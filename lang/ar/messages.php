@@ -532,4 +532,5 @@ return [
     'event_created' => 'إضافة',
     'event_updated' => 'تعديل',
     'event_deleted' => 'حذف',
+    'service_provider_cannot_delete_account' => 'لا يمكن لمقدم الخدمة حذف حسابه',
 ];

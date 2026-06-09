@@ -504,4 +504,5 @@ return [
     'event_created' => 'Created',
     'event_updated' => 'Updated',
     'event_deleted' => 'Deleted',
+    'service_provider_cannot_delete_account' => 'Service provider cannot delete account',
 ];
