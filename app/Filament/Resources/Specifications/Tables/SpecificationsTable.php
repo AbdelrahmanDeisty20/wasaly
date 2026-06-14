@@ -15,6 +15,44 @@ class SpecificationsTable
 {
     public static function configure(Table $table): Table
     {
+        $isAr = app()->getLocale() === 'ar';
+
+        $exportHeaders = $isAr ? [
+            'ID',
+            'المنتج',
+            'الخاصية (عربي)',
+            'الخاصية (إنجليزي)',
+            'القيمة (عربي)',
+            'القيمة (إنجليزي)',
+            'تاريخ الإنشاء',
+        ] : [
+            'ID',
+            'Product',
+            'Specification (Arabic)',
+            'Specification (English)',
+            'Value (Arabic)',
+            'Value (English)',
+            'Created At',
+        ];
+
+        $exportRowCallback = fn ($record) => $isAr ? [
+            $record->id,
+            $record->product?->name_ar ?? $record->product?->name_en ?? '',
+            $record->key_ar,
+            $record->key_en,
+            $record->value_ar,
+            $record->value_en,
+            $record->created_at?->toDateTimeString() ?? '',
+        ] : [
+            $record->id,
+            $record->product?->name_en ?: $record->product?->name_ar ?: '',
+            $record->key_ar,
+            $record->key_en,
+            $record->value_ar,
+            $record->value_en,
+            $record->created_at?->toDateTimeString() ?? '',
+        ];
+
         return $table
             ->columns([
                 ImageColumn::make('icon')
@@ -62,9 +100,48 @@ class SpecificationsTable
                 EditAction::make(),
                 DeleteAction::make(),
             ])
+            ->headerActions([
+                \App\Helpers\FilamentExportHelper::makeImportHeaderAction(
+                    'specifications',
+                    function (array $row) {
+                        // Find product
+                        $productName = $row['product'] ?? $row['المنتج'] ?? $row['اسم_المنتج'] ?? $row['اسم_المنتج_عربي'] ?? $row['الاسم_عربي'] ?? '';
+                        $product = null;
+                        if ($productName) {
+                            $product = \App\Models\Product::where('name_ar', $productName)->orWhere('name_en', $productName)->first();
+                        }
+
+                        if (!$product) {
+                            throw new \Exception(app()->getLocale() == 'ar' 
+                                ? "المنتج '{$productName}' غير موجود في النظام." 
+                                : "Product '{$productName}' not found.");
+                        }
+
+                        \App\Models\Specification::create([
+                            'product_id' => $product->id,
+                            'key_ar' => $row['key_ar'] ?? $row['الخاصية_عربي'] ?? $row['الاسم_عربي'] ?? $row['الخاصية'] ?? $row['الاسم'] ?? '',
+                            'key_en' => $row['key_en'] ?? $row['الخاصية_إنجليزي'] ?? $row['الاسم_إنجليزي'] ?? '',
+                            'value_ar' => $row['value_ar'] ?? $row['القيمة_عربي'] ?? $row['القيمة'] ?? '',
+                            'value_en' => $row['value_en'] ?? $row['القيمة_إنجليزي'] ?? '',
+                            'icon' => null,
+                        ]);
+                    }
+                ),
+                \App\Helpers\FilamentExportHelper::makeExportHeaderAction(
+                    'specifications',
+                    $exportHeaders,
+                    $exportRowCallback,
+                    \App\Models\Specification::class
+                )
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    \App\Helpers\FilamentExportHelper::makeExportBulkAction(
+                        'specifications',
+                        $exportHeaders,
+                        $exportRowCallback
+                    ),
                 ]),
             ]);
     }

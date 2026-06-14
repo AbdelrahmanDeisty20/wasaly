@@ -135,6 +135,13 @@ class FilamentExportHelper
                 $instructionsHtml .= '<li><strong>provider_ar:</strong> اسم مقدم الخدمة المسجل لربط الخدمة به.</li>';
                 $instructionsHtml .= '<li><strong>subcategory_ar:</strong> القسم الفرعي لربط الخدمة به.</li>';
                 $instructionsHtml .= '</ul>';
+            } elseif ($resourceName === 'specifications') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #34d399; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56; direction: ltr; text-align: left;">product, key_ar, key_en, value_ar, value_en</code>';
+                $instructionsHtml .= '<ul style="list-style-type: disc; margin: 10px 18px 0 0; padding: 0; font-size: 11px; color: #a1a1aa; line-height: 1.6;">';
+                $instructionsHtml .= '<li><strong>product:</strong> اسم المنتج (الذي يجب أن يكون مسجلاً بالفعل في النظام).</li>';
+                $instructionsHtml .= '<li><strong>key_ar / key_en:</strong> اسم الخاصية بالعربي / بالإنجليزي (مثل: اللون، الوزن).</li>';
+                $instructionsHtml .= '<li><strong>value_ar / value_en:</strong> قيمة الخاصية بالعربي / بالإنجليزي (مثل: أحمر، 1 كجم).</li>';
+                $instructionsHtml .= '</ul>';
             }
             $instructionsHtml .= '</div>';
         } else {
@@ -154,6 +161,8 @@ class FilamentExportHelper
                 $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #60a5fa; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56;">title_ar, title_en, user_email, subcategory_ar, price_from, service_description_ar</code>';
             } elseif ($resourceName === 'services') {
                 $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #60a5fa; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56;">service_ar, service_en, price, provider_ar, subcategory_ar</code>';
+            } elseif ($resourceName === 'specifications') {
+                $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #60a5fa; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56;">product, key_ar, key_en, value_ar, value_en</code>';
             }
             $instructionsHtml .= '</div>';
         }
