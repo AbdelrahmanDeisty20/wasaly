@@ -125,15 +125,22 @@ class ProvidersTable
                     'providers',
                     function (array $row) {
                         // Find or create User
+                        $userName = $row['user_name'] ?? $row['اسم_المستخدم'] ?? $row['المستخدم_المرتبط'] ?? $row['المستخدم'] ?? '';
                         $userEmail = $row['user_email'] ?? $row['البريد_الإلكتروني'] ?? '';
                         $user = null;
+                        
                         if ($userEmail) {
                             $user = \App\Models\User::where('email', $userEmail)->first();
                         }
+                        
+                        if (!$user && $userName) {
+                            $user = \App\Models\User::where('full_name', $userName)->orWhere('name', $userName)->first();
+                        }
+                        
                         if (!$user) {
                             $user = \App\Models\User::create([
-                                'full_name' => $row['user_name'] ?? $row['اسم_المستخدم'] ?? 'مقدم جديد',
-                                'name' => $row['user_name'] ?? $row['اسم_المستخدم'] ?? 'مقدم جديد',
+                                'full_name' => $userName ?: 'مقدم جديد',
+                                'name' => $userName ?: 'مقدم جديد',
                                 'email' => $userEmail ?: 'provider_' . uniqid() . '@wasaly.com',
                                 'phone' => $row['user_phone'] ?? $row['هاتف_المستخدم'] ?? '',
                                 'type' => 'service_provider',

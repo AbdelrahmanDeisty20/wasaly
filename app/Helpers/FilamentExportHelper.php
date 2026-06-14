@@ -273,9 +273,14 @@ class FilamentExportHelper
                     return;
                 }
 
-                // Clean headers
+                // Clean and normalize headers (replace spaces, brackets, parentheses, and dashes with underscores)
                 $headers = array_map(function($header) {
-                    return trim(str_replace(['"', "'"], '', $header));
+                    if ($header === null) {
+                        return '';
+                    }
+                    $header = trim(str_replace(['"', "'"], '', $header));
+                    $header = preg_replace('/[()\s\-]+/', '_', $header);
+                    return trim($header, '_');
                 }, $headers);
 
                 $successCount = 0;
@@ -284,7 +289,7 @@ class FilamentExportHelper
 
                 foreach ($rows as $row) {
                     $nonEmptyCells = array_filter($row, function($cell) {
-                        return $cell !== null && $cell !== '';
+                        return $cell !== null && trim((string)$cell) !== '';
                     });
                     if (empty($nonEmptyCells)) {
                         continue;
