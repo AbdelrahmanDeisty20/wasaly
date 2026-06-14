@@ -181,7 +181,7 @@ class FilamentExportHelper
                     ->directory('imports'),
             ])
             ->action(function (array $data) use ($importCallback) {
-                $filePath = storage_path('app/public/' . $data['file']);
+                $filePath = \Illuminate\Support\Facades\Storage::disk('public')->path($data['file']);
                 
                 if (!file_exists($filePath)) {
                     \Filament\Notifications\Notification::make()
