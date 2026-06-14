@@ -95,8 +95,8 @@ class FilamentExportHelper
      */
     public static function makeImportHeaderAction(string $resourceName, callable $importCallback): Action
     {
-        $labelAr = 'استيراد من إكسيل';
-        $labelEn = 'Import from Excel';
+        $labelAr = 'استيراد من إكسيل / CSV';
+        $labelEn = 'Import from Excel / CSV';
         $label = app()->getLocale() == 'ar' ? $labelAr : $labelEn;
 
         $instructionsHtml = '';
@@ -104,8 +104,8 @@ class FilamentExportHelper
             $instructionsHtml .= '<div style="background-color: #1e1e2e; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981; margin-bottom: 12px; font-family: sans-serif;">';
             $instructionsHtml .= '<h4 style="font-weight: bold; color: #10b981; margin: 0 0 8px 0; font-size: 14px; display: flex; align-items: center; gap: 6px;">';
             $instructionsHtml .= '<svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
-            $instructionsHtml .= 'تعليمات شيت الإكسيل للاستيراد:</h4>';
-            $instructionsHtml .= '<p style="font-size: 12px; color: #d1d1d6; margin: 0 0 10px 0; line-height: 1.5;">يرجى رفع ملف بصيغة <strong>CSV</strong> أو <strong>Excel</strong> يحتوي على أسماء الأعمدة التالية تماماً (في الصف الأول):</p>';
+            $instructionsHtml .= 'تعليمات شيت الإكسيل / CSV للاستيراد:</h4>';
+            $instructionsHtml .= '<p style="font-size: 12px; color: #d1d1d6; margin: 0 0 10px 0; line-height: 1.5;">يرجى رفع ملف بصيغة <strong>Excel (.xlsx / .xls)</strong> أو <strong>CSV</strong> يحتوي على أسماء الأعمدة التالية تماماً (في الصف الأول):</p>';
             
             if ($resourceName === 'products') {
                 $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #34d399; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56; direction: ltr; text-align: left;">name_ar, name_en, price, stock, description_ar, description_en, subcategory_ar, brand_ar, provider_ar</code>';
@@ -142,7 +142,7 @@ class FilamentExportHelper
             $instructionsHtml .= '<h4 style="font-weight: bold; color: #3b82f6; margin: 0 0 8px 0; font-size: 14px; display: flex; align-items: center; gap: 6px;">';
             $instructionsHtml .= '<svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
             $instructionsHtml .= 'Excel / CSV Import Instructions:</h4>';
-            $instructionsHtml .= '<p style="font-size: 12px; color: #d1d1d6; margin: 0 0 10px 0; line-height: 1.5;">Please upload a <strong>CSV</strong> or <strong>Excel</strong> file with exactly these header names in the first row:</p>';
+            $instructionsHtml .= '<p style="font-size: 12px; color: #d1d1d6; margin: 0 0 10px 0; line-height: 1.5;">Please upload an <strong>Excel (.xlsx / .xls)</strong> or <strong>CSV</strong> file with exactly these header names in the first row:</p>';
             
             if ($resourceName === 'products') {
                 $instructionsHtml .= '<code style="background: #2d2d3f; padding: 6px 10px; border-radius: 6px; color: #60a5fa; font-size: 11px; display: block; word-break: break-all; font-family: monospace; border: 1px solid #3f3f56;">name_ar, name_en, price, stock, description_ar, description_en, subcategory_ar, brand_ar, provider_ar</code>';
@@ -168,7 +168,14 @@ class FilamentExportHelper
                     ->content(new \Illuminate\Support\HtmlString($instructionsHtml)),
 
                 FileUpload::make('file')
-                    ->label(app()->getLocale() == 'ar' ? 'ملف CSV / Excel (ترميز عربي UTF-8)' : 'CSV / Excel File')
+                    ->label(app()->getLocale() == 'ar' ? 'ملف Excel / CSV' : 'Excel / CSV File')
+                    ->acceptedFileTypes([
+                        'text/csv',
+                        'text/plain',
+                        'application/csv',
+                        'application/vnd.ms-excel',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    ])
                     ->required()
                     ->disk('public')
                     ->directory('imports'),
@@ -185,29 +192,84 @@ class FilamentExportHelper
                     return;
                 }
 
-                $handle = fopen($filePath, 'r');
-                
-                // Skip BOM if present
-                $bom = fread($handle, 3);
-                if ($bom !== "\xEF\xBB\xBF") {
-                    rewind($handle);
+                try {
+                    $inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($filePath);
+                } catch (\Exception $e) {
+                    $inputFileType = null;
                 }
 
-                $headers = fgetcsv($handle, 0, ',');
-                if (!$headers) {
-                    rewind($handle);
-                    if ($bom === "\xEF\xBB\xBF") {
-                        fread($handle, 3);
+                if ($inputFileType === 'Csv') {
+                    try {
+                        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+                        
+                        // Detect encoding
+                        $fileContent = file_get_contents($filePath);
+                        if (!mb_check_encoding($fileContent, 'UTF-8')) {
+                            $reader->setInputEncoding('CP1256');
+                        } else {
+                            $reader->setInputEncoding('UTF-8');
+                        }
+
+                        // Detect delimiter
+                        $delimiter = ',';
+                        $firstLine = fgets(fopen($filePath, 'r'));
+                        if ($firstLine !== false) {
+                            $numCommas = substr_count($firstLine, ',');
+                            $numSemicolons = substr_count($firstLine, ';');
+                            $numTabs = substr_count($firstLine, "\t");
+                            if ($numSemicolons > $numCommas && $numSemicolons > $numTabs) {
+                                $delimiter = ';';
+                            } elseif ($numTabs > $numCommas && $numSemicolons === $numTabs) {
+                                $delimiter = "\t";
+                            }
+                        }
+                        $reader->setDelimiter($delimiter);
+                        $spreadsheet = $reader->load($filePath);
+                    } catch (\Exception $e) {
+                        \Log::error('CSV Load Error: ' . $e->getMessage());
+                        \Filament\Notifications\Notification::make()
+                            ->title(app()->getLocale() == 'ar' ? 'خطأ في قراءة ملف CSV' : 'Error Reading CSV')
+                            ->danger()
+                            ->send();
+                        @unlink($filePath);
+                        return;
                     }
-                    $headers = fgetcsv($handle, 0, ';');
+                } else {
+                    try {
+                        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
+                    } catch (\Exception $e) {
+                        \Log::error('Excel Load Error: ' . $e->getMessage());
+                        \Filament\Notifications\Notification::make()
+                            ->title(app()->getLocale() == 'ar' ? 'تنسيق ملف غير صالح' : 'Invalid File Format')
+                            ->body(app()->getLocale() == 'ar' 
+                                ? 'فشل قراءة الملف كـ Excel أو CSV. يرجى التأكد من سلامة وصيغة الملف.' 
+                                : 'Failed to read file as Excel or CSV. Please ensure the file is valid.')
+                            ->danger()
+                            ->send();
+                        @unlink($filePath);
+                        return;
+                    }
                 }
 
-                if (!$headers) {
+                $worksheet = $spreadsheet->getActiveSheet();
+                $rows = $worksheet->toArray(null, true, true, false);
+
+                if (empty($rows)) {
                     \Filament\Notifications\Notification::make()
                         ->title(app()->getLocale() == 'ar' ? 'ملف فارغ أو غير صالح' : 'Empty or Invalid File')
                         ->danger()
                         ->send();
-                    fclose($handle);
+                    @unlink($filePath);
+                    return;
+                }
+
+                $headers = array_shift($rows);
+                if (empty($headers)) {
+                    \Filament\Notifications\Notification::make()
+                        ->title(app()->getLocale() == 'ar' ? 'ملف فارغ أو غير صالح' : 'Empty or Invalid File')
+                        ->danger()
+                        ->send();
+                    @unlink($filePath);
                     return;
                 }
 
@@ -220,9 +282,11 @@ class FilamentExportHelper
                 $errorCount = 0;
                 $rowIndex = 1;
 
-                while (($row = fgetcsv($handle, 0, ',')) !== false || ($row = fgetcsv($handle, 0, ';')) !== false) {
-                    // Skip empty rows
-                    if (empty($row) || (count($row) === 1 && $row[0] === null)) {
+                foreach ($rows as $row) {
+                    $nonEmptyCells = array_filter($row, function($cell) {
+                        return $cell !== null && $cell !== '';
+                    });
+                    if (empty($nonEmptyCells)) {
                         continue;
                     }
 
@@ -241,7 +305,6 @@ class FilamentExportHelper
                     $rowIndex++;
                 }
 
-                fclose($handle);
                 @unlink($filePath);
 
                 $successTitle = app()->getLocale() == 'ar' ? 'اكتمل الاستيراد' : 'Import Completed';
