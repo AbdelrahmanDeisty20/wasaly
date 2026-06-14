@@ -187,7 +187,7 @@ class ProductsTable
                         }
 
                         // Find provider (optional)
-                        $providerName = $row['provider_ar'] ?? $row['provider'] ?? $row['مقدم_الخدمة'] ?? '';
+                        $providerName = $row['provider_ar'] ?? $row['provider'] ?? $row['مقدم_الخدمة'] ?? $row['صاحب_المنتج'] ?? $row['صاحب'] ?? '';
                         $providerId = null;
                         if ($providerName) {
                             $provider = \App\Models\Provider::where('title_ar', $providerName)->orWhere('title_en', $providerName)->first();
@@ -196,9 +196,12 @@ class ProductsTable
                             }
                         }
 
+                        $isFeaturedValue = $row['is_featured'] ?? $row['مميز'] ?? $row['مميز؟'] ?? '';
+                        $isFeatured = filter_var($isFeaturedValue, FILTER_VALIDATE_BOOLEAN) || $isFeaturedValue === 'نعم' || $isFeaturedValue === 'yes';
+
                         \App\Models\Product::create([
-                            'name_ar' => $row['name_ar'] ?? $row['الاسم_عربي'] ?? '',
-                            'name_en' => $row['name_en'] ?? $row['الاسم_إنجليزي'] ?? '',
+                            'name_ar' => $row['name_ar'] ?? $row['الاسم_عربي'] ?? $row['اسم_المنتج_عربي'] ?? $row['اسم_المنتج'] ?? '',
+                            'name_en' => $row['name_en'] ?? $row['الاسم_إنجليزي'] ?? $row['اسم_المنتج_إنجليزي'] ?? '',
                             'price' => floatval($row['price'] ?? $row['السعر'] ?? 0),
                             'stock' => intval($row['stock'] ?? $row['المخزون'] ?? 1),
                             'description_ar' => $row['description_ar'] ?? $row['الوصف_عربي'] ?? '',
@@ -207,7 +210,7 @@ class ProductsTable
                             'brand_id' => $brandId,
                             'provider_id' => $providerId,
                             'status' => $row['status'] ?? $row['الحالة'] ?? 'active',
-                            'is_featured' => filter_var($row['is_featured'] ?? $row['مميز'] ?? false, FILTER_VALIDATE_BOOLEAN),
+                            'is_featured' => $isFeatured,
                             'image' => 'default.png',
                         ]);
                     }

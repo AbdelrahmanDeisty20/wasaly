@@ -273,13 +273,13 @@ class FilamentExportHelper
                     return;
                 }
 
-                // Clean and normalize headers (replace spaces, brackets, parentheses, and dashes with underscores)
+                // Clean and normalize headers (replace spaces, brackets, parentheses, dashes, and question marks with underscores)
                 $headers = array_map(function($header) {
                     if ($header === null) {
                         return '';
                     }
                     $header = trim(str_replace(['"', "'"], '', $header));
-                    $header = preg_replace('/[()\s\-]+/', '_', $header);
+                    $header = preg_replace('/[()\s\-\?؟]+/', '_', $header);
                     return trim($header, '_');
                 }, $headers);
 
