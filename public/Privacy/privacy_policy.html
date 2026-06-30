@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wassaly - Privacy Policy | سياسة الخصوصية</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #093773;
+            --primary-light: #e6eef8;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Arabic language styling override */
+        [dir="rtl"] {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header / Logo Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 20px;
+        }
+
+        .logo-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title h1 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .logo-title .subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Language Toggle Button */
+        .lang-switch {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lang-switch:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Meta / Last Updated badge */
+        .meta-badge {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 32px;
+            transition: var(--transition);
+        }
+
+        .section h2 {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section p {
+            color: var(--text-dark);
+            opacity: 0.9;
+            font-size: 15px;
+            text-align: justify;
+        }
+
+        /* Footer links */
+        .footer {
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+            padding-top: 30px;
+            text-align: center;
+        }
+
+        .footer-note {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .links-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .links-group a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .links-group a:hover {
+            text-decoration: underline;
+        }
+
+        /* Language content toggles */
+        .lang-en, .lang-ar {
+            display: none;
+        }
+
+        /* Show active language content */
+        html[lang="en"] .lang-en {
+            display: block;
+        }
+
+        html[lang="ar"] .lang-ar {
+            display: block;
+        }
+
+        /* Print styling */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+            .lang-switch {
+                display: none;
+            }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 640px) {
+            body {
+                padding: 20px 10px;
+            }
+            .container {
+                padding: 24px;
+                border-radius: 12px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .lang-switch {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-title">
+            <h1 class="lang-en">Wassaly</h1>
+            <h1 class="lang-ar">وصّلي</h1>
+            <span class="subtitle lang-en">Privacy Policy</span>
+            <span class="subtitle lang-ar">سياسة الخصوصية</span>
+        </div>
+        <button class="lang-switch" onclick="toggleLanguage()">
+            <span class="lang-en">العربية</span>
+            <span class="lang-ar">English</span>
+        </button>
+    </div>
+
+    <!-- Last Updated Badge -->
+    <div class="meta-badge">
+        <span class="lang-en">Last Updated: December 30, 2024</span>
+        <span class="lang-ar">آخر تحديث: 30 ديسمبر 2024</span>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Introduction -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">1. Introduction</span>
+                <span class="lang-ar">1. مقدمة</span>
+            </h2>
+            <p class="lang-en">Wassaly ('we', 'our', or 'us') is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services.</p>
+            <p class="lang-ar">تلتزم وصلي ('نحن' أو 'نا') بحماية خصوصيتك. توضح سياسة الخصوصية هذه كيفية جمع واستخدام والكشف عن وحماية معلوماتك عند استخدام تطبيق الهاتف المحمول الخاص بنا والخدمات ذات الصلة.</p>
+        </div>
+
+        <!-- Information We Collect -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">2. Information We Collect</span>
+                <span class="lang-ar">2. المعلومات التي نجمعها</span>
+            </h2>
+            <p class="lang-en">We collect information you provide directly to us, such as when you create an account, update your profile, use our services, or contact us for support. This includes: name, email address, phone number, profile information, payment information, location data, and usage data.</p>
+            <p class="lang-ar">نجمع المعلومات التي تقدمها لنا مباشرة، مثل عند إنشاء حساب، أو تحديث ملفك الشخصي، أو استخدام خدماتنا، أو الاتصال بنا للحصول على الدعم. يتضمن ذلك: الاسم، وعنوان البريد الإلكتروني، ورقم الهاتف، ومعلومات الملف الشخصي، ومعلومات الدفع، وبيانات الموقع، وبيانات الاستخدام.</p>
+        </div>
+
+        <!-- How We Use Your Information -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">3. How We Use Your Information</span>
+                <span class="lang-ar">3. كيف نستخدم معلوماتك</span>
+            </h2>
+            <p class="lang-en">We use the information we collect to: provide, maintain, and improve our services; process transactions and send related information; send technical notices and support messages; communicate with you about products, services, and promotional offers; and monitor and analyze trends and usage.</p>
+            <p class="lang-ar">نستخدم المعلومات التي نجمعها من أجل: تقديم خدماتنا وصيانتها وتحسينها؛ ومعالجة المعاملات وإرسال المعلومات ذات الصلة؛ وإرسال الإشعارات الفنية ورسائل الدعم؛ والتواصل معك بشأن المنتجات والخدمات والعروض الترويجية؛ ومراقبة وتحليل الاتجاهات والاستخدام.</p>
+        </div>
+
+        <!-- Information Sharing -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">4. Information Sharing</span>
+                <span class="lang-ar">4. مشاركة المعلومات</span>
+            </h2>
+            <p class="lang-en">We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy. We may share information with: service providers who assist in operating our app, payment processors, and when required by law or to protect our rights.</p>
+            <p class="lang-ar">نحن لا نبيع معلوماتك الشخصية أو نتاجر بها أو ننقلها إلى أطراف ثالثة دون موافقتك، إلا كما هو موضح في هذه السياسة. قد نشارك المعلومات مع: مقدمي الخدمات الذين يساعدون في تشغيل تطبيقنا، ومعالجي الدفع، وعندما يقتضي القانون أو لحماية حقوقنا.</p>
+        </div>
+
+        <!-- Data Security -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">5. Data Security</span>
+                <span class="lang-ar">5. أمان البيانات</span>
+            </h2>
+            <p class="lang-en">We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure.</p>
+            <p class="lang-ar">نحن ننفذ تدابير فنية وتنظيمية مناسبة لحماية معلوماتك الشخصية ضد الوصول غير الصحرح به أو التغيير أو الإفصاح أو التدمير. ومع ذلك، لا توجد طريقة نقل عبر الإنترنت آمنة بنسبة 100%.</p>
+        </div>
+
+        <!-- Your Rights -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">6. Your Rights</span>
+                <span class="lang-ar">6. حقوقك</span>
+            </h2>
+            <p class="lang-en">You have the right to: access and update your personal information, request deletion of your account and data, opt-out of marketing communications, and request a copy of your data. To exercise these rights, contact us using the information below.</p>
+            <p class="lang-ar">لديك الحق في: الوصول إلى معلوماتك الشخصية وتحديثها، وطلب حذف حسابك وبياناتك، وإلغاء الاشتراك في الاتصالات التسويقية، وطلب نسخة من بياناتك. لممارسة هذه الحقوق، اتصل بنا باستخدام المعلومات أدناه.</p>
+        </div>
+
+        <!-- Third-Party Services -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">7. Third-Party Services</span>
+                <span class="lang-ar">7. خدمات الطرف الثالث</span>
+            </h2>
+            <p class="lang-en">Our app may contain links to third-party websites and services. We are not responsible for the privacy practices of these third parties. We encourage you to review their privacy policies.</p>
+            <p class="lang-ar">قد يحتوي تطبيقنا على روابط لمواقع وخدمات طرف ثالث. نحن لسنا مسؤولين عن ممارسات الخصوصية لهذه الأطراف الثالثة. نشجعك على مراجعة سياسات الخصوصية الخاصة بهم.</p>
+        </div>
+
+        <!-- Children's Privacy -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">8. Children's Privacy</span>
+                <span class="lang-ar">8. خصوصية الأطفال</span>
+            </h2>
+            <p class="lang-en">Our services are not intended for children under the age of 13. We do not knowingly collect personal information from children under the age of 13. If you believe we have collected such information, please contact us immediately.</p>
+            <p class="lang-ar">خدماتنا ليست مخصصة للأطفال دون سن 13 عامًا. نحن لا نجمع معلومات شخصية من الأطفال دون سن 13 عامًا عن علم. إذا كنت تعتقد أننا جمعنا مثل هذه المعلومات، فيرجى الاتصال بنا على الفور.</p>
+        </div>
+
+        <!-- International Transfers -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">9. International Transfers</span>
+                <span class="lang-ar">9. نقل البيانات دولياً</span>
+            </h2>
+            <p class="lang-en">Your information may be transferred to, and processed in, countries other than your own. We ensure appropriate safeguards are in place to protect your data in accordance with applicable data protection laws.</p>
+            <p class="lang-ar">قد يتم نقل معلوماتك ومعالجتها في بلدان أخرى غير بلدك. نحن نضمن وجود ضمانات مناسبة لحماية بياناتك وفقًا لقوانين حماية البيانات المعمول بها.</p>
+        </div>
+
+        <!-- Changes to this Policy -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">10. Changes to this Policy</span>
+                <span class="lang-ar">10. التغييرات على هذه السياسة</span>
+            </h2>
+            <p class="lang-en">We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy in the app and updating the 'Last Updated' date. Your continued use of the app after such changes constitutes your acceptance of them.</p>
+            <p class="lang-ar">قد نقوم بتحديث سياسة الخصوصية هذه من وقت لآخر. سنخطرك بأي تغييرات عن طريق نشر السياسة الجديدة في التطبيق وتحديث تاريخ 'آخر تحديث'. استمرار استخدامك للتطبيق بعد هذه التغييرات يشكل قبولاً لها.</p>
+        </div>
+
+        <!-- Contact Us -->
+        <div class="section">
+            <h2>
+                <span class="lang-en">11. Contact Us</span>
+                <span class="lang-ar">11. اتصل بنا</span>
+            </h2>
+            <p class="lang-en">If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:privacy@wassaly.com" style="color: var(--primary); font-weight: 600;">privacy@wassaly.com</a> or through the in-app support center.</p>
+            <p class="lang-ar">إذا كان لديك أي أسئلة حول سياسة الخصوصية هذه، فيرجى الاتصال بنا على: <a href="mailto:privacy@wassaly.com" style="color: var(--primary); font-weight: 600;">privacy@wassaly.com</a> أو من خلال مركز الدعم داخل التطبيق.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p class="footer-note lang-en">By using Wassaly, you acknowledge that you have read and understood this Privacy Policy.</p>
+        <p class="footer-note lang-ar">باستخدام وصلي، فإنك تقر بأنك قرأت وفهمت سياسة الخصوصية هذه.</p>
+        
+        <div class="links-group">
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+                <span class="lang-en">Google Privacy Policy</span>
+                <span class="lang-ar">سياسة خصوصية جوجل</span>
+            </a>
+            <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">
+                <span class="lang-en">Google Terms of Service</span>
+                <span class="lang-ar">شروط خدمة جوجل</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleLanguage() {
+        const html = document.documentElement;
+        const currentLang = html.getAttribute('lang');
+        
+        if (currentLang === 'en') {
+            html.setAttribute('lang', 'ar');
+            html.setAttribute('dir', 'rtl');
+        } else {
+            html.setAttribute('lang', 'en');
+            html.setAttribute('dir', 'ltr');
+        }
+    }
+</script>
+</body>
+</html>
