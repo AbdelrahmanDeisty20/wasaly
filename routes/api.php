@@ -61,7 +61,7 @@ Route::group(['middleware' => SetLang::class], function () {
     Route::get('providers/get/{id}', [ProviderController::class, 'getProviderById']);
 
     // Settings Routes
-    Route::get('settings', [SettingController::class, 'getSettings']);
+    Route::get('settings', [SettingController::class, 'getSettings'])->middleware('throttle:60,1');
     // Governorates Routes
     Route::get('governorates', [GovernorateController::class, 'getAllGovernorates']);
     // Centers Routes

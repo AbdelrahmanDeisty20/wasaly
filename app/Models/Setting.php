@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Setting extends Model
 {
@@ -14,6 +15,19 @@ class Setting extends Model
         'value_ar',
         'value_en',
     ];
+
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            Cache::forget('app_settings_ar');
+            Cache::forget('app_settings_en');
+        });
+
+        static::deleted(function () {
+            Cache::forget('app_settings_ar');
+            Cache::forget('app_settings_en');
+        });
+    }
 
     public function getKeyAttribute()
     {

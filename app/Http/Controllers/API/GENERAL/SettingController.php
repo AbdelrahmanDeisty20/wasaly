@@ -18,9 +18,9 @@ class SettingController extends Controller
     public function getSettings()
     {
         $result = $this->settingService->getSettings();
-        if(!$result){
-            return $this->error( $result['message'],404);
+        if (!$result['status']) {
+            return $this->error($result['message'], 404);
         }
-        return $this->success( $result['data'], $result['message'],200);
+        return $this->success($result['data'], $result['message'], 200);
     }
 }

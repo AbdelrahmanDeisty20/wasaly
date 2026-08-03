@@ -2,9 +2,8 @@
 
 use Illuminate\Support\Facades\Schedule;
 
-// هنخلي الـ Worker يشتغل لمدة 55 ثانية عشان يغطي الدقيقة كلها
-// ده هيخلي الإرسال أسرع بكتير لأن الـ Worker هيفضل مستني أي جوب جديد
-Schedule::command('queue:work --stop-when-empty --max-time=55')
+// تنفيذ الـ Queue Worker للمهام المعلقة وإنهاؤه فوراً عند الفراغ لمنع استهلاك السيرفر
+Schedule::command('queue:work --stop-when-empty')
     ->everyMinute()
     ->withoutOverlapping();
 
