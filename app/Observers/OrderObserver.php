@@ -192,6 +192,7 @@ class OrderObserver
 
                 // 1. Save standard Laravel database notification via Filament with a View Details action button
                 \Filament\Notifications\Notification::make()
+                    ->id((string) \Illuminate\Support\Str::uuid())
                     ->title($pushTitle)
                     ->body($pushBody)
                     ->icon('heroicon-o-bell')
