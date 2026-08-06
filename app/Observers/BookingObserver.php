@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\Booking;
 use App\Models\AppNotification;
+use App\Models\Booking;
 use App\Services\API\General\NotificationService;
 
 class BookingObserver
@@ -15,9 +15,8 @@ class BookingObserver
      */
     public $afterCommit = true;
 
-    /**
-     * Handle the Booking "created" event.
-     */
+    /** Handle the Booking "created" event. */
+
     /**
      * Handle the Booking "created" event.
      */
@@ -39,11 +38,11 @@ class BookingObserver
                 // 1. Notify Provider if available
                 if ($providerUser) {
                     $providerLocale = $providerUser->locale ?? 'ar';
-                    
+
                     // Localized notification details for both languages
                     $titleAr = 'حجز جديد وارد! 📅';
                     $titleEn = 'New Booking Received! 📅';
-                    
+
                     $bodyAr = "لقد تلقيت حجزاً جديداً لخدمتك «{$serviceNameAr}» من قبل العميل «{$customerName}». تفقد تفاصيل الحجز الآن.";
                     $bodyEn = "You have received a new booking for your service «{$serviceNameEn}» by customer «{$customerName}». Check booking details now.";
 
@@ -80,22 +79,18 @@ class BookingObserver
 
                 $adminTitleAr = 'حجز جديد في النظام! 📅';
                 $adminTitleEn = 'New Booking in the System! 📅';
-                
+
                 $adminBodyAr = "تم حجز الخدمة «{$serviceNameAr}» المقدمة من «{$providerNameAr}» بواسطة العميل «{$customerName}».";
                 $adminBodyEn = "The service «{$serviceNameEn}» provided by «{$providerNameEn}» has been booked by customer «{$customerName}».";
 
-                try {
-                    $actionUrl = \App\Filament\Resources\Bookings\BookingResource::getUrl('view', ['record' => $booking->id]);
-                } catch (\Throwable $e) {
-                    $actionUrl = url("/admin/bookings/{$booking->id}");
-                }
+                $actionUrl = \App\Filament\Resources\Bookings\BookingResource::getUrl('view', ['record' => $booking->id]);
 
                 $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, $actionUrl, 'system_new_booking', [
                     'booking_id' => (string) $booking->id,
                 ]);
             }
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('BookingObserver created event error: ' . $e->getMessage());
+            // Fail silently
         }
     }
 
@@ -117,7 +112,7 @@ class BookingObserver
             $status = $booking->status;
             $oldStatus = $booking->tempOriginalStatus ?? $booking->getOriginal('status');
             $oldSuggestedTimeId = $booking->tempOriginalSuggestedTimeId ?? $booking->getOriginal('suggested_time_id');
-            
+
             $statusChanged = $oldStatus !== $status;
             $rescheduleTimeChanged = ($oldSuggestedTimeId !== $booking->suggested_time_id) && $booking->suggested_time_id;
 
@@ -138,13 +133,13 @@ class BookingObserver
                 if ($status === 'accepted' && $statusChanged && $customer) {
                     $serviceNameAr = $service->service ?? $service->service_ar;
                     $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
-                    
+
                     $providerNameAr = $provider->title_ar ?? $providerUser?->name;
                     $providerNameEn = $provider->title_en ?? $providerUser?->name ?? $providerNameAr;
 
                     $titleAr = 'تم قبول حجزك! 🎉';
                     $titleEn = 'Booking Accepted! 🎉';
-                    
+
                     $bodyAr = "يسعدنا إبلاغك بأن مقدم الخدمة «{$providerNameAr}» قد قبل حجزك للخدمة «{$serviceNameAr}».";
                     $bodyEn = "We are happy to inform you that the provider «{$providerNameEn}» has accepted your booking for «{$serviceNameEn}».";
 
@@ -160,7 +155,7 @@ class BookingObserver
 
                         $titleAr = 'تم إلغاء الحجز 😔';
                         $titleEn = 'Booking Cancelled 😔';
-                        
+
                         $bodyAr = "نعتذر منك، لقد تم إلغاء حجزك للخدمة «{$serviceNameAr}».";
                         $bodyEn = "We are sorry, your booking for «{$serviceNameEn}» has been cancelled.";
 
@@ -175,7 +170,7 @@ class BookingObserver
 
                         $titleAr = 'تم إلغاء الحجز 😔';
                         $titleEn = 'Booking Cancelled 😔';
-                        
+
                         $bodyAr = "نود إعلامك بأنه قد تم إلغاء حجز الخدمة «{$serviceNameAr}» من قبل العميل «{$customerName}».";
                         $bodyEn = "We want to inform you that the booking for «{$serviceNameEn}» has been cancelled by customer «{$customerName}».";
 
@@ -187,13 +182,13 @@ class BookingObserver
                 if ($status === 'reschedule_by_provider' && $customer) {
                     $serviceNameAr = $service->service ?? $service->service_ar;
                     $serviceNameEn = $service->service_en ?? $service->service ?? $serviceNameAr;
-                    
+
                     $providerNameAr = $provider->title_ar ?? $providerUser?->name;
                     $providerNameEn = $provider->title_en ?? $providerUser?->name ?? $providerNameAr;
 
                     $titleAr = 'اقتراح موعد جديد للحجز ⏰';
                     $titleEn = 'New Booking Reschedule Proposal ⏰';
-                    
+
                     $bodyAr = "اقترح مقدم الخدمة «{$providerNameAr}» موعداً جديداً لحجزك للخدمة «{$serviceNameAr}».";
                     $bodyEn = "The provider «{$providerNameEn}» has suggested a new time for your booking of «{$serviceNameEn}».";
 
@@ -208,7 +203,7 @@ class BookingObserver
 
                     $titleAr = 'طلب إعادة جدولة الحجز ⏰';
                     $titleEn = 'Reschedule Request Received ⏰';
-                    
+
                     $bodyAr = "طلب العميل «{$customerName}» موعداً جديداً لحجزه للخدمة «{$serviceNameAr}».";
                     $bodyEn = "The customer «{$customerName}» has requested a new time for their booking of «{$serviceNameEn}».";
 
@@ -302,7 +297,7 @@ class BookingObserver
                 }
             }
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('BookingObserver notifyAdmins error: ' . $e->getMessage());
+            // Fail silently
         }
     }
 }

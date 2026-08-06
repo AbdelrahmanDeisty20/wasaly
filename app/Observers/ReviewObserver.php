@@ -16,7 +16,7 @@ class ReviewObserver
     {
         try {
             $review->load(['user', 'product', 'service', 'provider.user']);
-            
+
             $customerName = $review->user?->name ?? 'عميل';
             $rating = $review->rating;
             $comment = $review->comment ? "«{$review->comment}»" : 'بدون تعليق';
@@ -24,14 +24,14 @@ class ReviewObserver
 
             $titleAr = 'تقييم جديد! ⭐';
             $titleEn = 'New Review! ⭐';
-            
+
             $bodyAr = '';
             $bodyEn = '';
 
             if ($review->product_id && $review->product) {
                 $productName = $review->product->name_ar;
                 $productNameEn = $review->product->name_en ?? $productName;
-                
+
                 $titleAr = 'تقييم جديد لمنتج! ⭐';
                 $titleEn = 'New Product Review! ⭐';
                 $bodyAr = "قام العميل «{$customerName}» بتقييم المنتج «{$productName}» بـ {$rating} نجوم. التعليق: {$comment}";
@@ -60,17 +60,13 @@ class ReviewObserver
                 $bodyEn = "Customer «{$customerName}» rated the application with {$rating} stars. Comment: {$commentEn}";
             }
 
-            try {
-                $actionUrl = \App\Filament\Resources\Reviews\ReviewResource::getUrl('view', ['record' => $review->id]);
-            } catch (\Throwable $e) {
-                $actionUrl = url("/admin/reviews/{$review->id}");
-            }
+            $actionUrl = \App\Filament\Resources\Reviews\ReviewResource::getUrl('view', ['record' => $review->id]);
 
             $this->notifyAdmins($titleAr, $titleEn, $bodyAr, $bodyEn, $actionUrl, 'new_review', [
                 'review_id' => (string) $review->id,
             ]);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('ReviewObserver created event error: ' . $e->getMessage());
+            // Fail silently
         }
     }
 

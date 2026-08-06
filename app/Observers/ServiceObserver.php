@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
+use App\Models\AppNotification;
 use App\Models\Service;
 use App\Models\User;
-use App\Models\AppNotification;
 use App\Models\UserFcmToken;
 use App\Services\API\General\FirebaseNotificationService;
 
@@ -38,17 +38,13 @@ class ServiceObserver
             $bodyAr = "قام مقدم الخدمة «{$providerNameAr}» بإضافة خدمة جديدة باسم «{$serviceNameAr}».";
             $bodyEn = "The service provider «{$providerNameEn}» has added a new service named «{$serviceNameEn}».";
 
-            try {
-                $actionUrl = \App\Filament\Resources\Services\ServiceResource::getUrl('view', ['record' => $service->id]);
-            } catch (\Throwable $e) {
-                $actionUrl = url("/admin/services/{$service->id}");
-            }
+            $actionUrl = \App\Filament\Resources\Services\ServiceResource::getUrl('view', ['record' => $service->id]);
 
             $this->notifyAdmins($titleAr, $titleEn, $bodyAr, $bodyEn, $actionUrl, 'service_created', [
                 'service_id' => (string) $service->id
             ]);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('ServiceObserver created event error: ' . $e->getMessage());
+            // Fail silently
         }
     }
 

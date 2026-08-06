@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
+use App\Models\AppNotification;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\AppNotification;
 use App\Models\UserFcmToken;
 use App\Services\API\General\FirebaseNotificationService;
 
@@ -38,17 +38,13 @@ class ProductObserver
             $bodyAr = "قام مقدم الخدمة «{$providerNameAr}» بإضافة منتج جديد باسم «{$productNameAr}».";
             $bodyEn = "The service provider «{$providerNameEn}» has added a new product named «{$productNameEn}».";
 
-            try {
-                $actionUrl = \App\Filament\Resources\Products\ProductResource::getUrl('view', ['record' => $product->id]);
-            } catch (\Throwable $e) {
-                $actionUrl = url("/admin/products/{$product->id}");
-            }
+            $actionUrl = \App\Filament\Resources\Products\ProductResource::getUrl('view', ['record' => $product->id]);
 
             $this->notifyAdmins($titleAr, $titleEn, $bodyAr, $bodyEn, $actionUrl, 'product_created', [
                 'product_id' => (string) $product->id
             ]);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('ProductObserver created event error: ' . $e->getMessage());
+            // Fail silently
         }
     }
 

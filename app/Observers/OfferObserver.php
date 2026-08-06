@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\Offer;
 use App\Models\AppNotification;
+use App\Models\Offer;
 use App\Services\API\General\NotificationService;
 
 class OfferObserver
@@ -14,7 +14,7 @@ class OfferObserver
     public function created(Offer $offer): void
     {
         $notificationService = app(NotificationService::class);
-        
+
         // Load the product associated with this offer
         $product = $offer->product;
         if (!$product) {
@@ -26,8 +26,8 @@ class OfferObserver
 
         // Prepare the notification details
         $discount = $offer->discount_percentage;
-        $titleAr = "فرصة ذهبية! عرض جديد 🔥";
-        $titleEn = "Golden Deal! New Offer 🔥";
+        $titleAr = 'فرصة ذهبية! عرض جديد 🔥';
+        $titleEn = 'Golden Deal! New Offer 🔥';
 
         if ($provider) {
             $providerNameAr = $provider->title_ar ?? $provider->user?->name ?? 'مقدم الخدمة';
@@ -54,9 +54,9 @@ class OfferObserver
         $cartUserIds = \App\Models\Cart::whereHas('items', function ($query) use ($product) {
             $query->where('product_id', $product->id);
         })
-        ->whereNotNull('user_id')
-        ->pluck('user_id')
-        ->toArray();
+            ->whereNotNull('user_id')
+            ->pluck('user_id')
+            ->toArray();
 
         // 2. Find users who have this product in their Favorites
         $favoriteUserIds = \App\Models\Favorite::where('product_id', $product->id)
@@ -77,7 +77,7 @@ class OfferObserver
                 $userLocale = $user->locale ?? 'ar';
                 $cartTitleAr = 'خصم على منتج في سلتك! 🛒🔥';
                 $cartTitleEn = 'Discount on a product in your cart! 🛒🔥';
-                
+
                 $cartBodyAr = "المنتج «{$product->name_ar}» الموجود في سلتك أصبح عليه خصم بقيمة {$discount}%! سارع بطلب السلة الآن قبل انتهاء العرض!";
                 $cartBodyEn = "The product «{$product->name_en}» in your cart has a new {$discount}% discount! Complete your order now before the offer ends!";
 
@@ -115,7 +115,7 @@ class OfferObserver
                 $userLocale = $user->locale ?? 'ar';
                 $favTitleAr = 'بشرى سارة لمنتجك المفضل! ❤️🔥';
                 $favTitleEn = 'Great news for your favorite product! ❤️🔥';
-                
+
                 $favBodyAr = "بشرى سارة! منتجك المفضل «{$product->name_ar}» أصبح عليه خصم بقيمة {$discount}%! أضفه إلى السلة الآن!";
                 $favBodyEn = "Great news! Your favorite product «{$product->name_en}» has a new {$discount}% discount! Add it to your cart now!";
 
@@ -156,7 +156,7 @@ class OfferObserver
         // 4. Save a single broadcast notification to database for guests/others to see dynamically
         try {
             $publicNotification = AppNotification::create([
-                'user_id' => null, // Broadcast for everyone else
+                'user_id' => null,  // Broadcast for everyone else
                 'title_ar' => $titleAr,
                 'title_en' => $titleEn,
                 'message_ar' => $bodyAr,
@@ -194,15 +194,11 @@ class OfferObserver
 
                 $adminTitleAr = 'إضافة عرض جديد في النظام! 🔥';
                 $adminTitleEn = 'New Offer Added to the System! 🔥';
-                
+
                 $adminBodyAr = "قام مقدم الخدمة «{$providerNameAr}» بإضافة عرض جديد بخصم {$discount}% على منتجه «{$product->name_ar}».";
                 $adminBodyEn = "The service provider «{$providerNameEn}» has added a new offer of {$discount}% on product «{$product->name_en}».";
 
-                try {
-                    $actionUrl = \App\Filament\Resources\Offers\OfferResource::getUrl('view', ['record' => $offer->id]);
-                } catch (\Throwable $e) {
-                    $actionUrl = url("/admin/offers/{$offer->id}");
-                }
+                $actionUrl = \App\Filament\Resources\Offers\OfferResource::getUrl('view', ['record' => $offer->id]);
 
                 $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, $actionUrl, 'system_new_offer', [
                     'offer_id' => (string) $offer->id,
@@ -210,7 +206,7 @@ class OfferObserver
                 ]);
             }
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('OfferObserver created event error: ' . $e->getMessage());
+            // Fail silently
         }
     }
 
