@@ -233,15 +233,28 @@ class WasalyDataRefactorSeeder extends Seeder
                     ['ar' => 'لحم مستورد', 'en' => 'Imported Meat'], ['ar' => 'لحم بلدي', 'en' => 'Local Meat']
                 ]
             ]
-        ];
+        // Seed Categories and SubCategories first
+        foreach ($catalog as $catAr => $catData) {
+            $category = Category::where('name_ar', $catAr)->first();
+            if (!$category) {
+                $category = Category::create([
+                    'name_ar' => $catAr,
+                    'name_en' => $catData['en'],
+                    'image' => 'categories/default.png',
+                    'status' => 'active'
+                ]);
+            }
 
-        $brands = Brand::all();
-        if ($brands->isEmpty()) {
-            $brands = collect([Brand::create(['name_ar' => 'عام', 'name_en' => 'General', 'status' => 'active', 'image' => 'brand.png'])]);
+            foreach ($catData['subs'] as $index => $sub) {
+                SubCategory::create([
+                    'category_id' => $category->id,
+                    'name_ar' => $sub['ar'],
+                    'name_en' => $sub['en'],
+                    'image' => ($localSubImages[$index % 20] ?? 'default.png'),
+                    'status' => 'active'
+                ]);
+            }
         }
-
-        $productCounter = 0;
-        $serviceCounter = 0;
 
         // 1. Defined Real Classic Products
         $realProducts = [
@@ -493,9 +506,21 @@ class WasalyDataRefactorSeeder extends Seeder
 
         // Seed Real Products
         foreach ($realProducts as $p) {
-            $subCategory = SubCategory::where('name_ar', 'LIKE', '%' . $p['sub'] . '%')->first() 
-                ?? SubCategory::first();
-            $brand = Brand::where('name_ar', $p['brand'])->first() ?? $brands->first();
+            $subCategory = SubCategory::where('name_ar', 'LIKE', '%' . $p['sub'] . '%')->first() ?? SubCategory::first();
+            if (!$subCategory) {
+                $category = Category::first();
+                $subCategory = SubCategory::create([
+                    'category_id' => $category ? $category->id : 1,
+                    'name_ar' => 'عام',
+                    'name_en' => 'General',
+                    'status' => 'active'
+                ]);
+            }
+
+            $brand = Brand::where('name_ar', $p['brand'])->first() ?? Brand::first();
+            if (!$brand) {
+                $brand = Brand::create(['name_ar' => 'عام', 'name_en' => 'General', 'status' => 'active', 'image' => 'brand.png']);
+            }
 
             $imgName = $this->downloadImage($p['url'], 'products');
 
@@ -526,6 +551,15 @@ class WasalyDataRefactorSeeder extends Seeder
         // Seed Real Services & Providers
         foreach ($realServices as $s) {
             $subCategory = SubCategory::where('name_ar', 'LIKE', '%سباكة%')->first() ?? SubCategory::first();
+            if (!$subCategory) {
+                $category = Category::first();
+                $subCategory = SubCategory::create([
+                    'category_id' => $category ? $category->id : 1,
+                    'name_ar' => 'خدمات عامة',
+                    'name_en' => 'General Services',
+                    'status' => 'active'
+                ]);
+            }
             $imgName = $this->downloadImage($s['url'], 'services');
 
             $pUser = User::factory()->create(['type' => 'service_provider']);
