@@ -243,173 +243,319 @@ class WasalyDataRefactorSeeder extends Seeder
         $productCounter = 0;
         $serviceCounter = 0;
 
-        foreach ($catalog as $catAr => $catData) {
-            $category = Category::where('name_ar', $catAr)->first();
-            if (!$category) {
-                $category = Category::create([
-                    'name_ar' => $catAr,
-                    'name_en' => $catData['en'],
-                    'image' => 'categories/default.png',
-                    'status' => 'active'
-                ]);
-            }
+        // 1. Defined Real Classic Products
+        $realProducts = [
+            [
+                'name_ar' => 'شاي ليبتون ناعم العلامة الحمراء 250 جرام',
+                'name_en' => 'Lipton Red Label Tea 250g',
+                'brand' => 'ليبتون',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'ألبان', // SubCategory match or default
+                'price' => 45,
+                'stock' => 100,
+                'desc_ar' => 'شاي ليبتون العلامة الحمراء الأصلي المفضل في الشرق الأوسط بطعم غني ومذاق فريد.',
+                'desc_en' => 'Original Lipton Red Label tea, rich taste and unique aroma.',
+                'url' => 'https://images.unsplash.com/photo-1594631252845-29fc458695d7?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'حليب المراعي كامل الدسم 1 لتر',
+                'name_en' => 'Almarai Full Cream Milk 1L',
+                'brand' => 'المراعي',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'ألبان',
+                'price' => 42,
+                'stock' => 80,
+                'desc_ar' => 'حليب المراعي الطازج غني بالفيتايمينات والكالسيوم 100% طبيعي.',
+                'desc_en' => 'Fresh Almarai milk, rich in vitamins and calcium, 100% natural.',
+                'url' => 'https://images.unsplash.com/photo-1550583724-125581fe2f8a?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'نسكافيه كلاسيك برطمان 200 جرام',
+                'name_en' => 'Nescafe Classic Jar 200g',
+                'brand' => 'نستله',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'ألبان',
+                'price' => 185,
+                'stock' => 50,
+                'desc_ar' => 'قهوة نسكافيه كلاسيك سريعة التحضير نكهة غنية ومحمصة 100% بن طبيعي.',
+                'desc_en' => 'Instant Nescafe Classic coffee, rich roasted flavor.',
+                'url' => 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'جبنة دومتي فيتا بلس 500 جرام',
+                'name_en' => 'Domty Feta Plus Cheese 500g',
+                'brand' => 'دومتي',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'ألبان',
+                'price' => 38,
+                'stock' => 120,
+                'desc_ar' => 'جبنة دومتي فيتا بلس القشدية الممتازة طعم رائع للسندوتشات والفطور.',
+                'desc_en' => 'Domty Feta Plus creamy cheese, delicious taste for breakfast.',
+                'url' => 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'زبادي جهينة طبيعي (عبوة 4 قطع)',
+                'name_en' => 'Juhayna Natural Yogurt 4-Pack',
+                'brand' => 'جهينة',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'ألبان',
+                'price' => 28,
+                'stock' => 90,
+                'desc_ar' => 'زبادي جهينة الطبيعي خفيف ومغذي ومناسب لجميع الأوقات.',
+                'desc_en' => 'Natural Juhayna fresh yogurt pack.',
+                'url' => 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'زيت عافية عباد الشمس 1.6 لتر',
+                'name_en' => 'Afia Sunflower Oil 1.6L',
+                'brand' => 'صافولا',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'زيوت وسمن',
+                'price' => 115,
+                'stock' => 60,
+                'desc_ar' => 'زيت عافية نقي وخفيف مناسب لجميع أغراض الطهي والقلي.',
+                'desc_en' => 'Pure Afia sunflower oil for light cooking.',
+                'url' => 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'أرز الضحى أبيض فاخر 1 كجم',
+                'name_en' => 'ElDoha Premium White Rice 1kg',
+                'brand' => 'صافولا',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'مكرونة وأرز',
+                'price' => 35,
+                'stock' => 150,
+                'desc_ar' => 'أرز الضحى البلدي الفاخر منقى ومغسول بأعلى معايير الجودة.',
+                'desc_en' => 'ElDoha premium clean white rice.',
+                'url' => 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'مسحوق غسيل أريال أوتوماتيك 4 كجم',
+                'name_en' => 'Ariel Automatic Detergent 4kg',
+                'brand' => 'امريكانا',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'منظفات غسيل',
+                'price' => 290,
+                'stock' => 40,
+                'desc_ar' => 'مسحوق غسيل أريال بالتقنية المطورة لنظافة ورائحة لافندر تدوم.',
+                'desc_en' => 'Ariel automatic laundry detergent lavender 4kg.',
+                'url' => 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'توست ريتش بيك أبيض طازج 500 جرام',
+                'name_en' => 'Rich Bake White Toast 500g',
+                'brand' => 'حلواني',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'مخبوزات',
+                'price' => 38,
+                'stock' => 70,
+                'desc_ar' => 'توست ريتش بيك طازج وهش للسندوتشات.',
+                'desc_en' => 'Rich Bake fresh white toast bread.',
+                'url' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'شيكولاتة نوتيلا قابلة للمسح 350 جرام',
+                'name_en' => 'Nutella Hazelnut Spread 350g',
+                'brand' => 'نستله',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'فطور',
+                'price' => 165,
+                'stock' => 60,
+                'desc_ar' => 'شيكولاتة نوتيلا بالبندق الأصلية الغنية بالطعم اللذيذ.',
+                'desc_en' => 'Original Nutella hazelnut chocolate spread 350g.',
+                'url' => 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'طبق بيض أحمر طازج 30 بيضة',
+                'name_en' => 'Fresh Red Eggs Crate (30 Pcs)',
+                'brand' => 'المراعي',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'بيض',
+                'price' => 160,
+                'stock' => 100,
+                'desc_ar' => 'طبق بيض أحمر طازج يومياً من المزرعة مباشرة.',
+                'desc_en' => 'Fresh farm red eggs 30 pieces crate.',
+                'url' => 'https://images.unsplash.com/photo-1516448620398-c5f44bf9f441?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'عصير جهينة مانجو طازج 1 لتر',
+                'name_en' => 'Juhayna Mango Juice 1L',
+                'brand' => 'جهينة',
+                'cat' => 'سوبر ماركت',
+                'sub' => 'مشروبات',
+                'price' => 32,
+                'stock' => 110,
+                'desc_ar' => 'عصير جهينة مانجو طبيعي بدون مواد حافظة.',
+                'desc_en' => 'Juhayna natural mango juice 1L.',
+                'url' => 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'طماطم بلدي طازجة درجة أولى (1 كجم)',
+                'name_en' => 'Fresh Farm Tomatoes (1kg)',
+                'brand' => 'صافولا',
+                'cat' => 'خضروات وفواكه',
+                'sub' => 'طماطم',
+                'price' => 18,
+                'stock' => 200,
+                'desc_ar' => 'طماطم حمراء طازجة منتقاة بعناية لجميع السلطات والطهي.',
+                'desc_en' => 'Fresh red farm tomatoes 1kg.',
+                'url' => 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'موز بلدي فاخر طازج (1 كجم)',
+                'name_en' => 'Fresh Local Bananas (1kg)',
+                'brand' => 'صافولا',
+                'cat' => 'خضروات وفواكه',
+                'sub' => 'فواكه موسمية',
+                'price' => 25,
+                'stock' => 180,
+                'desc_ar' => 'موز بلدي حلو ومغذي طازج يومياً.',
+                'desc_en' => 'Fresh sweet local bananas 1kg.',
+                'url' => 'https://images.unsplash.com/photo-1603833665858-e61d17a86224?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'صدور دجاج فريش بانيه (1 كجم)',
+                'name_en' => 'Fresh Chicken Breast Fillet (1kg)',
+                'brand' => 'امريكانا',
+                'cat' => 'لحوم ودواجن',
+                'sub' => 'صدور دجاج',
+                'price' => 220,
+                'stock' => 90,
+                'desc_ar' => 'صدور دجاج طازجة مخلية وجاهزة للطهي والبانيه.',
+                'desc_en' => 'Fresh boneless chicken breasts 1kg.',
+                'url' => 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=800&q=80'
+            ],
+            [
+                'name_ar' => 'لحم بقري مفروم بلدي طازج (1 كجم)',
+                'name_en' => 'Fresh Minced Beef (1kg)',
+                'brand' => 'امريكانا',
+                'cat' => 'لحوم ودواجن',
+                'sub' => 'لحم مفروم',
+                'price' => 380,
+                'stock' => 60,
+                'desc_ar' => 'لحم بقري بلدي طازج مفروم بنسبة دهن مثالية.',
+                'desc_en' => 'Fresh local minced beef 1kg.',
+                'url' => 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=800&q=80'
+            ]
+        ];
 
-            foreach ($catData['subs'] as $index => $sub) {
-                $subCategory = SubCategory::create([
-                    'category_id' => $category->id,
-                    'name_ar' => $sub['ar'],
-                    'name_en' => $sub['en'],
-                    'image' => ($localSubImages[$index % 20] ?? 'default.png'),
-                    'status' => 'active'
-                ]);
+        // 2. Defined Real Classic Services
+        $realServices = [
+            [
+                'provider_name_ar' => 'مركز المصرية للسباكة والصيانة الشاملة',
+                'provider_name_en' => 'ElMasriya Plumbing & Maintenance',
+                'service_ar' => 'صيانة وتصليح أعطال السباكة المنزلية وتسريب المياه',
+                'service_en' => 'Home Plumbing Repair & Leak Maintenance',
+                'price' => 250,
+                'url' => 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=800&q=80'
+            ],
+            [
+                'provider_name_ar' => 'شركة الأهرام للتكييف والتبريد',
+                'provider_name_en' => 'AlAhram AC & Cooling Co.',
+                'service_ar' => 'فحص وتنظيف التكييفات وتعبئة فريون هندي ممتاز',
+                'service_en' => 'AC Cleaning, Inspection, & Freon Refill',
+                'price' => 350,
+                'url' => 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80'
+            ],
+            [
+                'provider_name_ar' => 'فريق الماسة للتنظيف والخدمات الشاملة',
+                'provider_name_en' => 'ElMasa Cleaning Services',
+                'service_ar' => 'خدمة تنظيف وتطوير الشقق والمنازل بالبخار والتطهير',
+                'service_en' => 'Full Home Deep Steam Cleaning & Sanitization',
+                'price' => 600,
+                'url' => 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80'
+            ],
+            [
+                'provider_name_ar' => 'الأستاذ للكهرباء والتمديدات المنزلية',
+                'provider_name_en' => 'ElOstaz Electrical Services',
+                'service_ar' => 'فحص وتركيب مفاتيح ولوحات الكهرباء وتمديدات الإضاءة',
+                'service_en' => 'Electrical Wiring, Switches, & Panel Repair',
+                'price' => 200,
+                'url' => 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80'
+            ],
+            [
+                'provider_name_ar' => 'الشركة الألمانية لمكافحة الحشرات والآفات',
+                'provider_name_en' => 'German Pest Control Center',
+                'service_ar' => 'رش ومكافحة الحشرات والآفات المنزلية بضمان 6 أشهر',
+                'service_en' => 'Home Pest Control & Fumigation (6 Month Warranty)',
+                'price' => 450,
+                'url' => 'https://images.unsplash.com/photo-1604147706480-43222e62223f?w=800&q=80'
+            ],
+            [
+                'provider_name_ar' => 'ورشة النجار المحترف للأثاث',
+                'provider_name_en' => 'Professional Carpentry Workshop',
+                'service_ar' => 'تصليح وتجميع الأثاث الخشبي وتعديل الغرف',
+                'service_en' => 'Furniture Repair, Assembly, & Carpentry',
+                'price' => 300,
+                'url' => 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=800&q=80'
+            ]
+        ];
 
-                if ($catData['type'] == 'product') {
-                    // Distribute 50 products across all product categories
-                    if ($productCounter < 50 && rand(0, 1)) {
-                        $productCounter++;
-                        $imgIndex = ($productCounter - 1) % 10;
-                        $product = Product::create([
-                            'sub_category_id' => $subCategory->id,
-                            'brand_id' => $brands->random()->id,
-                            'name_ar' => $sub['ar'] . ' طازج ',
-                            'name_en' => 'Fresh ' . $sub['en'],
-                            'description_ar' => 'منتج ' . $sub['ar'] . ' عالي الجودة ومختار بعناية فائقة لضمان الرضا التام.',
-                            'description_en' => 'High quality ' . $sub['en'] . ' product, carefully selected to ensure complete satisfaction.',
-                            'price' => rand(10, 200),
-                            'stock' => rand(20, 150),
-                            'image' => ($localProdImages[$imgIndex] ?? 'item.png'),
-                            'status' => 'active',
-                            'is_featured' => rand(0, 1)
-                        ]);
+        // Seed Real Products
+        foreach ($realProducts as $p) {
+            $subCategory = SubCategory::where('name_ar', 'LIKE', '%' . $p['sub'] . '%')->first() 
+                ?? SubCategory::first();
+            $brand = Brand::where('name_ar', $p['brand'])->first() ?? $brands->first();
 
-                        // Add Specifications for Products
-                        Specification::create(['product_id' => $product->id, 'key_ar' => 'بلد المنشأ', 'key_en' => 'Origin', 'value_ar' => 'محلي', 'value_en' => 'Local', 'icon' => 'globe']);
-                        Specification::create(['product_id' => $product->id, 'key_ar' => 'الوزن', 'key_en' => 'Weight', 'value_ar' => '1 كجم تقريباً', 'value_en' => '1 Kg Approx', 'icon' => 'package']);
-                        Specification::create(['product_id' => $product->id, 'key_ar' => 'الحالة', 'key_en' => 'Condition', 'value_ar' => 'طازج', 'value_en' => 'Fresh', 'icon' => 'leaf']);
+            $imgName = $this->downloadImage($p['url'], 'products');
 
-                        // Add Product Gallery Images
-                        for ($g = 1; $g <= 2; $g++) {
-                            $galleryImgIndex = ($productCounter + $g) % 10;
-                            // Re-download to the images subfolder or just copy
-                            $galleryImgName = ($localProdImages[$galleryImgIndex] ?? 'item.png');
-                            ProductImage::create([
-                                'product_id' => $product->id,
-                                'images' => $galleryImgName
-                            ]);
-                            
-                            // Ensure the file exists in the images subfolder too
-                            if ($galleryImgName != 'item.png') {
-                                @copy(public_path('storage/products/' . $galleryImgName), public_path('storage/products/images/' . $galleryImgName));
-                            }
-                        }
-                    }
-                } else {
-                    // Distribute 30 services across all service categories
-                    if ($serviceCounter < 30 && rand(0, 1)) {
-                        $serviceCounter++;
-                        $imgIndex = ($serviceCounter - 1) % 10;
-                        
-                        $pUser = User::factory()->create(['type' => 'service_provider']);
-                        $provider = Provider::create([
-                            'user_id' => $pUser->id,
-                            'sub_category_id' => $subCategory->id,
-                            'title_ar' => 'مركز ' . $sub['ar'],
-                            'title_en' => $sub['en'] . ' Center',
-                            'service_description_ar' => 'نحن متخصصون في تقديم أرقى خدمات ' . $sub['ar'] . ' بأحدث الأدوات والتقنيات لضمان أفضل جودة.',
-                            'service_description_en' => 'We specialize in providing the finest ' . $sub['en'] . ' services using the latest tools and techniques to ensure the best quality.',
-                            'price_from' => rand(50, 500),
-                            'from_day' => 'Saturday',
-                            'to_day' => 'Thursday',
-                            'start_time' => '09:00:00',
-                            'end_time' => '21:00:00',
-                            'status' => 'active',
-                            'cover' => ($localServImages[$imgIndex] ?? 'provider.png')
-                        ]);
-
-                        Service::create([
-                            'provider_id' => $provider->id,
-                            'service_ar' => 'خدمة ' . $sub['ar'] . ' شاملة (فحص وصيانة وتطهير)',
-                            'service_en' => 'Comprehensive ' . $sub['en'] . ' Service (Inspection, Maintenance, & Sanitization)',
-                            'description_ar' => 'تشمل الخدمة فحصاً دقيقاً لجميع المشاكل في قسم ' . $sub['ar'] . ' مع توفير الحلول الفورية واستخدام مواد آمنة وفعالة.',
-                            'description_en' => 'The service includes a thorough inspection of all issues in the ' . $sub['en'] . ' section, providing immediate solutions using safe and effective materials.',
-                            'price' => rand(100, 1000),
-                            'image' => ($localServImages[$imgIndex] ?? 'service.png')
-                        ]);
-                    }
-                }
-            }
-        }
-
-        Storage::disk('public')->makeDirectory('products/images');
-
-        // Fill up to exact counts if missed due to rand()
-        while ($productCounter < 50) {
-            $productCounter++;
-            $sub = SubCategory::whereHas('category', function($q) { $q->whereIn('name_ar', ['سوبر ماركت', 'خضروات وفواكه', 'لحوم ودواجن']); })->inRandomOrder()->first();
-            $imgIndex = ($productCounter - 1) % 10;
             $product = Product::create([
-                'sub_category_id' => $sub->id,
-                'brand_id' => $brands->random()->id,
-                'name_ar' => 'منتج ' . $sub->name_ar . ' مختار ',
-                'name_en' => 'Selected ' . $sub->name_en . ' Item',
-                'description_ar' => 'أفضل جودة مختارة بعناية من قسم ' . $sub->name_ar,
-                'description_en' => 'Carefully selected best quality from ' . $sub->name_en . ' section.',
-                'price' => rand(15, 150),
-                'stock' => rand(10, 100),
-                'image' => ($localProdImages[$imgIndex] ?? 'item.png'),
-                'status' => 'active'
+                'sub_category_id' => $subCategory->id,
+                'brand_id' => $brand->id,
+                'name_ar' => $p['name_ar'],
+                'name_en' => $p['name_en'],
+                'description_ar' => $p['desc_ar'],
+                'description_en' => $p['desc_en'],
+                'price' => $p['price'],
+                'stock' => $p['stock'],
+                'image' => $imgName,
+                'status' => 'active',
+                'is_featured' => 1
             ]);
 
-            Specification::create(['product_id' => $product->id, 'key_ar' => 'التعبئة', 'key_en' => 'Packaging', 'value_ar' => 'مغلف بعناية', 'value_en' => 'Carefully Packaged', 'icon' => 'box']);
-            Specification::create(['product_id' => $product->id, 'key_ar' => 'الجودة', 'key_en' => 'Quality', 'value_ar' => 'درجة أولى', 'value_en' => 'Grade A', 'icon' => 'award']);
+            Specification::create(['product_id' => $product->id, 'key_ar' => 'بلد المنشأ', 'key_en' => 'Origin', 'value_ar' => 'مصر', 'value_en' => 'Egypt', 'icon' => 'globe']);
+            Specification::create(['product_id' => $product->id, 'key_ar' => 'حالة المنتج', 'key_en' => 'Condition', 'value_ar' => 'طازج وأصلي 100%', 'value_en' => 'Fresh & 100% Original', 'icon' => 'award']);
 
-            // Add Product Gallery Images
-            for ($g = 1; $g <= 2; $g++) {
-                $galleryImgIndex = ($productCounter + $g) % 10;
-                $galleryImgName = ($localProdImages[$galleryImgIndex] ?? 'item.png');
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'images' => $galleryImgName
-                ]);
-                if ($galleryImgName != 'item.png') {
-                    @copy(public_path('storage/products/' . $galleryImgName), public_path('storage/products/images/' . $galleryImgName));
-                }
-            }
+            ProductImage::create([
+                'product_id' => $product->id,
+                'images' => $imgName
+            ]);
+            @copy(public_path('storage/products/' . $imgName), public_path('storage/products/images/' . $imgName));
         }
 
-        while ($serviceCounter < 30) {
-            $serviceCounter++;
-            $sub = SubCategory::whereHas('category', function($q) { $q->where('name_ar', 'خدمات منزلية'); })->inRandomOrder()->first();
-            $imgIndex = ($serviceCounter - 1) % 10;
-            
+        // Seed Real Services & Providers
+        foreach ($realServices as $s) {
+            $subCategory = SubCategory::where('name_ar', 'LIKE', '%سباكة%')->first() ?? SubCategory::first();
+            $imgName = $this->downloadImage($s['url'], 'services');
+
             $pUser = User::factory()->create(['type' => 'service_provider']);
             $provider = Provider::create([
                 'user_id' => $pUser->id,
-                'sub_category_id' => $sub->id,
-                'title_ar' => 'مزود خدمة متخصص ' . $serviceCounter,
-                'title_en' => 'Specialized Provider ' . $serviceCounter,
-                'service_description_ar' => 'نقدم حلولاً متكاملة وفعالة في جميع تخصصات الخدمات المنزلية.',
-                'service_description_en' => 'We provide integrated and effective solutions in all home service specialties.',
-                'price_from' => rand(50, 500),
+                'sub_category_id' => $subCategory->id,
+                'title_ar' => $s['provider_name_ar'],
+                'title_en' => $s['provider_name_en'],
+                'service_description_ar' => 'متخصصون في تقديم خدمات عالية الجودة وضمان تام على الأعمال.',
+                'service_description_en' => 'Specialized in providing high quality services with full warranty.',
+                'price_from' => $s['price'],
                 'from_day' => 'Saturday',
                 'to_day' => 'Thursday',
                 'start_time' => '09:00:00',
                 'end_time' => '21:00:00',
                 'status' => 'active',
-                'cover' => ($localServImages[$imgIndex] ?? 'provider.png')
+                'cover' => $imgName
             ]);
 
             Service::create([
                 'provider_id' => $provider->id,
-                'service_ar' => 'باقة خدمات ' . $sub->name_ar . ' (تنظيف وتنسيق)',
-                'service_en' => $sub->name_en . ' Service Package (Cleaning & Styling)',
-                'description_ar' => 'باقة احترافية تشمل التنظيف العميق والتنظيم وإعادة التأهيل.',
-                'description_en' => 'A professional package including deep cleaning, organizing, and rehabilitation.',
-                'price' => rand(100, 1000),
-                'image' => ($localServImages[$imgIndex] ?? 'service.png')
+                'service_ar' => $s['service_ar'],
+                'service_en' => $s['service_en'],
+                'description_ar' => 'خدمة احترافية ممتازة تشمل الفحص والصيانة وقطع الغيار الأصلية مع الضمان.',
+                'description_en' => 'Excellent professional service including inspection, maintenance, and genuine parts with warranty.',
+                'price' => $s['price'],
+                'image' => $imgName
             ]);
         }
 
-        echo "Refactor Complete: 80 SubCategories, 50 Products, 30 Services seeded.\n";
+        echo "Seeding completed: Real classic products and services with real high quality images downloaded!\n";
     }
 }
