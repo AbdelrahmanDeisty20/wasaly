@@ -88,7 +88,7 @@ class ReviewObserver
                     ->icon('heroicon-o-star')
                     ->iconColor('warning')
                     ->actions([
-                        \Filament\Notifications\Actions\Action::make('view')
+                        \Filament\Actions\Action::make('view')
                             ->label($userLocale === 'ar' ? 'عرض التفاصيل' : 'View Details')
                             ->url($actionUrl)
                             ->markAsRead(),
