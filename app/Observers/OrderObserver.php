@@ -165,14 +165,18 @@ class OrderObserver
             $adminBodyAr = "تمت إضافة طلب جديد رقم #{$order->order_number} بقيمة {$order->total_price} ج.م.";
             $adminBodyEn = "A new order #{$order->order_number} has been placed with a total of {$order->total_price} EGP.";
 
-            $actionUrl = \App\Filament\Resources\Orders\OrderResource::getUrl('view', ['record' => $order->id]);
+            try {
+                $actionUrl = \App\Filament\Resources\Orders\OrderResource::getUrl('view', ['record' => $order->id]);
+            } catch (\Throwable $e) {
+                $actionUrl = url("/admin/orders/{$order->id}");
+            }
 
             $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, $actionUrl, 'system_new_order', [
                 'order_id' => (string) $order->id,
                 'order_number' => (string) $order->order_number,
             ]);
         } catch (\Exception $e) {
-            // Fail silently to prevent interrupting application flow
+            \Illuminate\Support\Facades\Log::error('OrderObserver created event error: ' . $e->getMessage());
         }
     }
 
@@ -210,13 +214,13 @@ class OrderObserver
                                 'type' => $type,
                             ], $extraData));
                         } catch (\Exception $e) {
-                            // Fail silently
+                            // Fail silently for FCM
                         }
                     }
                 }
             }
         } catch (\Exception $e) {
-            // Fail silently
+            \Illuminate\Support\Facades\Log::error('OrderObserver notifyAdmins error: ' . $e->getMessage());
         }
     }
 }
