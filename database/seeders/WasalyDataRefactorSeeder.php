@@ -35,19 +35,21 @@ class WasalyDataRefactorSeeder extends Seeder
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
             $contents = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
-            if ($contents && $httpCode == 200) {
+            if ($contents && ($httpCode == 200 || $httpCode == 301 || $httpCode == 302)) {
                 file_put_contents($fullPath, $contents);
                 return $name;
             }
-            return 'default.png';
+            return $url;
         } catch (\Exception $e) {
-            return 'default.png';
+            return $url;
         }
     }
 
@@ -83,24 +85,8 @@ class WasalyDataRefactorSeeder extends Seeder
 
         Schema::enableForeignKeyConstraints();
 
-        // 1. Food Brands
-        $brandsData = [
-            ['ar' => 'المراعي', 'en' => 'Almarai'],
-            ['ar' => 'جهينة', 'en' => 'Juhayna'],
-            ['ar' => 'نستله', 'en' => 'Nestle'],
-            ['ar' => 'ليبتون', 'en' => 'Lipton'],
-            ['ar' => 'حلواني', 'en' => 'Halwani'],
-            ['ar' => 'صافولا', 'en' => 'Savola'],
-            ['ar' => 'دومتي', 'en' => 'Domty'],
-            ['ar' => 'امريكانا', 'en' => 'Americana'],
-        ];
-        foreach ($brandsData as $b) {
-            Brand::create(['name_ar' => $b['ar'], 'name_en' => $b['en'], 'status' => 'active', 'image' => 'brand.png']);
-        }
-        $brands = Brand::all();
-
-        // Clean directories
-        $dirs = ['categories', 'subCategories', 'products', 'providers', 'services'];
+        // Clean directories including brands
+        $dirs = ['categories', 'subCategories', 'products', 'providers', 'services', 'brands'];
         foreach ($dirs as $dir) {
             $this->cleanDirectory($dir);
             $fullDir = public_path('storage/' . $dir);
@@ -108,6 +94,27 @@ class WasalyDataRefactorSeeder extends Seeder
                 mkdir($fullDir, 0777, true);
             }
         }
+        $galleryDir = public_path('storage/products/images');
+        if (!file_exists($galleryDir)) {
+            mkdir($galleryDir, 0777, true);
+        }
+
+        // 1. Food & Service Brands with downloaded high-res images
+        $brandsData = [
+            ['ar' => 'المراعي', 'en' => 'Almarai', 'url' => 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?w=500&q=80'],
+            ['ar' => 'جهينة', 'en' => 'Juhayna', 'url' => 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=500&q=80'],
+            ['ar' => 'نستله', 'en' => 'Nestle', 'url' => 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500&q=80'],
+            ['ar' => 'ليبتون', 'en' => 'Lipton', 'url' => 'https://images.unsplash.com/photo-1594631252845-29fc458695d7?w=500&q=80'],
+            ['ar' => 'حلواني', 'en' => 'Halwani', 'url' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&q=80'],
+            ['ar' => 'صافولا', 'en' => 'Savola', 'url' => 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&q=80'],
+            ['ar' => 'دومتي', 'en' => 'Domty', 'url' => 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500&q=80'],
+            ['ar' => 'امريكانا', 'en' => 'Americana', 'url' => 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80'],
+        ];
+        foreach ($brandsData as $b) {
+            $brandImg = $this->downloadImage($b['url'], 'brands');
+            Brand::create(['name_ar' => $b['ar'], 'name_en' => $b['en'], 'status' => 'active', 'image' => $brandImg]);
+        }
+        $brands = Brand::all();
         $galleryDir = public_path('storage/products/images');
         if (!file_exists($galleryDir)) {
             mkdir($galleryDir, 0777, true);
