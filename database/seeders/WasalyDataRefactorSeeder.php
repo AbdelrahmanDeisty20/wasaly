@@ -233,6 +233,8 @@ class WasalyDataRefactorSeeder extends Seeder
                     ['ar' => 'لحم مستورد', 'en' => 'Imported Meat'], ['ar' => 'لحم بلدي', 'en' => 'Local Meat']
                 ]
             ]
+        ];
+
         // Seed Categories and SubCategories first
         foreach ($catalog as $catAr => $catData) {
             $category = Category::where('name_ar', $catAr)->first();
