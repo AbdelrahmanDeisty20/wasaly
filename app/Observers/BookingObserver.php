@@ -84,14 +84,18 @@ class BookingObserver
                 $adminBodyAr = "تم حجز الخدمة «{$serviceNameAr}» المقدمة من «{$providerNameAr}» بواسطة العميل «{$customerName}».";
                 $adminBodyEn = "The service «{$serviceNameEn}» provided by «{$providerNameEn}» has been booked by customer «{$customerName}».";
 
-                $actionUrl = \App\Filament\Resources\Bookings\BookingResource::getUrl('view', ['record' => $booking->id]);
+                try {
+                    $actionUrl = \App\Filament\Resources\Bookings\BookingResource::getUrl('view', ['record' => $booking->id]);
+                } catch (\Throwable $e) {
+                    $actionUrl = url("/admin/bookings/{$booking->id}");
+                }
 
                 $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, $actionUrl, 'system_new_booking', [
                     'booking_id' => (string) $booking->id,
                 ]);
             }
         } catch (\Exception $e) {
-            // Fail silently
+            \Illuminate\Support\Facades\Log::error('BookingObserver created event error: ' . $e->getMessage());
         }
     }
 
@@ -298,7 +302,7 @@ class BookingObserver
                 }
             }
         } catch (\Exception $e) {
-            // Fail silently
+            \Illuminate\Support\Facades\Log::error('BookingObserver notifyAdmins error: ' . $e->getMessage());
         }
     }
 }

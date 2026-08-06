@@ -38,13 +38,17 @@ class ProductObserver
             $bodyAr = "قام مقدم الخدمة «{$providerNameAr}» بإضافة منتج جديد باسم «{$productNameAr}».";
             $bodyEn = "The service provider «{$providerNameEn}» has added a new product named «{$productNameEn}».";
 
-            $actionUrl = \App\Filament\Resources\Products\ProductResource::getUrl('view', ['record' => $product->id]);
+            try {
+                $actionUrl = \App\Filament\Resources\Products\ProductResource::getUrl('view', ['record' => $product->id]);
+            } catch (\Throwable $e) {
+                $actionUrl = url("/admin/products/{$product->id}");
+            }
 
             $this->notifyAdmins($titleAr, $titleEn, $bodyAr, $bodyEn, $actionUrl, 'product_created', [
                 'product_id' => (string) $product->id
             ]);
         } catch (\Exception $e) {
-            // Fail silently
+            \Illuminate\Support\Facades\Log::error('ProductObserver created event error: ' . $e->getMessage());
         }
     }
 

@@ -198,7 +198,11 @@ class OfferObserver
                 $adminBodyAr = "قام مقدم الخدمة «{$providerNameAr}» بإضافة عرض جديد بخصم {$discount}% على منتجه «{$product->name_ar}».";
                 $adminBodyEn = "The service provider «{$providerNameEn}» has added a new offer of {$discount}% on product «{$product->name_en}».";
 
-                $actionUrl = \App\Filament\Resources\Offers\OfferResource::getUrl('view', ['record' => $offer->id]);
+                try {
+                    $actionUrl = \App\Filament\Resources\Offers\OfferResource::getUrl('view', ['record' => $offer->id]);
+                } catch (\Throwable $e) {
+                    $actionUrl = url("/admin/offers/{$offer->id}");
+                }
 
                 $this->notifyAdmins($adminTitleAr, $adminTitleEn, $adminBodyAr, $adminBodyEn, $actionUrl, 'system_new_offer', [
                     'offer_id' => (string) $offer->id,
@@ -206,7 +210,7 @@ class OfferObserver
                 ]);
             }
         } catch (\Exception $e) {
-            // Fail silently
+            \Illuminate\Support\Facades\Log::error('OfferObserver created event error: ' . $e->getMessage());
         }
     }
 

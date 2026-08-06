@@ -60,13 +60,17 @@ class ReviewObserver
                 $bodyEn = "Customer «{$customerName}» rated the application with {$rating} stars. Comment: {$commentEn}";
             }
 
-            $actionUrl = \App\Filament\Resources\Reviews\ReviewResource::getUrl('view', ['record' => $review->id]);
+            try {
+                $actionUrl = \App\Filament\Resources\Reviews\ReviewResource::getUrl('view', ['record' => $review->id]);
+            } catch (\Throwable $e) {
+                $actionUrl = url("/admin/reviews/{$review->id}");
+            }
 
             $this->notifyAdmins($titleAr, $titleEn, $bodyAr, $bodyEn, $actionUrl, 'new_review', [
                 'review_id' => (string) $review->id,
             ]);
         } catch (\Exception $e) {
-            // Fail silently
+            \Illuminate\Support\Facades\Log::error('ReviewObserver created event error: ' . $e->getMessage());
         }
     }
 
