@@ -235,16 +235,29 @@ class WasalyDataRefactorSeeder extends Seeder
             ]
         ];
 
-        // Seed Categories and SubCategories first
+        // Download and attach real high-res images to Main Categories without deleting them!
+        $categoryImages = [
+            'سوبر ماركت' => 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80',
+            'خدمات منزلية' => 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80',
+            'خضروات وفواكه' => 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=800&q=80',
+            'لحوم ودواجن' => 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=800&q=80',
+        ];
+
+        // Seed Categories and SubCategories without deleting main categories
         foreach ($catalog as $catAr => $catData) {
             $category = Category::where('name_ar', $catAr)->first();
+            $catImageUrl = $categoryImages[$catAr] ?? 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80';
+            $catImgName = $this->downloadImage($catImageUrl, 'categories');
+
             if (!$category) {
                 $category = Category::create([
                     'name_ar' => $catAr,
                     'name_en' => $catData['en'],
-                    'image' => 'categories/default.png',
+                    'image' => $catImgName,
                     'status' => 'active'
                 ]);
+            } else {
+                $category->update(['image' => $catImgName]);
             }
 
             foreach ($catData['subs'] as $index => $sub) {
