@@ -143,7 +143,7 @@ class WasalyDataRefactorSeeder extends Seeder
             }
         }
 
-        // 2. Seed Brands (10 Brands)
+        // 2. Seed 20 Real Brands with High-Res Images
         $brandsData = [
             ['ar' => 'المراعي', 'en' => 'Almarai', 'url' => 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?w=500&q=80'],
             ['ar' => 'جهينة', 'en' => 'Juhayna', 'url' => 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=500&q=80'],
@@ -155,6 +155,16 @@ class WasalyDataRefactorSeeder extends Seeder
             ['ar' => 'امريكانا', 'en' => 'Americana', 'url' => 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80'],
             ['ar' => 'هاينز', 'en' => 'Heinz', 'url' => 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&q=80'],
             ['ar' => 'كادبوري', 'en' => 'Cadbury', 'url' => 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=500&q=80'],
+            ['ar' => 'شيبسي', 'en' => 'Chipsy', 'url' => 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=500&q=80'],
+            ['ar' => 'ريتش بيك', 'en' => 'Rich Bake', 'url' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&q=80'],
+            ['ar' => 'فيتراك', 'en' => 'Vitrac', 'url' => 'https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=500&q=80'],
+            ['ar' => 'لافاش كيري', 'en' => 'La Vache Quirit', 'url' => 'https://images.unsplash.com/photo-1559561853-08451507cbe7?w=500&q=80'],
+            ['ar' => 'عافية', 'en' => 'Afia', 'url' => 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&q=80'],
+            ['ar' => 'الضحى', 'en' => 'ElDoha', 'url' => 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&q=80'],
+            ['ar' => 'كلوقز', 'en' => 'Kelloggs', 'url' => 'https://images.unsplash.com/photo-1521483451569-e33803c0330c?w=500&q=80'],
+            ['ar' => 'الملكة', 'en' => 'ElMaleka', 'url' => 'https://images.unsplash.com/photo-1621996346565-e3def6164286?w=500&q=80'],
+            ['ar' => 'ديتول', 'en' => 'Dettol', 'url' => 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80'],
+            ['ar' => 'أريال', 'en' => 'Ariel', 'url' => 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80'],
         ];
         foreach ($brandsData as $b) {
             $brandImg = $this->downloadImage($b['url'], 'brands', $b['ar']);
@@ -547,7 +557,7 @@ class WasalyDataRefactorSeeder extends Seeder
             }
         }
 
-        // 6. Seed 50 Real Products (Each with 1 exact-matching main image + 3 exact-matching gallery images = 200 product images)
+        // 6. Seed 50 Real Products (Each linked to specific Brand, SubCategory and with 1 main image + 3 gallery images)
         $productsData = [
             // Supermarket Products (1-25)
             [
@@ -612,7 +622,7 @@ class WasalyDataRefactorSeeder extends Seeder
             ],
             [
                 'name_ar' => 'زيت عافية عباد الشمس 1.6 لتر', 'name_en' => 'Afia Sunflower Oil 1.6L',
-                'brand' => 'صافولا', 'cat' => 'سوبر ماركت', 'sub' => 'زيوت وسمن', 'price' => 115, 'stock' => 60,
+                'brand' => 'عافية', 'cat' => 'سوبر ماركت', 'sub' => 'زيوت وسمن', 'price' => 115, 'stock' => 60,
                 'desc_ar' => 'زيت عافية نقي وخفيف مناسب لجميع أغراض الطهي والقلي.',
                 'desc_en' => 'Pure Afia sunflower oil for light cooking and frying.',
                 'main_img' => 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=800&q=80',
@@ -624,7 +634,7 @@ class WasalyDataRefactorSeeder extends Seeder
             ],
             [
                 'name_ar' => 'أرز الضحى أبيض فاخر 1 كجم', 'name_en' => 'ElDoha White Rice Premium 1kg',
-                'brand' => 'صافولا', 'cat' => 'سوبر ماركت', 'sub' => 'مكرونة وأرز', 'price' => 35, 'stock' => 150,
+                'brand' => 'الضحى', 'cat' => 'سوبر ماركت', 'sub' => 'مكرونة وأرز', 'price' => 35, 'stock' => 150,
                 'desc_ar' => 'أرز الضحى البلدي الفاخر منقى ومغسول بأعلى معايير الجودة.',
                 'desc_en' => 'ElDoha premium white rice, clean and ready for cooking.',
                 'main_img' => 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=80',
@@ -636,7 +646,7 @@ class WasalyDataRefactorSeeder extends Seeder
             ],
             [
                 'name_ar' => 'توست ريتش بيك أبيض طازج 500 جرام', 'name_en' => 'Rich Bake White Toast Bread 500g',
-                'brand' => 'حلواني', 'cat' => 'سوبر ماركت', 'sub' => 'مخبوزات', 'price' => 38, 'stock' => 70,
+                'brand' => 'ريتش بيك', 'cat' => 'سوبر ماركت', 'sub' => 'مخبوزات', 'price' => 38, 'stock' => 70,
                 'desc_ar' => 'توست ريتش بيك طازج وهش للسندوتشات للفطور والعشاء.',
                 'desc_en' => 'Rich Bake fresh white sliced toast bread.',
                 'main_img' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80',
@@ -696,7 +706,7 @@ class WasalyDataRefactorSeeder extends Seeder
             ],
             [
                 'name_ar' => 'مكرونة الملكة اسباجيتي 400 جرام', 'name_en' => 'ElMaleka Spaghetti Pasta 400g',
-                'brand' => 'امريكانا', 'cat' => 'سوبر ماركت', 'sub' => 'مكرونة وأرز', 'price' => 18, 'stock' => 200,
+                'brand' => 'الملكة', 'cat' => 'سوبر ماركت', 'sub' => 'مكرونة وأرز', 'price' => 18, 'stock' => 200,
                 'desc_ar' => 'مكرونة اسباجيتي الملكة مصنوعة من سميد القمح الصلب الممتاز.',
                 'desc_en' => 'ElMaleka premium durum wheat spaghetti pasta.',
                 'main_img' => 'https://images.unsplash.com/photo-1621996346565-e3def6164286?w=800&q=80',
@@ -720,7 +730,7 @@ class WasalyDataRefactorSeeder extends Seeder
             ],
             [
                 'name_ar' => 'سكر الضحى نقي 1 كجم', 'name_en' => 'ElDoha Pure White Sugar 1kg',
-                'brand' => 'صافولا', 'cat' => 'سوبر ماركت', 'sub' => 'سكر ودقيق', 'price' => 38, 'stock' => 160,
+                'brand' => 'الضحى', 'cat' => 'سوبر ماركت', 'sub' => 'سكر ودقيق', 'price' => 38, 'stock' => 160,
                 'desc_ar' => 'سكر أبيض نقي بلورات منقى بأعلى معايير الجودة.',
                 'desc_en' => 'ElDoha pure refined white sugar 1kg.',
                 'main_img' => 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=800&q=80',
@@ -756,7 +766,7 @@ class WasalyDataRefactorSeeder extends Seeder
             ],
             [
                 'name_ar' => 'جبنة لافاش كيري مثلثات 16 قطعة', 'name_en' => 'La Vache Quirit Triangles 16P',
-                'brand' => 'دومتي', 'cat' => 'سوبر ماركت', 'sub' => 'ألبان', 'price' => 65, 'stock' => 95,
+                'brand' => 'لافاش كيري', 'cat' => 'سوبر ماركت', 'sub' => 'ألبان', 'price' => 65, 'stock' => 95,
                 'desc_ar' => 'جبن مثلثات لافاش كيري غنية بالكالسيوم قوام كريمي.',
                 'desc_en' => 'La Vache Quirit 16-piece creamy cheese triangles.',
                 'main_img' => 'https://images.unsplash.com/photo-1559561853-08451507cbe7?w=800&q=80',
@@ -768,7 +778,7 @@ class WasalyDataRefactorSeeder extends Seeder
             ],
             [
                 'name_ar' => 'كورن فليكس كلوقز الأصلي 375 جرام', 'name_en' => 'Kelloggs Original Corn Flakes 375g',
-                'brand' => 'نستله', 'cat' => 'سوبر ماركت', 'sub' => 'مخبوزات', 'price' => 95, 'stock' => 50,
+                'brand' => 'كلوقز', 'cat' => 'سوبر ماركت', 'sub' => 'مخبوزات', 'price' => 95, 'stock' => 50,
                 'desc_ar' => 'رقائق الذرة كلوقز الأصلية الفطور المقرمش الصحي للأطفال والكبار.',
                 'desc_en' => 'Kelloggs crispy original golden corn flakes 375g.',
                 'main_img' => 'https://images.unsplash.com/photo-1521483451569-e33803c0330c?w=800&q=80',
@@ -780,7 +790,7 @@ class WasalyDataRefactorSeeder extends Seeder
             ],
             [
                 'name_ar' => 'مربى فيتراك فراولة 450 جرام', 'name_en' => 'Vitrac Strawberry Jam 450g',
-                'brand' => 'حلواني', 'cat' => 'سوبر ماركت', 'sub' => 'معلبات', 'price' => 55, 'stock' => 85,
+                'brand' => 'فيتراك', 'cat' => 'سوبر ماركت', 'sub' => 'معلبات', 'price' => 55, 'stock' => 85,
                 'desc_ar' => 'مربى فيتراك قطع الفراولة الطبيعية طعم غني ومميز.',
                 'desc_en' => 'Vitrac strawberry jam with natural fruit chunks.',
                 'main_img' => 'https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=800&q=80',
@@ -828,7 +838,7 @@ class WasalyDataRefactorSeeder extends Seeder
             ],
             [
                 'name_ar' => 'شيبسي طماطم عائلي 100 جرام', 'name_en' => 'Chipsy Tomato Family Pack 100g',
-                'brand' => 'امريكانا', 'cat' => 'سوبر ماركت', 'sub' => 'تسالي وشيكولاتة', 'price' => 15, 'stock' => 220,
+                'brand' => 'شيبسي', 'cat' => 'سوبر ماركت', 'sub' => 'تسالي وشيكولاتة', 'price' => 15, 'stock' => 220,
                 'desc_ar' => 'رقائق بطاطس شيبسي بطعم الطماطم المتبلة العبوة العائلية.',
                 'desc_en' => 'Chipsy crunchy tomato flavored potato chips family pack.',
                 'main_img' => 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=800&q=80',
