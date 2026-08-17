@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class SubCategoriesTable
@@ -38,6 +39,12 @@ class SubCategoriesTable
                     })
                     ->sortable(),
 
+                // القسم الرئيسي
+                TextColumn::make('category.name_ar')
+                    ->label(__('messages.category'))
+                    ->sortable()
+                    ->searchable(),
+
                 // الحالة badge
                 TextColumn::make('status')
                     ->label(__('messages.status'))
@@ -61,7 +68,9 @@ class SubCategoriesTable
             ->defaultSort('created_at', 'desc')
             ->striped()
             ->filters([
-                //
+                SelectFilter::make('category_id')
+                    ->label(__('messages.category'))
+                    ->relationship('category', 'name_ar'),
             ])
             ->recordActions([
                 ViewAction::make(),
