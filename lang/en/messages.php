@@ -505,4 +505,12 @@ return [
     'event_updated' => 'Updated',
     'event_deleted' => 'Deleted',
     'service_provider_cannot_delete_account' => 'Service provider cannot delete account',
+    'banner' => 'Advertisement',
+    'banners' => 'Advertisements & Banners',
+    'banner_details' => 'Advertisement Details',
+    'banner_type' => 'Advertisement Placement',
+    'home_page' => 'Home Page',
+    'product_page' => 'Product Page',
+    'coupon_page' => 'Coupon Page',
+    'link' => 'Link',
 ];

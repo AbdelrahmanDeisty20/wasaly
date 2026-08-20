@@ -533,4 +533,12 @@ return [
     'event_updated' => 'تعديل',
     'event_deleted' => 'حذف',
     'service_provider_cannot_delete_account' => 'لا يمكن لمقدم الخدمة حذف حسابه',
+    'banner' => 'إعلان',
+    'banners' => 'الإعلانات والبانرات',
+    'banner_details' => 'تفاصيل الإعلان',
+    'banner_type' => 'موقع الإعلان',
+    'home_page' => 'الصفحة الرئيسية',
+    'product_page' => 'صفحة المنتجات',
+    'coupon_page' => 'صفحة الكوبونات',
+    'link' => 'الرابط',
 ];
