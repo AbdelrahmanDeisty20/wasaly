@@ -22,19 +22,21 @@ class BannerForm
                             ->schema([
                                 TextInput::make('title_ar')
                                     ->label(__('messages.title_ar'))
-                                    ->required(),
+                                    ->nullable(),
                                 TextInput::make('title_en')
                                     ->label(__('messages.title_en'))
-                                    ->required(),
+                                    ->nullable(),
                                 Textarea::make('desc_ar')
                                     ->label(__('messages.description_ar'))
+                                    ->nullable()
                                     ->rows(3),
                                 Textarea::make('desc_en')
                                     ->label(__('messages.description_en'))
+                                    ->nullable()
                                     ->rows(3),
                                 TextInput::make('link')
                                     ->label(__('messages.link'))
-                                    ->url()
+                                    ->nullable()
                                     ->placeholder('https://example.com or /offers'),
                                 Select::make('type')
                                     ->label(__('messages.banner_type'))
@@ -57,7 +59,7 @@ class BannerForm
                                     ->label(__('messages.image'))
                                     ->image()
                                     ->directory('banners')
-                                    ->required(),
+                                    ->nullable(),
                             ]),
                     ]),
             ]);
